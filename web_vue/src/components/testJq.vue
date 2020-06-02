@@ -3,6 +3,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
 name: 'testJq',
   methods: {
@@ -44,22 +45,42 @@ name: 'testJq',
         "<input id='keep_sign_in_check' type='checkbox'><span>123213213</span>" + // 记住密码选框
         "</div>" +
         "<button class='vimtag_btn' id='sign_in'>123123214214</button>" + // 登录页面中登录按钮
-        "<button class='vimtag_btn' id='register_btn'>fareqw</button>" + // 注册页面中注册按钮
+        "<button class='vimtag_btn' id='register_btn'>" + mcs_remember_password + "</button>" + // 注册页面中注册按钮
         "<div>" +
         "<span id='register_account'>12321fa</span>" + // 登录页面中注册文字按钮
-        "<span id='forget_pass'>cdeqe?</span>" + // 登录页面中忘记密码文字按钮
-        "<span id='sign_account'>ghqewq</span>" + // 注册页面中登录文字按钮
+        "<span id='forget_pass'>"+mcs_forgot_your_password+"</span>" + // 登录页面中忘记密码文字按钮
+        "<span id='sign_account'>"+ mcs_sign_in +"</span>" + // 注册页面中登录文字按钮 // eslint-disable-line no-undef
         "</div>" +
         "</div>" +
         "<div id='forget_pass_inner_main'>" + // 忘记密码点击弹窗渲染节点
           "</div>" +
           "</div>" +
-          "</div>"
-      );
-    }
+          "</div>" +
+          "<button class='vimtag_btn' id='en_btn'>en</button>"+
+          "<button class='vimtag_btn' id='zh_btn'>zh</button>"
+      )
+      $("#en_btn").click(() => {
+        sessionStorage.setItem("userLanguage", 'en')
+        location.reload()
+        // this.$chooseLanguage.lang('en')
+      })
+      $("#zh_btn").click(() => {
+        sessionStorage.setItem("userLanguage", 'zh')
+        location.reload()
+        // this.$chooseLanguage.lang('zh')
+      })
+    },
+    
   },
-  mounted() {
-      this.testJq()
+  async mounted() {
+    let userLanguage = sessionStorage.getItem("userLanguage")
+    if (userLanguage) {
+      await this.$chooseLanguage.lang(userLanguage)
+    } else {
+      await this.$chooseLanguage.lang('en')
+    }
+    this.testJq()
+    console.log(process.env.MY_VERSION, 'version')
   }
 }
 </script>

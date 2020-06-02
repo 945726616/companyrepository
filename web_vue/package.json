@@ -1,17 +1,24 @@
 {
   "name": "web_vue",
-  "version": "0.1.0",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "dev": "node webpackPlugins/npmDev.js",
+    "package": "node webpackPlugins/npmBuild.js"
   },
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "jquery": "^3.5.1",
-    "vue": "^2.6.11"
+    "jquery-ui": "^1.12.1",
+    "jquery-ui-i18n": "0.0.1-security",
+    "jquery-ui-timepicker-addon": "^1.6.3",
+    "vue": "^2.6.11",
+    "vue-router": "^3.2.0",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.3.0",
@@ -20,6 +27,8 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "filemanager-webpack-plugin": "^2.0.5",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
@@ -35,7 +44,9 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-undef": 0
+    }
   },
   "browserslist": [
     "Chrome 39"

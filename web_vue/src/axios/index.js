@@ -72,7 +72,7 @@ instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlenco
  * 每次请求前，重新拼接请求参数键名添加d 
  */
 instance.interceptors.request.use(
-    (config) => {
+    config => {
         let param = config.params // 取得当前get传递的对象
         let newParams = {} // 新建对象用于存储变更后的对象
         for (let paramName in param) {
