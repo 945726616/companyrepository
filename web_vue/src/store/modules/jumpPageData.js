@@ -1,3 +1,4 @@
+// 跳转页面使用的vuex进行数据存储
 const jumpPageData = {
   state: {
     pageDom: '',

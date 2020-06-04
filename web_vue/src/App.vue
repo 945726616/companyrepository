@@ -1,21 +1,15 @@
 <template>
+<!-- 入口文件 -->
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <testJq></testJq>
-    <!-- <HelloWorld msg="welcome"/> -->
+    <!-- 调用路由部分进行渲染 -->
+    <router-view />
   </div>
 </template>
 
 <script>
-// import HelloWorld from "./components/HelloWorld.vue"
-import testJq from "./components/testJq.vue"
 
 export default {
-  name: "App",
-  components: {
-    testJq
-    // HelloWorld
-  }
+  name: "App"
 }
 </script>
 

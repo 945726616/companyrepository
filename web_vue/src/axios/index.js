@@ -76,7 +76,7 @@ instance.interceptors.request.use(
         let param = config.params // 取得当前get传递的对象
         let newParams = {} // 新建对象用于存储变更后的对象
         for (let paramName in param) {
-            newParams['d' + paramName] = param[paramName] // 遍历对象键值对并重新命名属性名
+            newParams['d' + paramName] = param[paramName] // 遍历对象键值对并重新命名属性名 后续此处需要添加两个额外的固定参数数据值通过vuex进行存取
         }
         config.params = newParams // 修改后的对象
         return config

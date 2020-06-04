@@ -1,11 +1,12 @@
 {
   "name": "web_vue",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "version": "node webpackPlugins/changeVersionPlugin.js",
     "dev": "node webpackPlugins/npmDev.js",
     "package": "node webpackPlugins/npmBuild.js"
   },
@@ -25,6 +26,7 @@
     "@vue/cli-plugin-eslint": "~4.3.0",
     "@vue/cli-service": "~4.3.0",
     "babel-eslint": "^10.1.0",
+    "concurrently": "^5.2.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",

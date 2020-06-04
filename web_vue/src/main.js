@@ -5,10 +5,9 @@ import App from './App.vue'
 import Api from './api'
 import $ from 'jquery'
 
-// 引入外部js插件
+// 引入多国语言切换插件
 import chooseLanguage from './lib/exportModule/languageExport'
 Vue.prototype.$chooseLanguage = chooseLanguage
-// chooseLanguage.chooseLanguage(zh)
 
 Vue.prototype.$ = $
 Vue.prototype.$api = Api

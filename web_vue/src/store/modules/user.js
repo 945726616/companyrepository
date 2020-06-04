@@ -1,3 +1,4 @@
+// 存储用户信息vuex
 const user = {
   state: {
     name: '',
