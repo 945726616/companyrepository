@@ -1,5 +1,5 @@
 // 打包时采用的合并命令
-const concurrently = require('concurrently');
+const concurrently = require('concurrently') 
 
 let [version = ''] = process.argv.filter(
   (item, index) => {
