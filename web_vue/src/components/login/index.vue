@@ -2,6 +2,13 @@
   <div id="test">加载内容</div>
 </template>
 
+<style lang="scss" scoped>
+// @import url(./index.scss); (暂时注释后续放开)
+#test{
+  height: 100%;
+}
+</style>
+
 <script>
 export default {
   name: "testJq",
@@ -113,8 +120,8 @@ export default {
         }
       }
 
-      l_remember_data = localStorage.getItem("remember_msg_info")  // 从存储空间中取出账户名和密码并填写渲染在页面中
-      l_remember_data_obj = l_remember_data
+      let l_remember_data = localStorage.getItem("remember_msg_info")  // 从存储空间中取出账户名和密码并填写渲染在页面中
+      let l_remember_data_obj = l_remember_data
         ? eval("(" + l_remember_data + ")")
         : null
       if (l_remember_data_obj && l_remember_data_obj.user) {
@@ -899,8 +906,9 @@ export default {
       }
     }
   },
-  mounted () {
-    this.create_login_page({ parent: $("#test") })
+  async mounted () {
+    await this.create_login_page({ parent: $("#test") }) // 进入页面后加载
+    await require("../../css/vimtagPublic.scss") // 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
   }
 }
 </script>
