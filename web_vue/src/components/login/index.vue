@@ -3,13 +3,14 @@
 </template>
 
 <style lang="scss" scoped>
-// @import url(./index.scss); (暂时注释后续放开)
+// @import url(./index.scss); (暂时注释后续分离样式后放开)
 #test{
   height: 100%;
 }
 </style>
 
 <script>
+import publicFunc from '../../util/public.js'
 export default {
   name: "testJq",
   data () {
@@ -908,7 +909,7 @@ export default {
   },
   async mounted () {
     await this.create_login_page({ parent: $("#test") }) // 进入页面后加载
-    await require("../../css/vimtagPublic.scss") // 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
+    await publicFunc.importCss("Public.scss") // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
   }
 }
 </script>

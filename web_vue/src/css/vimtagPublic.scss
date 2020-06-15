@@ -1,3 +1,5 @@
+@import './public.scss';
+$projectColor: #00a6ba;
 .disabled{
 	pointer-events:none;
 }
@@ -72,7 +74,7 @@ input, button, select, textarea {
 }
 .top_list_menu:hover{
 	color: #fff;
-	background: #00a6ba;
+	background: $projectColor;
 }
 #top_box_right{
 	height:100%;
@@ -86,7 +88,7 @@ input, button, select, textarea {
 	cursor:pointer;
 }
 .top_right_menu:hover{
-	color:#00a6ba;
+	color:$projectColor;
 }
 #top_menu_my{
 	height:100%;
@@ -99,7 +101,7 @@ input, button, select, textarea {
 }
 #top_menu_my:hover{
 	color:white;
-	background: #00a6ba;
+	background: $projectColor;
 }
 #top_login_div{
 	border: none;
@@ -111,7 +113,7 @@ input, button, select, textarea {
 	border-radius: 3px;
 	/*margin-top: 16px;*/
 	font-size: 15px;
-	/*border: 1px solid #00a6ba;*/
+	/*border: 1px solid $projectColor;*/
 	float:right;
 	margin-left:20px;
 	cursor: pointer;
@@ -125,14 +127,14 @@ input, button, select, textarea {
 }
 #top_login_div:hover{
 	color:#fff;
-	background: #00a6ba;
+	background: $projectColor;
 }
 #top_login_div:hover #top_login_div_ico{
 	background: url(../assets/device/equipment2.png) no-repeat;
 }
 #top_login_span:hover{
 	color:#fff;
-	background: #00a6ba;
+	background: $projectColor;
 	height:62px;
 }
 #buffer_page{
@@ -162,7 +164,7 @@ input, button, select, textarea {
 	margin-top: 20px;
 	padding: 20px 40px;
 	display: none;
-	background-color: #00A6BA;
+	background-color: $projectColor;
 	width: max-content;
 	border-radius: 5px;
 	cursor: pointer;
@@ -205,7 +207,7 @@ input, button, select, textarea {
 }
 #delete_tips_cancel{
 	float:left;
-	color:#00a6ba;
+	color:$projectColor;
 	font-size:21px;
 	cursor:pointer;
 	border-top:1px solid #ccc;
@@ -219,7 +221,7 @@ input, button, select, textarea {
 	float:right;
 	box-sizing: border-box;
     height:100%;
-	color:#00a6ba;
+	color:$projectColor;
 	font-size:21px;
 	cursor:pointer;
 	border-top:1px solid #ccc;
@@ -319,7 +321,7 @@ input, button, select, textarea {
 #keep_sign_in{
 	float: right;
 	margin-bottom: 10px;
-	color: #00a6ba;
+	color: $projectColor;
 }
 #keep_sign_in_check{
 	float: left;
@@ -333,20 +335,20 @@ input, button, select, textarea {
 	height: 44px;
 	margin-bottom: 16px;
 	cursor: pointer;
-	background-color: #00a6ba;
+	background-color: $projectColor;
 	border: 0px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
 }
 #register_account{
-	color: #00a6ba;
+	color: $projectColor;
 	font-size: 14px;
 	cursor: pointer;
 	float: left;
 }
 #forget_pass{
-	color: #00a6ba;
+	color: $projectColor;
 	font-size: 14px;
 	cursor: pointer;
 	float: right;
@@ -447,14 +449,14 @@ input, button, select, textarea {
 	color: rgb(255, 255, 255);
 	text-align: center;
 	line-height: 44px;
-	background-color: #00a6ba;
+	background-color: $projectColor;
 }
 .device_sidebar_nick{
 	margin-top:5px;
 	color:#909090;
 }
 .selected_style{
-	color:#00a6ba;
+	color:$projectColor;
 }
 #active_dev{
 	width:208px;
@@ -570,7 +572,7 @@ input, button, select, textarea {
 	cursor:pointer;
 }
 #resolute_choice:hover{
-	color:#00a6ba;
+	color:$projectColor;
 }
 .enter_nav{
 	height: 18px;
@@ -714,7 +716,7 @@ input, button, select, textarea {
 	height: 34px;
 	width: 200px;
 	border: 1px solid #ccc;
-	color:#00a6ba;
+	color:$projectColor;
 	text-align: right;
 	padding-right: 10px;
 	margin-top: 5px;
@@ -730,7 +732,7 @@ input, button, select, textarea {
 	line-height: 30px;
 	text-align: center;
 	border: 0;
-	background-color: #00a6ba;
+	background-color: $projectColor;
 	margin-top: 20px;
 	margin-left: 20px;
 	cursor: pointer;
@@ -750,11 +752,11 @@ input, button, select, textarea {
 	height: auto;
 	float:right;
 	margin-top: 5px;
-	color:#00a6ba;
+	color:$projectColor;
 }
 .options_float_right input {
 	font-size: 15px;
-	color: #00a6ba;
+	color: $projectColor;
     height: 34px;
 }
 .input_read_only{
@@ -783,7 +785,7 @@ input, button, select, textarea {
 	margin-top: 5px;
 	padding-right: 10px;
 	box-sizing: border-box;
-	color:#00a6ba;
+	color:$projectColor;
 }
 div.ibutton-label-on, div.ibutton-label-off {
 	/*修改了这里  background-color ;height原来是9 px*/
@@ -941,7 +943,7 @@ div.ibutton-label-on {
 .label_sd {
 	width: 60px;
 	height: 12px;
-	background:#00a6ba;
+	background:$projectColor;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
@@ -1347,7 +1349,7 @@ div.ibutton-label-on {
 .adjust_in_box {
 	width: 0px;
 	height: 4px;
-	background: #00a6ba;
+	background: $projectColor;
 	border: 0;
 	position: absolute;
 }
@@ -1408,7 +1410,7 @@ div.ibutton-label-on {
 	z-index: 100000;
 }
 #back:hover{
-	color:#00a6ba;
+	color:$projectColor;
 }
 #back:hover #main_title_box_return_img{
 	background: url(../assets/device/choose-back.png) no-repeat 0 22px;
@@ -1422,7 +1424,7 @@ div.ibutton-label-on {
 	z-index: 100000;
 }
 #new_back:hover{
-	color:#00a6ba;
+	color:$projectColor;
 }
 #new_back:hover #main_title_box_return_img{
 	background: url(../assets/device/choose-back.png) no-repeat 0 22px;
@@ -1785,13 +1787,13 @@ div.ibutton-label-on {
 	cursor: pointer;
 }
 #playback_start_time{
-	color:#00a6ba;
+	color:$projectColor;
 	float:left;
 	margin-top:15px;
 	margin-left:15px;
 }
 #playback_end_time{
-	color:#00a6ba;
+	color:$projectColor;
 	float:right;
 	margin-top:15px;
 	margin-right:15px;
@@ -1827,7 +1829,7 @@ div.ibutton-label-on {
 	width:40px;
 	height:30px;
 	background:url(../assets/device/search2.png) no-repeat 10px 5px;
-	background-color: #00a6ba;
+	background-color: $projectColor;
 	border-top-right-radius: 4px;
 	border-bottom-right-radius: 4px;
 }
@@ -1844,7 +1846,7 @@ div.ibutton-label-on {
 	line-height: 30px;
 }
 .device_list_menu:hover{
-	color:#00a6ba;
+	color:$projectColor;
 }
 #device_refresh_btn{
 	float:right;
@@ -2014,7 +2016,7 @@ div.ibutton-label-on {
     line-height: 35px;
     margin:0 auto;
     border-radius: 5px;
-    background: #00a6ba;
+    background: $projectColor;
 }
 #add_device_skip{
     color:#fff;
@@ -2024,7 +2026,7 @@ div.ibutton-label-on {
     line-height: 35px;
     margin:0 auto;
     border-radius: 5px;
-    background: #00a6ba;
+    background: $projectColor;
     margin-top:20px;
 }
 #add_devices_box_back{
@@ -2036,7 +2038,7 @@ div.ibutton-label-on {
     background: url("../assets/device/back.png") 0 24px no-repeat;
 }
 #add_devices_box_back:hover{
-    color:#00a6ba;
+    color:$projectColor;
     background: url("../assets/device/choose-back.png") 0 24px no-repeat;
 }
 .add_device_input_pass_box_ico{
@@ -2079,7 +2081,7 @@ div.ibutton-label-on {
 }
 #add_device_success_txt{
     text-align: center;
-    color:#00a6ba;
+    color:$projectColor;
     font-size: 16px;
 }
 .add_device_set_wifi_box_ico{
@@ -2162,7 +2164,7 @@ div.ibutton-label-on {
 }
 .add_devices_box_note{
     text-align: center;
-    color:#00a6ba;
+    color:$projectColor;
     font-size: 16px;
 }
 /*g 新增 .add_devices_box_info*/
@@ -2235,7 +2237,7 @@ div.ibutton-label-on {
     cursor:pointer;
 }
 .add_device_set_wifi_list:hover{
-    color:#00a6ba;
+    color:$projectColor;
 }
 #add_device_forget_pass{
     text-align: center;
@@ -2244,13 +2246,13 @@ div.ibutton-label-on {
 }
 
 #heared_sound{
-	color:#00a6ba;
+	color:$projectColor;
 	text-align:center;
 	margin-top:20px;
 	margin-bottom:20px;
 }
 #failed_to_restore{
-	color:#00a6ba;
+	color:$projectColor;
 	text-align:center;
 	margin-top:20px;
 	margin-bottom:20px;
@@ -2262,7 +2264,7 @@ div.ibutton-label-on {
     text-align:center;
 }
 .no_heard_sound a{
-	color:#00a6ba;
+	color:$projectColor;
 }
 
 .vimtag_service_address {
@@ -2307,7 +2309,7 @@ div.ibutton-label-on {
 	font-size: 14px;
 	/*width: 62px;6.4.1*/
 	height: 26px;
-	border-color: #00a6ba;
+	border-color: $projectColor;
 	margin-left: 20px;
 	border-width: 1px;
 	text-align: center;
@@ -2317,11 +2319,11 @@ div.ibutton-label-on {
 }
 /*.filter_btn:hover{  6.1.2
 	color: #fff;
-	background-color: #00a6ba;
+	background-color: $projectColor;
 }*/
 .filter_btn_active{  
 	/*color: #fff;  6.1.2
-	background-color: #00a6ba;*/
+	background-color: $projectColor;*/
 }
 
 /*6.1.2自定义单选框*/
@@ -2345,7 +2347,7 @@ div.ibutton-label-on {
 input[type=radio]:checked:before{
      content: "\2714";
      color:#fff;
-     background-color: #00a6ba;
+     background-color: $projectColor;
     width: 13px;
     height: 13px;
     border-radius: 2px;
@@ -2414,7 +2416,7 @@ input[type=radio]{
 }
 #binding_account_cancel_btn{
 	float:right;
-	background-color:#00a6ba;
+	background-color:$projectColor;
 	color:#fff;
 	font-size:24px;
 	cursor:pointer;
@@ -2463,7 +2465,7 @@ input[type=radio]{
 	cursor: pointer;
 }
 #boxlist_set_btn:hover{
-	color:#00a6ba;
+	color:$projectColor;
 }
 #boxlist_set_btn:hover #boxlist_set_btn_img{
 	background: url("../assets/device/choose-setting.png") no-repeat 0 21px;
@@ -2499,7 +2501,7 @@ input[type=radio]{
 	cursor: pointer;
 }
 #boxlist_edit_btn:hover{
-	color:#00a6ba;
+	color:$projectColor;
 }
 #boxlist_edit_btn:hover #boxlist_edit_btn_img{
 	background: url("../assets/device/choose_edit.png") no-repeat 0 21px;
@@ -2508,7 +2510,7 @@ input[type=radio]{
 #box_name_div{
 	width:194px;
 	margin:0 auto;
-	background: #00a6ba;
+	background: $projectColor;
 	color:#fff;
 	font-size: 18px;
 	line-height: 25px;
@@ -2537,7 +2539,7 @@ input[type=radio]{
 	height: 30px;
 	width: 120px;
 	color:#fff;
-	background: #00a6ba;
+	background: $projectColor;
 	text-align: center;
 	line-height: 30px;
 	float:left;
@@ -2549,7 +2551,7 @@ input[type=radio]{
 	height: 30px;
 	width: 120px;
 	color:#fff;
-	background: #00a6ba;
+	background: $projectColor;
 	text-align: center;
 	line-height: 30px;
 	float:right;
@@ -2578,7 +2580,7 @@ input[type=radio]{
 	width: 100px;
 	height: 30px;
 	cursor: pointer;
-	background-color: #00a6ba;
+	background-color: $projectColor;
 	border-radius: 3px;
 	float:right;
 	text-align: center;
@@ -2591,7 +2593,7 @@ input[type=radio]{
 	width: 100px;
 	height: 30px;
 	cursor: pointer;
-	background-color: #00a6ba;
+	background-color: $projectColor;
 	border-radius: 3px;
 	float:left;
 	text-align: center;
@@ -2717,7 +2719,7 @@ input[type=radio]{
 	height: 44px;
 	margin:0 auto;
 	cursor: pointer;
-	background-color: #00a6ba;
+	background-color: $projectColor;
 	border: 0px;
 	border-radius: 4px;
 	line-height: 44px;
@@ -2819,7 +2821,7 @@ input[type=radio]{
 	/*margin:0 auto;*/
 	float:left;
 	clear:both;
-	background: #00a6ba;
+	background: $projectColor;
 	border-radius: 5px;
 	margin-top:20px;
 	margin-bottom: 28px;
@@ -2841,7 +2843,7 @@ input[type=radio]{
 #use_ordinary_video{
 	color:#fff;
 	font-size:14px;
-	background: #00a6ba;
+	background: $projectColor;
     margin: 0 auto;
     width: 196px;
     padding: 8px 5px;
@@ -2928,7 +2930,7 @@ border-right:1px solid #ccc;
 	padding:20px 0;
 }
 .active_list{
-	color:#00a6ba;
+	color:$projectColor;
 }	
 .set_list #search{
 	background: url(../assets/device/search.png) no-repeat;
@@ -3296,7 +3298,7 @@ border-right:1px solid #ccc;
 #export_success_icon {
 	line-height:36px;
 	padding-left:40px;
-	color:#00a6ba;
+	color:$projectColor;
 	height:36px;
 	background:url(../assets/device/over.png) no-repeat;
 	margin-left:110px;
@@ -3333,7 +3335,7 @@ border-right:1px solid #ccc;
 	width: 0;
 	border-radius: 3px;
 	height: 5px;
-	background: #00a6ba;
+	background: $projectColor;
 }
 #sd_export_path_show {
 	width: 200px;
@@ -3364,7 +3366,7 @@ border-right:1px solid #ccc;
 	text-align: center;
 	cursor: pointer;
 	color: #fff;
-	background: #00a6ba;
+	background: $projectColor;
 	float: left;
 	margin-left: 220px;
 	margin-top: 20px;
@@ -3393,8 +3395,8 @@ border-bottom:1px solid #ccc;
 }
 #logo_exit #exit_btn_img {
 	float:right;
-	border:1px solid #00a6ba;
-	color:#00a6ba;
+	border:1px solid $projectColor;
+	color:$projectColor;
 	font-size: 16px;
 	border-radius:2px;
 	text-align:center;
@@ -3403,7 +3405,7 @@ border-bottom:1px solid #ccc;
 	line-height:34px;
 }
 #logo_exit #exit_btn_img:hover{
-	background:#00a6ba;
+	background:$projectColor;
 	color:#fff;
 }
 #feedback{
@@ -3727,7 +3729,7 @@ border-bottom:1px solid #ccc;
 }
 #auto_mode_title {
 	float: left;
-	color: #00a6ba;
+	color: $projectColor;
 	margin-left: 20px;
 }
 #auto_mode_title_img {
@@ -3757,10 +3759,10 @@ border-bottom:1px solid #ccc;
 	width: 520px;
 	padding: 20px 0;
 	float: left;
-	border-bottom: 1px solid #00a6ba;
+	border-bottom: 1px solid $projectColor;
 }
 #to_scene_select{
-	border-bottom: 1px solid #00a6ba;
+	border-bottom: 1px solid $projectColor;
 }
 .scene_list_img {
 	float: left;
@@ -3826,8 +3828,8 @@ border-bottom:1px solid #ccc;
 	width: 520px;
 	padding: 20px 0;
 	float: left;
-	/*border-top: 1px solid #00a6ba;*/
-	border-bottom: 1px solid #00a6ba;
+	/*border-top: 1px solid $projectColor;*/
+	border-bottom: 1px solid $projectColor;
 	display: none;
 }
 .scene_list_add {
@@ -3914,7 +3916,7 @@ border-bottom:1px solid #ccc;
 	width: 100%;
 	float: left;
 	margin-top: 20px;
-	border-bottom: 1px solid #00a6ba;
+	border-bottom: 1px solid $projectColor;
 }
 .attachmen_set_list_title {
 	font-size: 16px;
@@ -4003,10 +4005,10 @@ border-bottom:1px solid #ccc;
 	margin-top: 30px;
 }
 #attachmen_btn_submit {
-	background: #00a6ba;
+	background: $projectColor;
 	float: right;
 	color: #fff;
-	border: 1px solid #00a6ba;
+	border: 1px solid $projectColor;
 	border-radius: 5px;
 	width: 120px;
 	height: 30px;
@@ -4094,8 +4096,8 @@ border-bottom:1px solid #ccc;
 	height: 200px;
 	margin-top: 14px;
 	float: left;
-	border-top: 1px solid #00a6ba;
-	border-bottom: 1px solid #00a6ba;
+	border-top: 1px solid $projectColor;
+	border-bottom: 1px solid $projectColor;
 }
 .attachmen_add_type_list {
 	width: 140px;
@@ -4145,8 +4147,8 @@ border-bottom:1px solid #ccc;
 	width: 100%;
 	float: left;
 	height: 240px;
-	border-top: 1px solid #00a6ba;
-	border-bottom: 1px solid #00a6ba;
+	border-top: 1px solid $projectColor;
+	border-bottom: 1px solid $projectColor;
 	text-align: center;
 	margin-top: 14px;
 }
@@ -4165,7 +4167,7 @@ border-bottom:1px solid #ccc;
 	text-align: center;
 	line-height: 28px;
 	cursor: pointer;
-	background: #00a6ba;
+	background: $projectColor;
 	margin: 0 auto;
 	color: #fff;
 }
@@ -4177,7 +4179,7 @@ border-bottom:1px solid #ccc;
 #option_attachmen_search_list_box {
 	width: 100%;
 	float: left;
-	border-bottom: 1px solid #00a6ba;
+	border-bottom: 1px solid $projectColor;
 }
 .record_list_item {
 	width: 520px;
@@ -4231,8 +4233,8 @@ border-bottom:1px solid #ccc;
 	text-align: center;
 	line-height: 20px;
 	margin: 0 auto;
-	border: 1px solid #00a6ba;
-	color: #00a6ba;
+	border: 1px solid $projectColor;
+	color: $projectColor;
 	font-size: 12px;
 	cursor: pointer;
 }
@@ -4256,8 +4258,8 @@ border-bottom:1px solid #ccc;
 	width: 100%;
 	float: left;
 	height: 200px;
-	border-top: 1px solid #00a6ba;
-	border-bottom: 1px solid #00a6ba;
+	border-top: 1px solid $projectColor;
+	border-bottom: 1px solid $projectColor;
 	text-align: center;
 	margin-top: 14px;
 }
@@ -4271,7 +4273,7 @@ border-bottom:1px solid #ccc;
 	width: 220px;
 	margin: 0 auto;
 	height: 24px;
-	border: 1px solid #00a6ba;
+	border: 1px solid $projectColor;
 	border-radius: 15px;
 }
 #option_attachmen_edit_content_nick_input {
@@ -4282,10 +4284,10 @@ border-bottom:1px solid #ccc;
 	background: #efeff4;
 }
 #option_attachmen_edit_submit {
-	background: #00a6ba;
+	background: $projectColor;
 	float: right;
 	color: #fff;
-	border: 1px solid #00a6ba;
+	border: 1px solid $projectColor;
 	border-radius: 5px;
 	width: 120px;
 	height: 30px;
@@ -4317,8 +4319,8 @@ border-bottom:1px solid #ccc;
 	width: 100%;
 	float: left;
 	height: 200px;
-	border-top: 1px solid #00a6ba;
-	border-bottom: 1px solid #00a6ba;
+	border-top: 1px solid $projectColor;
+	border-bottom: 1px solid $projectColor;
 	text-align: center;
 	margin-top: 14px;
 }
@@ -4332,10 +4334,10 @@ border-bottom:1px solid #ccc;
 	margin-top: 14px;
 }
 #option_attachmen_result_submit {
-	background: #00a6ba;
+	background: $projectColor;
 	float: right;
 	color: #fff;
-	border: 1px solid #00a6ba;
+	border: 1px solid $projectColor;
 	border-radius: 5px;
 	width: 120px;
 	height: 30px;
@@ -4414,17 +4416,17 @@ border-bottom:1px solid #ccc;
 	width: 100%;
 	height: 52px;
 	line-height: 52px;
-	background-color: #00a6ba;
+	background-color: $projectColor;
 	color: #fff;
 	font-size: 20px;
 	text-align: center;
 	border-radius: 5px 5px 0 0;
-	border-left: 1px solid #00a6ba;
-	border-right: 1px solid #00a6ba;
+	border-left: 1px solid $projectColor;
+	border-right: 1px solid $projectColor;
 }
 #option_auto_box_table {
 	width: 100%;
-	border: 1px solid #00A6BA;
+	border: 1px solid $projectColor;
 	float: left;
 	border-radius: 0 0 5px 5px;
 	font-size: 12px;
@@ -4544,8 +4546,8 @@ border-bottom:1px solid #ccc;
 	width: 120px;
 	height: 36px;
 	color: #fff;
-	background: #00a6ba;
-	border: 1px solid #00a6ba;
+	background: $projectColor;
+	border: 1px solid $projectColor;
 	border-radius: 5px;
 	line-height: 36px;
 	text-align: center;
@@ -4556,9 +4558,9 @@ border-bottom:1px solid #ccc;
 	float: right;
 	width: 120px;
 	height: 36px;
-	color: #00a6ba;
+	color: $projectColor;
 	background: #fff;
-	border: 1px solid #00a6ba;
+	border: 1px solid $projectColor;
 	border-radius: 5px;
 	line-height: 36px;
 	text-align: center;
@@ -4568,7 +4570,7 @@ border-bottom:1px solid #ccc;
 	color: #323232;
 }
 #alert_setting_guide_title {
-	border-bottom: 1px solid #00a6ba;
+	border-bottom: 1px solid $projectColor;
 	padding-bottom: 10px;
 	margin-bottom: 20px;
 	color: #323232;
@@ -4601,24 +4603,24 @@ border-bottom:1px solid #ccc;
 	width: 300px;
 	height: 156px;
 	margin: 0 auto;
-	border: 2px solid #00a6ba;
+	border: 2px solid $projectColor;
 }
 .option_scene_list_div_in_img {
 	background: url(../assets/device/arrow.png) no-repeat;
 	padding-left: 25px;
-	color: #00a6ba;
+	color: $projectColor;
 	position: absolute;
 }
 #option_scene_list_div_out {
 	width: 300px;
 	height: 156px;
 	margin: 0 auto;
-	border: 2px solid #00a6ba;
+	border: 2px solid $projectColor;
 }
 .option_scene_list_div_in_img {
 	background: url(../assets/device/arrow.png) no-repeat;
 	padding-left: 25px;
-	color: #00a6ba;
+	color: $projectColor;
 	position: absolute;
 }
 #alert_setting_guide_step_3 {
@@ -4674,8 +4676,8 @@ border-bottom:1px solid #ccc;
 	width: 80px;
 	height: 30px;
 	color: #fff;
-	background: #00a6ba;
-	border: 1px solid #00a6ba;
+	background: $projectColor;
+	border: 1px solid $projectColor;
 	border-radius: 5px;
 	line-height: 30px;
 	text-align: center;
@@ -4686,16 +4688,16 @@ border-bottom:1px solid #ccc;
 	float: right;
 	width: 80px;
 	height: 30px;
-	color: #00a6ba;
+	color: $projectColor;
 	background: #fff;
-	border: 1px solid #00a6ba;
+	border: 1px solid $projectColor;
 	border-radius: 5px;
 	line-height: 30px;
 	text-align: center;
 	cursor: pointer;
 }
 #attachmen_set_list_box {
-	border: 2px solid #00a6ba;
+	border: 2px solid $projectColor;
 	float: left;
 	width: 100%;
 	margin-left: -47px;
@@ -4732,7 +4734,7 @@ border-bottom:1px solid #ccc;
 .device_scenes_in_active{
 	width:28px;
 	height:28px;
-	color:#00a6ba;
+	color:$projectColor;
 	background: url(../assets/device/at_home_active.png) no-repeat;
 	float:left;
 	margin-top:20px;
@@ -4744,7 +4746,7 @@ border-bottom:1px solid #ccc;
 	margin-left:10px;
 }
 .device_scenes_list_text_active{
-	color:#00a6ba;
+	color:$projectColor;
 	float:left;
 	margin-top:25px;
 }
@@ -4795,7 +4797,7 @@ border-bottom:1px solid #ccc;
 	font-size: 14px;
 }
 #bottom_select_lang:hover{
-	color:#00a6ba;
+	color:$projectColor;
 }
 #select_lang_box {
 	position: absolute;
@@ -4852,7 +4854,7 @@ border-bottom:1px solid #ccc;
 	height: 30px;
 	margin: 0 10px 0 10px;
 	cursor: pointer;
-	border:1px solid #00a6ba;
+	border:1px solid $projectColor;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
@@ -4861,12 +4863,12 @@ border-bottom:1px solid #ccc;
 	/*float:left;6.4.3*/
 }
 .page_num_btn_no{
-	color: #00a6ba;
+	color: $projectColor;
 	background: #fff;
 }
 .page_num_btn_yes{
 	color: #fff;
-	background: #00a6ba;
+	background: $projectColor;
 }
 .system_new_version{
 	float: right;
@@ -4914,7 +4916,7 @@ border-bottom:1px solid #ccc;
     width: 100px;
     height: 26px;
     line-height: 30px;
-    background-color: #00a6ba;
+    background-color: $projectColor;
     color: #fff;
     margin-left: 70px;
     border-radius: 4px;
@@ -4924,7 +4926,7 @@ border-bottom:1px solid #ccc;
     width: 100px;
     height: 26px;
     line-height: 30px;
-    background-color: #00a6ba;
+    background-color: $projectColor;
     color: #fff;
     margin-right: 70px;
     cursor: pointer;
@@ -4948,17 +4950,17 @@ border-bottom:1px solid #ccc;
 }
 #online_btn{
 	/*padding:2px 14px;
-	border:1px solid #00a6ba;*/
+	border:1px solid $projectColor;*/
 	cursor: pointer;
 }
 #online_btn:hover{
-	color:#00a6ba;
+	color:$projectColor;
 }
 .online_btn{
 	
 }
 .online_btn_active{
-	/*color:#00a6ba;*/
+	/*color:$projectColor;*/
 }
 #online_btn_direction{
 	width:14px;
@@ -4999,7 +5001,7 @@ border-bottom:1px solid #ccc;
 	line-height: 23px;
 }
 #online_btn_select_all:hover{
-	color:#00a6ba;
+	color:$projectColor;
 }
 #online_btn_select_online{
 	border-bottom:1px solid #ccc;
@@ -5013,7 +5015,7 @@ border-bottom:1px solid #ccc;
 	line-height: 23px;
 }
 #online_btn_select_online:hover{
-	color:#00a6ba;
+	color:$projectColor;
 }
 #online_btn_select_offline{
 	margin:0 auto;
@@ -5030,7 +5032,7 @@ border-bottom:1px solid #ccc;
     border-radius: 0 0 5px 5px;
 }
 #online_btn_select_offline:hover{
-	color:#00a6ba;
+	color:$projectColor;
 }
 #device_list_tree_box{
 	position: fixed;
@@ -5053,7 +5055,7 @@ border-bottom:1px solid #ccc;
 	cursor:pointer;
 }
 .tree_list_menu_active{
-	color:#00a6ba;
+	color:$projectColor;
 }
 .tree_list_display{
 	float:left;
@@ -5075,8 +5077,8 @@ border-bottom:1px solid #ccc;
 #device_list_tree_box_btn{
 	width:40px;
 	height:40px;
-	background: #00a6ba;
-	border:1px solid #00a6ba;
+	background: $projectColor;
+	border:1px solid $projectColor;
 	cursor: pointer;
 	float:left;
 	color:#fff;
@@ -5101,7 +5103,7 @@ border-bottom:1px solid #ccc;
 	margin-right:10px;
 	cursor:pointer;
 	padding: 3px 6px;
-	background: #00a6ba;
+	background: $projectColor;
 	color: #fff;
 	border-radius: 4px;
 	margin-top: 5px;
@@ -5115,7 +5117,7 @@ border-bottom:1px solid #ccc;
 }
 .device_list_sort_btn{
 	float:right;
-	background: #00a6ba;
+	background: $projectColor;
 	color:#fff;
 	font-size: 12px;
 	padding:0px 5px;
@@ -5189,7 +5191,7 @@ border-bottom:1px solid #ccc;
 	margin-left:45%;	
 	width:100%;
 	margin-bottom:14px;
-	color:#00a6ba;
+	color:$projectColor;
 }
 .no_light_twinkle_tips{
 	margin-top:40px;
@@ -5201,13 +5203,13 @@ border-bottom:1px solid #ccc;
 	margin-bottom:10px;
 }
 .no_light_twinkle_tips_three a{
-	color:#00a6ba;
+	color:$projectColor;
 	display:inline-block;
     margin-left:6px;
 }
 
 .my_page_box_back:hover{
-    color:#00a6ba;
+    color:$projectColor;
     background: url("../assets/device/choose-back.png") 0 12px no-repeat;
 }
 .my_page_box_back{
@@ -5233,7 +5235,7 @@ border-bottom:1px solid #ccc;
 	float:right;
 	height:50px;
 	line-height: 50px;
-	color:#00a6ba;
+	color:$projectColor;
 	font-size: 16px;
 	cursor: pointer;
 }
@@ -5242,7 +5244,7 @@ border-bottom:1px solid #ccc;
 	height:34px;
 	border:1px solid #ccc;
 	border-radius: 4px;
-	color:#00a6ba;
+	color:$projectColor;
 	font-size: 16px;
 }
 .record_page .list_name{
@@ -5294,7 +5296,7 @@ border-bottom:1px solid #ccc;
 	/*margin: 30px 50px 0;*/
 	height:20px;
 	line-height: 20px;
-	border-left: 2px solid #00a6ba;
+	border-left: 2px solid $projectColor;
     padding-left: 10px;
     /*6.1.2*/
     /*margin-top:20px;  */
@@ -5395,7 +5397,7 @@ border-bottom:1px solid #ccc;
 .switch_btn_box{
     width:3.5rem;
     height:12px;
-    background: #00a6ba;
+    background: $projectColor;
     border-radius: 2.8rem;
     margin-top:20px;
 }
@@ -5410,7 +5412,7 @@ border-bottom:1px solid #ccc;
     border: 1px solid #ccc;
 }
 .set_btn{
-	background:#00a6ba;
+	background:$projectColor;
 	height:30px;
 	width:120px;
 	border-radius: 4px;
@@ -5483,7 +5485,7 @@ border-bottom:1px solid #ccc;
 }
 #search_help{
 	color: #fff;
-    background: #00a6ba;
+    background: $projectColor;
     font-size: 14px;
     margin: 0 auto;
     width: 200px;
@@ -5505,7 +5507,7 @@ border-bottom:1px solid #ccc;
     color:#646464;
 }
 #reconfig_wifi{
-	color:#00a6ba;
+	color:$projectColor;
 	display:inline-block;
 }
 
@@ -5556,7 +5558,7 @@ border-bottom:1px solid #ccc;
     width: 120px;
     height: 30px;
     border-radius: 4px;
-    background: #00a6ba;
+    background: $projectColor;
     color: #fff;
 	line-height: 28px;
 	cursor: pointer;
@@ -5633,7 +5635,7 @@ border-bottom:1px solid #ccc;
 }
 #input_status{
    line-height: 42px;
-   color:#00a6ba;
+   color:$projectColor;
 }
 #create_setting_page_new{
 	width: 520px;
@@ -5644,7 +5646,7 @@ border-bottom:1px solid #ccc;
 #power_fr{
 	width: 200px;
     height: 34px;
-    color: #00a6ba;
+    color: $projectColor;
     border-radius: 4px;
 }
 #power_fr_div{
@@ -5657,11 +5659,11 @@ border-bottom:1px solid #ccc;
 }
 #delete_set_record{
 	float:right;
-	color:#00a6ba;
+	color:$projectColor;
 	padding-right:10px;
 }
 .start_time_active{
-	color:#00a6ba;
+	color:$projectColor;
 }
 .list_info_select_img{
 	width:20px;
@@ -5732,7 +5734,7 @@ line-height: 30px;
     font-size: 13px;*/
     /*position:absolute;*/
    /* float: right;
-    background: #00a6ba;
+    background: $projectColor;
     padding: 2px 6px;
     border-radius: 2px;*/
 /*}*/
@@ -5761,7 +5763,7 @@ line-height: 30px;
 #screen_fr{
 	width: 200px; 
     height: 34px;
-    color: #00a6ba;
+    color: $projectColor;
     border-radius: 4px;
 }
 #osd_info{
@@ -5769,12 +5771,12 @@ line-height: 30px;
 	margin: 0 auto;
 }
 #export_sd_text{
-	color:#00a6ba;
+	color:$projectColor;
 	height: 50px;
     line-height: 50px;
 }
 #export_sd_content{
-	color:#00a6ba;
+	color:$projectColor;
 	height: 50px;
 	border-bottom: 1px solid #ccc;
 }
@@ -5803,7 +5805,7 @@ line-height: 30px;
 #add_devices_timenum{
 	width:30px;
 	height:30px;
-	background:#00a6ba;
+	background:$projectColor;
 	color:#fff;
 	margin:0 auto;
 	border-radius: 50%;
@@ -6015,7 +6017,7 @@ line-height: 30px;
 }
 #grounp_standard{
 	font-size:16px;
-	color:#00a6ba;
+	color:$projectColor;
 }
 #device_sort{
 	margin-left:52px;
@@ -6043,7 +6045,7 @@ line-height: 30px;
     box-sizing: border-box;
     margin-right: 100px;
 	border: 0;
-	background-color: #00a6ba;
+	background-color: $projectColor;
 	margin-top: 20px;
 	margin-left: 20px;
 	cursor: pointer;
@@ -6061,7 +6063,7 @@ line-height: 30px;
 }
 #sd_export_link{
 	font-size:14px;
-	color:#00a6ba;
+	color:$projectColor;
 	margin-top:15px;
 	height:40px;
 	line-height:40px;
@@ -6069,7 +6071,7 @@ line-height: 30px;
 }
 #sd_export_link_content{
 	font-size:14px;
-	color:#00a6ba;
+	color:$projectColor;
 	margin-top:15px;
 	height:40px;
 	line-height:35px;
@@ -6082,7 +6084,7 @@ line-height: 30px;
     width: 120px;
     border: 0;
     font-size: 16px;
-    background-color: #00a6ba;
+    background-color: $projectColor;
     color:#fff;
     /*110改为55*/
     margin:55px auto 0;
@@ -6150,7 +6152,7 @@ line-height: 30px;
     margin: 0 auto;
     text-align: center;
     font-size: 16px;
-    color: #00a6ba;
+    color: $projectColor;
     margin-top: 30px;
     display:none;
 }
@@ -6189,8 +6191,8 @@ line-height: 30px;
 	font-size: 16px;
 	line-height:32px;
 	text-align:center;
-	color:#00a6ba;
-	border:1px solid #00a6ba;
+	color:$projectColor;
+	border:1px solid $projectColor;
 	border-radius: 4px;
 }
 #add_onvif_devices_box{
@@ -6231,7 +6233,7 @@ line-height: 30px;
 	height:35px;
 	font-size: 14px;
 	line-height: 35px;
-	color:#00a6ba;
+	color:$projectColor;
 }
 #history_play_box{
 	width:85%;
@@ -6262,7 +6264,7 @@ line-height: 30px;
 	font-size:18px;
 	/*margin: 0 10px 0 10px;*/
 	cursor: pointer;
-	/*border:1px solid #00a6ba;*/
+	/*border:1px solid $projectColor;*/
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	/*border-radius: 2px;*/
@@ -6275,7 +6277,7 @@ line-height: 30px;
 	height: 30px;
 	/*margin: 0 10px 0 10px;*/
 	cursor: pointer;
-	/*border:1px solid #00a6ba;*/
+	/*border:1px solid $projectColor;*/
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	/*border-radius: 2px;*/
@@ -6371,7 +6373,7 @@ line-height: 30px;
     width:20%;
     height:3rem;
     line-height: 3rem;
-    background: #00a6ba;
+    background: $projectColor;
     color:#fff;
     text-align: center;
     border-radius: 5px;

@@ -4,7 +4,6 @@ import router from "./router"
 import App from './App.vue'
 import Api from './api'
 import $ from 'jquery'
-import './css/public.scss'
 
 // 引入多国语言切换插件
 import chooseLanguage from './lib/exportModule/languageExport'
