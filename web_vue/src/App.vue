@@ -1,15 +1,19 @@
 <template>
 <!-- 入口文件 -->
   <div id="app">
+    <topBar />
     <!-- 调用路由部分进行渲染 -->
     <router-view />
   </div>
 </template>
 
 <script>
-
+import TopBar from './components/top'
 export default {
-  name: "App"
+  name: "App",
+  components: { // 组件注册
+    topBar: TopBar
+  }
 }
 </script>
 

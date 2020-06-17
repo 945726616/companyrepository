@@ -1,0 +1,339 @@
+<template>
+  <div id="top"></div>
+</template>
+<script>
+import publicFunc from '../../util/public.js'
+export default {
+  methods: {
+    create_top(obj) {
+      if (window.location.href.indexOf('vimtag') > -1) {
+        console.log('vimtag')
+        // vimtag结构
+        obj.parent.html(
+          "<div id='top_box'>" +
+          "<div id='top_box_main'>" +
+          "<div id='top_box_left'>" +
+          "<a target='_top'><div id='top_logo'><img src='./imgs/device/logo.png'></div></a>" +
+          '</div>' +
+          "<div id='top_box_right'>" +
+          "<div id='bottom_select_lang'></div>" +
+          "<div id='select_lang_box'>" +
+          "<div class='select_lang' value='ar'>العربية</div>" +
+          "<div class='select_lang' value='en'>English</div>" +
+          "<div class='select_lang' value='es'>española</div>" +
+          "<div class='select_lang' value='fr'>française</div>" +
+          "<div class='select_lang' value='de'>Deutsch</div>" +
+          "<div class='select_lang' value='it'>italiana</div>" +
+          "<div class='select_lang' value='ja'>日本語</div>" +
+          "<div class='select_lang' value='ko'>한국의</div>" +
+          "<div class='select_lang' value='pt'>português</div>" +
+          "<div class='select_lang' value='ru'>русский</div>" +
+          "<div class='select_lang' value='zh'>中文(简体)</div>" +
+          "<div class='select_lang' value='tw'>中文(繁体)</div>" +
+          "<div class='select_lang' value='hu'>magyar</div>" +
+          "<div class='select_lang' value='nl'>Nederlands</div>" +
+          "<div class='select_lang' value='sk'>slovenského jazyk</div>" +
+          "<div class='select_lang' value='tr'>Türk dili</div>" +
+          "<div class='select_lang' value='cz'>Česky</div>" +
+          "<div class='select_lang' value='vi'>Người việt nam</div>" +
+          "<div class='select_lang' value='iw'>עברית</div>" +
+          "<div class='select_lang' value='pl'>Polski</div>" +
+          "<div class='select_lang' value='uk'>Українська мова</div>" + //乌克兰语
+          "<div class='select_lang' value='th'>ภาษาไทย</div>" + //泰国语
+            '</div>' +
+            "<div id='top_menu_my' class='top_right_menu'></div>" +
+            "<div id='top_login_div'><span id='top_login_span'>" +
+            mcs_my_device +
+            '</span></div>' +
+            "<div id='top_experience_div' class='top_right_menu'>" +
+            mcs_demo +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>'
+        )
+      } else {
+        // mipc结构
+        obj.parent.html(
+          "<div id='menu_box' class='menu_box'>" +
+            "<div id='menu_box_main'>" +
+            "<div id='mipc_logo_img'></div>" +
+            "<div id='menu_more' class='menu_top_li'>" +
+            "<div id='menu_more_img' class='menu_img'></div>" +
+            "<div id='menu_more_txt' class='menu_txt'>" +
+            mcs_more_options +
+            '</div>' +
+            '</div>' +
+            "<div id='menu_download' class='menu_top_li'>" +
+            "<div id='menu_download_img' class='menu_img'></div>" +
+            "<div id='menu_download_txt' class='menu_txt'>" +
+            mcs_download +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            "<div id='set_back'><div id='mipcBack'><div id='main_title_box_return_img'></div>" +
+            mcs_back +
+            '</div></div>' +
+            '</div>'
+        )
+
+        if (window.fujikam === 'fujikam') {
+          let mipc_appparam_url = location.href
+          if (GetUrlParam_kb('kbwin', mipc_appparam_url)) {
+            g_is_kbwin = GetUrlParam_kb('kbwin', mipc_appparam_url)
+              ? GetUrlParam_kb('kbwin', mipc_appparam_url)
+              : 0
+          }
+        }
+        if (g_is_kbwin === 1) {
+          $('#mipc_logo_img').attr('class', 'kbwin_logo_img')
+          $('#menu_download').hide()
+        }
+
+        $('#menu_download').on('click', function() {
+          // console.log(this)
+          $('#menu_more').attr('class', 'menu_top_li')
+          $('#menu_download').attr('class', 'menu_top_li_active')
+          createPage('download', { parent: $('#page') })
+        })
+        $('#menu_more').on('click', function() {
+          $('#menu_download').attr('class', 'menu_top_li')
+          $('#menu_more').attr('class', 'menu_top_li_active')
+          createPage('my', { parent: $('#page') })
+        })
+        $('#mipc_logo_img').on('click', function() {
+          $('#menu_more').attr('class', 'menu_top_li')
+          $('#menu_download').attr('class', 'menu_top_li')
+          if (g_is_login) {
+            createPage('devlist', { parent: $('#page') })
+          } else if (g_experience) {
+            createPage('devlist', { parent: $('#page') })
+          } else {
+            g_login_waiting_flag = 0
+            createPage('login', { parent: $('#page') })
+          }
+        })
+      }
+      // mx("#top_login_div").setAttribute("style","border:none;height:100%;line-height:62px;margin-top:0;padding:0 10px;");
+      if (this.$store.state.jumpPageData.jmLogoFlag === 1) { // vimtag江门专属logo
+        $('#top_logo')
+          .children()[0]
+          .setAttribute('src', './imgs/device/m_logo.png')
+        $('#top_logo').children()[0].width = '220'
+        $('#top_logo').children()[0].height = '36'
+      }
+      let username_value = mcs_my // 定义用户名
+      console.log(publicFunc.urlParam(), 'url')
+      if (this.$store.state.jumpPageData.localModel) { // 判断是否为本地离线模式
+        g_is_login = publicFunc.urlParam() && publicFunc.urlParam().c == 1 ? 1 : 0
+        l_remember_data = sessionStorage.get('remember_msg_info')
+        l_remember_data = eval('(' + l_remember_data + ')')
+        if (g_is_login) {
+          username_value = l_remember_data.user
+          l_pwd_val = l_remember_data.password
+        }
+      }
+      // 个人中心填写用户名
+      $('#top_menu_my').html(username_value)
+      $('#top_box_left').on('click', function() {
+        // 左上角logo图标点击事件
+        if (window.fujikam == 'fujikam') {
+          // 如果是客户端则屏蔽跳转功能
+          return false
+        }
+        location.href = 'https://www.vimtag.com/'
+      })
+
+      if (window.fujikam == 'fujikam') {
+        if (!projectFlag) {
+          // vimtag顶部导航专属样式添加
+          $('#top').attr('style', 'width:100%;height:81px;')
+        }
+        $('#top_box').attr('style', 'height:81px;line-height:81px')
+        $('#top_box_main').attr('style', 'width:90%')
+        $('#top_experience_div').attr('style', 'line-height:81px')
+        $('#top_login_div').attr('style', 'line-height:81px')
+        $('#bottom_select_lang').attr('style', 'line-height:81px')
+        $('#top_menu_my').attr('style', 'line-height:81px')
+        $('#select_lang_btn').attr('style', 'height:360px') // 用于修复在客户端滚轮轻微滚动,语言选择条移动距离过大的问题
+        $('.top_list_menu').hide()
+      }
+      if (window.location.host.indexOf('www') === -1) {
+        $('#top_menu_about').hide()
+      }
+      $('#top_menu_my').click(function() {
+        // 点击个人中心
+        if (publicFunc.urlParam().l == 'local') {
+          this.$store.commit('SET_LOCAL_MODEL', 1)
+        }
+        if (this.$store.state.jumpPageData.localModel) {
+          g_is_login = publicFunc.urlParam() && publicFunc.urlParam().c == 1 ? 1 : 0
+        }
+        createPage('my', { parent: $('#page') })
+      })
+
+      $('#top_login_div').click(function() {
+        if (this.$store.state.jumpPageData.localModel) {
+          //如果点击了本地搜索
+          g_is_login = publicFunc.urlParam() && publicFunc.urlParam().c == 1 ? 1 : 0
+          if (g_is_login) {
+            //已经登录了	点击我的设备无效
+            // console.log('登录状态点击我的设备')
+            this.$store.commit('SET_LOCAL_MODEL', 0)
+            // console.log(location.href)  // http://45.113.201.4:7080/dcm/http_v10.1.4.1911140933/device/v10.1.4.1911140…main.product.htm?v10.1.4.19111409331&m=test.vimtag.com&ta=&tp=&l=local&c=1
+            // console.log(location.href.split("&"), '切割后的数组')
+            if (window.fujikam === 'fujikam') {
+              // 根据是否是客户端进行两种不同的截取方式 客户端多一个版本号的参数
+              // console.log("客户端下的链接")
+              location.href =
+                location.href.split('&')[0] + '&' + location.href.split('&')[1] // 将切割后第部分进行拼接保证链接正确
+              // console.log(location.href, "客户端内部")
+            } else {
+              location.href = location.href.split('&')[0]
+              // console.log(location.href, "浏览器部分")
+            }
+            createPage('devlist', { parent: $('#page') })
+          } else {
+            //没有登录点击我的设备 跳转到登录页面
+            // console.log("g_is_login === 0")
+            location.href = location.href.replace('&l=local&c=0', '')
+          }
+        } else {
+          //没有点击本地搜索
+          if (g_experience == 1) {
+            // g_experience为体验权限 0非体验 1体验
+            createPage('login', { parent: $('#page') })
+          } else {
+            g_experience = 0
+            if (g_is_login) {
+              //已经登录，直接到设备列表页面
+              // console.log('点击了设备列表按钮')
+              createPage('devlist', { parent: $('#page') })
+            } else {
+              //没有登录，跳转到登录页面
+              createPage('login', { parent: $('#page') })
+            }
+          }
+        }
+      })
+
+      $('#top_experience_div').click(function() {
+        //点击体验
+        let username = publicFunc.urlParam().ta ? publicFunc.urlParam().ta : 'vimtag'
+        let password = publicFunc.urlParam().tp ? publicFunc.urlParam().tp : 'vimtag'
+        msdk_ctrl({
+          type: 'account_login_in',
+          data: {
+            user: username,
+            password: mmd5.hex(password),
+            // func: function(msg) {
+            func: function() {
+              g_experience = 1
+              createPage('devlist', { parent: $('#page') })
+            }
+          }
+        })
+      })
+      select_lang()
+      function select_lang() {
+        let l_select_lang = document.getElementsByClassName('select_lang')
+        let language_choice_info = localStorage.getItem('language_choice_info')
+        let l_lang = language_choice_info ? language_choice_info : sessionStorage.getItem('projectName')
+
+        for (let l = 0; l < l_select_lang.length; l++) {
+          if (l_select_lang[l].getAttribute('value') == l_lang) {
+            $('#bottom_select_lang').html(l_select_lang[l].innerHTML)
+          }
+        }
+        $('#bottom_select_lang').click(function() {
+          let is_show = $('#select_lang_box').css('display')
+          if (is_show === 'none') {
+            let top = this.offsetTop + 52
+            let left = this.offsetLeft
+            $('#select_lang_box').css({
+              top: top + 'px',
+              left: left + 'px'
+            })
+            $('#select_lang_box').show()
+          } else {
+            $('#select_lang_box').hide()
+          }
+
+          // $("#top_box_right").mouseleave(function(event) {
+          $('#top_box_right').mouseleave(function() {
+            $('#select_lang_box').hide()
+          })
+        })
+
+        $('.select_lang').click(function() {
+          let val = $(this).attr('value')
+          localStorage.setItem('language_choice_info', val)
+          location.reload()
+        })
+      }
+
+      let pc_is_offline = GetQueryString('pc_is_offline')
+      function GetQueryString(name) {
+        // 截取url参数函数
+        let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
+        let r = window.location.search.substr(1).match(reg)
+        if (r != null) return unescape(r[2])
+        return null
+      }
+
+      if (pc_is_offline == 1) {
+        createPage('devlist', { parent: $('#page') })
+      }
+      // 截取url参数进行登录
+      let exp_username = publicFunc.urlParam().user ? publicFunc.urlParam().user : ''
+      let exp_password = publicFunc.urlParam().pw ? publicFunc.urlParam().pw : ''
+      if (exp_username) {
+        msdk_ctrl({
+          type: 'account_login_in',
+          data: {
+            user: exp_username,
+            password: mmd5.hex(exp_password),
+            // func: function(msg) {
+            func: function() {
+              g_experience = 1
+              createPage('devlist', {
+                parent: $('#page')
+              })
+            }
+          }
+        })
+      }
+    },
+    // 暂时不清楚kbwin是那个具体项目暂时简单搬迁
+    GetUrlParam_kb(paraName, url) {
+      let arrObj = url.split('?')
+      if (arrObj.length > 1) {
+        let arrPara = arrObj[1].split('&')
+        let arr
+        for (let i = 0; i < arrPara.length; i++) {
+          arr = arrPara[i].split('=')
+          if (arr != null && arr[0] == paraName) {
+            return arr[1]
+          }
+        }
+        return ''
+      } else {
+        return ''
+      }
+    }
+  },
+  mounted() {
+    this.$nextTick(async () => {
+      // 强制重新引入多国语言 main.js中的引用无法确保在调用top时能够全局使用
+      let userLanguage = sessionStorage.getItem('userLanguage')
+      if (userLanguage) {
+        await this.$chooseLanguage.lang(userLanguage)
+      } else {
+        await this.$chooseLanguage.lang('en')
+      }
+      await this.create_top({ parent: $('#top') })
+      await publicFunc.importCss('Public.scss')
+    })
+  }
+}
+</script>

@@ -23,6 +23,7 @@ process.env.VUE_APP_PROJECT_NAME = config['--name']
 module.exports = {
   publicPath: "/" + process.env.VUE_APP_PROJECT_NAME + "/", // 设置本地服务域名后缀
   outputDir: './dist/http_' + process.env.VUE_APP_VERSION + time, // 项目打包输出路径
+  productionSourceMap: false,
   configureWebpack: config => {
     if (process.env.NODE_ENV === 'production') { // 生产环境打包使用插件
       // 为生产环境修改配置...
@@ -62,9 +63,9 @@ module.exports = {
   },
   chainWebpack: config => {
     config.module
-    .rule('image')
-    .test(/\.ico$/)
-    .use('url-loader')
-    .loader('url-loader')
+      .rule('image')
+      .test(/\.ico$/)
+      .use('url-loader')
+      .loader('url-loader')
   }
 }

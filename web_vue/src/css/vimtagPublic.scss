@@ -417,6 +417,9 @@ input, button, select, textarea {
 	border-right:1px solid #d6d7dc;
 	border-bottom:1px solid #d6d7dc;
 	box-sizing:border-box; 
+	white-space: nowrap;
+  text-overflow: ellipsis;
+	overflow: hidden;
 }
 .img_class {
 	width:100%;
@@ -6242,10 +6245,10 @@ line-height: 30px;
 #enter_history_img_box_tip{
 	position: absolute;
 	/*53   39*/
-    top: -63px; 
+    top: -63px;
     width: 175px;
     height: 50px;
-    left: -75px;
+    left: -60px;
     background: url(../assets/device/promptbox.png) no-repeat;
     z-index: 9999;
     color:#909090;

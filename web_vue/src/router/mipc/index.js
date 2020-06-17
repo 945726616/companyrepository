@@ -5,14 +5,14 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const testJq = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/testJq')
+const login = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/login')
 
 const mipcRouter = new Router({
   routes: [
     {
       path: '/',
-      name: 'testJq',
-      component: testJq
+      name: 'login',
+      component: login
     }
   ]
 })
