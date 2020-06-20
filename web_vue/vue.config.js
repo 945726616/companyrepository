@@ -21,7 +21,18 @@ process.env.VUE_APP_VERSION = config['--appVersion']
 process.env.VUE_APP_PROJECT_NAME = config['--name']
 
 module.exports = {
-  publicPath: "/" + process.env.VUE_APP_PROJECT_NAME + "/", // 设置本地服务域名后缀
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'https://wsbgp14.' + process.env.VUE_APP_PROJECT_NAME + '.com:7446',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
+  },
+  publicPath: process.env.NODE_ENV === 'production' ? "/" : "/" + process.env.VUE_APP_PROJECT_NAME + "/", // 设置本地服务域名后缀
   outputDir: './dist/http_' + process.env.VUE_APP_VERSION + time, // 项目打包输出路径
   productionSourceMap: false,
   configureWebpack: config => {

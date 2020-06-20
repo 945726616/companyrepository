@@ -61,7 +61,10 @@ input, button, select, textarea {
 #top_logo{
 	float:left;
 	margin-top:9px;
-	margin-right:10px;
+  margin-right:10px;
+  background: url(../assets/device/logo.png) no-repeat;
+  width: 145px;
+  height: 36px;
 }
 
 .top_list_menu{
@@ -236,7 +239,7 @@ input, button, select, textarea {
 }
 #login_box{
 	width:100%;
-	height:100%;
+  height:100%;
 	background-image:url(../assets/device/vimtag_bg.png);
 	background-size: 100% 100%;
 	background-color: rgb(90, 194, 208);

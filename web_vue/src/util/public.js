@@ -9,16 +9,17 @@ const publicFunc = {
     }
   },
   urlParam () { // 截取url参数
-    console.log(location, 'location')
     let args = new Object()
-    let query = location.href.split('?')[1]//Get the query string
-    let pairs = query.split("&")//Disconnect the comma
-    for (let i = 0; i < pairs.length; i++) {
-      let pos = pairs[i].indexOf('=')//Find name=value
-      if (pos == -1) continue//If you do not find just skip
-      let argname = pairs[i].substring(0, pos)//extract name
-      let value = pairs[i].substring(pos + 1)//extract value
-      args[argname] = unescape(value)//Save as property
+    if (process.env.NODE_ENV === 'production') {
+      let query = location.href.split('?')[1]//Get the query string
+      let pairs = query.split("&")//Disconnect the comma
+      for (let i = 0; i < pairs.length; i++) {
+        let pos = pairs[i].indexOf('=')//Find name=value
+        if (pos == -1) continue//If you do not find just skip
+        let argname = pairs[i].substring(0, pos)//extract name
+        let value = pairs[i].substring(pos + 1)//extract value
+        args[argname] = unescape(value)//Save as property
+      }
     }
     return args
   }

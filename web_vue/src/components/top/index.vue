@@ -3,17 +3,17 @@
 </template>
 <script>
 import publicFunc from '../../util/public.js'
+import md5 from 'js-md5'
 export default {
   methods: {
     create_top(obj) {
       if (window.location.href.indexOf('vimtag') > -1) {
-        console.log('vimtag')
         // vimtag结构
         obj.parent.html(
           "<div id='top_box'>" +
           "<div id='top_box_main'>" +
           "<div id='top_box_left'>" +
-          "<a target='_top'><div id='top_logo'><img src='./imgs/device/logo.png'></div></a>" +
+          "<a target='_top'><div id='top_logo'></div></a>" +
           '</div>' +
           "<div id='top_box_right'>" +
           "<div id='bottom_select_lang'></div>" +
@@ -118,12 +118,12 @@ export default {
       if (this.$store.state.jumpPageData.jmLogoFlag === 1) { // vimtag江门专属logo
         $('#top_logo')
           .children()[0]
-          .setAttribute('src', './imgs/device/m_logo.png')
+          .setAttribute('src', '../../asset/device/m_logo.png')
         $('#top_logo').children()[0].width = '220'
         $('#top_logo').children()[0].height = '36'
       }
       let username_value = mcs_my // 定义用户名
-      console.log(publicFunc.urlParam(), 'url')
+      // console.log(publicFunc.urlParam(), 'url')
       if (this.$store.state.jumpPageData.localModel) { // 判断是否为本地离线模式
         g_is_login = publicFunc.urlParam() && publicFunc.urlParam().c == 1 ? 1 : 0
         l_remember_data = sessionStorage.get('remember_msg_info')
@@ -221,27 +221,25 @@ export default {
         //点击体验
         let username = publicFunc.urlParam().ta ? publicFunc.urlParam().ta : 'vimtag'
         let password = publicFunc.urlParam().tp ? publicFunc.urlParam().tp : 'vimtag'
-        msdk_ctrl({
-          type: 'account_login_in',
-          data: {
-            user: username,
-            password: mmd5.hex(password),
-            // func: function(msg) {
-            func: function() {
-              g_experience = 1
-              createPage('devlist', { parent: $('#page') })
-            }
-          }
+        this.$api.login.sign_in({
+          user: username, // 用户名
+          password: md5.hex(password) // 密码
+        }).then(res => { // 登录回调处理
+          console.log(res, 'res')
+          // 跳转至设备列表页面
+          // g_experience = 1
+          // createPage('devlist', { parent: $('#page') })
         })
       })
       select_lang()
       function select_lang() {
         let l_select_lang = document.getElementsByClassName('select_lang')
-        let language_choice_info = localStorage.getItem('language_choice_info')
+        let language_choice_info = sessionStorage.getItem('userLanguage')
         let l_lang = language_choice_info ? language_choice_info : sessionStorage.getItem('projectName')
 
         for (let l = 0; l < l_select_lang.length; l++) {
-          if (l_select_lang[l].getAttribute('value') == l_lang) {
+          // console.log(l_select_lang[l].getAttribute('value'), 'lang_val')
+          if (l_select_lang[l].getAttribute('value') === l_lang) {
             $('#bottom_select_lang').html(l_select_lang[l].innerHTML)
           }
         }
@@ -284,23 +282,17 @@ export default {
       if (pc_is_offline == 1) {
         createPage('devlist', { parent: $('#page') })
       }
-      // 截取url参数进行登录
-      let exp_username = publicFunc.urlParam().user ? publicFunc.urlParam().user : ''
-      let exp_password = publicFunc.urlParam().pw ? publicFunc.urlParam().pw : ''
+      // 截取url登录相关参数
+      let exp_username = publicFunc.urlParam().user ? publicFunc.urlParam().user : '' // 用户名
+      let exp_password = publicFunc.urlParam().pw ? publicFunc.urlParam().pw : '' // 密码
       if (exp_username) {
-        msdk_ctrl({
-          type: 'account_login_in',
-          data: {
-            user: exp_username,
-            password: mmd5.hex(exp_password),
-            // func: function(msg) {
-            func: function() {
-              g_experience = 1
-              createPage('devlist', {
-                parent: $('#page')
-              })
-            }
-          }
+        // 调用登录接口
+        this.$api.login.sign_in({
+          user: exp_username, // 用户名
+          password: md5.hex(exp_password) // 密码
+        }).then(res => { // 登录回调处理
+          console.log(res, 'res')
+          // 跳转至设备列表页面
         })
       }
     },

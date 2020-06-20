@@ -22,6 +22,7 @@ if (!sessionStorage.getItem('userLanguage')) {
   chooseLanguage.lang(sessionStorage.getItem('userLanguage'))
 }
 
+
 Vue.prototype.$ = $
 Vue.prototype.$api = Api
 Vue.config.productionTip = false
