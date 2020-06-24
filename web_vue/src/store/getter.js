@@ -2,6 +2,7 @@
 
 const getters = {
   name: state => state.user.name,
-  password: state => state.user.password
+  password: state => state.user.password,
+  loginWaitFlag: state => state.jumpPageData.loginWaitFlag
 }
 export default getters

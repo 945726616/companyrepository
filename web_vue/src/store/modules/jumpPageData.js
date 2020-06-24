@@ -5,7 +5,8 @@ const jumpPageData = {
     pageObj: {},
     projectName: sessionStorage.getItem('projectName') ? sessionStorage.getItem('projectName') : '',
     jmLogoFlag: 0,
-    localModel: window.location.protocol === "file:" ? 1 : 0
+    localModel: window.location.protocol === "file:" ? 1 : 0,
+    loginWaitFlag: 0
   },
 
   mutations: {
@@ -23,6 +24,9 @@ const jumpPageData = {
     },
     SET_LOCAL_MODEL: (state, localModel) => {
       state.localModel = localModel
+    },
+    SET_LOGIN_WAIT_FLAG: (state, loginWaitFlag) => {
+      state.loginWaitFlag = loginWaitFlag
     }
   }
 }

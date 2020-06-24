@@ -4,6 +4,7 @@
  */
 import axios from 'axios'
 import x2js from 'x2js' //xml数据处理插件
+import mcodec from '../util/mcodec'
 const x2Js = new x2js()
 // import router from '../router'
 
@@ -77,14 +78,15 @@ instance.interceptors.request.use(
   config => {
     let param = config.params // 取得当前get传递的对象
     let newParams = {} // 新建对象用于存储变更后的对象
-    for (let paramName in param) {
-      newParams['d' + paramName] = param[paramName] // 遍历对象键值对并重新命名属性名 后续此处需要添加两个额外的固定参数数据值通过vuex进行存取
-    }
+    newParams = mcodec.obj_2_url(param, '&')
+    // for (let paramName in param) {
+    //   newParams['d' + paramName] = param[paramName] // 遍历对象键值对并重新命名属性名 后续此处需要添加两个额外的固定参数数据值通过vuex进行存取
+    // }
     config.params = {
       hfrom_handle: 1,
       ...newParams
     } // 修改后的对象
-    if (process.env.NODE_ENV !== 'production') { // 如果是测试环境下
+    if (process.env.NODE_ENV !== 'production') { // 如果是测试环境下接口添加/api采用代理地址进行访问,解决跨域等问题
       let url = config.url
       config.url = '/api' + url
     }

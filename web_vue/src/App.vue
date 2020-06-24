@@ -1,6 +1,7 @@
 <template>
 <!-- 入口文件 -->
   <div id="app">
+    <div id="tip_div"></div>
     <topBar />
     <!-- 调用路由部分进行渲染 -->
     <router-view />

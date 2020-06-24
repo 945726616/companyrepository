@@ -24,7 +24,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'https://wsbgp14.' + process.env.VUE_APP_PROJECT_NAME + '.com:7446',
+        target: 'https://wsbgp14.' + process.env.VUE_APP_PROJECT_NAME + '.com:7446', // 代理目标地址为正式版通用域名地址
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
@@ -72,7 +72,7 @@ module.exports = {
       })
     )
   },
-  chainWebpack: config => {
+  chainWebpack: config => { // 解决webpack无法打包.ico文件
     config.module
       .rule('image')
       .test(/\.ico$/)

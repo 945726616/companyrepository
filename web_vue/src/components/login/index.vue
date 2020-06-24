@@ -12,7 +12,7 @@
 <script>
 import publicFunc from '../../util/public.js'
 import languageSelect from '../../lib/exportModule/languageSelect.js'
-import md5 from 'js-md5'
+import md5 from '@/util/mmd5.js'
 export default {
   methods: {
     create_login_page(obj) {
@@ -112,7 +112,7 @@ export default {
         if (username) {
           localStorage.setItem(
             'remember_msg_info',
-            mcodec.obj_2_str({ user: username })
+            JSON.stringify({ user: username })
           ) // mcodec参见\web\lib\mlib.core.codec.js
         }
       }
@@ -131,6 +131,8 @@ export default {
         $('#signin_pw').css('color', '#404040')
       }
       if (localStorage.getItem('keep_pw')) {
+        // JSON.parse(localStorage.getItem('keep_pw'))
+        // console.log('记住密码')
         // 存储中保持登录状态被选中
         $('#keep_sign_in_check').attr('checked', 'true') // 页面中添加被选中效果
       }
@@ -139,59 +141,59 @@ export default {
         let dom_forget_pass =
           "<div id='forget_pass_inner'>" +
           "<div id='binding_account_cancel_btn'>&times </div>" +
-          "<div style='margin-top:50px ' id='input_account_page'>" +
-          "<div style='font-size:20px color:#323232 '>" +
+          "<div style='margin-top:50px;' id='input_account_page'>" +
+          "<div style='font-size:20px; color:#323232;'>" +
           mcs_forgot_your_password +
           '</div>' + // 忘记密码 (弹框title)
-          "<div style='font-size:14px color:#646464 margin-top:40px margin-bottom:20px '>" +
+          "<div style='font-size:14px; color:#646464; margin-top:40px; margin-bottom:20px;'>" +
           mcs_valid_user_name +
           '</div>' + // 第一步：请输入有效用户名
-          "<div style='margin-bottom:20px '>" +
-          "<input class='standard_inputs_normal' id='binding_account_name' type='text' style='width:230px float:none ' value='" +
+          "<div style='margin-bottom:20px;'>" +
+          "<input class='standard_inputs_normal' id='binding_account_name' type='text' style='width:230px; float:none;' value='" +
           mcs_please_input_username +
           "'>" + // 请输入用户名
-          "<input class='standard_inputs_normal' id='binding_account' type='text' style='display:none color:#404040 width:230px float:none '>" +
+          "<input class='standard_inputs_normal' id='binding_account' type='text' style='display:none; color:#404040; width:230px; float:none;'>" +
           '</div>' +
-          "<div style='width:235px margin:auto '>" + // 下一步按钮
-          "<input id='binding_account_next_btn' style='width:100% line-height:34px height:34px background-color:#00a6ba ' type='button' class='vimtag_button_right' value='" +
+          "<div style='width:235px; margin:auto;'>" + // 下一步按钮
+          "<input id='binding_account_next_btn' style='width:100%; line-height:34px; height:34px; background-color:#00a6ba;' type='button' class='vimtag_button_right' value='" +
           mcs_action_next +
           "'>" +
           '</div>' +
           '</div>' +
-          "<div style='margin-top:50px display:none color:#00a6ba font-size:14px ' id='input_email_page'>" +
-          "<div style='font-size:20px color:#323232 '>" +
+          "<div style='margin-top:50px; display:none; color:#00a6ba; font-size:14px;' id='input_email_page'>" +
+          "<div style='font-size:20px; color:#323232;'>" +
           mcs_forgot_your_password +
           '</div>' + // 忘记密码 (弹框title)
-          "<div style='font-size:14px color:#646464 margin-top:40px margin-bottom:10px '>" +
+          "<div style='font-size:14px; color:#646464; margin-top:40px; margin-bottom:10px;'>" +
           mcs_binding_mailbox +
           '</div>' + // 第二步：请输入绑定的邮箱
-          "<div id='email_warn' style='display:none margin-bottom:10px '>" +
+          "<div id='email_warn' style='display:none; margin-bottom:10px;'>" +
           '<span>' +
           mcs_prompt +
           ": </span><span id='binding_account_email'></span>" + // 提示: 绑定的邮箱隐去中间部分
           '</div>' +
-          "<div style='margin-bottom:10px '>" +
-          "<input class='standard_inputs_normal' id='recovery_pass_email_addr' type='text' style='width:230px float:none ' value='" +
+          "<div style='margin-bottom:10px;'>" +
+          "<input class='standard_inputs_normal' id='recovery_pass_email_addr' type='text' style='width:230px; float:none;' value='" +
           mcs_input_email_addr +
           "'>" + // 邮箱输入框部分
-          "<input class='standard_inputs_normal' id='recovery_pass_email' type='text' style='display:none color:#404040 width:230px float:none '>" +
+          "<input class='standard_inputs_normal' id='recovery_pass_email' type='text' style='display:none; color:#404040; width:230px; float:none;'>" +
           '</div>' +
-          "<div style='width:235px margin:auto margin-top:10px '>" +
-          "<input id='recovery_pass_ok_btn' style='width:100% line-height:34px height:34px' type='button' class='vimtag_button_left' value='" +
+          "<div style='width:235px; margin:auto; margin-top:10px;'>" +
+          "<input id='recovery_pass_ok_btn' style='width:100%; line-height:34px; height:34px;' type='button' class='vimtag_button_left' value='" +
           mcs_ok +
           "'>" + // 确定按钮
-          "<input id='recovery_pass_cancel_btn' style='display:none ' type='button' class='vimtag_button_right' value='" +
+          "<input id='recovery_pass_cancel_btn' style='display:none;' type='button' class='vimtag_button_right' value='" +
           mcs_cancel +
           "'>" + // 取消按钮
           '</div>' +
           '</div>' +
-          "<div style='margin-top:50px display:none color:#00a6ba font-size:14px ' id='forget_password_page'>" +
-          "<div style='font-size:20px color:#323232 '>" +
+          "<div style='margin-top:50px; display:none; color:#00a6ba; font-size:14px;' id='forget_password_page'>" +
+          "<div style='font-size:20px; color:#323232;'>" +
           mcs_forgot_your_password +
           '</div>' + // 忘记密码 (弹框title)
-          "<div style='margin-bottom:10px margin:0 auto margin-top:60px font-size:14px color:#323232 width:335px ' id='retrieve_password_warn'></div>" +
-          "<div style='width:235px margin:auto margin-top:20px '>" + // 提示内容
-          "<input id='forget_password_close_btn' style='width:100% line-height:34px height:34px background-color:#00a6ba ' type='button' class='vimtag_button_left' value='" +
+          "<div style='margin-bottom:10px; margin:0 auto; margin-top:60px; font-size:14px; color:#323232; width:335px;' id='retrieve_password_warn'></div>" +
+          "<div style='width:235px; margin:auto; margin-top:20px; '>" + // 提示内容
+          "<input id='forget_password_close_btn' style='width:100%; line-height:34px; height:34px; background-color:#00a6ba;' type='button' class='vimtag_button_left' value='" +
           mcs_ok +
           "'>" + // 确定按钮
           '</div>' +
@@ -203,8 +205,8 @@ export default {
         let l_username_value = $('#signin_name')
           .val()
           .trim() // 获取用户名 去除空格
-        let appid = location.origin.split('www.')[1] // 获取项目地址vimtag.com/mipcm.com
-        let name = appid.split('.')[0] // 获取项目名 vimtag/mipcm
+        let appid = 'vimtag.com' // location.origin.split('www.')[1] // 获取项目地址vimtag.com/mipcm.com
+        let name = 'vimtag' // appid.split('.')[0] // 获取项目名 vimtag/mipcm
         if (l_username_value && l_username_value !== mcs_username) {
           $('#binding_account_name').css('display', 'none')
           $('#binding_account').css('display', 'inline')
@@ -249,7 +251,7 @@ export default {
           // 点击下一步按钮
           if (!$('#binding_account').val()) {
             // 未输入任何值弹出报错信息
-            msg_tips({
+            publicFunc.msg_tips({
               msg: mcs_the_user_name_is_empty,
               type: 'error',
               timeout: 3000
@@ -257,7 +259,10 @@ export default {
             return
           }
           // 调用绑定邮箱接口
-          this.$api.login
+          // _this.$api.login.mdh().then(res => {
+          //   console.log(res, 'mdh_res_login')
+          // })
+          _this.$api.login
             .binding_email_get({
               username: $('#binding_account').val(),
               appid: appid
@@ -269,23 +274,28 @@ export default {
                 // 用户名验证回调函数
                 if (msg.result) {
                   if (msg.result == 'accounts.user.unknown') {
-                    msg_tips({
+                    publicFunc.msg_tips({
                       msg: mcs_username_does_not_exis,
                       type: 'error',
                       timeout: 3000
                     })
                   } else {
-                    msg_tips({ msg: msg.result, type: 'error', timeout: 3000 })
+                    publicFunc.msg_tips({
+                      msg: msg.result,
+                      type: 'error',
+                      timeout: 3000
+                    })
                   }
                 } else {
-                  if (msg.conf.email) {
+                  console.log(msg)
+                  if (msg.data.cacs_query_ack.email) {
                     // 用户绑定邮箱
                     $('#input_account_page').css('display', 'none')
                     $('#input_email_page').css('display', 'block')
                     $('#email_warn').css('display', 'block')
-                    $('#binding_account_email').html(msg.conf.email)
+                    $('#binding_account_email').html(msg.data.cacs_query_ack.email)
                   } else {
-                    msg_tips({
+                    publicFunc.msg_tips({
                       msg: mcs_recovery_fail_no_mail,
                       type: 'error',
                       timeout: 3000
@@ -304,7 +314,7 @@ export default {
             $('#recovery_pass_email').val() === mcs_input_email_addr
           ) {
             // 验证输入的邮箱号是否与账户绑定的邮箱一致
-            msg_tips({
+            publicFunc.msg_tips({
               msg: mcs_invalid_email_addr,
               type: 'error',
               timeout: 3000
@@ -313,7 +323,7 @@ export default {
           } else {
             reg = /^([a-zA-Z0-9]+[_|\\_|\\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\\_|\\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
             if (!reg.exec($('#recovery_pass_email').val())) {
-              msg_tips({
+              publicFunc.msg_tips({
                 msg: mcs_invalid_email_addr,
                 type: 'error',
                 timeout: 3000
@@ -335,7 +345,11 @@ export default {
               function recovery_binding_email_ack(msg) {
                 // 重置密码回调处理函数
                 if (msg !== '') {
-                  msg_tips({ msg: msg, type: 'error', timeout: 3000 })
+                  publicFunc.msg_tips({
+                    msg: msg,
+                    type: 'error',
+                    timeout: 3000
+                  })
                 } else {
                   $('#input_email_page').css('display', 'none')
                   $('#forget_password_page').css('display', 'block')
@@ -552,14 +566,17 @@ export default {
         }
       })
       //Login key events 点击登录按钮事件
+      let _this = this
+      let loginWaitFlag = this.$store.state.jumpPageData.loginWaitFlag
       $('#sign_in').click(function() {
-        if (!localStorage.getItem('auto_login')) {
-          g_login_method = 'manual' //登录日志
-        }
+        console.log('enter sign_in')
+        // if (!localStorage.getItem('auto_login')) {
+        //   g_login_method = 'manual' //登录日志
+        // }
         if ($('#keep_sign_in_check').is(':checked')) {
           localStorage.setItem('keep_pw', 1)
         } else {
-          localStorage.setItem('keep_pw')
+          localStorage.setItem('keep_pw', '')
         }
         if ($('#signin_pw').val() === 'amdin') {
           $('#signin_pw').val('admin')
@@ -571,12 +588,13 @@ export default {
           .val()
           .trim()
         //storage the password use mmd5 format
+        let l_pwd_val
         if (password_value == '••••••') l_pwd_val = l_password_value
         else l_pwd_val = md5.hex(password_value)
 
         let isDevicesID = username_value.search(/1jfie/i)
         if (!username_value || username_value == mcs_username) {
-          msg_tips({
+          publicFunc.msg_tips({
             msg: mcs_the_user_name_is_empty,
             type: 'error',
             timeout: 3000
@@ -585,7 +603,7 @@ export default {
         }
         if (!password_value || password_value == mcs_password) {
           if (!localStorage.getItem('remember_msg_info')) {
-            msg_tips({
+            publicFunc.msg_tips({
               msg: mcs_the_password_is_empty,
               type: 'error',
               timeout: 3000
@@ -595,17 +613,22 @@ export default {
         }
         /*IPC to debug so annotation these lines*/
         if (isDevicesID == 0 && g_project != 'mipc') {
-          msg_tips({ msg: mcs_register_prompt, type: 'error', timeout: 3000 })
+          publicFunc.msg_tips({
+            msg: mcs_register_prompt,
+            type: 'error',
+            timeout: 3000
+          })
           return
         }
-        //Judgment is ipc login or user login
-        let reg = /^\d/
-        if (reg.exec(username_value)) g_login_status = 'ipc'
-        else g_login_status = 'register_user'
-        if (!g_login_waiting_flag) {
+        //Judgment is ipc login or user login 记录用户是ipc登录还是账户登录(目前暂未发现该参数有实际用途暂且注释)
+        // let reg = /^\d/
+        // if (reg.exec(username_value)) g_login_status = 'ipc'
+        // else g_login_status = 'register_user'
+        if (!loginWaitFlag) {
           // 用户登录
-          g_login_waiting_flag = 1
-          this.$api.login
+          _this.$store.commit('SET_LOGIN_WAIT_FLAG', 1)
+          console.log('use Api')
+          _this.$api.login
             .sign_in({
               user: username_value, // 用户名
               password: l_pwd_val // 密码
@@ -613,14 +636,13 @@ export default {
             .then(res => {
               // 登录回调处理
               console.log(res, 'res')
-              function login_ack(msg, ref) {
+              function login_ack(msg) {
                 //There is a problem before returning, no result is a successful login
                 if (msg.result == '') {
                   login_ack_lid = msg.lid //登录返回lid head中
-                  login_result = 'success'
                   loginendtime = new Date().getTime() //日志
                   logintime = (loginendtime - loginstartime) / 1000
-                  g_username = ref.user
+                  g_username = username_value
                   let version_type = ''
                   if (navigator.userAgent.indexOf('Intel Mac') > -1) {
                     version_type = 'mac_' + g_oems
@@ -631,7 +653,7 @@ export default {
                     $('#top_menu_my').html(username_value)
                   }
                   // 获取版本信息接口
-                  this.$api.login
+                  _this.$api.login
                     .get_version({
                       srv: window.location.host,
                       ver_type: version_type,
@@ -670,7 +692,7 @@ export default {
                   //   for (let m = 0; m < mmq_data.length; m++) {
                   //     if (mmq_data[m].code == 'motion_alert') {
                   //       if (mmq_data[m].type == 'alert') {
-                  //         msg_tips({
+                  //         publicFunc.msg_tips({
                   //           msg:
                   //             mmq_data[m].sn + '&nbsp:&nbsp' + mcs_motion_alert,
                   //           type: 'warning',
@@ -679,7 +701,7 @@ export default {
                   //       }
                   //     } else if (mmq_data[m].code == 'sound_detect') {
                   //       if (mmq_data[m].type == 'alert') {
-                  //         msg_tips({
+                  //         publicFunc.msg_tips({
                   //           msg:
                   //             mmq_data[m].sn +
                   //             '&nbsp:&nbsp' +
@@ -690,7 +712,7 @@ export default {
                   //       }
                   //     } else if (mmq_data[m].code == 'face_alert') {
                   //       if (mmq_data[m].type == 'alert') {
-                  //         msg_tips({
+                  //         publicFunc.msg_tips({
                   //           msg:
                   //             mmq_data[m].sn +
                   //             '&nbsp:&nbsp' +
@@ -702,7 +724,7 @@ export default {
                   //     } else if (mmq_data[m].code == 'human_alert') {
                   //       //人型检测
                   //       if (mmq_data[m].type == 'alert') {
-                  //         msg_tips({
+                  //         publicFunc.msg_tips({
                   //           msg:
                   //             mmq_data[m].sn +
                   //             '&nbsp:&nbsp' +
@@ -714,7 +736,7 @@ export default {
                   //     } else if (mmq_data[m].code == 'sos') {
                   //       // 紧急按钮报警
                   //       if (mmq_data[m].type == 'alert') {
-                  //         msg_tips({
+                  //         publicFunc.msg_tips({
                   //           msg:
                   //             mmq_data[m].sn +
                   //             '&nbsp:&nbsp' +
@@ -736,7 +758,7 @@ export default {
                   //         mmq_data[m].type == 'alert' &&
                   //         door_status == 'open'
                   //       ) {
-                  //         msg_tips({
+                  //         publicFunc.msg_tips({
                   //           msg:
                   //             mmq_data[m].sn +
                   //             '&nbsp:&nbsp  ' +
@@ -748,7 +770,7 @@ export default {
                   //         mmq_data[m].type == 'alert' &&
                   //         door_status == 'close'
                   //       ) {
-                  //         msg_tips({
+                  //         publicFunc.msg_tips({
                   //           msg:
                   //             mmq_data[m].sn +
                   //             '&nbsp:&nbsp  ' +
@@ -760,9 +782,9 @@ export default {
                   //     }
                   //   }
                   // }
-                  this.$api.login
+                  _this.$api.login
                     .get_req({
-                      username: ref.user,
+                      username: username_value,
                       srv: appid
                     })
                     .then(res => {
@@ -814,7 +836,7 @@ export default {
                             if (param[i].name == 'sc.logo') {
                               //给江门xhjymclz修改设备列表页面图标
                               // g_supprot_clogo = 1;
-                              store.commit('SET_JM_LOGO_FLAG', 1)
+                              _this.$store.commit('SET_JM_LOGO_FLAG', 1)
                               createPage('top', { parent: $('#top') })
                             }
                           }
@@ -828,7 +850,7 @@ export default {
                     // 记住密码状态/自动登录状态设置
                     localStorage.setItem(
                       'remember_msg_info',
-                      mcodec.obj_2_str({
+                      JSON.stringify({
                         user: username_value,
                         password: l_pwd_val
                       })
@@ -837,34 +859,35 @@ export default {
                     g_is_login = 1
                   }
                 } else {
-                  login_result = 'fail' //登录结果失败
-                  g_login_waiting_flag = 0
+                  //登录结果失败
+                  console.log('fail_login')
+                  _this.$store.commit('SET_LOGIN_WAIT_FLAG', 0)
                   if (msg.result == 'accounts.user.offline') {
-                    msg_tips({
+                    publicFunc.msg_tips({
                       msg: mcs_offline,
                       type: 'warning',
                       timeout: 3000
                     })
                   } else if (msg.result == 'accounts.user.unknown') {
-                    msg_tips({
+                    publicFunc.msg_tips({
                       msg: mcs_username_does_not_exis,
                       type: 'warning',
                       timeout: 3000
                     })
                   } else if (msg.result == 'accounts.pass.invalid') {
-                    msg_tips({
+                    publicFunc.msg_tips({
                       msg: mcs_invalid_password,
                       type: 'warning',
                       timeout: 3000
                     })
                   } else if (msg.result == 'accounts.user.inactive') {
-                    msg_tips({
+                    publicFunc.msg_tips({
                       msg: mcs_email_inactive,
                       type: 'warning',
                       timeout: 3000
                     })
                   } else {
-                    msg_tips({
+                    publicFunc.msg_tips({
                       msg: mrs_request_error,
                       type: 'warning',
                       timeout: 3000
@@ -873,7 +896,7 @@ export default {
                   // upload_log("log_app_login")  //登录请求返回后发送日志
                 }
               }
-              login_ack(res, ref)
+              login_ack(res)
             })
         }
       })
@@ -888,7 +911,7 @@ export default {
           pw_confirm_value = $('#register_signin_pw_again').val()
 
         if (!username_value || username_value == mcs_input_username) {
-          msg_tips({
+          publicFunc.msg_tips({
             msg: mcs_the_user_name_is_empty,
             type: 'error',
             timeout: 3000
@@ -897,7 +920,7 @@ export default {
         } else {
           reg = /^([a-zA-Z][a-zA-Z0-9]{5,31})$/
           if (!reg.exec(username_value)) {
-            msg_tips({
+            publicFunc.msg_tips({
               msg: mcs_user_letter_range_hint,
               type: 'warning',
               timeout: 5000
@@ -906,7 +929,7 @@ export default {
           }
         }
         if (!password_value || password_value == mcs_input_password) {
-          msg_tips({
+          publicFunc.msg_tips({
             msg: mcs_the_password_is_empty,
             type: 'error',
             timeout: 3000
@@ -915,7 +938,7 @@ export default {
         } else {
           reg = /^[0-9a-zA-Z]{8,32}$/
           if (!reg.exec(password_value)) {
-            msg_tips({
+            publicFunc.msg_tips({
               msg: mcs_password_range_hint,
               type: 'warning',
               timeout: 5000
@@ -924,11 +947,15 @@ export default {
           }
         }
         if (!pw_confirm_value || pw_confirm_value == mcs_confirm_password) {
-          msg_tips({ msg: mcs_password_empty, type: 'error', timeout: 3000 })
+          publicFunc.msg_tips({
+            msg: mcs_password_empty,
+            type: 'error',
+            timeout: 3000
+          })
           return
         }
         if (pw_confirm_value != password_value) {
-          msg_tips({
+          publicFunc.msg_tips({
             msg: mcs_two_password_input_inconsistent,
             type: 'error',
             timeout: 3000
@@ -942,10 +969,14 @@ export default {
             password: password_value,
             func: function(msg) {
               if (msg == mcs_successful_sign_up) {
-                msg_tips({ msg: msg, type: 'success', timeout: 3000 })
+                publicFunc.msg_tips({
+                  msg: msg,
+                  type: 'success',
+                  timeout: 3000
+                })
                 createPage('login', obj)
               } else {
-                msg_tips({ msg: msg, type: 'error', timeout: 3000 })
+                publicFunc.msg_tips({ msg: msg, type: 'error', timeout: 3000 })
               }
             }
           }

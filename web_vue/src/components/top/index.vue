@@ -3,7 +3,7 @@
 </template>
 <script>
 import publicFunc from '../../util/public.js'
-import md5 from 'js-md5'
+import md5 from '@/util/mmd5.js'
 export default {
   methods: {
     create_top(obj) {

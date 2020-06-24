@@ -1,0 +1,8 @@
+/build/
+/assets/
+/assets/icon/iconfont.js
+/config/
+/lib/zh_CN.js
+
+/dist/
+/*.js
