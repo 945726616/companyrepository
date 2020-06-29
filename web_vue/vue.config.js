@@ -29,6 +29,13 @@ module.exports = {
         pathRewrite: {
           '^/api': ''
         }
+      },
+      '/project': {
+        target: 'http://' + process.env.VUE_APP_PROJECT_NAME + '.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/project': ''
+        }
       }
     }
   },

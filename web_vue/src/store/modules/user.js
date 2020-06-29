@@ -1,13 +1,18 @@
 // 存储用户信息vuex
 const user = {
   state: {
-    name: '',
-    password: '',
-    tid: 0,
+    name: '', // 用户名
+    password: '', // 密码
+    tid: 0, // dh获取的相关加密验证id
     lid: 0,
     sid: 0,
     seq: 0,
-    shareKey: ''
+    shareKey: '',
+    secretKey: '', // dh校验使用的私钥
+    mmqFlag: 0, // mmq是否创建标志
+    mmqPickTimeFlag1: null, // mmq轮询回调计时器1标识
+    mmqPickTimeFlag2: null, // mmq轮询回调计时器2标识
+    qid: '' // 存储qid用于请求中
   },
 
   mutations: {
@@ -31,6 +36,21 @@ const user = {
     },
     SET_SID: (state, sid) => {
       state.sid = sid
+    },
+    SET_SECRET_KEY: (state, secretKey) => {
+      state.secretKey = secretKey
+    },
+    SET_MMQ_FLAG: (state, mmqFlag) => {
+      state.mmqFlag = mmqFlag
+    },
+    SET_QID: (state, qid) => {
+      state.qid = qid
+    },
+    SET_MMQ_PICK_TIME_FLAG_1: (state, mmqPickTimeFlag1) => {
+      state.mmqPickTimeFlag1 = mmqPickTimeFlag1
+    },
+    SET_MMQ_PICK_TIME_FLAG_2: (state, mmqPickTimeFlag2) => {
+      state.mmqPickTimeFlag2 = mmqPickTimeFlag2
     }
   },
 
@@ -41,7 +61,12 @@ const user = {
     setLid: ({commit}, lid) => commit('SET_LID', lid),
     setShareKey: ({commit}, shareKey) => commit('SET_SHARE_KEY', shareKey),
     setSeq: ({commit}, seq) => commit('SET_SEQ', seq),
-    setSid: ({commit}, sid) => commit('SET_SEQ', sid)
+    setSid: ({commit}, sid) => commit('SET_SID', sid),
+    setSecretKey: ({commit}, secretKey) => commit('SET_SECRET_KEY', secretKey),
+    setMmqFlag: ({commit}, mmqFlag) => commit('SET_MMQ_FLAG', mmqFlag),
+    setQid: ({commit}, qid) => commit('SET_QID', qid),
+    setMmqPickTimeFlag1: ({commit}, mmqPickTimeFlag1) => commit('SET_MMQ_PICK_TIME_FLAG_1', mmqPickTimeFlag1),
+    setMmqPickTimeFlag2: ({commit}, mmqPickTimeFlag2) => commit('SET_MMQ_PICK_TIME_FLAG_2', mmqPickTimeFlag2)
   }
 }
 

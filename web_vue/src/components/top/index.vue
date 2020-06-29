@@ -2,11 +2,11 @@
   <div id="top"></div>
 </template>
 <script>
-import publicFunc from '../../util/public.js'
 import md5 from '@/util/mmd5.js'
 export default {
   methods: {
     create_top(obj) {
+      let _this = this
       if (window.location.href.indexOf('vimtag') > -1) {
         // vimtag结构
         obj.parent.html(
@@ -104,28 +104,26 @@ export default {
         $('#mipc_logo_img').on('click', function() {
           $('#menu_more').attr('class', 'menu_top_li')
           $('#menu_download').attr('class', 'menu_top_li')
-          if (g_is_login) {
+          if (_this.$store.state.jumpPageData.loginFlag) {
             createPage('devlist', { parent: $('#page') })
-          } else if (g_experience) {
+          } else if (_this.$store.state.jumpPageData.experienceFlag) {
             createPage('devlist', { parent: $('#page') })
           } else {
-            g_login_waiting_flag = 0
+            _this.$store.dispatch('setLoginWaitFlag', 0)
             createPage('login', { parent: $('#page') })
           }
         })
       }
       // mx("#top_login_div").setAttribute("style","border:none;height:100%;line-height:62px;margin-top:0;padding:0 10px;");
-      if (this.$store.state.jumpPageData.jmLogoFlag === 1) { // vimtag江门专属logo
-        $('#top_logo')
-          .children()[0]
-          .setAttribute('src', '../../asset/device/m_logo.png')
+      if (_this.$store.state.jumpPageData.jmLogoFlag === 1) { // vimtag江门专属logo
+        $('#top_logo').children()[0].setAttribute('src', '../../asset/device/m_logo.png')
         $('#top_logo').children()[0].width = '220'
         $('#top_logo').children()[0].height = '36'
       }
       let username_value = mcs_my // 定义用户名
-      // console.log(publicFunc.urlParam(), 'url')
-      if (this.$store.state.jumpPageData.localModel) { // 判断是否为本地离线模式
-        g_is_login = publicFunc.urlParam() && publicFunc.urlParam().c == 1 ? 1 : 0
+      // console.log(_this.publicFunc.urlParam(), 'url')
+      if (_this.$store.state.jumpPageData.localModel) { // 判断是否为本地离线模式
+        g_is_login = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
         l_remember_data = sessionStorage.get('remember_msg_info')
         l_remember_data = eval('(' + l_remember_data + ')')
         if (g_is_login) {
@@ -163,23 +161,23 @@ export default {
       }
       $('#top_menu_my').click(function() {
         // 点击个人中心
-        if (publicFunc.urlParam().l == 'local') {
-          this.$store.commit('SET_LOCAL_MODEL', 1)
+        if (_this.publicFunc.urlParam().l == 'local') {
+          _this.$store.dispatch('setLocalModel', 1)
         }
-        if (this.$store.state.jumpPageData.localModel) {
-          g_is_login = publicFunc.urlParam() && publicFunc.urlParam().c == 1 ? 1 : 0
+        if (_this.$store.state.jumpPageData.localModel) {
+          g_is_login = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
         }
         createPage('my', { parent: $('#page') })
       })
 
       $('#top_login_div').click(function() {
-        if (this.$store.state.jumpPageData.localModel) {
+        if (_this.$store.state.jumpPageData.localModel) {
           //如果点击了本地搜索
-          g_is_login = publicFunc.urlParam() && publicFunc.urlParam().c == 1 ? 1 : 0
+          g_is_login = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
           if (g_is_login) {
             //已经登录了	点击我的设备无效
             // console.log('登录状态点击我的设备')
-            this.$store.commit('SET_LOCAL_MODEL', 0)
+            _this.$store.dispatch('setLocalModel', 0)
             // console.log(location.href)  // http://45.113.201.4:7080/dcm/http_v10.1.4.1911140933/device/v10.1.4.1911140…main.product.htm?v10.1.4.19111409331&m=test.vimtag.com&ta=&tp=&l=local&c=1
             // console.log(location.href.split("&"), '切割后的数组')
             if (window.fujikam === 'fujikam') {
@@ -200,12 +198,12 @@ export default {
           }
         } else {
           //没有点击本地搜索
-          if (g_experience == 1) {
+          if (_this.$store.state.jumpPageData.experienceFlag === 1) {
             // g_experience为体验权限 0非体验 1体验
             createPage('login', { parent: $('#page') })
           } else {
-            g_experience = 0
-            if (g_is_login) {
+            _this.$store.dispatch('setExperienceFlag', 0)
+            if (_this.$store.state.jumpPageData.loginFlag) {
               //已经登录，直接到设备列表页面
               // console.log('点击了设备列表按钮')
               createPage('devlist', { parent: $('#page') })
@@ -219,8 +217,8 @@ export default {
 
       $('#top_experience_div').click(function() {
         //点击体验
-        let username = publicFunc.urlParam().ta ? publicFunc.urlParam().ta : 'vimtag'
-        let password = publicFunc.urlParam().tp ? publicFunc.urlParam().tp : 'vimtag'
+        let username = _this.publicFunc.urlParam().ta ? _this.publicFunc.urlParam().ta : 'vimtag'
+        let password = _this.publicFunc.urlParam().tp ? _this.publicFunc.urlParam().tp : 'vimtag'
         this.$api.login.sign_in({
           user: username, // 用户名
           password: md5.hex(password) // 密码
@@ -283,8 +281,8 @@ export default {
         createPage('devlist', { parent: $('#page') })
       }
       // 截取url登录相关参数
-      let exp_username = publicFunc.urlParam().user ? publicFunc.urlParam().user : '' // 用户名
-      let exp_password = publicFunc.urlParam().pw ? publicFunc.urlParam().pw : '' // 密码
+      let exp_username = _this.publicFunc.urlParam().user ? _this.publicFunc.urlParam().user : '' // 用户名
+      let exp_password = _this.publicFunc.urlParam().pw ? _this.publicFunc.urlParam().pw : '' // 密码
       if (exp_username) {
         // 调用登录接口
         this.$api.login.sign_in({
@@ -324,7 +322,7 @@ export default {
         await this.$chooseLanguage.lang('en')
       }
       await this.create_top({ parent: $('#top') })
-      await publicFunc.importCss('Public.scss')
+      await this.publicFunc.importCss('Public.scss')
     })
   }
 }

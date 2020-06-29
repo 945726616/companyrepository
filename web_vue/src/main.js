@@ -4,6 +4,7 @@ import router from "./router"
 import App from './App.vue'
 import Api from './api'
 import $ from 'jquery'
+import Public from './util/public.js'
 
 // 引入多国语言切换插件
 import chooseLanguage from './lib/exportModule/languageExport'
@@ -26,6 +27,7 @@ if (!sessionStorage.getItem('userLanguage')) {
 Vue.prototype.$ = $
 Vue.prototype.$api = Api
 Vue.config.productionTip = false
+Vue.prototype.publicFunc = Public
 
 new Vue({
   router,

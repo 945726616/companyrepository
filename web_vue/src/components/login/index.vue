@@ -10,15 +10,24 @@
 </style>
 
 <script>
-import publicFunc from '../../util/public.js'
 import languageSelect from '../../lib/exportModule/languageSelect.js'
 import md5 from '@/util/mmd5.js'
+import mme from '@/util/mme.js'
 export default {
+  data () {
+    return {
+      appid: 'vimtag.com', // location.origin.split('www.')[1] // 获取项目地址vimtag.com/mipcm.com
+      name: 'vimtag' // appid.split('.')[0] // 获取项目名 vimtag/mipcm
+    }
+  },
   methods: {
-    create_login_page(obj) {
+    create_login_page (obj) {
       // 创建登录页面dom结构
       // 暂存全局obj变量
       // g_obj_login = obj
+      let _this = this // jq代码报错全局this指向(后续会有部分选择器内操作代码会导致this指向错误需要用_this进行保留,同时data中定义的变量也需要使用_this,暂且这样后续使用vueDom时修复)
+      let l_password_value // 暂定义局部记住密码时获取到的存储的密码
+      let l_pwd_val // 函数内接口使用的密码值
       obj.parent.html(
         "<div id='login_page'>" +
         "<div id='login_box'>" +
@@ -86,11 +95,10 @@ export default {
         '</div>' +
         '</div>' +
         "<div id='forget_pass_inner_main'>" + // 忘记密码点击弹窗渲染节点
-          '</div>' +
-          '</div>' +
-          '</div>'
+        '</div>' +
+        '</div>' +
+        '</div>'
       )
-
       // 默认展示登录页面的节点
       $('#keep_sign_in').show()
       $('#register_username').hide()
@@ -98,7 +106,6 @@ export default {
       $('#register_account_pwd_again').hide()
       $('#register_btn').hide()
       $('#sign_account').hide()
-
       let bt, aaa, username
       if (localStorage.getItem('remember_msg_info')) {
         // mlocal_storage参见\web\lib\mlib.core.localstorage.js
@@ -106,21 +113,14 @@ export default {
         aaa = eval('(' + bt + ')') // aaa为remember_msg_info字符串方法的结果
         username = aaa.user
       }
-
-      if (!localStorage.getItem('keep_pw')) {
-        // 本地加密存储帐号密码 改变自动登录状态
+      if (!localStorage.getItem('keep_pw')) { // 本地加密存储帐号密码 改变自动登录状态
         if (username) {
-          localStorage.setItem(
-            'remember_msg_info',
-            JSON.stringify({ user: username })
-          ) // mcodec参见\web\lib\mlib.core.codec.js
+          localStorage.setItem('remember_msg_info', JSON.stringify({ user: username }))
         }
       }
 
       let l_remember_data = localStorage.getItem('remember_msg_info') // 从存储空间中取出账户名和密码并填写渲染在页面中
-      let l_remember_data_obj = l_remember_data
-        ? eval('(' + l_remember_data + ')')
-        : null
+      let l_remember_data_obj = l_remember_data ? eval('(' + l_remember_data + ')') : null
       if (l_remember_data_obj && l_remember_data_obj.user) {
         $('#signin_name').val(l_remember_data_obj.user)
         $('#signin_name').attr('style', 'color: #404040')
@@ -130,14 +130,12 @@ export default {
         l_password_value = l_remember_data_obj.password
         $('#signin_pw').css('color', '#404040')
       }
-      if (localStorage.getItem('keep_pw')) {
+      if (localStorage.getItem('keep_pw')) { // 存储中保持登录状态被选中
         // JSON.parse(localStorage.getItem('keep_pw'))
         // console.log('记住密码')
-        // 存储中保持登录状态被选中
         $('#keep_sign_in_check').attr('checked', 'true') // 页面中添加被选中效果
       }
-      $('#forget_pass').click(function() {
-        // 忘记密码渲染dom
+      $('#forget_pass').click(function () { // 忘记密码渲染dom
         let dom_forget_pass =
           "<div id='forget_pass_inner'>" +
           "<div id='binding_account_cancel_btn'>&times </div>" +
@@ -202,56 +200,44 @@ export default {
         // 在登录页面中插入忘记密码弹窗dom
         $('#forget_pass_inner_main').html(dom_forget_pass)
         // dom绑定局部元素
-        let l_username_value = $('#signin_name')
-          .val()
-          .trim() // 获取用户名 去除空格
-        let appid = 'vimtag.com' // location.origin.split('www.')[1] // 获取项目地址vimtag.com/mipcm.com
-        let name = 'vimtag' // appid.split('.')[0] // 获取项目名 vimtag/mipcm
+        let l_username_value = $('#signin_name').val().trim() // 获取用户名 去除空格
         if (l_username_value && l_username_value !== mcs_username) {
           $('#binding_account_name').css('display', 'none')
           $('#binding_account').css('display', 'inline')
           $('#binding_account').val(l_username_value)
         }
 
-        $('#binding_account_name').focus(function() {
-          // 当焦点在用户名输入框时,隐藏展示的input 显示隐藏的input框
+        $('#binding_account_name').focus(function () { // 当焦点在用户名输入框时,隐藏展示的input 显示隐藏的input框
           $('#binding_account_name').css('display', 'none')
           $('#binding_account').css('display', 'inline')
           $('#binding_account').focus()
         })
-        $('#binding_account').focus(function() {
-          // 触发select事件
+        $('#binding_account').focus(function () { // 触发select事件
           $('#binding_account').select()
         })
-        $('#binding_account').blur(function() {
-          // 焦点离开时事件操作
-          if ($('#binding_account').val() === '') {
-            // 未输入任何值时隐藏输入框显示默认展示框
+        $('#binding_account').blur(function () { // 焦点离开时事件操作
+          if ($('#binding_account').val() === '') { // 未输入任何值时隐藏输入框显示默认展示框
             $('#binding_account').css('display', 'none')
             $('#binding_account_name').css('display', 'inline')
           }
         })
-        $('#recovery_pass_email_addr').focus(function() {
-          // 邮箱验证框
+        $('#recovery_pass_email_addr').focus(function () { // 邮箱验证框
           $('#recovery_pass_email_addr').css('display', 'none')
           $('#recovery_pass_email').css('display', 'inline')
           $('#recovery_pass_email').focus()
         })
-        $('#recovery_pass_email').focus(function() {
+        $('#recovery_pass_email').focus(function () {
           $('#recovery_pass_email').select()
         })
-        $('#recovery_pass_email').blur(function() {
-          // 焦点离开邮箱验证
+        $('#recovery_pass_email').blur(function () { // 焦点离开邮箱验证
           if ($('#recovery_pass_email').val() === '') {
             $('#recovery_pass_email').css('display', 'none')
             $('#recovery_pass_email_addr').css('display', 'inline')
           }
         })
-        $('#binding_account_next_btn').click(function() {
-          // 点击下一步按钮
-          if (!$('#binding_account').val()) {
-            // 未输入任何值弹出报错信息
-            publicFunc.msg_tips({
+        $('#binding_account_next_btn').click(function () { // 点击下一步按钮
+          if (!$('#binding_account').val()) { // 未输入任何值弹出报错信息
+            _this.publicFunc.msg_tips({
               msg: mcs_the_user_name_is_empty,
               type: 'error',
               timeout: 3000
@@ -259,62 +245,50 @@ export default {
             return
           }
           // 调用绑定邮箱接口
-          // _this.$api.login.mdh().then(res => {
-          //   console.log(res, 'mdh_res_login')
-          // })
-          _this.$api.login
-            .binding_email_get({
-              username: $('#binding_account').val(),
-              appid: appid
-            })
-            .then(res => {
-              console.log(res, 'res')
-              binding_accounts_info_ack(res)
-              function binding_accounts_info_ack(msg) {
-                // 用户名验证回调函数
-                if (msg.result) {
-                  if (msg.result == 'accounts.user.unknown') {
-                    publicFunc.msg_tips({
-                      msg: mcs_username_does_not_exis,
-                      type: 'error',
-                      timeout: 3000
-                    })
-                  } else {
-                    publicFunc.msg_tips({
-                      msg: msg.result,
-                      type: 'error',
-                      timeout: 3000
-                    })
-                  }
+          _this.$api.login.binding_email_get({
+            username: $('#binding_account').val(),
+            appid: _this.appid
+          }).then(res => {
+            console.log(res, 'binding_email_get')
+            binding_accounts_info_ack(res)
+            function binding_accounts_info_ack (msg) {
+              // 用户名验证回调函数
+              if (msg.data.result) {
+                if (msg.result === 'accounts.user.unknown') {
+                  _this.publicFunc.msg_tips({
+                    msg: mcs_username_does_not_exis,
+                    type: 'error',
+                    timeout: 3000
+                  })
                 } else {
-                  console.log(msg)
-                  if (msg.data.cacs_query_ack.email) {
-                    // 用户绑定邮箱
-                    $('#input_account_page').css('display', 'none')
-                    $('#input_email_page').css('display', 'block')
-                    $('#email_warn').css('display', 'block')
-                    $('#binding_account_email').html(msg.data.cacs_query_ack.email)
-                  } else {
-                    publicFunc.msg_tips({
-                      msg: mcs_recovery_fail_no_mail,
-                      type: 'error',
-                      timeout: 3000
-                    })
-                  }
+                  _this.publicFunc.msg_tips({
+                    msg: msg.data.result,
+                    type: 'error',
+                    timeout: 3000
+                  })
+                }
+              } else {
+                if (msg.data.email) {
+                  // 用户绑定邮箱
+                  $('#input_account_page').css('display', 'none')
+                  $('#input_email_page').css('display', 'block')
+                  $('#email_warn').css('display', 'block')
+                  $('#binding_account_email').html(msg.data.email)
+                } else {
+                  _this.publicFunc.msg_tips({
+                    msg: mcs_recovery_fail_no_mail,
+                    type: 'error',
+                    timeout: 3000
+                  })
                 }
               }
-            })
+            }
+          })
         })
-
-        $('#recovery_pass_ok_btn').click(function() {
-          // 邮箱验证确定按钮点击事件
+        $('#recovery_pass_ok_btn').click(function () { // 邮箱验证确定按钮点击事件
           let reg
-          if (
-            !$('#recovery_pass_email').val() ||
-            $('#recovery_pass_email').val() === mcs_input_email_addr
-          ) {
-            // 验证输入的邮箱号是否与账户绑定的邮箱一致
-            publicFunc.msg_tips({
+          if (!$('#recovery_pass_email').val() || $('#recovery_pass_email').val() === mcs_input_email_addr) { // 验证输入的邮箱号是否与账户绑定的邮箱一致
+            _this.publicFunc.msg_tips({
               msg: mcs_invalid_email_addr,
               type: 'error',
               timeout: 3000
@@ -323,7 +297,7 @@ export default {
           } else {
             reg = /^([a-zA-Z0-9]+[_|\\_|\\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\\_|\\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/
             if (!reg.exec($('#recovery_pass_email').val())) {
-              publicFunc.msg_tips({
+              _this.publicFunc.msg_tips({
                 msg: mcs_invalid_email_addr,
                 type: 'error',
                 timeout: 3000
@@ -331,66 +305,60 @@ export default {
               return
             }
           }
-          // 发送重置密码邮件
-          this.$api.login
-            .recovery_binding_email({
-              username: $('#binding_account').val(),
-              email: $('#recovery_pass_email').val(),
-              appid: appid,
-              name: name
-            })
-            .then(res => {
-              console.log(res, 'recovery_binding_email_res')
-              recovery_binding_email_ack(res)
-              function recovery_binding_email_ack(msg) {
-                // 重置密码回调处理函数
-                if (msg !== '') {
-                  publicFunc.msg_tips({
-                    msg: msg,
-                    type: 'error',
-                    timeout: 3000
-                  })
-                } else {
-                  $('#input_email_page').css('display', 'none')
-                  $('#forget_password_page').css('display', 'block')
-                  $('#retrieve_password_warn').html(
-                    mcs_password_reset_confirmation
-                  )
-                }
+          _this.$api.login.recovery_binding_email({ // 发送重置密码邮件
+            username: $('#binding_account').val(),
+            email: $('#recovery_pass_email').val(),
+            appid: _this.appid,
+            name: name,
+            lang: sessionStorage.getItem('userLanguage')
+          }).then(res => {
+            console.log(res.data, 'recovery_binding_email_res')
+            recovery_binding_email_ack(res.data)
+            function recovery_binding_email_ack (msg) {
+              // 重置密码回调处理函数
+              if (msg.result !== '') {
+                _this.publicFunc.msg_tips({
+                  msg: msg,
+                  type: 'error',
+                  timeout: 3000
+                })
+              } else {
+                $('#input_email_page').css('display', 'none')
+                $('#forget_password_page').css('display', 'block')
+                $('#retrieve_password_warn').html(
+                  mcs_password_reset_confirmation
+                )
               }
-            })
+            }
+          })
         })
-
         // 取消按钮事件
-        $('#recovery_pass_cancel_btn').click(function() {
+        $('#recovery_pass_cancel_btn').click(function () {
           $('#forget_pass_inner_main').html('')
         })
-        $('#binding_account_cancel_btn').click(function() {
+        $('#binding_account_cancel_btn').click(function () {
           $('#forget_pass_inner_main').html('')
         })
-        $('#forget_password_close_btn').click(function() {
+        $('#forget_password_close_btn').click(function () {
           $('#forget_pass_inner_main').html('')
         })
       })
-      $('#signin_name').focus(function() {
-        // 用户名输入框聚焦
-        if (this.value == mcs_username) {
+      $('#signin_name').focus(function () { // 用户名输入框聚焦
+        if (this.value === mcs_username) {
           this.value = ''
         }
         this.style.color = '#404040'
       })
-      $('#signin_name').blur(function() {
-        // 用户名输入框失焦
-        if (this.value == '') {
+      $('#signin_name').blur(function () { // 用户名输入框失焦
+        if (this.value === '') {
           this.style.color = '#bdbdbd'
           this.value = mcs_username
         } else {
           this.style.color = '#404040'
         }
       })
-      $('#password_eye').click(function() {
-        // 密码框输入密码可视状态
-        if ($('#password_eye').attr('class') == 'password_eye') {
+      $('#password_eye').click(function () { // 密码框输入密码可视状态
+        if ($('#password_eye').attr('class') === 'password_eye') {
           $('#password_eye').attr('class', 'password_eye_gray')
           $('#signin_pw').attr('type', 'password')
         } else {
@@ -401,8 +369,7 @@ export default {
           $('#signin_pw').attr('type', 'text')
         }
       })
-      $('#signin_pw').focus(function() {
-        // 密码输入框聚焦(内含密码可见情况判断)
+      $('#signin_pw').focus(function () { // 密码输入框聚焦(内含密码可见情况判断)
         if ($('#password_eye').attr('class') === 'password_eye_gray') {
           $('#signin_pw').attr('type', 'password')
         } else {
@@ -413,33 +380,28 @@ export default {
           $('#signin_pw').val('')
         }
       })
-      $('#signin_pw').blur(function() {
-        // 密码输入框失焦
-        if ($('#signin_pw').val() == '') {
+      $('#signin_pw').blur(function () { // 密码输入框失焦
+        if ($('#signin_pw').val() === '') {
           $('#signin_pw').css('color', '#bdbdbd')
           $('#signin_pw').val(mcs_password)
         } else {
           $('#signin_pw').css('color', '#404040')
         }
-        if (
-          $('#password_eye').attr('class') === 'password_eye_gray' &&
-          $('#signin_pw').val() !== mcs_password
-        ) {
+        if ($('#password_eye').attr('class') === 'password_eye_gray' && $('#signin_pw').val() !== mcs_password) {
           $('#signin_pw').attr('type', 'password')
         } else {
           $('#signin_pw').attr('type', 'text')
         }
       })
-      $('#signin_pw').keypress(function(e) {
-        // 监听回车键是否按下
+      $('#signin_pw').keypress(function (e) { // 监听回车键是否按下
         let evt = e || window.event
-        if ((evt.which || evt.keyCode) == 13) {
+        if ((evt.which || evt.keyCode) === 13) {
           $('#sign_in').click()
           evt.returnValue = false
         }
       })
       /*注册按钮点击事件*/
-      $('#register_account').click(function() {
+      $('#register_account').click(function () {
         $('#sigin_in_username').hide()
         $('#sigin_in_password').hide()
         $('#sign_in').hide()
@@ -453,7 +415,7 @@ export default {
         $('#forget_pass').css('display', 'none')
       })
       // 登录按钮点击事件
-      $('#sign_account').click(function() {
+      $('#sign_account').click(function () {
         $('#sigin_in_username').show()
         $('#sigin_in_password').show()
         $('#sign_in').show()
@@ -466,21 +428,21 @@ export default {
         $('#sign_account').hide()
         $('#forget_pass').css('display', 'block')
       })
-      $('#register_signin_name').focus(function() {
-        if ($('#register_signin_name').val() == mcs_input_username) {
+      $('#register_signin_name').focus(function () {
+        if ($('#register_signin_name').val() === mcs_input_username) {
           $('#register_signin_name').val('')
         }
         $('#register_signin_name').css('color', '#404040')
       })
-      $('#register_signin_name').blur(function() {
-        if ($('#register_signin_name').val() == '') {
+      $('#register_signin_name').blur(function () {
+        if ($('#register_signin_name').val() === '') {
           $('#register_signin_name').css('color', '#bdbdbd')
           $('#register_signin_name').val(mcs_input_username)
         } else {
           $('#register_signin_name').css('color', '#404040')
         }
       })
-      $('#register_signin_pw').focus(function() {
+      $('#register_signin_pw').focus(function () {
         if ($('#register_password_eye').attr('class') === 'password_eye_gray') {
           $('#register_signin_pw').attr('type', 'password')
         } else {
@@ -491,10 +453,9 @@ export default {
           $('#register_signin_pw').val('')
         }
       })
-      $('#register_signin_pw').blur(function() {
-        if ($('#register_signin_pw').val() == '') {
-          $('#register_signin_pw').css('color', '#bdbdbd').style.color =
-            '#bdbdbd'
+      $('#register_signin_pw').blur(function () {
+        if ($('#register_signin_pw').val() === '') {
+          $('#register_signin_pw').css('color', '#bdbdbd')
           $('#register_signin_pw').val(mcs_input_password)
         } else {
           $('#register_signin_pw').css('color', '#404040')
@@ -508,7 +469,7 @@ export default {
           $('#register_signin_pw').attr('type', 'text')
         }
       })
-      $('#register_password_eye').click(function() {
+      $('#register_password_eye').click(function () {
         if ($('#register_password_eye').attr('class') === 'password_eye') {
           $('#register_password_eye').attr('class', 'password_eye_gray')
           $('#register_signin_pw').attr('type', 'password')
@@ -520,11 +481,8 @@ export default {
           $('#register_signin_pw').attr('type', 'text')
         }
       })
-      $('#register_signin_pw_again').focus(function() {
-        if (
-          $('#register_password_eye_again').attr('class') ===
-          'password_eye_gray'
-        ) {
+      $('#register_signin_pw_again').focus(function () {
+        if ($('#register_password_eye_again').attr('class') === 'password_eye_gray') {
           $('#register_signin_pw_again').attr('type', 'password')
         } else {
           $('#register_signin_pw_again').attr('type', 'text')
@@ -534,7 +492,7 @@ export default {
           $('#register_signin_pw_again').val('')
         }
       })
-      $('#register_signin_pw_again').blur(function() {
+      $('#register_signin_pw_again').blur(function () {
         if ($('#register_signin_pw_again').val() === '') {
           $('#register_signin_pw_again').css('color', '#bdbdbd')
           $('#register_signin_pw_again').val(mcs_confirm_password)
@@ -543,7 +501,7 @@ export default {
         }
         if (
           $('#register_password_eye_again').attr('class') ===
-            'password_eye_gray' &&
+          'password_eye_gray' &&
           $('#register_signin_pw_again').val() !== mcs_confirm_password
         ) {
           $('#register_signin_pw_again').attr('type', 'password')
@@ -551,10 +509,8 @@ export default {
           $('#register_signin_pw_again').attr('type', 'text')
         }
       })
-      $('#register_password_eye_again').click(function() {
-        if (
-          $('#register_password_eye_again').attr('class') === 'password_eye'
-        ) {
+      $('#register_password_eye_again').click(function () {
+        if ($('#register_password_eye_again').attr('class') === 'password_eye') {
           $('#register_password_eye_again').attr('class', 'password_eye_gray')
           $('#register_signin_pw_again').attr('type', 'password')
         } else {
@@ -566,13 +522,8 @@ export default {
         }
       })
       //Login key events 点击登录按钮事件
-      let _this = this
-      let loginWaitFlag = this.$store.state.jumpPageData.loginWaitFlag
-      $('#sign_in').click(function() {
-        console.log('enter sign_in')
-        // if (!localStorage.getItem('auto_login')) {
-        //   g_login_method = 'manual' //登录日志
-        // }
+      let loginWaitFlag = _this.$store.state.jumpPageData.loginWaitFlag
+      $('#sign_in').click(function () {
         if ($('#keep_sign_in_check').is(':checked')) {
           localStorage.setItem('keep_pw', 1)
         } else {
@@ -581,29 +532,27 @@ export default {
         if ($('#signin_pw').val() === 'amdin') {
           $('#signin_pw').val('admin')
         }
-        let username_value = $('#signin_name')
-          .val()
-          .trim()
-        let password_value = $('#signin_pw')
-          .val()
-          .trim()
+        // 获取登录时输入的帐号密码
+        let username_value = $('#signin_name').val().trim()
+        let password_value = $('#signin_pw').val().trim()
         //storage the password use mmd5 format
-        let l_pwd_val
-        if (password_value == '••••••') l_pwd_val = l_password_value
-        else l_pwd_val = md5.hex(password_value)
-
-        let isDevicesID = username_value.search(/1jfie/i)
-        if (!username_value || username_value == mcs_username) {
-          publicFunc.msg_tips({
+        if (password_value === '••••••') {
+          l_pwd_val = l_password_value
+        } else {
+          l_pwd_val = md5.hex(password_value)
+        }
+        let isDevicesID = username_value.search(/1jfie/i) // 校验是否为设备id登录
+        if (!username_value || username_value === mcs_username) {
+          _this.publicFunc.msg_tips({
             msg: mcs_the_user_name_is_empty,
             type: 'error',
             timeout: 3000
           })
           return
         }
-        if (!password_value || password_value == mcs_password) {
+        if (!password_value || password_value === mcs_password) {
           if (!localStorage.getItem('remember_msg_info')) {
-            publicFunc.msg_tips({
+            _this.publicFunc.msg_tips({
               msg: mcs_the_password_is_empty,
               type: 'error',
               timeout: 3000
@@ -612,8 +561,8 @@ export default {
           return
         }
         /*IPC to debug so annotation these lines*/
-        if (isDevicesID == 0 && g_project != 'mipc') {
-          publicFunc.msg_tips({
+        if (isDevicesID === 0 && _this.name !== 'mipc') { // 非mipc项目/设备id用户名校验未通过,提示拒绝登录
+          _this.publicFunc.msg_tips({
             msg: mcs_register_prompt,
             type: 'error',
             timeout: 3000
@@ -626,292 +575,159 @@ export default {
         // else g_login_status = 'register_user'
         if (!loginWaitFlag) {
           // 用户登录
-          _this.$store.commit('SET_LOGIN_WAIT_FLAG', 1)
-          console.log('use Api')
-          _this.$api.login
-            .sign_in({
-              user: username_value, // 用户名
-              password: l_pwd_val // 密码
-            })
-            .then(res => {
-              // 登录回调处理
-              console.log(res, 'res')
-              function login_ack(msg) {
-                //There is a problem before returning, no result is a successful login
-                if (msg.result == '') {
-                  login_ack_lid = msg.lid //登录返回lid head中
-                  loginendtime = new Date().getTime() //日志
-                  logintime = (loginendtime - loginstartime) / 1000
-                  g_username = username_value
-                  let version_type = ''
-                  if (navigator.userAgent.indexOf('Intel Mac') > -1) {
-                    version_type = 'mac_' + g_oems
-                  } else if (navigator.userAgent.indexOf('Windows') > -1) {
-                    version_type = 'windows_' + g_oems
-                  }
-                  if ($('#top_menu_my')) {
-                    $('#top_menu_my').html(username_value)
-                  }
-                  // 获取版本信息接口
-                  _this.$api.login
-                    .get_version({
-                      srv: window.location.host,
-                      ver_type: version_type,
-                      ver_from: 'v3.9.1.1607051739',
-                      lang: g_now_lang
-                    })
-                    .then(res => {
-                      console.log(res, 'get_version_res')
-                      get_version_ack(res)
-                      function get_version_ack(msg) {
-                        if (msg && msg.result == '') {
-                          app_verson = msg.info.ver_to //登录日志 app版本号
-                          if (msg.info.p && msg.info.p[0].n == 'checksum') {
-                            //登录日志 app checksum
-                            app_checksum = msg.info.p[0].v
-                          }
-                          if (window.location.protocol == 'https:') {
-                            msg.info.link_url = msg.info.link_url.replace(
-                              'http://209.133.212.170:2080',
-                              'https://us10.vimtag.com:2446'
-                            )
-                            msg.info.link_url = msg.info.link_url.replace(
-                              'http://61.147.109.92:7080',
-                              'https://js.vimtag.com:7446'
-                            )
-                          }
-                          g_download_url = msg.info.link_url
-                        }
-                      }
-                    })
-                  //If vimtag, remember the default password
-                  // 设备消息轮询
-                  // msdk_ctrl({ type: 'mmq', data: { func: mmq_ack } })
-                  // function mmq_ack(msg) {
-                  //   let mmq_data = msg.items
-                  //   for (let m = 0; m < mmq_data.length; m++) {
-                  //     if (mmq_data[m].code == 'motion_alert') {
-                  //       if (mmq_data[m].type == 'alert') {
-                  //         publicFunc.msg_tips({
-                  //           msg:
-                  //             mmq_data[m].sn + '&nbsp:&nbsp' + mcs_motion_alert,
-                  //           type: 'warning',
-                  //           timeout: 3000
-                  //         })
-                  //       }
-                  //     } else if (mmq_data[m].code == 'sound_detect') {
-                  //       if (mmq_data[m].type == 'alert') {
-                  //         publicFunc.msg_tips({
-                  //           msg:
-                  //             mmq_data[m].sn +
-                  //             '&nbsp:&nbsp' +
-                  //             mcs_sound_detect_alert,
-                  //           type: 'warning',
-                  //           timeout: 3000
-                  //         })
-                  //       }
-                  //     } else if (mmq_data[m].code == 'face_alert') {
-                  //       if (mmq_data[m].type == 'alert') {
-                  //         publicFunc.msg_tips({
-                  //           msg:
-                  //             mmq_data[m].sn +
-                  //             '&nbsp:&nbsp' +
-                  //             mcs_face_detect_alert,
-                  //           type: 'warning',
-                  //           timeout: 3000
-                  //         })
-                  //       }
-                  //     } else if (mmq_data[m].code == 'human_alert') {
-                  //       //人型检测
-                  //       if (mmq_data[m].type == 'alert') {
-                  //         publicFunc.msg_tips({
-                  //           msg:
-                  //             mmq_data[m].sn +
-                  //             '&nbsp:&nbsp' +
-                  //             mrs_human_detect_alert,
-                  //           type: 'warning',
-                  //           timeout: 3000
-                  //         })
-                  //       } //mrs_human_detect_alert
-                  //     } else if (mmq_data[m].code == 'sos') {
-                  //       // 紧急按钮报警
-                  //       if (mmq_data[m].type == 'alert') {
-                  //         publicFunc.msg_tips({
-                  //           msg:
-                  //             mmq_data[m].sn +
-                  //             '&nbsp:&nbsp' +
-                  //             mcs_sos +
-                  //             mcs_alarm,
-                  //           type: 'warning',
-                  //           timeout: 3000
-                  //         })
-                  //       }
-                  //     } else if (mmq_data[m].code == 'door') {
-                  //       // 门磁
-                  //       let door_status = ''
-                  //       for (let i = 0; i < mmq_data[m].p.length; i++) {
-                  //         if (mmq_data[m].p[i].n == 'status') {
-                  //           door_status = mmq_data[m].p[i].v
-                  //         }
-                  //       }
-                  //       if (
-                  //         mmq_data[m].type == 'alert' &&
-                  //         door_status == 'open'
-                  //       ) {
-                  //         publicFunc.msg_tips({
-                  //           msg:
-                  //             mmq_data[m].sn +
-                  //             '&nbsp:&nbsp  ' +
-                  //             mrs_door_sensor_open,
-                  //           type: 'warning',
-                  //           timeout: 3000
-                  //         })
-                  //       } else if (
-                  //         mmq_data[m].type == 'alert' &&
-                  //         door_status == 'close'
-                  //       ) {
-                  //         publicFunc.msg_tips({
-                  //           msg:
-                  //             mmq_data[m].sn +
-                  //             '&nbsp:&nbsp  ' +
-                  //             mrs_door_sensor_closed,
-                  //           type: 'warning',
-                  //           timeout: 3000
-                  //         })
-                  //       }
-                  //     }
-                  //   }
-                  // }
-                  _this.$api.login
-                    .get_req({
-                      username: username_value,
-                      srv: appid
-                    })
-                    .then(res => {
-                      get_req_ack(res)
-                      function get_req_ack(msg) {
-                        if (
-                          msg &&
-                          msg.data &&
-                          msg.data.server &&
-                          msg.data.server.param
-                        ) {
-                          let param = msg.data.server.param
-                          for (let i = 0; i < param.length; i++) {
-                            if (
-                              param[i].name == 'f_multi_screen' &&
-                              param[i].value == 1
-                            ) {
-                              mme.prototype.check_plug_install('', function(
-                                ref,
-                                version
-                              ) {
-                                if (!version) {
-                                  g_support_auto_play = 0
-                                } else {
-                                  g_support_auto_play = 1
-                                  let auto_play = localStorage.getItem(
-                                    'auto_play'
-                                  )
-                                  if (auto_play != 0) {
-                                    g_auto_play = 1
-                                  } else {
-                                    g_auto_play = 0
-                                  }
-                                }
-                              })
-                            }
-                            if (
-                              param[i].name == 'f_filter' &&
-                              param[i].value == 1
-                            ) {
-                              g_support_filter = 1
-                            }
-                            if (
-                              param[i].name == 'f_grp' &&
-                              param[i].value == 1
-                            ) {
-                              g_support_tree = 1
-                            }
-                            if (param[i].name == 'sc.logo') {
-                              //给江门xhjymclz修改设备列表页面图标
-                              // g_supprot_clogo = 1;
-                              _this.$store.commit('SET_JM_LOGO_FLAG', 1)
-                              createPage('top', { parent: $('#top') })
-                            }
-                          }
-                        }
-                        g_download_manual_url = msg.data.server.signal[2]
-                        // upload_log("log_app_login")  //登录请求返回后发送日志
-                        createPage('devlist', { parent: obj.parent })
-                      }
-                    })
-                  if (!g_experience) {
-                    // 记住密码状态/自动登录状态设置
-                    localStorage.setItem(
-                      'remember_msg_info',
-                      JSON.stringify({
-                        user: username_value,
-                        password: l_pwd_val
-                      })
-                    )
-                    localStorage.setItem('auto_login', '1')
-                    g_is_login = 1
-                  }
-                } else {
-                  //登录结果失败
-                  console.log('fail_login')
-                  _this.$store.commit('SET_LOGIN_WAIT_FLAG', 0)
-                  if (msg.result == 'accounts.user.offline') {
-                    publicFunc.msg_tips({
-                      msg: mcs_offline,
-                      type: 'warning',
-                      timeout: 3000
-                    })
-                  } else if (msg.result == 'accounts.user.unknown') {
-                    publicFunc.msg_tips({
-                      msg: mcs_username_does_not_exis,
-                      type: 'warning',
-                      timeout: 3000
-                    })
-                  } else if (msg.result == 'accounts.pass.invalid') {
-                    publicFunc.msg_tips({
-                      msg: mcs_invalid_password,
-                      type: 'warning',
-                      timeout: 3000
-                    })
-                  } else if (msg.result == 'accounts.user.inactive') {
-                    publicFunc.msg_tips({
-                      msg: mcs_email_inactive,
-                      type: 'warning',
-                      timeout: 3000
-                    })
-                  } else {
-                    publicFunc.msg_tips({
-                      msg: mrs_request_error,
-                      type: 'warning',
-                      timeout: 3000
-                    })
-                  }
-                  // upload_log("log_app_login")  //登录请求返回后发送日志
+          _this.$store.dispatch('setLoginWaitFlag', 1)
+          _this.$api.login.sign_in({
+            user: username_value, // 用户名
+            password: l_pwd_val // 密码
+          }).then(res => {
+            login_ack(res.data)
+            // 登录回调处理
+            function login_ack (msg) {
+              //There is a problem before returning, no result is a successful login
+              if (msg.result === '') {
+                _this.$store.dispatch('setLid', msg.lid) //登录返回lid head中
+                _this.$store.dispatch('setName', username_value)
+                _this.$store.dispatch('setSid', msg.sid)
+                let version_type = ''
+                if (navigator.userAgent.indexOf('Intel Mac') > -1) {
+                  version_type = 'mac_' + name
+                } else if (navigator.userAgent.indexOf('Windows') > -1) {
+                  version_type = 'windows_' + name
                 }
+                if ($('#top_menu_my')) {
+                  $('#top_menu_my').html(username_value)
+                }
+                // 获取版本信息接口(暂未发现调用该接口用途, 存储的结果包含固定值)
+                _this.$api.login.get_version({
+                  // srv: window.location.host, // 暂时注释由于有代理添加该参数会导致调用地址异常
+                  ver_type: version_type,
+                  ver_from: 'v3.9.1.1607051739',
+                  lang: sessionStorage.getItem('userLanguage')
+                }).then(res => {
+                  get_version_ack(res.data)
+                  function get_version_ack (msg) {
+                    if (msg && msg.result === '') {
+                      // app_verson = msg.info.ver_to //登录日志 app版本号  暂时未发现用处注释
+                      // if (msg.info.p && msg.info.p[0].n === 'checksum') { // 日志功能暂时无法对接注释
+                      //   //登录日志 app checksum
+                      //   app_checksum = msg.info.p[0].v
+                      // }
+                      if (window.location.protocol === 'https:') {
+                        msg.info.link_url = msg.info.link_url.replace('http://209.133.212.170:2080', 'https://us10.vimtag.com:2446')
+                        msg.info.link_url = msg.info.link_url.replace('http://61.147.109.92:7080', 'https://js.vimtag.com:7446')
+                      }
+                      _this.$store.dispatch('setPlayDownloadUrl',  msg.info.link_url) // 存储播放时需要用到的url
+                    }
+                  }
+                })
+                // 设备消息轮询
+                _this.$api.login.dev_msg_listener_add()
+                // 获取iframe相关服务器地址参数
+                _this.$api.login.get_req({
+                  client: {
+                    mode: "",
+                    id: username_value
+                  },
+                  srv: _this.appid
+                }).then(res => {
+                  get_req_ack(res)
+                  function get_req_ack (msg) {
+                    if (msg && msg.data && msg.data.server && msg.data.server.param) {
+                      let param = msg.data.server.param
+                      for (let i = 0; i < param.length; i++) {
+                        if (param[i].name === 'f_multi_screen' && param[i].value === 1) {
+                          mme.prototype.check_plug_install('', function (ref, version) {
+                            if (!version) {
+                              g_support_auto_play = 0
+                            } else {
+                              g_support_auto_play = 1
+                              let auto_play = localStorage.getItem('auto_play')
+                              if (auto_play !== 0) {
+                                g_auto_play = 1
+                              } else {
+                                g_auto_play = 0
+                              }
+                            }
+                          })
+                        }
+                        if (param[i].name === 'f_filter' && param[i].value === 1) {
+                          g_support_filter = 1
+                        }
+                        if (param[i].name === 'f_grp' && param[i].value === 1) {
+                          g_support_tree = 1
+                        }
+                        if (param[i].name === 'sc.logo') {
+                          //给江门xhjymclz修改设备列表页面图标
+                          // g_supprot_clogo = 1;
+                          _this.$store.commit('SET_JM_LOGO_FLAG', 1)
+                          createPage('top', { parent: $('#top') })
+                        }
+                      }
+                    }
+                    _this.$store.dispatch('setDownloadManualUrl', msg.data.server.signal[2])
+                    // upload_log("log_app_login")  //登录请求返回后发送日志
+                    createPage('devlist', { parent: obj.parent })
+                  }
+                })
+                if (!_this.$store.state.jumpPageData.experienceFlag) { // 判断是否为体验
+                  // 记住密码状态/自动登录状态设置
+                  localStorage.setItem('remember_msg_info', JSON.stringify({ user: username_value, password: l_pwd_val }))
+                  localStorage.setItem('auto_login', '1')
+                  _this.$store.dispatch('setLoginFlag', 1) // 存储登录状态标识
+                }
+              } else {
+                //登录结果失败
+                console.log('fail_login')
+                _this.$store.dispatch('setLoginWaitFlag', 0)
+                if (msg.result === 'accounts.user.offline') {
+                  _this.publicFunc.msg_tips({
+                    msg: mcs_offline,
+                    type: 'warning',
+                    timeout: 3000
+                  })
+                } else if (msg.result === 'accounts.user.unknown') {
+                  _this.publicFunc.msg_tips({
+                    msg: mcs_username_does_not_exis,
+                    type: 'warning',
+                    timeout: 3000
+                  })
+                } else if (msg.result === 'accounts.pass.invalid') {
+                  _this.publicFunc.msg_tips({
+                    msg: mcs_invalid_password,
+                    type: 'warning',
+                    timeout: 3000
+                  })
+                } else if (msg.result === 'accounts.user.inactive') {
+                  _this.publicFunc.msg_tips({
+                    msg: mcs_email_inactive,
+                    type: 'warning',
+                    timeout: 3000
+                  })
+                } else {
+                  _this.publicFunc.msg_tips({
+                    msg: mrs_request_error,
+                    type: 'warning',
+                    timeout: 3000
+                  })
+                }
+                // upload_log("log_app_login")  //登录请求返回后发送日志
               }
-              login_ack(res)
-            })
+            }
+          })
         }
       })
 
       // 轮询函数重复定义 devlist.page.js中也进行了定义 考虑做成项目通用的公共函数
 
       // 注册页面点击注册按钮(注册验证提交)
-      $('#register_btn').click(function() {
+      $('#register_btn').click(function () {
         let reg,
           username_value = $('#register_signin_name').val(),
           password_value = $('#register_signin_pw').val(),
           pw_confirm_value = $('#register_signin_pw_again').val()
 
         if (!username_value || username_value == mcs_input_username) {
-          publicFunc.msg_tips({
+          _this.publicFunc.msg_tips({
             msg: mcs_the_user_name_is_empty,
             type: 'error',
             timeout: 3000
@@ -920,7 +736,7 @@ export default {
         } else {
           reg = /^([a-zA-Z][a-zA-Z0-9]{5,31})$/
           if (!reg.exec(username_value)) {
-            publicFunc.msg_tips({
+            _this.publicFunc.msg_tips({
               msg: mcs_user_letter_range_hint,
               type: 'warning',
               timeout: 5000
@@ -929,7 +745,7 @@ export default {
           }
         }
         if (!password_value || password_value == mcs_input_password) {
-          publicFunc.msg_tips({
+          _this.publicFunc.msg_tips({
             msg: mcs_the_password_is_empty,
             type: 'error',
             timeout: 3000
@@ -938,7 +754,7 @@ export default {
         } else {
           reg = /^[0-9a-zA-Z]{8,32}$/
           if (!reg.exec(password_value)) {
-            publicFunc.msg_tips({
+            _this.publicFunc.msg_tips({
               msg: mcs_password_range_hint,
               type: 'warning',
               timeout: 5000
@@ -947,7 +763,7 @@ export default {
           }
         }
         if (!pw_confirm_value || pw_confirm_value == mcs_confirm_password) {
-          publicFunc.msg_tips({
+          _this.publicFunc.msg_tips({
             msg: mcs_password_empty,
             type: 'error',
             timeout: 3000
@@ -955,7 +771,7 @@ export default {
           return
         }
         if (pw_confirm_value != password_value) {
-          publicFunc.msg_tips({
+          _this.publicFunc.msg_tips({
             msg: mcs_two_password_input_inconsistent,
             type: 'error',
             timeout: 3000
@@ -967,16 +783,16 @@ export default {
           data: {
             username: username_value,
             password: password_value,
-            func: function(msg) {
+            func: function (msg) {
               if (msg == mcs_successful_sign_up) {
-                publicFunc.msg_tips({
+                _this.publicFunc.msg_tips({
                   msg: msg,
                   type: 'success',
                   timeout: 3000
                 })
                 createPage('login', obj)
               } else {
-                publicFunc.msg_tips({ msg: msg, type: 'error', timeout: 3000 })
+                _this.publicFunc.msg_tips({ msg: msg, type: 'error', timeout: 3000 })
               }
             }
           }
@@ -989,7 +805,7 @@ export default {
       }
     }
   },
-  async mounted() {
+  async mounted () {
     let userLanguage = sessionStorage.getItem('userLanguage')
     if (userLanguage) {
       await this.$chooseLanguage.lang(userLanguage)
@@ -997,7 +813,7 @@ export default {
       await this.$chooseLanguage.lang('en')
     }
     await this.create_login_page({ parent: $('#login') }) // 进入页面后加载
-    await publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
+    await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {
       // mipc系列
       languageSelect.mipc($('#login_box'))

@@ -3,9 +3,10 @@
  * 请求拦截、响应拦截、错误统一处理
  */
 import axios from 'axios'
-import x2js from 'x2js' //xml数据处理插件
+// import x2js from 'x2js' //xml数据处理插件
 import mcodec from '../util/mcodec'
-const x2Js = new x2js()
+// const x2Js = new x2js()
+import store from '../store'
 // import router from '../router'
 
 /** 
@@ -65,7 +66,7 @@ const errorHandle = (status, other) => {
 }
 
 // 创建axios实例
-let instance = axios.create({ timeout: 1000 * 12 })
+let instance = axios.create({ timeout: 400000 })
 
 // 设置post请求头
 instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -78,17 +79,24 @@ instance.interceptors.request.use(
   config => {
     let param = config.params // 取得当前get传递的对象
     let newParams = {} // 新建对象用于存储变更后的对象
-    newParams = mcodec.obj_2_url(param, '&')
+    console.log(param, 'config_param')
+    newParams = mcodec.obj_2_url(param, '&') // 采用原项目中对参数进行加密的方法进行封装
     // for (let paramName in param) {
     //   newParams['d' + paramName] = param[paramName] // 遍历对象键值对并重新命名属性名 后续此处需要添加两个额外的固定参数数据值通过vuex进行存取
     // }
     config.params = {
       hfrom_handle: 1,
+      hqid: store.state.user.qid,
       ...newParams
     } // 修改后的对象
     if (process.env.NODE_ENV !== 'production') { // 如果是测试环境下接口添加/api采用代理地址进行访问,解决跨域等问题
       let url = config.url
-      config.url = '/api' + url
+      console.log(config.params, 'srv', config.params.dsrv)
+      if (!config.params.dsrv) {
+        config.url = '/api' + url + '.js'
+      } else {
+        config.url = '/project' + url + '.js'
+      }
     }
     // config.url = location.host + config.url
     console.log(config, 'axiosConfig')
@@ -101,23 +109,29 @@ instance.interceptors.response.use(
   // 请求成功
   res => {
     if (res.status === 200) { // 接口请求成功进行接口数据处理
-      let getRes = res
-      res = {
-        status: res.status, // 接口返回状态值
-        statusText: res.statusText, // 返回状态文字
-        ...x2Js.xml2js(getRes.data).message // 使用xml插件进行解析后的message数据
+      let getRes = eval(res.data)
+      console.log(getRes, 'getRes')
+      /* eslint-disable */
+      function message (obj) { // 该函数在服务器端用于渲染iframe 目前暂时先在此处进行返回值处理
+        return obj
       }
+      res.data = getRes
+      // res = {
+      //   status: res.status, // 接口返回状态值
+      //   statusText: res.statusText, // 返回状态文字
+      //   ...x2Js.xml2js(getRes.data).message // 使用xml插件进行解析后的message数据
+      // }
       Promise.resolve(res)
     } else {
       Promise.reject(res)
     }
-    return res
+    return res.data
   },
   // 请求失败
   error => {
     const { response } = error
     if (response) {
-      // 请求已发出，但是不在2xx的范围 
+      // 请求已发出，但是不在2xx的范围
       errorHandle(response.status, response.data.message)
       return Promise.reject(response)
     } else {
