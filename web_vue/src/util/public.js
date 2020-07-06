@@ -1,3 +1,6 @@
+import store from '../store'
+import router from '../router'
+
 const publicFunc = {
   async importCss (docPath) { // 引入CSS文件
     if (window.location.href.indexOf('vimtag') > -1) {
@@ -56,6 +59,56 @@ const publicFunc = {
         $tip_container.slideUp(300);
       });
     }
+  },
+  delete_tips(obj) { // confirm提示框方法
+    $("#delete_tips").html("<div id='delete_tips_box'>"
+    + "<div id='delete_tips_title'></div>"
+    + "<div id='delete_tips_content'></div>"
+    + "<div id='delete_tips_btn'>"
+    + "<div id='delete_tips_cancel'></div>"
+    + "<div id='delete_tips_ok'></div>"
+    + "</div>"
+    + "</div>")
+    $("#delete_tips_title").html(obj.title ? obj.title : mcs_prompt) //g 5.6.1
+    $("#delete_tips_content").html(obj.content ? obj.content : "")
+    $("#delete_tips_cancel").html(mcs_cancel)
+    $("#delete_tips_ok").html(mcs_ok)
+    $("#delete_tips").attr('style', 'display:block;')
+    $("#delete_tips_cancel").click(function () {
+      $("#delete_tips").attr('style', 'display:none;')
+      if (obj.flag && obj.flag === "my_page") {
+        createPage("my",{ parent: $("#page") }) // 进入我的页面
+      }
+    })
+    $("#delete_tips_ok").click(function () {
+      obj.func()
+      $("#delete_tips").attr('style', 'display:none;')
+    })
+  },
+  showBufferPage () { // 展示遮罩层
+    $("#buffer_page").show()
+    if (!$("#back_to_dev_list").length > 0) { // jQ检测节点是否存在
+      $("#buffer_page").append("<div id='back_to_dev_list'>" + mrs_return_dev_list + "</div>")
+    }
+    // 返回设备列表页
+    $("#back_to_dev_list").click(function () {
+      // // console.log("进入点击返回设备列表")
+      if (router.currentRoute.path !== '/devlist') {
+        publicFunc.closeBufferPage()
+        router.currentRoute.path = '/devlist'
+      }
+    })
+    store.dispatch('setBufferPageFlag', setTimeout(function () {
+      if (router.currentRoute.path !== '/devlist') {
+        $("#back_to_dev_list").show()
+      }
+      // console.log("等待时间超过5m")
+    }, 1000))
+  },
+  closeBufferPage () { // 关闭遮罩层
+    clearTimeout(store.state.jumpPageData.bufferPageFlag)
+    $("#buffer_page").hide()
+    $("#back_to_dev_list").hide()
   }
 }
 

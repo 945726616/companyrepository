@@ -306,7 +306,7 @@ mme.prototype =
         title_center.style.display = (install_div.clientWidth < 290 && install_div.clientHeight < 160) ? 'none' : 'block';
     }
     if (this.on_event) {
-      /* function({panel:install_div_panel, download:cosebase-url}){ build html-content, must let first a-link as try-flash, and second a-link is download with name=[flash|plug]} */
+      /* function({panel:install_div_panel, download:cosebase-url}){ build html-content, must var first a-link as try-flash, and second a-link is download with name=[flash|plug]} */
       this.on_event({ type: "install_ui", panel: this.install_panel, download: codebase, ver_cur: this.ver_cur });
     }
     this.install_panel.style.visibility = "";
@@ -621,7 +621,7 @@ mme.prototype =
     }
   }
 }
-let userLanguage = sessionStorage.getItem('userLanguage')
+var userLanguage = sessionStorage.getItem('userLanguage')
 if (userLanguage === 'cn' || userLanguage === 'en') {
   mme.prototype.lang = mme.prototype.langs.userLanguage
 } else {

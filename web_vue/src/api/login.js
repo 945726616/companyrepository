@@ -29,7 +29,6 @@ const login = {
   ** password md5转换后的密码
   */
   async sign_in (params) {
-    console.log(params, 'login_params')
     let returnItem // then函数中return并不能正确的返回到调用处 所以添加该变量作为局部中转使用
     await login.mdh().then(res => {
       let data = res ? res.data : null
@@ -41,22 +40,51 @@ const login = {
       store.dispatch('setLid', data.lid)
       // 注: 此处secret_key值为mdh()函数中所使用的secret_key,使用方法创建会重新随机私钥导致无法匹配
       store.dispatch('setShareKey', mdh.gen_shared_secret(secret_key, data.key_b2a))
-      let uctx = get_uctx({ app: { id: params.appid } })
+      let uctx = login.get_uctx({ app: { id: params.appid } })
       returnItem = axios.get('/ccm/cacs_login_req', { // 调用登录接口
         params: {
           lid: store.state.user.lid,
-          nid: create_nid_ex(2), // 计算nid
+          nid: login.create_nid_ex(2), // 计算nid
           user: params.user,
-          pass: pwd_encrypt(params.password),
+          pass: login.pwd_encrypt(params.password),
           session_req: 1,
           p: [{ name: "spv", value: "v1" }, { name: "uctx", value: uctx }]
         }
       })
     })
     return returnItem
-    // return axios.get('/ccm/cacs_login_req', {
-    //   params: params
-    // })
+  },
+  /*
+  ** 用户注册接口
+  ** user 用户名
+  ** password md5转换后的密码
+  */
+  async sign_up (params) {
+    console.log(params, 'sign_up')
+    let returnItem // then函数中return并不能正确的返回到调用处 所以添加该变量作为局部中转使用
+    await login.mdh().then(res => {
+      let data = res ? res.data : null
+      if ((!data) || data.result) { // 请求失败的情况
+        returnItem = false
+      }
+      // 请求成功 存储用户关键id信息
+      store.dispatch('setTid', data.tid)
+      store.dispatch('setLid', data.lid)
+      // 注: 此处secret_key值为mdh()函数中所使用的secret_key,使用方法创建会重新随机私钥导致无法匹配
+      store.dispatch('setShareKey', mdh.gen_shared_secret(secret_key, data.key_b2a))
+      let uctx = login.get_uctx({ app: { id: params.appid } })
+      returnItem = axios.get('/ccm/cacs_reg_req', { // 调用注册接口
+        params: {
+          lid: store.state.user.lid,
+          nid: login.create_nid_ex(2), // 计算nid
+          user: params.username,
+          pass: login.pwd_encrypt(params.password),
+          session_req: 1,
+          p: [{ name: "spv", value: "v1" }, { name: "uctx", value: uctx }]
+        }
+      })
+    })
+    return returnItem
   },
   /*
   ** 获取绑定邮箱接口
@@ -76,11 +104,11 @@ const login = {
       store.dispatch('setLid', data.lid)
       // 注: 此处secret_key值为mdh()函数中所使用的secret_key,使用方法创建会重新随机私钥导致无法匹配
       store.dispatch('setShareKey', mdh.gen_shared_secret(secret_key, data.key_b2a))
-      let uctx = get_uctx({ app: { id: params.appid } })
+      let uctx = login.get_uctx({ app: { id: params.appid } })
       returnItem = axios.get('/ccm/cacs_query_req', { // 调用获取绑定邮箱接口
         params: {
           lid: store.state.user.lid,
-          nid: create_nid_ex(2), // 计算nid
+          nid: login.create_nid_ex(2), // 计算nid
           user: params.username,
           p: [{ n: "uctx", v: uctx }]
         }
@@ -108,11 +136,11 @@ const login = {
       store.dispatch('setLid', data.lid)
       // 注: 此处secret_key值为mdh()函数中所使用的secret_key,使用方法创建会重新随机私钥导致无法匹配
       store.dispatch('setShareKey', mdh.gen_shared_secret(secret_key, data.key_b2a))
-      let uctx = get_uctx({ app: { id: params.appid } })
+      let uctx = login.get_uctx({ app: { id: params.appid } })
       returnItem = axios.get('/ccm/cacs_recovery_req', { // 调用获取绑定邮箱接口
         params: {
           lid: store.state.user.lid,
-          nid: create_nid_ex(2), // 计算nid
+          nid: login.create_nid_ex(2), // 计算nid
           email: params.email,
           user: params.username,
           lang: params.lang,
@@ -166,7 +194,7 @@ const login = {
   */
   mmq_subscribe () {
     axios.get('/ccm/ccm_subscribe', {
-      params: { sess: { nid: create_nid() } }
+      params: { sess: { nid: login.create_nid() } }
     }).then(res => {
       let mmqReason // 记录获取的回调reason
       if (res.data && res.data.ret) {
@@ -225,41 +253,41 @@ const login = {
   mmq_ack_func (params) {
     console.log(params, '消息处理方法')
     let mmq_data = params.items
-    for (var m = 0; m < mmq_data.length; m++) {
-			if (mmq_data[m].code == "motion_alert") {
-				if (mmq_data[m].type == "alert") {
-					msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_motion_alert, type: "warning", timeout: 3000 })
-				}
-			} else if (mmq_data[m].code == "sound_detect") {
-				if (mmq_data[m].type == "alert") {
-					msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_sound_detect_alert, type: "warning", timeout: 3000 })
-				}
-			} else if (mmq_data[m].code == "face_alert") {
-				if (mmq_data[m].type == "alert") {
-					msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_face_detect_alert, type: "warning", timeout: 3000 })
-				}
-			} else if (mmq_data[m].code == "human_alert") { //人型检测
-				if (mmq_data[m].type == "alert") {
-					msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mrs_human_detect_alert, type: "warning", timeout: 3000 })
-				}//mrs_human_detect_alert
-			} else if (mmq_data[m].code == "sos") { // 紧急按钮报警
-				if (mmq_data[m].type == "alert") {
-					msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_sos + mcs_alarm, type: "warning", timeout: 3000 })
-				}
-			} else if (mmq_data[m].code == "door") { // 门磁
-				var door_status = "";
-				for (var i = 0; i < mmq_data[m].p.length; i++) {
-					if (mmq_data[m].p[i].n == "status") {
-						door_status = mmq_data[m].p[i].v;
-					}
-				}
-				if (mmq_data[m].type == "alert" && door_status == 'open') {
-					msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp  " + mrs_door_sensor_open, type: "warning", timeout: 3000 })
-				} else if (mmq_data[m].type == "alert" && door_status == 'close') {
-					msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp  " + mrs_door_sensor_closed, type: "warning", timeout: 3000 })
-				}
-			}
-		}
+    for (let m = 0; m < mmq_data.length; m++) {
+      if (mmq_data[m].code == "motion_alert") {
+        if (mmq_data[m].type == "alert") {
+          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_motion_alert, type: "warning", timeout: 3000 })
+        }
+      } else if (mmq_data[m].code == "sound_detect") {
+        if (mmq_data[m].type == "alert") {
+          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_sound_detect_alert, type: "warning", timeout: 3000 })
+        }
+      } else if (mmq_data[m].code == "face_alert") {
+        if (mmq_data[m].type == "alert") {
+          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_face_detect_alert, type: "warning", timeout: 3000 })
+        }
+      } else if (mmq_data[m].code == "human_alert") { //人型检测
+        if (mmq_data[m].type == "alert") {
+          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mrs_human_detect_alert, type: "warning", timeout: 3000 })
+        }//mrs_human_detect_alert
+      } else if (mmq_data[m].code == "sos") { // 紧急按钮报警
+        if (mmq_data[m].type == "alert") {
+          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_sos + mcs_alarm, type: "warning", timeout: 3000 })
+        }
+      } else if (mmq_data[m].code == "door") { // 门磁
+        let door_status = "";
+        for (let i = 0; i < mmq_data[m].p.length; i++) {
+          if (mmq_data[m].p[i].n == "status") {
+            door_status = mmq_data[m].p[i].v;
+          }
+        }
+        if (mmq_data[m].type == "alert" && door_status == 'open') {
+          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp  " + mrs_door_sensor_open, type: "warning", timeout: 3000 })
+        } else if (mmq_data[m].type == "alert" && door_status == 'close') {
+          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp  " + mrs_door_sensor_closed, type: "warning", timeout: 3000 })
+        }
+      }
+    }
   },
   /*
   ** 获取最佳服务器地址/同时用于判断用户是否为特殊用户例如:江门xhjymclz xh@123123
@@ -270,82 +298,86 @@ const login = {
     return axios.get('/cmipcgw/cmipcgw_get_req', {
       params: params
     })
+  },
+  // 以下为自封装的工具函数 文件内可以采用this.函数名调用外部需要引入后使用login.函数名调用
+  create_nid_ex (type) {
+    return mcodec.nid(++store.state.user.seq, type ? store.state.user.lid : store.state.user.sid, store.state.user.shareKey, type, null, null, md5, "hex")
+  },
+  create_nid () {
+    return login.create_nid_ex(0);
+  },
+  // CryptoJS 加密工具函数
+  get_uctx (data) {
+    let l_share_key = store.state.user.shareKey
+    let json_buf = JSON.stringify(data)
+    let key = CryptoJS.MD5(l_share_key)
+    //to do 8 byte alignment
+    let json_bufs = login.bytes_align(json_buf)
+    let bytes_len = 8 * (parseInt(json_buf.length / 8) + 1), str_len = bytes_len / 4
+    let json_obj = { sigBytes: bytes_len, words: json_bufs, length: str_len }
+    let json_uctx = CryptoJS.DES.encrypt(json_obj, key, { iv: CryptoJS.enc.Hex.parse('0000000000000000'), padding: CryptoJS.pad.NoPadding }).ciphertext.toString()
+    let b = login.str_2_16bytes(json_uctx)
+    let uctx = "data:application/octet-stream;base64," + mcodec.binary_2_b64(b)
+    return uctx
+  },
+  bytes_align (str) {
+    let val = []
+    for (let i = 0; i < str.length; i++) {
+      val.push(str.charCodeAt(i).toString(16))
+    }
+    let get8bytes_num = parseInt(str.length / 8) + 1
+    let addbytes = 8 * get8bytes_num - str.length
+    let result = []
+    // let trans_8bytes = "";
+    let trans_val = ""
+    for (let k = 0; k < addbytes; k++) {
+      if (k === 0)
+        trans_val = "0" + addbytes
+      else
+        trans_val += "ff"
+      if (trans_val.length === 8) {
+        result.push("0x" + trans_val)
+        trans_val = ""
+      }
+    }
+    for (let j = 0; j < val.length; j++) {
+      trans_val += val[j]
+      if (trans_val.length === 8) {
+        result.push("0x" + trans_val)
+        trans_val = ""
+      }
+    }
+    return result
+  },
+  str_2_16bytes (b) {
+    if (!b) return
+    let len = b.length / 2, c = []
+    for (let i = 0; i < len; i++) {
+      let a0 = b.charAt(2 * i)
+      let a1 = b.charAt(2 * i + 1)
+      let a2 = "0x" + a0 + a1
+      c.push(a2 & 0xff)
+    }
+    return c
+  },
+  pwd_encrypt (pwd_md5_hex) {
+    // let xxx = CryptoJS.enc.Hex.parse(pwd_md5_hex);
+    return CryptoJS.DES.encrypt(CryptoJS.enc.Hex.parse(pwd_md5_hex), CryptoJS.enc.Hex.parse(md5.hex(store.state.user.shareKey)), { iv: CryptoJS.enc.Hex.parse('0000000000000000'), padding: CryptoJS.pad.NoPadding }).ciphertext.toString()
+  },
+  get_ret (msg) { // 部分函数返回值取舍判断函数
+    console.log(msg, 'get_ret_msg')
+    let ret = (msg && msg.data) ? (msg.data.ret || msg.data.result) : null
+    console.log(ret, 'let_ret')
+    if (Object.prototype.toString.call(ret) === "[object String]") {
+      console.log(ret, 'ret')
+      return ret
+    }
+    else {
+      let s_ret = ret ? (ret.reason || ret.sub || ret.code) : null
+      console.log(s_ret, 's_ret')
+      return s_ret
+    }
   }
 }
 
 export default login
-
-// 部分自封装的工具函数
-function create_nid_ex (type/* 0:by sid, 2: by lid */) {/* \todo: if support type==>tid , plz change following line. */ // sid信令服务器
-  // console.log(store.state.user.lid, store.state.user.sid, store.state.user.shareKey, type, 'create_nid_ex')
-  // 1 "0xe7b0" "156805891402441349081803789855738918" 2
-  // return mcodec.nid(++store.state.user.seq, "0xe7b0", "156805891402441349081803789855738918", type, null, null, md5, "hex")
-  return mcodec.nid(++store.state.user.seq, type ? store.state.user.lid : store.state.user.sid, store.state.user.shareKey, type, null, null, md5, "hex")
-}
-
-function create_nid () {
-  return create_nid_ex(0);
-}
-
-
-// CryptoJS 加密工具函数
-function get_uctx (data) {
-  console.log(store)
-  let l_share_key = store.state.user.shareKey
-  var json_buf = JSON.stringify(data);
-  var key = CryptoJS.MD5(l_share_key);
-  //to do 8 byte alignment
-  var json_bufs = bytes_align(json_buf);
-  var bytes_len = 8 * (parseInt(json_buf.length / 8) + 1), str_len = bytes_len / 4;
-  var json_obj = { sigBytes: bytes_len, words: json_bufs, length: str_len };
-  var json_uctx = CryptoJS.DES.encrypt(json_obj, key, { iv: CryptoJS.enc.Hex.parse('0000000000000000'), padding: CryptoJS.pad.NoPadding }).ciphertext.toString();
-  var b = str_2_16bytes(json_uctx);
-  var uctx = "data:application/octet-stream;base64," + mcodec.binary_2_b64(b);
-  return uctx;
-}
-
-function bytes_align (str) {
-  var val = [];
-  for (var i = 0; i < str.length; i++) {
-    val.push(str.charCodeAt(i).toString(16));
-  }
-  var get8bytes_num = parseInt(str.length / 8) + 1;
-  var addbytes = 8 * get8bytes_num - str.length;
-  var result = [];
-  // var trans_8bytes = "";
-  var trans_val = "";
-  for (var k = 0; k < addbytes; k++) {
-    if (k === 0)
-      trans_val = "0" + addbytes;
-    else
-      trans_val += "ff";
-    if (trans_val.length === 8) {
-      result.push("0x" + trans_val);
-      trans_val = "";
-    }
-  }
-  for (var j = 0; j < val.length; j++) {
-    trans_val += val[j];
-    if (trans_val.length === 8) {
-      result.push("0x" + trans_val);
-      trans_val = "";
-    }
-  }
-  return result;
-}
-
-function str_2_16bytes (b) {
-  if (!b) return;
-  var len = b.length / 2, c = [];
-  for (var i = 0; i < len; i++) {
-    var a0 = b.charAt(2 * i);
-    var a1 = b.charAt(2 * i + 1);
-    var a2 = "0x" + a0 + a1;
-    c.push(a2 & 0xff);
-  }
-  return c;
-}
-function pwd_encrypt (pwd_md5_hex) {
-  // var xxx = CryptoJS.enc.Hex.parse(pwd_md5_hex);
-  return CryptoJS.DES.encrypt(CryptoJS.enc.Hex.parse(pwd_md5_hex), CryptoJS.enc.Hex.parse(md5.hex(store.state.user.shareKey)), { iv: CryptoJS.enc.Hex.parse('0000000000000000'), padding: CryptoJS.pad.NoPadding }).ciphertext.toString();
-}

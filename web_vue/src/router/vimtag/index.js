@@ -6,6 +6,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const login = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/login')
+const devlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/devlist_vimtag')
 
 const vimtagRouter = new Router({
   routes: [
@@ -13,6 +14,11 @@ const vimtagRouter = new Router({
       path: '/',
       name: 'login',
       component: login
+    },
+    {
+      path: '/devlist',
+      name: 'devlist',
+      component: devlist
     }
   ]
 })

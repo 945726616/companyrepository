@@ -5,7 +5,7 @@
 import md5 from '@/util/mmd5.js'
 export default {
   methods: {
-    create_top(obj) {
+    create_top (obj) {
       let _this = this
       if (window.location.href.indexOf('vimtag') > -1) {
         // vimtag结构
@@ -40,49 +40,47 @@ export default {
           "<div class='select_lang' value='pl'>Polski</div>" +
           "<div class='select_lang' value='uk'>Українська мова</div>" + //乌克兰语
           "<div class='select_lang' value='th'>ภาษาไทย</div>" + //泰国语
-            '</div>' +
-            "<div id='top_menu_my' class='top_right_menu'></div>" +
-            "<div id='top_login_div'><span id='top_login_span'>" +
-            mcs_my_device +
-            '</span></div>' +
-            "<div id='top_experience_div' class='top_right_menu'>" +
-            mcs_demo +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '</div>'
+          '</div>' +
+          "<div id='top_menu_my' class='top_right_menu'></div>" +
+          "<div id='top_login_div'><span id='top_login_span'>" +
+          mcs_my_device +
+          '</span></div>' +
+          "<div id='top_experience_div' class='top_right_menu'>" +
+          mcs_demo +
+          '</div>' +
+          '</div>' +
+          '</div>' +
+          '</div>'
         )
       } else {
         // mipc结构
         obj.parent.html(
           "<div id='menu_box' class='menu_box'>" +
-            "<div id='menu_box_main'>" +
-            "<div id='mipc_logo_img'></div>" +
-            "<div id='menu_more' class='menu_top_li'>" +
-            "<div id='menu_more_img' class='menu_img'></div>" +
-            "<div id='menu_more_txt' class='menu_txt'>" +
-            mcs_more_options +
-            '</div>' +
-            '</div>' +
-            "<div id='menu_download' class='menu_top_li'>" +
-            "<div id='menu_download_img' class='menu_img'></div>" +
-            "<div id='menu_download_txt' class='menu_txt'>" +
-            mcs_download +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            "<div id='set_back'><div id='mipcBack'><div id='main_title_box_return_img'></div>" +
-            mcs_back +
-            '</div></div>' +
-            '</div>'
+          "<div id='menu_box_main'>" +
+          "<div id='mipc_logo_img'></div>" +
+          "<div id='menu_more' class='menu_top_li'>" +
+          "<div id='menu_more_img' class='menu_img'></div>" +
+          "<div id='menu_more_txt' class='menu_txt'>" +
+          mcs_more_options +
+          '</div>' +
+          '</div>' +
+          "<div id='menu_download' class='menu_top_li'>" +
+          "<div id='menu_download_img' class='menu_img'></div>" +
+          "<div id='menu_download_txt' class='menu_txt'>" +
+          mcs_download +
+          '</div>' +
+          '</div>' +
+          '</div>' +
+          "<div id='set_back'><div id='mipcBack'><div id='main_title_box_return_img'></div>" +
+          mcs_back +
+          '</div></div>' +
+          '</div>'
         )
 
         if (window.fujikam === 'fujikam') {
           let mipc_appparam_url = location.href
           if (GetUrlParam_kb('kbwin', mipc_appparam_url)) {
-            g_is_kbwin = GetUrlParam_kb('kbwin', mipc_appparam_url)
-              ? GetUrlParam_kb('kbwin', mipc_appparam_url)
-              : 0
+            g_is_kbwin = GetUrlParam_kb('kbwin', mipc_appparam_url) ? GetUrlParam_kb('kbwin', mipc_appparam_url) : 0
           }
         }
         if (g_is_kbwin === 1) {
@@ -90,18 +88,18 @@ export default {
           $('#menu_download').hide()
         }
 
-        $('#menu_download').on('click', function() {
+        $('#menu_download').on('click', function () {
           // console.log(this)
           $('#menu_more').attr('class', 'menu_top_li')
           $('#menu_download').attr('class', 'menu_top_li_active')
           createPage('download', { parent: $('#page') })
         })
-        $('#menu_more').on('click', function() {
+        $('#menu_more').on('click', function () {
           $('#menu_download').attr('class', 'menu_top_li')
           $('#menu_more').attr('class', 'menu_top_li_active')
           createPage('my', { parent: $('#page') })
         })
-        $('#mipc_logo_img').on('click', function() {
+        $('#mipc_logo_img').on('click', function () {
           $('#menu_more').attr('class', 'menu_top_li')
           $('#menu_download').attr('class', 'menu_top_li')
           if (_this.$store.state.jumpPageData.loginFlag) {
@@ -133,7 +131,7 @@ export default {
       }
       // 个人中心填写用户名
       $('#top_menu_my').html(username_value)
-      $('#top_box_left').on('click', function() {
+      $('#top_box_left').on('click', function () {
         // 左上角logo图标点击事件
         if (window.fujikam == 'fujikam') {
           // 如果是客户端则屏蔽跳转功能
@@ -159,7 +157,7 @@ export default {
       if (window.location.host.indexOf('www') === -1) {
         $('#top_menu_about').hide()
       }
-      $('#top_menu_my').click(function() {
+      $('#top_menu_my').click(function () {
         // 点击个人中心
         if (_this.publicFunc.urlParam().l == 'local') {
           _this.$store.dispatch('setLocalModel', 1)
@@ -170,7 +168,7 @@ export default {
         createPage('my', { parent: $('#page') })
       })
 
-      $('#top_login_div').click(function() {
+      $('#top_login_div').click(function () {
         if (_this.$store.state.jumpPageData.localModel) {
           //如果点击了本地搜索
           g_is_login = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
@@ -215,7 +213,7 @@ export default {
         }
       })
 
-      $('#top_experience_div').click(function() {
+      $('#top_experience_div').click(function () {
         //点击体验
         let username = _this.publicFunc.urlParam().ta ? _this.publicFunc.urlParam().ta : 'vimtag'
         let password = _this.publicFunc.urlParam().tp ? _this.publicFunc.urlParam().tp : 'vimtag'
@@ -230,7 +228,7 @@ export default {
         })
       })
       select_lang()
-      function select_lang() {
+      function select_lang () {
         let l_select_lang = document.getElementsByClassName('select_lang')
         let language_choice_info = sessionStorage.getItem('userLanguage')
         let l_lang = language_choice_info ? language_choice_info : sessionStorage.getItem('projectName')
@@ -241,7 +239,7 @@ export default {
             $('#bottom_select_lang').html(l_select_lang[l].innerHTML)
           }
         }
-        $('#bottom_select_lang').click(function() {
+        $('#bottom_select_lang').click(function () {
           let is_show = $('#select_lang_box').css('display')
           if (is_show === 'none') {
             let top = this.offsetTop + 52
@@ -256,12 +254,12 @@ export default {
           }
 
           // $("#top_box_right").mouseleave(function(event) {
-          $('#top_box_right').mouseleave(function() {
+          $('#top_box_right').mouseleave(function () {
             $('#select_lang_box').hide()
           })
         })
 
-        $('.select_lang').click(function() {
+        $('.select_lang').click(function () {
           let val = $(this).attr('value')
           localStorage.setItem('language_choice_info', val)
           location.reload()
@@ -269,7 +267,7 @@ export default {
       }
 
       let pc_is_offline = GetQueryString('pc_is_offline')
-      function GetQueryString(name) {
+      function GetQueryString (name) {
         // 截取url参数函数
         let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
         let r = window.location.search.substr(1).match(reg)
@@ -295,7 +293,7 @@ export default {
       }
     },
     // 暂时不清楚kbwin是那个具体项目暂时简单搬迁
-    GetUrlParam_kb(paraName, url) {
+    GetUrlParam_kb (paraName, url) {
       let arrObj = url.split('?')
       if (arrObj.length > 1) {
         let arrPara = arrObj[1].split('&')
@@ -312,7 +310,7 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.$nextTick(async () => {
       // 强制重新引入多国语言 main.js中的引用无法确保在调用top时能够全局使用
       let userLanguage = sessionStorage.getItem('userLanguage')

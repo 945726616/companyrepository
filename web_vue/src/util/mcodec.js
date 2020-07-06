@@ -212,23 +212,23 @@ var mcodec = null;
   function fn_obj_2_url (obj, split/* default is "&" */) { //日志数据处理后修改
     console.log(obj, 'obj', split, 'split')
 
-    let nc = "="
-    let vc = "&"
-    let pfx = "%"
-    let s = {}
+    var nc = "="
+    var vc = "&"
+    var pfx = "%"
+    var s = {}
     function _obj_2_uri (obj, path) {
-      let test = {}
+      var test = {}
       if (obj.constructor === Array) {
         s[path + "__x_countz_"] = obj.length
       }
-      for (let objName in obj) {
-        let objItem = obj[objName] // 传递过来的对象内容
+      for (var objName in obj) {
+        var objItem = obj[objName] // 传递过来的对象内容
         console.log(objItem, "objItem", typeof(objItem), 'typeof(objItem)', objName, "objName", path, 'path')
         if ((undefined !== objItem) && (null !== objItem)) {
           if ('%' === ("" + objName).charAt(0)) { // 确定键名第一个字符不是%
             objName = objName.substr(1) // 如果第一个字符是% 则去掉%
           }
-          let n_path = path + (('0' !== objName) ? ((("" === path) ? "d" : "_") + objName) : "") // 前缀加密后的键名
+          var n_path = path + (('0' !== objName) ? ((("" === path) ? "d" : "_") + objName) : "") // 前缀加密后的键名
 
           if (typeof (objItem) !== "function") { // 检测对象键值是否为函数
             if (typeof (objItem) === 'object') { // 键值是否为对象
@@ -340,7 +340,7 @@ var mcodec = null;
       s_md5_src = s_nid_idty
         + (share_key ? (fn_v2c((0 << 5) + share_key.length) + share_key) : "")
         + (s_password_md5 ? (fn_v2c((0 << 5) + s_password_md5.length) + s_password_md5) : "")
-    let s_md5 = fn_i2a("0x" + md5_ex[md5_hex_name](s_md5_src));
+    var s_md5 = fn_i2a("0x" + md5_ex[md5_hex_name](s_md5_src));
     return fn_str_2_b64(fn_v2c((1 << 5) + s_md5.length) + s_md5 + s_nid_idty, 1);
   }
 

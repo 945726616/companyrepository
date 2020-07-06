@@ -616,7 +616,7 @@ export default {
                         msg.info.link_url = msg.info.link_url.replace('http://209.133.212.170:2080', 'https://us10.vimtag.com:2446')
                         msg.info.link_url = msg.info.link_url.replace('http://61.147.109.92:7080', 'https://js.vimtag.com:7446')
                       }
-                      _this.$store.dispatch('setPlayDownloadUrl',  msg.info.link_url) // 存储播放时需要用到的url
+                      _this.$store.dispatch('setPlayDownloadUrl', msg.info.link_url) // 存储播放时需要用到的url
                     }
                   }
                 })
@@ -643,30 +643,31 @@ export default {
                               g_support_auto_play = 1
                               let auto_play = localStorage.getItem('auto_play')
                               if (auto_play !== 0) {
-                                g_auto_play = 1
+                                _this.$store.dispatch('setAutoPlayFlag', 1)
                               } else {
-                                g_auto_play = 0
+                                _this.$store.dispatch('setAutoPlayFlag', 0)
                               }
                             }
                           })
                         }
                         if (param[i].name === 'f_filter' && param[i].value === 1) {
-                          g_support_filter = 1
+                          _this.$store.dispatch('setSupportFilterFlag', 1)
                         }
                         if (param[i].name === 'f_grp' && param[i].value === 1) {
-                          g_support_tree = 1
+                          _this.$store.dispatch('setSupportTreeFlag', 1)
                         }
                         if (param[i].name === 'sc.logo') {
                           //给江门xhjymclz修改设备列表页面图标
                           // g_supprot_clogo = 1;
                           _this.$store.commit('SET_JM_LOGO_FLAG', 1)
-                          createPage('top', { parent: $('#top') })
+                          // createPage('top', { parent: $('#top') })
                         }
                       }
                     }
                     _this.$store.dispatch('setDownloadManualUrl', msg.data.server.signal[2])
                     // upload_log("log_app_login")  //登录请求返回后发送日志
-                    createPage('devlist', { parent: obj.parent })
+                    // createPage('devlist', { parent: obj.parent })
+                    _this.$router.push('/devlist') // 跳转至设备列表页面
                   }
                 })
                 if (!_this.$store.state.jumpPageData.experienceFlag) { // 判断是否为体验
@@ -717,8 +718,6 @@ export default {
         }
       })
 
-      // 轮询函数重复定义 devlist.page.js中也进行了定义 考虑做成项目通用的公共函数
-
       // 注册页面点击注册按钮(注册验证提交)
       $('#register_btn').click(function () {
         let reg,
@@ -744,7 +743,7 @@ export default {
             return
           }
         }
-        if (!password_value || password_value == mcs_input_password) {
+        if (!password_value || password_value === mcs_input_password) {
           _this.publicFunc.msg_tips({
             msg: mcs_the_password_is_empty,
             type: 'error',
@@ -762,7 +761,7 @@ export default {
             return
           }
         }
-        if (!pw_confirm_value || pw_confirm_value == mcs_confirm_password) {
+        if (!pw_confirm_value || pw_confirm_value === mcs_confirm_password) {
           _this.publicFunc.msg_tips({
             msg: mcs_password_empty,
             type: 'error',
@@ -770,7 +769,7 @@ export default {
           })
           return
         }
-        if (pw_confirm_value != password_value) {
+        if (pw_confirm_value !== password_value) {
           _this.publicFunc.msg_tips({
             msg: mcs_two_password_input_inconsistent,
             type: 'error',
@@ -778,27 +777,32 @@ export default {
           })
           return
         }
-        msdk_ctrl({
-          type: 'account_register',
-          data: {
-            username: username_value,
-            password: password_value,
-            func: function (msg) {
-              if (msg == mcs_successful_sign_up) {
-                _this.publicFunc.msg_tips({
-                  msg: msg,
-                  type: 'success',
-                  timeout: 3000
-                })
-                createPage('login', obj)
-              } else {
-                _this.publicFunc.msg_tips({ msg: msg, type: 'error', timeout: 3000 })
-              }
-            }
+        _this.$api.login.sign_up({ // 调用用户注册接口
+          username: username_value,
+          password: password_value,
+        }).then(res => {
+          let msg_data = res.data
+          let msg
+          if (msg_data && msg_data.result === "") { // 对返回的数据进行处理
+            msg = mcs_successful_sign_up;
+          } else if (msg_data.result === "accounts.user.existed") {
+            msg = mcs_username_already_exists;
+          } else {
+            msg = mcs_sign_up_failed;
+          }
+          if (msg === mcs_successful_sign_up) { // 判断返回值进行提示
+            _this.publicFunc.msg_tips({
+              msg: msg,
+              type: 'success',
+              timeout: 3000
+            })
+            // createPage('login', obj)
+            _this.create_login_page({ parent: $('#login') }) // 切换回登录页面(此处后期可改成点击登录按钮事件)
+          } else {
+            _this.publicFunc.msg_tips({ msg: msg, type: 'error', timeout: 3000 })
           }
         })
       })
-
       if (localStorage.getItem('auto_login') == 1) {
         // 自动登录状态为1时,相当于操作一次点击登录按钮
         $('#sign_in').click()
