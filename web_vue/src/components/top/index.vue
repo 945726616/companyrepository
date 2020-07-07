@@ -141,7 +141,7 @@ export default {
       })
 
       if (window.fujikam == 'fujikam') {
-        if (!projectFlag) {
+        if (!_this.$store.state.jumpPageData.projectFlag) {
           // vimtag顶部导航专属样式添加
           $('#top').attr('style', 'width:100%;height:81px;')
         }

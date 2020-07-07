@@ -324,10 +324,9 @@ export default {
             if (l_dom_device_list_img.getAttribute("state") === "Online") {
               //State Normal equipment click event
               $(".camera_sign_picture_div")[i].onclick = function () {
-                g_select_device_ipc = this.parentNode.parentNode.getAttribute("sn");
-                // console.log(g_select_device_ipc, '点击时应用的方法, 获取其sn')
+                _this.$store.dispatch('setSelectDeviceIpc', this.parentNode.parentNode.getAttribute("sn")) // 点击时获取sn
+                _this.$store.dispatch('setSelectNick', this.parentNode.parentNode.getAttribute("nick")) // 点击时获取nick
                 g_Select_nick = this.parentNode.parentNode.getAttribute("nick")
-                // console.log(g_Select_nick, '点击时应用的方法, 获取其nick')
                 let type = this.parentNode.parentNode.getAttribute("dtype");
                 let state = this.parentNode.parentNode.getAttribute("state");
                 let addr = this.parentNode.parentNode.getAttribute("addr");
@@ -353,7 +352,7 @@ export default {
                   local_play_data.profile_token = "p3";
                   local_play_data.func = function (msg) {
                     if (msg.result) {
-                      msg_tips({ msg: mcs_invalid_password, type: "error", timeout: 3000 })
+                      _this.publicFunc.msg_tips({ msg: mcs_invalid_password, type: "error", timeout: 3000 })
                     }
                   }
                   msdk_ctrl({ type: "local_device_play", data: local_play_data }); // 本地化接口暂缓
@@ -366,7 +365,7 @@ export default {
                   local_play_data.profile_token = "p3";
                   local_play_data.func = function (msg) {
                     if (msg.result) {
-                      msg_tips({ msg: mcs_invalid_password, type: "error", timeout: 3000 })
+                      _this.publicFunc.msg_tips({ msg: mcs_invalid_password, type: "error", timeout: 3000 })
                     }
                   };
                   msdk_ctrl({ type: "local_box", data: local_play_data }); // 本地化接口暂缓
@@ -414,31 +413,31 @@ export default {
               }
             } else if (l_dom_device_list_img.getAttribute("state") === "InvalidAuth") {
               $(".camera_sign_picture_div")[i].onclick = function () {
-                g_select_device_ipc = this.parentNode.parentNode.getAttribute("sn");
+                _this.$store.dispatch('setSelectDeviceIpc', this.parentNode.parentNode.getAttribute("sn")) // 点击时存储sn
                 let type = this.parentNode.parentNode.getAttribute("dtype");
                 let addr = this.parentNode.parentNode.getAttribute("addr");
                 if (_this.$store.state.jumpPageData.localFlag) {
                   if (type == "IPC") {
-                    create_input_passwrod_box({ sn: g_select_device_ipc, addr: addr, dom: this.parentNode.childNodes[1], type: "IPC" })
+                    create_input_passwrod_box({ sn: _this.$store.state.jumpPageData.selectDeviceIpc, addr: addr, dom: this.parentNode.childNodes[1], type: "IPC" })
                   } else if (type == "BOX") {
-                    create_input_passwrod_box({ sn: g_select_device_ipc, addr: addr, dom: this.parentNode.childNodes[1], type: "BOX" })
+                    create_input_passwrod_box({ sn: _this.$store.state.jumpPageData.selectDeviceIpc, addr: addr, dom: this.parentNode.childNodes[1], type: "BOX" })
                   }
                 } else {
                   $("#add_device_page").show();
                   $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
-                  create_add_devices_box({ parent: $("#add_device_page"), sn: g_select_device_ipc });
+                  create_add_devices_box({ parent: $("#add_device_page"), sn: _this.$store.state.jumpPageData.selectDeviceIpc });
                 }
               }
             } else if (l_dom_device_list_img.getAttribute("state") === "Offline") {
               $(".camera_sign_picture_div")[i].onclick = function () {
-                g_select_device_ipc = this.parentNode.parentNode.getAttribute("sn");
+                _this.$store.dispatch('setSelectDeviceIpc', this.parentNode.parentNode.getAttribute("sn")) // 点击时存储sn
                 let type = this.parentNode.parentNode.getAttribute("dtype");
                 let state = this.parentNode.parentNode.getAttribute("state");
                 let addr = this.parentNode.parentNode.getAttribute("addr");
                 let nick = this.parentNode.parentNode.getAttribute("nick");
                 $("#add_device_page").show();
                 $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
-                create_devices_offline({ parent: $("#add_device_page"), sn: g_select_device_ipc, type: type, state: state, addr: addr, nick: nick });
+                create_devices_offline({ parent: $("#add_device_page"), sn: _this.$store.state.jumpPageData.selectDeviceIpc, type: type, state: state, addr: addr, nick: nick });
               }
             }
           } else {
@@ -723,7 +722,7 @@ export default {
           msdk_ctrl({ type: "local_sign_in", data: local_play_data })
           function local_sign_in_ack (msg) {
             if (msg.result == "accounts.pass.invalid") {
-              msg_tips({ msg: mcs_invalid_password, type: "error", timeout: 3000 })
+              _this.publicFunc.msg_tips({ msg: mcs_invalid_password, type: "error", timeout: 3000 })
             } else {
               if (data.type == "IPC") {
                 obj.addr = data.addr;
@@ -756,7 +755,7 @@ export default {
         $("#video_play_id").html(mcs_device_id + ":  " + data.sn)
         $("#add_devices_box_close").click(function () { close_add_page() })
         $('#search_help').click(function () {
-          create_search_help({ parent: $("#add_device_page"), sn: g_select_device_ipc, state: data.state, type: data.type, addr: data.addr });
+          create_search_help({ parent: $("#add_device_page"), sn: _this.$store.state.jumpPageData.selectDeviceIpc, state: data.state, type: data.type, addr: data.addr });
         })
       }
 
@@ -778,7 +777,7 @@ export default {
           close_add_page()
         })
         $("#reconfig_wifi").click(function () {
-          create_add_devices_box({ parent: $("#add_device_page"), sn: g_select_device_ipc, type: data.type });
+          create_add_devices_box({ parent: $("#add_device_page"), sn: _this.$store.state.jumpPageData.selectDeviceIpc, type: data.type });
         })
       }
 
@@ -909,7 +908,7 @@ export default {
                 // console.log('匹配成功')
               } else {
                 // console.log('匹配失败')
-                msg_tips({ msg: mrs_device_ID_input_error, type: "error", timeout: 3000 });
+                _this.publicFunc.msg_tips({ msg: mrs_device_ID_input_error, type: "error", timeout: 3000 });
                 return
               }
 
@@ -926,11 +925,11 @@ export default {
                 }
               }
               if (!d_id) {
-                msg_tips({ msg: mcs_the_user_name_is_empty, type: "error", timeout: 3000 })
+                _this.publicFunc.msg_tips({ msg: mcs_the_user_name_is_empty, type: "error", timeout: 3000 })
                 return
               } else if (device_existed) {
                 add_device_stat = 'lan' // 日志 本地设备
-                msg_tips({ msg: mcs_device_existed, type: "warning", timeout: 3000 })
+                _this.publicFunc.msg_tips({ msg: mcs_device_existed, type: "warning", timeout: 3000 })
               } else {
                 // 展示遮罩层
                 _this.publicFunc.showBufferPage()
@@ -940,7 +939,7 @@ export default {
                 }).then(res => {
                   _this.publicFunc.closeBufferPage()
                   if (res === mcs_device_not_exist) { // 设备不存在
-                    msg_tips({ msg: res, type: "error", timeout: 3000 })
+                    _this.publicFunc.msg_tips({ msg: res, type: "error", timeout: 3000 })
                   } else if (res === "user.offline") { // 设备不在线时
                     add_device_stat = 'offline' // 日志 设备状态
                     add_device_connect_power()
@@ -1176,7 +1175,7 @@ export default {
               let password = $("#add_device_input_pass").val();
               if (!password) {
                 add_dev_info.desc = 'input password is empty';
-                msg_tips({ msg: mcs_the_password_is_empty, type: "error", timeout: 3000 });
+                _this.publicFunc.msg_tips({ msg: mcs_the_password_is_empty, type: "error", timeout: 3000 });
               } else {
                 // 展示遮罩层
                 _this.publicFunc.showBufferPage()
@@ -1211,7 +1210,7 @@ export default {
                           }
                         }
                         close_add_page('add_dev');
-                        msg_tips({ msg: mcs_add_successfully, type: "success", timeout: 3000 }); // 添加成功
+                        _this.publicFunc.msg_tips({ msg: mcs_add_successfully, type: "success", timeout: 3000 }); // 添加成功
                       } else {
                         close_add_page('add_dev');
                       }
@@ -1221,16 +1220,16 @@ export default {
                     }
                   } else if (res.result == "accounts.pass.invalid") {
                     add_dev_info.desc = 'add device fail' + mcs_invalid_password;
-                    msg_tips({ msg: mcs_invalid_password + ".", type: "error", timeout: 3000 });
+                    _this.publicFunc.msg_tips({ msg: mcs_invalid_password + ".", type: "error", timeout: 3000 });
                   } else if (res.result == "subdev.exceed.device") {
                     add_dev_info.desc = 'add device fail' + mcs_devices_in_the_account_overrun;
-                    msg_tips({ msg: mcs_devices_in_the_account_overrun + ".", type: "error", timeout: 3000 });
+                    _this.publicFunc.msg_tips({ msg: mcs_devices_in_the_account_overrun + ".", type: "error", timeout: 3000 });
                   } else if (res.result == "server.app.invalid") { // app限制   
                     add_dev_info.desc = 'add device fail' + mcs_device_add_app_invalid;
-                    msg_tips({ msg: mcs_device_add_app_invalid, type: "error", timeout: 3000 });
+                    _this.publicFunc.msg_tips({ msg: mcs_device_add_app_invalid, type: "error", timeout: 3000 });
                   } else if (res.result == "server.loc.invalid") { // 地区限制 
                     add_dev_info.desc = 'add device fail' + mcs_device_add_loc_invalid;
-                    msg_tips({ msg: mcs_device_add_loc_invalid, type: "error", timeout: 3000 });
+                    _this.publicFunc.msg_tips({ msg: mcs_device_add_loc_invalid, type: "error", timeout: 3000 });
                   }
                 })
               }
@@ -1288,11 +1287,11 @@ export default {
               let re_password = $("#add_device_edit_confirm_pass").val();
               let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,32}$/;
               if (!password || !re_password) {
-                msg_tips({ msg: mcs_the_password_is_empty, type: "error", timeout: 3000 });
+                _this.publicFunc.msg_tips({ msg: mcs_the_password_is_empty, type: "error", timeout: 3000 });
               } else if (!reg.exec(password)) { //密码为8到32位的数字和字母
-                msg_tips({ msg: mcs_password_range_hint, type: "error", timeout: 3000 });
+                _this.publicFunc.msg_tips({ msg: mcs_password_range_hint, type: "error", timeout: 3000 });
               } else if (password != re_password) { //密码不一致
-                msg_tips({ msg: mcs_two_password_input_inconsistent, type: "error", timeout: 3000 });
+                _this.publicFunc.msg_tips({ msg: mcs_two_password_input_inconsistent, type: "error", timeout: 3000 });
               } else {
                 _this.$api.devlist.dev_passwd_set({ // 设备密码设置
                   sn: d_id,
@@ -1307,7 +1306,7 @@ export default {
                       add_device_set_wifi(res)
                     })
                   } else {
-                    msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 })
+                    _this.publicFunc.msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 })
                   }
                 })
               }
@@ -1414,12 +1413,12 @@ export default {
                   add_dev_info.desc = 'set wifi_' + select_wifi + 'error';//日志
                   add_set_wifi_endtime = new Date().getTime(); //日志 wifi配置结束时间
                   add_set_wifi_totaltime = add_set_wifi_endtime - add_set_wifi_startime;//日志 wifi配置耗时
-                  msg_tips({ msg: res.msg, type: res.type, timeout: 3000 });
+                  _this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 });
                 } else if (res.type === 'success') {
                   add_dev_info.desc = 'set wifi_' + select_wifi + 'success';//日志
                   add_set_wifi_endtime = new Date().getTime(); //日志 wifi配置结束时间
                   add_set_wifi_totaltime = add_set_wifi_endtime - add_set_wifi_startime;//日志 wifi配置耗时
-                  msg_tips({ msg: res.msg, type: res.type, timeout: 3000 });
+                  _this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 });
                   add_device_set_nick();
                 } else {
                   add_device_set_nick();
@@ -1473,7 +1472,7 @@ export default {
             $("#add_device_submit").click(function () {
               let nick = $("#add_device_nick").val();
               if (!nick) {
-                msg_tips({ msg: mcs_nick_not_empty, type: "error", timeout: 3000 });
+                _this.publicFunc.msg_tips({ msg: mcs_nick_not_empty, type: "error", timeout: 3000 });
               } else {
                 _this.$api.devlist.nick_set({ // 设置设备昵称
                   sn: d_id,
@@ -1583,11 +1582,11 @@ export default {
                 timezone: timezone
               }).then(res => {
                 if (res == 1) {
-                  msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 });
+                  _this.publicFunc.msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 });
                 } else {
                   // $("#buffer_page").hide();
                   _this.publicFunc.closeBufferPage()
-                  msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 }); //设置完时区提示
+                  _this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 }); //设置完时区提示
                   close_add_page('add_dev')
                 }
               })

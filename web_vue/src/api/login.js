@@ -1,9 +1,11 @@
+'use strict'
 import axios from '@/axios' // 导入http中创建的axios实例
 import mdh from '@/util/DHKeyExchange.js'
 import CryptoJS from '@/util/cryptojs_tripledes.js'
 import store from '../store'
 import mcodec from '@/util/mcodec.js'
 import md5 from '@/util/mmd5.js'
+import publicFunc from '@/util/public.js'
 let secret_key // 公共私钥变量用于mdh接口与后续回调的接口公用同一私钥值
 const login = {
   /*
@@ -256,23 +258,23 @@ const login = {
     for (let m = 0; m < mmq_data.length; m++) {
       if (mmq_data[m].code == "motion_alert") {
         if (mmq_data[m].type == "alert") {
-          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_motion_alert, type: "warning", timeout: 3000 })
+          publicFunc.msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_motion_alert, type: "warning", timeout: 3000 })
         }
       } else if (mmq_data[m].code == "sound_detect") {
         if (mmq_data[m].type == "alert") {
-          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_sound_detect_alert, type: "warning", timeout: 3000 })
+          publicFunc.msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_sound_detect_alert, type: "warning", timeout: 3000 })
         }
       } else if (mmq_data[m].code == "face_alert") {
         if (mmq_data[m].type == "alert") {
-          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_face_detect_alert, type: "warning", timeout: 3000 })
+          publicFunc.msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_face_detect_alert, type: "warning", timeout: 3000 })
         }
       } else if (mmq_data[m].code == "human_alert") { //人型检测
         if (mmq_data[m].type == "alert") {
-          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mrs_human_detect_alert, type: "warning", timeout: 3000 })
+          publicFunc.msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mrs_human_detect_alert, type: "warning", timeout: 3000 })
         }//mrs_human_detect_alert
       } else if (mmq_data[m].code == "sos") { // 紧急按钮报警
         if (mmq_data[m].type == "alert") {
-          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_sos + mcs_alarm, type: "warning", timeout: 3000 })
+          publicFunc.msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp" + mcs_sos + mcs_alarm, type: "warning", timeout: 3000 })
         }
       } else if (mmq_data[m].code == "door") { // 门磁
         let door_status = "";
@@ -282,9 +284,9 @@ const login = {
           }
         }
         if (mmq_data[m].type == "alert" && door_status == 'open') {
-          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp  " + mrs_door_sensor_open, type: "warning", timeout: 3000 })
+          publicFunc.msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp  " + mrs_door_sensor_open, type: "warning", timeout: 3000 })
         } else if (mmq_data[m].type == "alert" && door_status == 'close') {
-          msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp  " + mrs_door_sensor_closed, type: "warning", timeout: 3000 })
+          publicFunc.msg_tips({ msg: mmq_data[m].sn + "&nbsp:&nbsp  " + mrs_door_sensor_closed, type: "warning", timeout: 3000 })
         }
       }
     }

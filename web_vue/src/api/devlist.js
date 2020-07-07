@@ -3,6 +3,7 @@ import axios from '@/axios' // 导入http中创建的axios实例
 import login from './login'
 import store from '../store'
 import md5 from '@/util/mmd5.js'
+import mcodec from '@/util/mcodec.js'
 
 const devlist = {
   /*
@@ -660,7 +661,7 @@ const devlist = {
           if (is_exist_ipc[i] == local_devs_data.sn) return;
         }//
         is_exist_ipc.push(local_devs_data.sn);
-        let tmp_local_dev_password = mlocal_storage.get("pass_" + local_devs_data.sn);
+        let tmp_local_dev_password = sessionStorage.getItem("pass_" + local_devs_data.sn);
         let tmp_local_devs_data = {
           sn: local_devs_data.sn,
           type: local_devs_data.type,
@@ -672,7 +673,7 @@ const devlist = {
         return_data.push(tmp_local_devs_data);
       }
     }
-    let l_dom_search = dom_create_child(mx("#web"), "div", "search");
+    let l_dom_search = dom_create_child($("#web"), "div", "search");
     l_dom_search[s_style][s_cssText] = "width:1px;height:1px";
     let mme_params,
       ua = navigator.userAgent.toLowerCase(),
@@ -697,7 +698,7 @@ const devlist = {
     obj.mme = new mme(mme_params);
     setTimeout(function () {
       obj.mme.chl_destroy();
-      jQuery("#search").remove();
+      $("#search").remove();
       data.func(return_data)
     }, 1000)
     return return_data
@@ -715,7 +716,7 @@ const devlist = {
   },
   ldev_index_get (sn) { // 查找在暂存数据中的编号
     let devlist = store.state.jumpPageData.deviceData
-    for (var i = 0, length = devlist.length; i < length; i++) {
+    for (let i = 0, length = devlist.length; i < length; i++) {
       if (devlist[i].sn === sn) {
         return i
       }
@@ -723,7 +724,7 @@ const devlist = {
   },
   ldev_del (sn) { // 删除
     let devlist = store.state.jumpPageData.deviceData
-    for (var i = 0; i < devlist.length; ++i) {
+    for (let i = 0; i < devlist.length; ++i) {
       if (devlist[i].sn === sn) {
         devlist.splice(i, 1)
         store.dispatch('setDeviceData', devlist)

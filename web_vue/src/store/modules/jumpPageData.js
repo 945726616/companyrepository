@@ -18,6 +18,11 @@ const jumpPageData = {
     localFlag: 0, // 本地模式标识
     deviceData: [], // 全局设备列表内容数据
     autoPlayFlag: 0, // 自动播放标识
+    projectFlag: location.href.indexOf('vimtag') > -1 ? 0 : 1, // 项目判断标识(不可修改不添加mutation以及action)
+    selectDeviceIpc: '', // 选择中设备sn码
+    selectNick: '', // 选中的设备nick
+    flashIsPlay: null, // flash自动播放
+    playInfo: '', // 播放相关详情
   },
   mutations: {
     SET_PAGE_DOM: (state, pageDom) => {
@@ -67,6 +72,18 @@ const jumpPageData = {
     },
     SET_AUTO_PLAY_FLAG: (state, autoPlayFlag) => {
       state.autoPlayFlag = autoPlayFlag
+    },
+    SET_SELECT_DEVICE_IPC: (state, selectDeviceIpc) => {
+      state.selectDeviceIpc = selectDeviceIpc
+    },
+    SET_SELECT_NICK: (state, selectNick) => {
+      state.selectNick = selectNick
+    },
+    SET_FLASH_IS_PLAY: (state, flashIsPlay) => {
+      state.flashIsPlay = flashIsPlay
+    },
+    SET_PLAY_INFO: (state, playInfo) => {
+      state.playInfo = playInfo
     }
   },
   actions: {
@@ -85,15 +102,19 @@ const jumpPageData = {
     setBufferPageFlag: ({commit}, bufferPageFlag) => commit('SET_BUFFER_PAGE_FLAG', bufferPageFlag),
     setDeviceData: ({commit}, deviceData) => commit('SET_DEVICE_DATA', deviceData),
     setLocalFlag: ({commit}, localFlag) => commit('SET_LOCAL_FLAG', localFlag),
-    setAutoPlayFlag: ({commit}, autoPlayFlag) => commit('SET_AUTO_PLAY_FLAG', autoPlayFlag)
+    setAutoPlayFlag: ({commit}, autoPlayFlag) => commit('SET_AUTO_PLAY_FLAG', autoPlayFlag),
+    setSelectDeviceIpc: ({commit}, selectDeviceIpc) => commit('SET_SELECT_DEVICE_IPC', selectDeviceIpc),
+    setSelectNick: ({commit}, selectNick) => commit('SET_SELECT_NICK', selectNick),
+    setFlashIsPlay: ({commit}, flashIsPlay) => commit('SET_FLASH_IS_PLAY', flashIsPlay),
+    setPlayInfo: ({commit}, playInfo) => commit('SET_PLAY_INFO', playInfo)
   }
 }
 
 export default jumpPageData
 
 function GetQueryString(name) { // 截取url参数函数判断其中是否含有搜索的字符串(目前用于离线模式的判断)
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-  var r = window.location.search.substr(1).match(reg);
+  let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+  let r = window.location.search.substr(1).match(reg);
   if (r !== null) return unescape(r[2]);
   return null;
 }
