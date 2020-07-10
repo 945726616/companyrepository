@@ -242,33 +242,33 @@ export default {
         }
       }
       if (g_is_login) {
-        mx("#user_logo_username").innerHTML = username_value ? username_value : mcs_username;
-        mx("#about").parentNode.style.display = "block";
-        mx("#feedback").parentNode.style.display = "block";
-        mx("#exit_btn_img").parentNode.style.display = "block";
-        mx("#my_other").parentNode.style.display = "block";
-        mx("#manage_password").parentNode.style.display = "block";
-        mx("#guest_password").parentNode.style.display = "block";
-        mx("#add_email").parentNode.style.display = "block";
-        mx('#li_line').style.display = "none";
-        // mx("#local_div").parentNode.style.display = "block";// 本地搜索测试	
+        _this.publicFunc.mx("#user_logo_username").innerHTML = username_value ? username_value : mcs_username;
+        _this.publicFunc.mx("#about").parentNode.style.display = "block";
+        _this.publicFunc.mx("#feedback").parentNode.style.display = "block";
+        _this.publicFunc.mx("#exit_btn_img").parentNode.style.display = "block";
+        _this.publicFunc.mx("#my_other").parentNode.style.display = "block";
+        _this.publicFunc.mx("#manage_password").parentNode.style.display = "block";
+        _this.publicFunc.mx("#guest_password").parentNode.style.display = "block";
+        _this.publicFunc.mx("#add_email").parentNode.style.display = "block";
+        _this.publicFunc.mx('#li_line').style.display = "none";
+        // _this.publicFunc.mx("#local_div").parentNode.style.display = "block";// 本地搜索测试	
         if (g_support_auto_play) {
-          mx("#auto_play").parentNode.style.display = "block";
+          _this.publicFunc.mx("#auto_play").parentNode.style.display = "block";
         }
         if (window.fujikam) {
-          mx("#local_div").parentNode.style.display = "block";
+          _this.publicFunc.mx("#local_div").parentNode.style.display = "block";
         } else {
-          mx('#left_ul_top').style.border = 'inherit';
+          _this.publicFunc.mx('#left_ul_top').style.border = 'inherit';
         }
       } else {
-        // mx("#local_div").parentNode.style.display = "block";// 本地搜索测试	
-        mx("#exit_btn_img").parentNode.style.display = "block";
-        mx("#exit_btn_img").innerHTML = mcs_sign_in + "/" + mcs_sign_up;
-        mx("#about").parentNode.style.display = "block";
-        mx("#feedback").parentNode.style.display = "block";
-        mx("#li_line").style.border = 'inherit';
-        mx("#left_ul_top").style.border = 'inherit';
-        mx("#left_ul_bottom").style.border = 'inherit';
+        // _this.publicFunc.mx("#local_div").parentNode.style.display = "block";// 本地搜索测试	
+        _this.publicFunc.mx("#exit_btn_img").parentNode.style.display = "block";
+        _this.publicFunc.mx("#exit_btn_img").innerHTML = mcs_sign_in + "/" + mcs_sign_up;
+        _this.publicFunc.mx("#about").parentNode.style.display = "block";
+        _this.publicFunc.mx("#feedback").parentNode.style.display = "block";
+        _this.publicFunc.mx("#li_line").style.border = 'inherit';
+        _this.publicFunc.mx("#left_ul_top").style.border = 'inherit';
+        _this.publicFunc.mx("#left_ul_bottom").style.border = 'inherit';
       }
       $(document).ready(function () {
         create_my_page(obj)
@@ -302,32 +302,32 @@ export default {
             $(this).addClass("active_list");
           }
 
-          if (mx("#set_add_email_page").style.display == "block") binding_accounts_info();
+          if (_this.publicFunc.mx("#set_add_email_page").style.display == "block") binding_accounts_info();
           // ********此处代码在当前项目中并未真正应用******** //
           if (id_name == "sd_export") {
             if (sd_is_export) {
             } else {
               let sd_exist = window.check_SDCard();
               if (sd_exist == 0) {
-                mx("#sd_export_submit_tip").innerHTML = "no sd card";
-                mx("#sd_export_submit_tip").style.color = "#ff0000";
+                _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "no sd card";
+                _this.publicFunc.mx("#sd_export_submit_tip").style.color = "#ff0000";
               } else {
-                mx("#sd_export_submit_tip").style.display = 'none';
-                mx("#sd_export_submit_tip").innerHTML = "<img src='./imgs/device/add_loading.gif'>";
+                _this.publicFunc.mx("#sd_export_submit_tip").style.display = 'none';
+                _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src='./imgs/device/add_loading.gif'>";
                 // 暂时将双项目的代码简单捏合
                 if (location.href.indexOf("ebit") > -1) { // 判断页面是否为ebit
-                  mx("#sd_export_submit_tip").innerHTML = "<img src='./imgs/mipc/ebit_loading.gif'>";
+                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src='./imgs/mipc/ebit_loading.gif'>";
                 } else { // vshome/mipc
-                  mx("#sd_export_submit_tip").innerHTML = "<img src='./imgs/mipc/mipc_loading.gif'>";
+                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src='./imgs/mipc/mipc_loading.gif'>";
                 }
               }
             }
           }
           // ************************************************ //
           if (id_name == "feedback") { // 反馈
-            let l_dom_feedback_type = mx("#feedback_type");
+            let l_dom_feedback_type = _this.publicFunc.mx("#feedback_type");
             l_dom_feedback_type.onclick = function () {
-              mx("#add_device_page").innerHTML = "";
+              _this.publicFunc.mx("#add_device_page").innerHTML = "";
               $("#add_device_page").show(); //遮罩层
               $("#pb_select_sl").show();
             }
@@ -337,12 +337,12 @@ export default {
               l_dom_feedback_type.value = $(this).text();
             });
 
-            let l_dom_feedback_upload_image = mx("#upload_image");
-            let l_dom_feedback_submit = mx("#feedback_submit_btn");
-            let l_dom_feedback_content = mx("#feedback_describe_text");
-            let l_dom_feedback_email_address = mx("#feedback_email_address");
-            let l_dom_upload_image_btn = mx("#upload_image_btn");
-            let l_dom_pre_img_btn = mx("#pre_img_btn");
+            let l_dom_feedback_upload_image = _this.publicFunc.mx("#upload_image");
+            let l_dom_feedback_submit = _this.publicFunc.mx("#feedback_submit_btn");
+            let l_dom_feedback_content = _this.publicFunc.mx("#feedback_describe_text");
+            let l_dom_feedback_email_address = _this.publicFunc.mx("#feedback_email_address");
+            let l_dom_upload_image_btn = _this.publicFunc.mx("#upload_image_btn");
+            let l_dom_pre_img_btn = _this.publicFunc.mx("#pre_img_btn");
             let img_url = '';
             l_dom_feedback_upload_image.onchange = function (e) {
               // l_dom_upload_image_btn.style.display="none";
@@ -497,9 +497,9 @@ export default {
             }
           }
           if (id_name == "sd_export") {
-            mx("#sd_export").style.background = "url('./imgs/device/c-sd.png') no-repeat";
+            _this.publicFunc.mx("#sd_export").style.background = "url('./imgs/device/c-sd.png') no-repeat";
           } else {
-            mx("#sd_export").style.background = "url('./imgs/device/sd.png') no-repeat";
+            _this.publicFunc.mx("#sd_export").style.background = "url('./imgs/device/sd.png') no-repeat";
           }
           if (id_name == "local_devs") { // 点击本地搜索按钮后执行
             // // console.log("进入判断")
@@ -513,8 +513,8 @@ export default {
           }
           if (id_name == "my_other") {
             let dev_set_num;
-            let l_dome_dev_set_input = mx("#dev_set_input");
-            let l_dom_button_setup = mx("#button_setup");
+            let l_dome_dev_set_input = _this.publicFunc.mx("#dev_set_input");
+            let l_dom_button_setup = _this.publicFunc.mx("#button_setup");
             let dev_set_input_num = "";
             l_dome_dev_set_input.onkeyup = function (event) {
               let reg;
@@ -536,8 +536,8 @@ export default {
             }
           }
         })
-        if (mx("#my_page_box_back_manage")) {
-          mx("#my_page_box_back_manage").onclick = function () {
+        if (_this.publicFunc.mx("#my_page_box_back_manage")) {
+          _this.publicFunc.mx("#my_page_box_back_manage").onclick = function () {
             createPage("my", obj)
           }
         }
@@ -557,12 +557,12 @@ export default {
       function binding_accounts_info_ack (msg) {
         if (msg && msg.conf.email !== "") {
           if (msg.conf.active_email) {
-            mx("#email_addr").value = msg.conf.email;
-            mx("#email_addr").disabled = "true";
+            _this.publicFunc.mx("#email_addr").value = msg.conf.email;
+            _this.publicFunc.mx("#email_addr").disabled = "true";
             $("#ae_btn").hide();
           } else {
-            mx("#email_addr").value = msg.conf.email;
-            mx("#ae_email_inactive").style.display = "block";
+            _this.publicFunc.mx("#email_addr").value = msg.conf.email;
+            _this.publicFunc.mx("#ae_email_inactive").style.display = "block";
           }
         } else {
           return;
@@ -570,28 +570,28 @@ export default {
       }
 
       function set_apply_btn_event () {
-        let l_dom_manage_password = mx("#mp_btn");
-        let l_dom_guest_password = mx("#gp_btn");
-        let l_dom_add_email_page = mx("#ae_btn");
-        let l_dom_admin_pw = mx("#old_password");
-        let l_dom_admin_pw1 = mx("#new_password");
-        let l_dom_admin_pw2 = mx("#new_password2");
-        let l_dom_guest_pw = mx("#guest_pw");
-        let l_dom_guest_pw1 = mx("#guest_pw1");
-        let l_dom_guest_pw2 = mx("#guest_pw2");
-        let l_dom_email_addr = mx("#email_addr");
-        let l_dom_about_title = mx("#about_title");
-        let l_dom_developer_option = mx("#developer_option");
-        let l_dom_developer_ok = mx("#developer_ok");
-        // let l_dom_error_log_commit_btn = mx("#error_log_commit_btn");
-        let l_dom_sd_export_select_path = mx("#sd_export_path_btn");
-        let l_dom_sd_export_submit = mx("#sd_export_submit");
-        let l_dom_sd_export_path_show = mx("#sd_export_path_show");
-        let l_dom_feedback_submit = mx("#feedback_submit_btn");
-        let l_dom_feedback_content = mx("#feedback_describe_text");
-        let l_dom_feedback_email_address = mx("#feedback_email_address");
-        let l_dom_feedback_upload_image = mx("#upload_image");
-        let l_dom_buffer_page = mx("#buffer_page");
+        let l_dom_manage_password = _this.publicFunc.mx("#mp_btn");
+        let l_dom_guest_password = _this.publicFunc.mx("#gp_btn");
+        let l_dom_add_email_page = _this.publicFunc.mx("#ae_btn");
+        let l_dom_admin_pw = _this.publicFunc.mx("#old_password");
+        let l_dom_admin_pw1 = _this.publicFunc.mx("#new_password");
+        let l_dom_admin_pw2 = _this.publicFunc.mx("#new_password2");
+        let l_dom_guest_pw = _this.publicFunc.mx("#guest_pw");
+        let l_dom_guest_pw1 = _this.publicFunc.mx("#guest_pw1");
+        let l_dom_guest_pw2 = _this.publicFunc.mx("#guest_pw2");
+        let l_dom_email_addr = _this.publicFunc.mx("#email_addr");
+        let l_dom_about_title = _this.publicFunc.mx("#about_title");
+        let l_dom_developer_option = _this.publicFunc.mx("#developer_option");
+        let l_dom_developer_ok = _this.publicFunc.mx("#developer_ok");
+        // let l_dom_error_log_commit_btn = _this.publicFunc.mx("#error_log_commit_btn");
+        let l_dom_sd_export_select_path = _this.publicFunc.mx("#sd_export_path_btn");
+        let l_dom_sd_export_submit = _this.publicFunc.mx("#sd_export_submit");
+        let l_dom_sd_export_path_show = _this.publicFunc.mx("#sd_export_path_show");
+        let l_dom_feedback_submit = _this.publicFunc.mx("#feedback_submit_btn");
+        let l_dom_feedback_content = _this.publicFunc.mx("#feedback_describe_text");
+        let l_dom_feedback_email_address = _this.publicFunc.mx("#feedback_email_address");
+        let l_dom_feedback_upload_image = _this.publicFunc.mx("#upload_image");
+        let l_dom_buffer_page = _this.publicFunc.mx("#buffer_page");
         let img_base;
         let image = new Image(),
           canvas = document.createElement("canvas"),
@@ -642,14 +642,14 @@ export default {
         }
         function sd_export_pause () {
           let sd_export_path = l_dom_sd_export_path_show.innerHTML;
-          mx("#sd_export_submit_tip").style.display = "none";
+          _this.publicFunc.mx("#sd_export_submit_tip").style.display = "none";
           l_dom_sd_export_submit.innerHTML = "continue";
           l_dom_sd_export_submit.onclick = sd_export_continue;
           window.export_ctrl(sd_export_path + "\\opt", "1")
         }
         function sd_export_continue () {
           let sd_export_path = l_dom_sd_export_path_show.innerHTML;
-          mx("#sd_export_submit_tip").style.display = "block";
+          _this.publicFunc.mx("#sd_export_submit_tip").style.display = "block";
           l_dom_sd_export_submit.innerHTML = "pause";
           l_dom_sd_export_submit.onclick = sd_export_pause;
           window.export_ctrl(sd_export_path + "\\opt", "3");
@@ -661,26 +661,26 @@ export default {
             let export_path = l_dom_sd_export_path_show.innerHTML;
             export_path = export_path.replace(/\\/g, "/");
             let resutl = set_mme.mme.ctrl(0, 'system.commit', 'osascript -e "do shell script \\"cd ' + window.cmd_path + '; export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:./; ./mcard_test -path ' + export_path + ' \\" with administrator privileges"');
-            mx("#sd_export_submit_tip").style.display = "block";
-            mx("#buffer_page").style.display = "none";
-            mx("#sd_export_submit_tip").innerHTML = "Export success";
-            mx("#sd_export_submit_tip").style.color = "#00a6ba";
+            _this.publicFunc.mx("#sd_export_submit_tip").style.display = "block";
+            _this.publicFunc.mx("#buffer_page").style.display = "none";
+            _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "Export success";
+            _this.publicFunc.mx("#sd_export_submit_tip").style.color = "#00a6ba";
             document.getElementById("sd_export_submit").style.background = "#00a6ba";
-            let l_dom_progress_bar = mx("#progress_bar");
-            let l_dom_progress_bar_box = mx("#progress_bar_box");
+            let l_dom_progress_bar = _this.publicFunc.mx("#progress_bar");
+            let l_dom_progress_bar_box = _this.publicFunc.mx("#progress_bar_box");
             l_dom_progress_bar_box.style.position = "relative";
             l_dom_progress_bar.style.position = "relative";
             l_dom_progress_bar.style.left = "0";
             l_dom_progress_bar.style.width = "20px";
           } else if (window.system_type == "windows") {
-            let l_dom_progress_bar = mx("#progress_bar");
-            let l_dom_progress_bar_box = mx("#progress_bar_box");
-            let l_dom_progress_bar_num = mx("#progress_bar_num");
+            let l_dom_progress_bar = _this.publicFunc.mx("#progress_bar");
+            let l_dom_progress_bar_box = _this.publicFunc.mx("#progress_bar_box");
+            let l_dom_progress_bar_num = _this.publicFunc.mx("#progress_bar_num");
             l_dom_progress_bar_box.style.position = "relative";
             l_dom_progress_bar.style.position = "relative";
             l_dom_progress_bar.style.left = "0";
             l_dom_progress_bar.style.width = "20px";
-            mx("#sd_export_submit_tip").style.display = "block";
+            _this.publicFunc.mx("#sd_export_submit_tip").style.display = "block";
             let sd_export_path = l_dom_sd_export_path_show.innerHTML;
             function get_progress (path) {
               let progress_time = null;
@@ -693,8 +693,8 @@ export default {
                 l_dom_progress_bar.style.width = show_progress_num;
                 l_dom_progress_bar_num.innerHTML = show_progress_num;
                 if (progress_num == 100) {
-                  mx("#export_success_icon").style.display = "block";
-                  mx("#sd_export_submit_tip").style.display = "none";
+                  _this.publicFunc.mx("#export_success_icon").style.display = "block";
+                  _this.publicFunc.mx("#sd_export_submit_tip").style.display = "none";
                   document.getElementById("sd_export_submit").style.background = "#00a6ba";
                   clearInterval(progress_time);
                   l_dom_sd_export_submit.innerHTML = "Export success";
@@ -717,17 +717,17 @@ export default {
                   //no data
                 } else if (result == 0) {
                   l_dom_progress_bar_box.style.display = "none";
-                  mx("#buffer_page").style.display = "none";
-                  mx("#sd_export_submit_tip").innerHTML = "no sd card";
-                  mx("#sd_export_submit_tip").style.color = "#ff0000";
+                  _this.publicFunc.mx("#buffer_page").style.display = "none";
+                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "no sd card";
+                  _this.publicFunc.mx("#sd_export_submit_tip").style.color = "#ff0000";
                   document.getElementById("sd_export_submit").style.background = "#00a6ba";
                   clearInterval(timer);
                   //no_sd
                 } else if (result == 1) {
                   l_dom_progress_bar_box.style.display = "none";
-                  mx("#buffer_page").style.display = "none";
-                  mx("#sd_export_submit_tip").innerHTML = "no sd card";
-                  mx("#sd_export_submit_tip").style.color = "#ff0000";
+                  _this.publicFunc.mx("#buffer_page").style.display = "none";
+                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "no sd card";
+                  _this.publicFunc.mx("#sd_export_submit_tip").style.color = "#ff0000";
                   document.getElementById("sd_export_submit").style.background = "#00a6ba";
                   clearInterval(timer);
                 }
@@ -735,7 +735,7 @@ export default {
             }, 100)
           } else {
             document.getElementById("sd_export_submit").style.background = "#ccc";
-            mx("#sd_export_submit_tip").style.display = "block";
+            _this.publicFunc.mx("#sd_export_submit_tip").style.display = "block";
             setTimeout(function () {
               let result = window.sd_export(l_dom_sd_export_path_show.innerHTML);
               let timer = null;
@@ -743,31 +743,31 @@ export default {
                 //Export completed
                 if (result == 2) {
                   l_dom_progress_bar.style.left = "0";
-                  mx("#export_success_icon").style.display = "block";
-                  mx("#sd_export_submit_tip").style.display = "none";
+                  _this.publicFunc.mx("#export_success_icon").style.display = "block";
+                  _this.publicFunc.mx("#sd_export_submit_tip").style.display = "none";
                   document.getElementById("sd_export_submit").style.background = "#00a6ba";
                   clearInterval(timer);
                   //no data
                 } else if (result == 0) {
                   l_dom_progress_bar_box.style.display = "none";
-                  mx("#buffer_page").style.display = "none";
-                  mx("#sd_export_submit_tip").innerHTML = "no sd card";
-                  mx("#sd_export_submit_tip").style.color = "#ff0000";
+                  _this.publicFunc.mx("#buffer_page").style.display = "none";
+                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "no sd card";
+                  _this.publicFunc.mx("#sd_export_submit_tip").style.color = "#ff0000";
                   document.getElementById("sd_export_submit").style.background = "#00a6ba";
                   clearInterval(timer);
                   //no_sd
                 } else if (result == 1) {
                   l_dom_progress_bar_box.style.display = "none";
-                  mx("#buffer_page").style.display = "none";
-                  mx("#sd_export_submit_tip").innerHTML = "no sd card";
-                  mx("#sd_export_submit_tip").style.color = "#ff0000";
+                  _this.publicFunc.mx("#buffer_page").style.display = "none";
+                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "no sd card";
+                  _this.publicFunc.mx("#sd_export_submit_tip").style.color = "#ff0000";
                   document.getElementById("sd_export_submit").style.background = "#00a6ba";
                   clearInterval(timer);
                 }
               }, 100);
             }, 100)
-            let l_dom_progress_bar = mx("#progress_bar");
-            let l_dom_progress_bar_box = mx("#progress_bar_box");
+            let l_dom_progress_bar = _this.publicFunc.mx("#progress_bar");
+            let l_dom_progress_bar_box = _this.publicFunc.mx("#progress_bar_box");
             l_dom_progress_bar_box.style.position = "relative";
 
             l_dom_progress_bar.style.position = "relative";
@@ -785,19 +785,19 @@ export default {
         // 		+ "<div id='develop_warn' style='color:#f00;height:50px;line-height:50px;'></div>"
         // 		+ "</form>"
         // 		+ "</div>");
-        // 	mx("#develop_ok").onclick = function () {
-        // 		if (mx("#develop_pw").value == "Vimtag@2016") {
+        // 	_this.publicFunc.mx("#develop_ok").onclick = function () {
+        // 		if (_this.publicFunc.mx("#develop_pw").value == "Vimtag@2016") {
         // 			l_dom_developer_option.parentNode.style.display = "block";
         // 		} else {
-        // 			mx("#develop_warn").innerHTML = "The password is error";
+        // 			_this.publicFunc.mx("#develop_warn").innerHTML = "The password is error";
         // 			setTimeout(function () {
-        // 				mx("#develop_warn").innerHTML = "";
+        // 				_this.publicFunc.mx("#develop_warn").innerHTML = "";
         // 			}, 3000)
         // 		}
         // 	};
         // };
         l_dom_developer_ok.onclick = function () {
-          let tree_id = mx("tree_id");
+          let tree_id = _this.publicFunc.mx("tree_id");
           let checkbox_check;
           for (let i = 0, length = tree_id.length; i < length; i++) {
             if (tree_id[i].checked) {
@@ -1013,7 +1013,7 @@ export default {
         }
         $("#set_auto_play_btn").iButton({
           change: function () {
-            if (mx("#set_auto_play_btn").checked && g_support_auto_play) {
+            if (_this.publicFunc.mx("#set_auto_play_btn").checked && g_support_auto_play) {
               sessionStorage.setItem("auto_play", 1)
               g_auto_play = 1;
             } else {

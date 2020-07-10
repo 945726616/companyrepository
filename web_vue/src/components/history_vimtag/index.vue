@@ -70,7 +70,7 @@ export default {
           + "</div>"
           + "</div>"
           + "</div>")
-        mx("#history_menu_edit").onclick = function () {
+        _this.publicFunc.mx("#history_menu_edit").onclick = function () {
           if ($(".video_delete").css("display") == "none") {
             $(".video_delete").show();
             $(this).css("color", "#00a6ba");
@@ -81,7 +81,7 @@ export default {
             $("#history_menu_edit_img").removeClass('history_menu_choose_edit_img');
           }
         }
-        mx("#filter_snapshot").onclick = function () {  // 根据筛选条件获取视频播放列表
+        _this.publicFunc.mx("#filter_snapshot").onclick = function () {  // 根据筛选条件获取视频播放列表
           $(".filter_list").eq(2).css("display", "none");
           l_format = 1;
           iscid = 0;
@@ -101,7 +101,7 @@ export default {
             create_history_list(res)
           })
         }
-        mx("#filter_video").onclick = function () {
+        _this.publicFunc.mx("#filter_video").onclick = function () {
           $(".filter_list").eq(2).css("display", "block");
           l_format = 2;
           iscid = 0;
@@ -121,7 +121,7 @@ export default {
             create_history_list(res)
           })
         }
-        mx("#filter_video_snapshot").onclick = function () {
+        _this.publicFunc.mx("#filter_video_snapshot").onclick = function () {
           $(".filter_list").eq(2).css("display", "block");
           l_format = 0;
           iscid = 0;
@@ -141,7 +141,7 @@ export default {
             create_history_list(res)
           })
         }
-        mx("#filter_event").onclick = function () {
+        _this.publicFunc.mx("#filter_event").onclick = function () {
           l_category = 1;
           // 展示遮罩层
           _this.publicFunc.showBufferPage()
@@ -159,7 +159,7 @@ export default {
             create_history_list(res)
           })
         }
-        mx("#filter_all_event").onclick = function () {
+        _this.publicFunc.mx("#filter_all_event").onclick = function () {
           l_category = 0;
           // 展示遮罩层
           _this.publicFunc.showBufferPage()
@@ -177,7 +177,7 @@ export default {
             create_history_list(res)
           })
         }
-        mx("#time_length_1h").onclick = function () {
+        _this.publicFunc.mx("#time_length_1h").onclick = function () {
           time_length = "1h";
           // 展示遮罩层
           _this.publicFunc.showBufferPage()
@@ -195,7 +195,7 @@ export default {
             create_history_list(res)
           })
         }
-        mx("#time_length_30min").onclick = function () {
+        _this.publicFunc.mx("#time_length_30min").onclick = function () {
           time_length = "30min";
           // 展示遮罩层
           _this.publicFunc.showBufferPage()
@@ -213,7 +213,7 @@ export default {
             create_history_list(res)
           })
         }
-        mx("#time_length_5min").onclick = function () {
+        _this.publicFunc.mx("#time_length_5min").onclick = function () {
           time_length = "5min";
           // 展示遮罩层
           _this.publicFunc.showBufferPage()
@@ -233,8 +233,8 @@ export default {
         }
         create_history_list(data);
 
-        let l_dom_history_menu_filter = mx("#history_menu_filter");
-        let l_dom_history_menu_date = mx("#history_menu_date");
+        let l_dom_history_menu_filter = _this.publicFunc.mx("#history_menu_filter");
+        let l_dom_history_menu_date = _this.publicFunc.mx("#history_menu_date");
         $("#calendar_input").datepicker({ //点击具体日期
           showOn: 'button',
           buttonImageOnly: true,
@@ -294,7 +294,7 @@ export default {
             $("#filter_menu_box").slideUp();
           }
         }
-        mx("#back").onclick = function () {
+        _this.publicFunc.mx("#back").onclick = function () {
           _this.publicFunc.closeBufferPage()
           if (obj.back_page == "boxlist") {
             create_boxlist_page({ parent: obj.parent, agent: obj.agent, addr: obj.addr })
@@ -309,7 +309,7 @@ export default {
         }
         function create_history_img_page (data) {
           let token = data.replace("_p3_", "_p0_")
-          if (!mx("#history_img_page")) {
+          if (!_this.publicFunc.mx("#history_img_page")) {
             $("body").after(
               "<div id='history_img_page'>"
               + "<div id='history_img_box'>"
@@ -318,7 +318,7 @@ export default {
               + "</div>"
               + "</div>"
             )
-            mx("#history_img_page_close").onclick = function () {
+            _this.publicFunc.mx("#history_img_page_close").onclick = function () {
               $("#history_img_page").remove();
             }
             _this.$api.history.history_list_get({
@@ -492,7 +492,7 @@ export default {
               }
             }
           } else {
-            let historyExist = mx("#history_list_main").innerHTML // 是否存在历史记录
+            let historyExist = _this.publicFunc.mx("#history_list_main").innerHTML // 是否存在历史记录
             if (!historyExist) { // 如果历史列表内有历史视频内容则不展示无历史记录图片提示
               history_list_dom =
                 "<div id='history_no_list'>"
@@ -507,11 +507,11 @@ export default {
           }
           let history_page_dom = "";
           history_page_dom += "<div id='page_num_day' class='page_num_btn_no'>" + mrs_load_more + "</div>" // onvif录像
-          mx("#page_num_main").innerHTML = history_page_dom;
+          _this.publicFunc.mx("#page_num_main").innerHTML = history_page_dom;
           if (iscid == 1) { //如果cid检索录像，往下加载视频
-            mx("#history_list_main").innerHTML += history_list_dom;
+            _this.publicFunc.mx("#history_list_main").innerHTML += history_list_dom;
           } else { //按照时间检索，直接显示检索出来的数据
-            mx("#history_list_main").innerHTML = history_list_dom;
+            _this.publicFunc.mx("#history_list_main").innerHTML = history_list_dom;
           }
           let loopTime = 0
           function getPic () { // 获取图片方法
@@ -522,7 +522,7 @@ export default {
             if (photoDomArr.length > 0) { // 如果图片数组内含有内容
               setPhotoDom()
             }
-            let l_dom_video_list_picture = mx(".video_list_picture"); // nodeList 需要转换成普通数组之后才能显示正常的数组内容不会多出多余杂项
+            let l_dom_video_list_picture = _this.publicFunc.mx(".video_list_picture"); // nodeList 需要转换成普通数组之后才能显示正常的数组内容不会多出多余杂项
             let l_dom_new_video_list = [];
             if (l_dom_video_list_picture) {
               for (let i in l_dom_video_list_picture) {
@@ -575,7 +575,7 @@ export default {
       obj.end_time = 0;
       obj.search_type = 1;
       obj.func = device_history_list;
-      if (obj.backplay_flag == 4) {// 点击返回无效 修改obj.parent  mx(page
+      if (obj.backplay_flag == 4) {// 点击返回无效 修改obj.parent  _this.publicFunc.mx(page
         device_history_list(g_history_data)
       } else {
         _this.$api.history.boxlist_device_messages_get(obj).then(res => {

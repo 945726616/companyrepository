@@ -2,6 +2,7 @@
 import axios from '@/axios' // 导入http中创建的axios实例
 import login from './login'
 import store from '../store'
+import devlist from './devlist'
 // import md5 from '@/util/mmd5.js'
 // import mcodec from '@/util/mcodec.js'
 const boxlist = {
@@ -60,7 +61,7 @@ const boxlist = {
     for (let i = 0; i < data_ipc_length; i++) {
       let token = params.ipc[i].sn + "_" + params.resolution + "_" + Math.pow(2, 31) + "_" + Math.pow(2, 31);
       if (store.state.jumpPageData.localFlag) {
-        let url = login.pic_url_get({ sn: params.sn, token: token, flag: 2, is_history: 1 })
+        let url = devlist.pic_url_get({ sn: params.sn, token: token, flag: 2, is_history: 1 })
         console.log(url, 'boxlist_img_get_local')
       } else {
         let url = window.location.protocol + "//" + window.location.host + "/ccm/ccm_pic_get.js?dsess=1&dsess_nid=" + msdk_agent.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + token + "&dflag=2";

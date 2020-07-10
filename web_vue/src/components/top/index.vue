@@ -112,7 +112,7 @@ export default {
           }
         })
       }
-      // mx("#top_login_div").setAttribute("style","border:none;height:100%;line-height:62px;margin-top:0;padding:0 10px;");
+      // _this.publicFunc.mx("#top_login_div").setAttribute("style","border:none;height:100%;line-height:62px;margin-top:0;padding:0 10px;");
       if (_this.$store.state.jumpPageData.jmLogoFlag === 1) { // vimtag江门专属logo
         $('#top_logo').children()[0].setAttribute('src', '../../asset/device/m_logo.png')
         $('#top_logo').children()[0].width = '220'

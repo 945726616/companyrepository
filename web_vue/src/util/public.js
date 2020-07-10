@@ -60,15 +60,15 @@ const publicFunc = {
       });
     }
   },
-  delete_tips(obj) { // confirm提示框方法
+  delete_tips (obj) { // confirm提示框方法
     $("#delete_tips").html("<div id='delete_tips_box'>"
-    + "<div id='delete_tips_title'></div>"
-    + "<div id='delete_tips_content'></div>"
-    + "<div id='delete_tips_btn'>"
-    + "<div id='delete_tips_cancel'></div>"
-    + "<div id='delete_tips_ok'></div>"
-    + "</div>"
-    + "</div>")
+      + "<div id='delete_tips_title'></div>"
+      + "<div id='delete_tips_content'></div>"
+      + "<div id='delete_tips_btn'>"
+      + "<div id='delete_tips_cancel'></div>"
+      + "<div id='delete_tips_ok'></div>"
+      + "</div>"
+      + "</div>")
     $("#delete_tips_title").html(obj.title ? obj.title : mcs_prompt) //g 5.6.1
     $("#delete_tips_content").html(obj.content ? obj.content : "")
     $("#delete_tips_cancel").html(mcs_cancel)
@@ -77,7 +77,7 @@ const publicFunc = {
     $("#delete_tips_cancel").click(function () {
       $("#delete_tips").attr('style', 'display:none;')
       if (obj.flag && obj.flag === "my_page") {
-        createPage("my",{ parent: $("#page") }) // 进入我的页面
+        createPage("my", { parent: $("#page") }) // 进入我的页面
       }
     })
     $("#delete_tips_ok").click(function () {
@@ -109,6 +109,35 @@ const publicFunc = {
     clearTimeout(store.state.jumpPageData.bufferPageFlag)
     $("#buffer_page").hide()
     $("#back_to_dev_list").hide()
+  },
+  mx (selector, context) {
+    let  doc = context || document;
+    switch (typeof (selector)) {
+      case 'string':
+        {
+          let name = selector.substring(1);
+          switch (selector.charAt(0)) {
+            case '#':
+              return doc.getElementById(name);
+            case '.':
+              return (doc.getElementsByClassName ? doc.getElementsByClassName(name) : getElementsByClass(name, doc));
+            case '/':
+              return doc.getElementsByTagName(name);
+            default:
+              return doc.getElementsByName(selector);
+          }
+        }
+
+      case 'object':
+        {
+          return selector;
+        }
+
+      case 'function':
+        {
+          mx.funcs.push(selector) // mx选中函数的情况较少如遇到请用其他选择器代替
+        }
+    }
   }
 }
 

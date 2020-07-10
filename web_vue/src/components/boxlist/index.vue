@@ -134,7 +134,7 @@ export default {
           $("#box_onvif_ipc_container").html(_this.onvif_ipc)
           // 获取onvif设备展示图片
           _this.$api.boxlist.boxlist_img_get({ addr: obj.addr, agent: 'undefined', sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: _this.onvif_ipc_arr, dom: $(".box_camera_sign_picture"), resolution: "p3" })
-          // msdk_ctrl({ type: "boxlist_img_get", data: { addr: obj.addr, agent: 'undefined', sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: _this.onvif_ipc_arr, dom: mx(".box_camera_sign_picture"), resolution: "p3" } });
+          // msdk_ctrl({ type: "boxlist_img_get", data: { addr: obj.addr, agent: 'undefined', sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: _this.onvif_ipc_arr, dom: _this.publicFunc.mx(".box_camera_sign_picture"), resolution: "p3" } });
         }
         _this.$api.boxlist.box_get({ //返回onvif后发送ccm_box_get，解决有时私有去不掉onvif问题
           box_sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -182,7 +182,7 @@ export default {
           // console.log('第二个请求')
           // 私有设备加载图片的请求
           _this.$api.boxlist.boxlist_img_get({ addr: obj.addr, agent: data.agent, sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: data.ipcs, dom: $(".box_camera_sign_picture"), resolution: "p3" })
-          // msdk_ctrl({ type: "boxlist_img_get", data: { addr: obj.addr, agent: data.agent, sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: data.ipcs, dom: mx(".box_camera_sign_picture"), resolution: "p3" } });
+          // msdk_ctrl({ type: "boxlist_img_get", data: { addr: obj.addr, agent: data.agent, sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: data.ipcs, dom: _this.publicFunc.mx(".box_camera_sign_picture"), resolution: "p3" } });
         }
         if (urlparms.m.indexOf('vimtag.com') > -1) {
           $(".del_box_ipc_btn").attr("app", "vimtag")
@@ -197,7 +197,7 @@ export default {
         if (!_this.$store.state.jumpPageData.projectFlag) { // vimtag项目动态自适应   给box_device_list_img 加margin
           $(".box_device_list_img").css({ "margin-right": _this.margin_width / 2, "margin-left": _this.margin_width / 2 });
         }
-        l_dom_box_camera_sign_picture = mx(".box_camera_sign_picture");
+        l_dom_box_camera_sign_picture = _this.publicFunc.mx(".box_camera_sign_picture");
         for (let i = 0; i < l_dom_box_camera_sign_picture.length; i++) {
           l_dom_box_camera_sign_picture[i].onclick = function () {
             if (obj.box_live == 1) {//如果云盒子支持实时视频播放                  
@@ -215,14 +215,14 @@ export default {
             }
           }
         }
-        mx("#back").onclick = function () {
+        _this.publicFunc.mx("#back").onclick = function () {
           _this.publicFunc.closeBufferPage()
           createPage("devlist", obj)
         }
-        mx("#boxlist_set_btn").onclick = function () {
+        _this.publicFunc.mx("#boxlist_set_btn").onclick = function () {
           createPage("set", { parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live });
         }
-        mx("#boxlist_edit_btn").onclick = function () {
+        _this.publicFunc.mx("#boxlist_edit_btn").onclick = function () {
           if ($(".del_box_ipc_btn").css("display") == "none") { // 删除关联和录像
             $(".del_box_ipc_btn").show();
           } else {
@@ -234,16 +234,16 @@ export default {
             $(".del_box_ipc_record_btn").hide();
           }
         }
-        if (mx("#empty_search_btn")) {
-          mx("#empty_search_btn").onclick = function () { // 点击你的设备列表为空 搜索设备 注意这里就是搜索onvif设备的，私有设备没有相应接口
+        if (_this.publicFunc.mx("#empty_search_btn")) {
+          _this.publicFunc.mx("#empty_search_btn").onclick = function () { // 点击你的设备列表为空 搜索设备 注意这里就是搜索onvif设备的，私有设备没有相应接口
             $("#add_device_page").show();
             $("#add_device_page").css('position', 'absolute');
-            create_search_onvif_box({ parent: mx("#add_device_page") });
+            create_search_onvif_box({ parent: _this.publicFunc.mx("#add_device_page") });
           }
         }
-        mx("#boxlist_add_btn").onclick = function () { // 根据ip 端口号进行添加设备
+        _this.publicFunc.mx("#boxlist_add_btn").onclick = function () { // 根据ip 端口号进行添加设备
           $("#add_device_page").show();
-          create_add_onvif_byip({ parent: mx("#add_device_page") });
+          create_add_onvif_byip({ parent: _this.publicFunc.mx("#add_device_page") });
         }
       }
       function create_add_onvif_byip (data) { // 绘制添加设备弹窗
@@ -281,16 +281,16 @@ export default {
         create_add_onvif_byip_event();
       }
       function create_add_onvif_byip_event () {
-        mx("#add_devices_box_close").onclick = function () { // 点击onvif添加设备关闭
+        _this.publicFunc.mx("#add_devices_box_close").onclick = function () { // 点击onvif添加设备关闭
           $("#add_device_page").hide();
           createPage("boxlist", obj);
         }
         for (let i = 0; i < 4; i++) {
-          mx(".add_device_input_id_box_del")[i].onclick = function () {
+          _this.publicFunc.mx(".add_device_input_id_box_del")[i].onclick = function () {
             this.nextSibling.value = "";
           }
         }
-        mx("#add_device_submit").onclick = function () { // 点击onvif添加按钮
+        _this.publicFunc.mx("#add_device_submit").onclick = function () { // 点击onvif添加按钮
           let conf = {};
           onvif_username = $("#add_device_input_id_box_input").val();
           onvif_password = $("#add_device_input_pass").val();
@@ -337,15 +337,15 @@ export default {
       function boxlist_onvif_event () { // 点击搜索设备 搜索onvif
         if (!_this.$store.state.jumpPageData.projectFlag) { // vimtag 特殊添加搜索设备hover提示框
           if (g_now_lang == "zh") {
-            mx("#boxlist_search_btn").onmouseenter = function () {
+            _this.publicFunc.mx("#boxlist_search_btn").onmouseenter = function () {
               $('#boxlist_search_btn_down').show().delay(1500).hide(0);
             }
           }
         }
-        mx("#boxlist_search_btn").onclick = function () {
+        _this.publicFunc.mx("#boxlist_search_btn").onclick = function () {
           $("#add_device_page").show();
           $("#add_device_page").css('position', 'absolute');
-          create_search_onvif_box({ parent: mx("#add_device_page") });
+          create_search_onvif_box({ parent: _this.publicFunc.mx("#add_device_page") });
         }
       }
       function create_search_onvif_box (data) { // 搜索onvif设备页面
@@ -438,7 +438,7 @@ export default {
           conf.port = onvif_port;
           conf.ip = onvif_ip;
           conf.type = onvif_type;
-          create_add_onvif_ipc({ parent: mx("#add_device_page") }) // 跳转到添加onvif页面
+          create_add_onvif_ipc({ parent: _this.publicFunc.mx("#add_device_page") }) // 跳转到添加onvif页面
         })
       }
 
@@ -497,20 +497,20 @@ export default {
         create_add_onvif_ipc_event();
       }
       function create_add_onvif_ipc_event () {
-        mx("#add_device_input_id_box_del").onclick = function () {
-          mx("#add_device_input_id_box_input").value = "";
+        _this.publicFunc.mx("#add_device_input_id_box_del").onclick = function () {
+          _this.publicFunc.mx("#add_device_input_id_box_input").value = "";
         }
-        mx("#add_device_input_pass_box_del").onclick = function () {
-          mx("#add_device_input_pass").value = "";
+        _this.publicFunc.mx("#add_device_input_pass_box_del").onclick = function () {
+          _this.publicFunc.mx("#add_device_input_pass").value = "";
         }
-        mx("#add_devices_box_close").onclick = function () { // 点击onvif添加设备关闭
+        _this.publicFunc.mx("#add_devices_box_close").onclick = function () { // 点击onvif添加设备关闭
           $("#add_device_page").hide();
           createPage("boxlist", obj);
         }
-        mx("#add_devices_box_back").onclick = function () { // 点击onvif添加设备返回
-          create_search_onvif_box({ parent: mx("#add_device_page"), add_onvif_back: 1 }); // onvif搜索页面
+        _this.publicFunc.mx("#add_devices_box_back").onclick = function () { // 点击onvif添加设备返回
+          create_search_onvif_box({ parent: _this.publicFunc.mx("#add_device_page"), add_onvif_back: 1 }); // onvif搜索页面
         }
-        mx("#add_device_submit").onclick = function () { // 点击onvif添加按钮
+        _this.publicFunc.mx("#add_device_submit").onclick = function () { // 点击onvif添加按钮
           // console.log("调用点击添加事件")
           onvif_username = $("#add_device_input_id_box_input").val()
           onvif_password = $("#add_device_input_pass").val()

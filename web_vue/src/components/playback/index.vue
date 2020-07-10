@@ -20,20 +20,20 @@ export default {
         vedio_flag_arr.push(obj.data[j].f)
       }
 
-      mx("#playback_download_path_input").value = (navigator.platform.indexOf("Win") > -1 ? ('c:/downloads/') : ('/Users/Shared/'));
-      let l_dom_playback_view = mx("#playback_view");
-      let l_dom_playback_screen = mx("#playback_screen");
-      let l_dom_playback_menu_box = mx("#playback_menu_box");
-      let l_dom_playback_download_path_box = mx("#playback_download_path_box");
-      let l_height = mx("#web").offsetWidth * 0.4 + 11;
-      let l_download_path_box_top = mx("#playback_box").offsetTop + 200;
-      let l_download_path_box_left = mx("#playback_box").offsetLeft + 430;
+      _this.publicFunc.mx("#playback_download_path_input").value = (navigator.platform.indexOf("Win") > -1 ? ('c:/downloads/') : ('/Users/Shared/'));
+      let l_dom_playback_view = _this.publicFunc.mx("#playback_view");
+      let l_dom_playback_screen = _this.publicFunc.mx("#playback_screen");
+      let l_dom_playback_menu_box = _this.publicFunc.mx("#playback_menu_box");
+      let l_dom_playback_download_path_box = _this.publicFunc.mx("#playback_download_path_box");
+      let l_height = _this.publicFunc.mx("#web").offsetWidth * 0.4 + 11;
+      let l_download_path_box_top = _this.publicFunc.mx("#playback_box").offsetTop + 200;
+      let l_download_path_box_left = _this.publicFunc.mx("#playback_box").offsetLeft + 430;
       let l_playback_menu_box_height = l_dom_playback_menu_box.offsetHeight - 1;
       l_dom_playback_view.style.height = l_height + "px";
       l_dom_playback_screen.style.height = (l_height - l_playback_menu_box_height) + "px";
       l_dom_playback_download_path_box.style.top = l_download_path_box_top + "px";
       l_dom_playback_download_path_box.style.left = l_download_path_box_left + "px";
-      mx("#playback_buffer_ret").style.left = (l_dom_playback_screen.offsetLeft + l_dom_playback_screen.offsetWidth - 50) + "px";
+      _this.publicFunc.mx("#playback_buffer_ret").style.left = (l_dom_playback_screen.offsetLeft + l_dom_playback_screen.offsetWidth - 50) + "px";
       play_menu_control({ parent: l_dom_playback_menu_box });
       create_preview({ parent: l_dom_playback_screen });
       function play_menu_control (data) {
@@ -71,12 +71,12 @@ export default {
           $("#playback_end_time").show();
           $("#play_menu_right").show();
         }
-        l_dom_video_play = mx("#video_play");
-        let l_width = mx("#play_menu_left").offsetWidth;
-        let r_width = mx("#play_menu_right").offsetWidth;
+        l_dom_video_play = _this.publicFunc.mx("#video_play");
+        let l_width = _this.publicFunc.mx("#play_menu_left").offsetWidth;
+        let r_width = _this.publicFunc.mx("#play_menu_right").offsetWidth;
         // let r_width = parseInt($("#play_menu_right").css("width"));
-        let box_width = mx("#playback_menu_box").offsetWidth;
-        mx("#playback_progress_bar").style.width = (box_width - l_width - r_width - 30) + "px";
+        let box_width = _this.publicFunc.mx("#playback_menu_box").offsetWidth;
+        _this.publicFunc.mx("#playback_progress_bar").style.width = (box_width - l_width - r_width - 30) + "px";
         fdSliderController.create();
         function create_flag_item (msg) {
           for (let i = 0; i < msg.length; i++) {
@@ -97,11 +97,11 @@ export default {
         process_flag_dom.setAttribute("class", "fd_slider_flag");
         document.getElementById("fd-slider-playback_progressbar").appendChild(process_flag_dom);
         create_flag_item(vedio_flag_arr);
-        fdSliderController.addEvent(mx("#playback_progress_bar"), "mouseup", playback_event_mouseup); // 监听鼠标点击事件
+        fdSliderController.addEvent(_this.publicFunc.mx("#playback_progress_bar"), "mouseup", playback_event_mouseup); // 监听鼠标点击事件
         function playback_event_mouseup () {
           // console.log('play_back_event_mouseup')
           first = true;
-          play_progress = mx("#playback_progressbar").value / 100;
+          play_progress = _this.publicFunc.mx("#playback_progressbar").value / 100;
           let new_token = parseInt(data_length * play_progress);
           play_back_token = obj.data[new_token].token;
           let play_progress_time_stamp = l_video_start_time_stamp + (l_video_time * play_progress);
@@ -111,10 +111,10 @@ export default {
           $("#playback_start_time").html(play_progress_time);
           // moveProgressBar
           if (is_playing) {
-            _this.$api.playback.video_stop({
+            _this.$api.play.video_stop({
               dom: $("#playback_screen")
             }).then(() => { // 原函数中是存在返回值调用至函数的情况
-              _this.$api.playback.play({ // 原playback接口
+              _this.$api.play.play({ // 原playback接口
                 agent: obj.agent,
                 dom: $("#playback_screen"),
                 sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -140,7 +140,7 @@ export default {
             if (is_playing) { // 当前播放状态 1 为播放中 0 为未播放
               is_playing = 0;
               $("#video_play").attr("class", "video_play_stop");
-              _this.$api.playback.video_stop({
+              _this.$api.play.video_stop({
                 dom: $("#playback_screen")
               }).then(res => {
                 create_preview(res)
@@ -151,7 +151,7 @@ export default {
               if (!first) {
                 bo_type = true;
                 $("#playback_start_time").html(start_time)
-                _this.$api.playback.play({ // 原playback接口
+                _this.$api.play.play({ // 原playback接口
                   agent: obj.agent,
                   dom: $("#playback_screen"),
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -164,7 +164,7 @@ export default {
                 // msdk_ctrl({ type: "playback", data: { agent: obj.agent, dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, videoSize: videoSize, token: obj.token, func: playback_speed } });
               } else {
                 // console.log('运行至此处')
-                _this.$api.playback.play({ // 原playback接口
+                _this.$api.play.play({ // 原playback接口
                   agent: obj.agent,
                   dom: $("#playback_screen"),
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -181,14 +181,14 @@ export default {
           }
         }
 
-        mx("#playback_download_img").onclick = function () {
+        _this.publicFunc.mx("#playback_download_img").onclick = function () {
           $("#playback_download_path_box").show();
         }
-        mx("#playback_download_path_cancel").onclick = function () {
+        _this.publicFunc.mx("#playback_download_path_cancel").onclick = function () {
           $("#playback_download_path_box").hide();
         }
         if (!_this.$store.state.jumpPageData.projectFlag) {
-          mx("#back").onclick = function () {
+          _this.publicFunc.mx("#back").onclick = function () {
             // create_history_page({parent:obj.parent,dev_sn:obj.dev_sn,back_page:obj.back_page,agent:obj.agent,addr:obj.addr})
             if (obj.box_ipc == 1) { //如果从云盒子实时播放进来回放播放
               createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, box_ipc: 1, ipc_sn: obj.ipc_sn, box_sn: obj.box_sn, box_live: 1, backplay_flag: 4, ipc_stat: obj.ipc_stat })
@@ -199,27 +199,27 @@ export default {
             }
           }
         } else {
-          mx("#mipcBack").onclick = function () {
+          _this.publicFunc.mx("#mipcBack").onclick = function () {
             createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page })
             sessionStorage.clear();
           }
         }
-        mx("#playback_download_path_submit").onclick = function () { // 下载部分函数
-          let download_path = mx("#playback_download_path_input").value; //下载路径
+        _this.publicFunc.mx("#playback_download_path_submit").onclick = function () { // 下载部分函数
+          let download_path = _this.publicFunc.mx("#playback_download_path_input").value; //下载路径
           $("#playback_download_path_box").hide();
-          mx("#playback_screen").style.background = "#000";
-          mx("#playback_screen").innerHTML = "<div id='download_info_box'>"
+          _this.publicFunc.mx("#playback_screen").style.background = "#000";
+          _this.publicFunc.mx("#playback_screen").innerHTML = "<div id='download_info_box'>"
             + "<div id='download_progress'></div>"
             + "<div id='download_stop'>" + mcs_stop + "</div>"
             + "<div id='download_pause'>" + mcs_pause + "</div>"
             + "</div>";
-          mx("#download_pause").onclick = function () {
-            if (mx("#download_pause").innerHTML == mcs_pause) {
+          _this.publicFunc.mx("#download_pause").onclick = function () {
+            if (_this.publicFunc.mx("#download_pause").innerHTML == mcs_pause) {
               _this.$api.pause_ipc().then($("#download_pause").html(mcs_continue))
               // msdk_ctrl({
               //   type: "play_download_pause", data: {
               //     func: function () {
-              //       mx("#download_pause").innerHTML = mcs_continue;
+              //       _this.publicFunc.mx("#download_pause").innerHTML = mcs_continue;
               //     }
               //   }
               // })
@@ -228,14 +228,14 @@ export default {
               // msdk_ctrl({
               //   type: "play_download_continue", data: {
               //     func: function () {
-              //       mx("#download_pause").innerHTML = mcs_pause;
+              //       _this.publicFunc.mx("#download_pause").innerHTML = mcs_pause;
               //     }
               //   }
               // })
             }
           }
-          mx("#download_stop").onclick = function () {
-            _this.$api.playback.video_stop({
+          _this.publicFunc.mx("#download_stop").onclick = function () {
+            _this.$api.play.video_stop({
               dom: $("#playback_screen"),
               isDownload: 1 // 是否下载中特殊标记
             }).then(res => {
@@ -244,7 +244,7 @@ export default {
             // msdk_ctrl({ type: "play_download_stop", data: { dom: l_dom_playback_screen, func: create_preview } })
           }
           if (g_project == "vimtag") {
-            _this.$api.playback.play({ // 原play_back_download接口
+            _this.$api.play.play({ // 原play_back_download接口
               agent: obj.agent,
               dom: $("#playback_screen"),
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -257,7 +257,7 @@ export default {
             })
             // msdk_ctrl({ type: "play_back_download", data: { dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, token: obj.download_token, download_path: download_path, videoSize: videoSize, func: download_info } });
           } else {
-            _this.$api.playback.play({ // 原play_back_download接口
+            _this.$api.play.play({ // 原play_back_download接口
               agent: obj.agent,
               dom: $("#playback_screen"),
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -274,12 +274,12 @@ export default {
       }
       function download_info (data) {
         let data_num = data.substring(0, data.length - 1);
-        if (mx("#download_progress")) {
-          mx("#download_progress").innerHTML = data;
+        if (_this.publicFunc.mx("#download_progress")) {
+          _this.publicFunc.mx("#download_progress").innerHTML = data;
         }
         if (data_num == 100) {
           // create_preview({parent:l_dom_playback_screen});
-          _this.$api.playback.video_stop({
+          _this.$api.play.video_stop({
               dom: $("#playback_screen"),
               isDownload: 1 // 是否下载中特殊标记
             }).then(res => {
@@ -311,7 +311,7 @@ export default {
         let play_end_time = new Date(end_time).format("hh:mm:ss");
         if (play_start_time_stop >= play_end_time_stop) {
           $("#playback_start_time").html(play_end_time);
-          _this.$api.playback.video_stop({
+          _this.$api.play.video_stop({
               dom: $("#playback_screen")
             }).then(res => {
               create_preview(res)
@@ -319,7 +319,7 @@ export default {
           // msdk_ctrl({ type: "play_video_stop", data: { dom: l_dom_playback_screen, func: create_preview } });
         }
         if (first) {
-          progress = Number(progress) - Number(progress2) + Number(mx("#playback_progressbar").value);
+          progress = Number(progress) - Number(progress2) + Number(_this.publicFunc.mx("#playback_progressbar").value);
           let play_progress_time_stamp = sessionStorage.getItem("play_progress_time_stamp");
           let get_drag_duration = sessionStorage.getItem("duration");
           let drag_start_time = parseInt(play_progress_time_stamp) + parseInt(get_drag_duration);
@@ -330,7 +330,7 @@ export default {
           let play_end_time_stop = new Date(end_time).format("yyyy-MM-dd hh:mm:ss");
           if (play_start_time_stop >= play_end_time_stop) {
             $("#playback_start_time").html(play_end_time);
-            _this.$api.playback.video_stop({
+            _this.$api.play.video_stop({
               dom: $("#playback_screen")
             }).then(res => {
               create_preview(res)
@@ -338,8 +338,8 @@ export default {
             // msdk_ctrl({ type: "play_video_stop", data: { dom: l_dom_playback_screen, func: create_preview } });
           }
         }
-        mx("#playback_buffer_ret").innerHTML = data;
-        fdSliderController.increment("playback_progressbar", progress - mx("#playback_progressbar").value);
+        _this.publicFunc.mx("#playback_buffer_ret").innerHTML = data;
+        fdSliderController.increment("playback_progressbar", progress - _this.publicFunc.mx("#playback_progressbar").value);
       }
       b_start_time = obj.start_time;
       function create_preview (data) {
@@ -355,7 +355,7 @@ export default {
           pic_token: pic_token
         })
         // msdk_ctrl({ type: "play_preview_img", data: { dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, pic_token: pic_token } });
-        let l_dom_play_view_box = mx("#play_view_box");
+        let l_dom_play_view_box = _this.publicFunc.mx("#play_view_box");
 
         l_dom_play_view_box.onclick = function () {
           is_playing = 1;
@@ -363,7 +363,7 @@ export default {
             bo_type = true;
             let bof_start_time = new Date(b_start_time).format("hh:mm:ss");
             $("#playback_start_time").html(bof_start_time);
-            _this.$api.playback.play({ // 原playback接口
+            _this.$api.play.play({ // 原playback接口
               agent: obj.agent,
               dom: $("#playback_screen"),
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -375,7 +375,7 @@ export default {
             })
             // msdk_ctrl({ type: "playback", data: { agent: obj.agent, dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, videoSize: videoSize, token: obj.token, func: playback_speed } });
           } else {
-            _this.$api.playback.play({ // 原playback接口
+            _this.$api.play.play({ // 原playback接口
               agent: obj.agent,
               dom: $("#playback_screen"),
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,

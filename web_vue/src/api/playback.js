@@ -1,10 +1,12 @@
 'use strict'
+// 已经整合到play.js中
 // import axios from '@/axios' // 导入http中创建的axios实例
-// import login from './login'
+import login from './login'
 import store from '../store'
 // import md5 from '@/util/mmd5.js'
 // import mcodec from '@/util/mcodec.js'
 import mme from '@/util/mme.js'
+
 const playback = {
   /*
   ** 停止视频播放
@@ -69,8 +71,8 @@ const playback = {
       let profile_token_choice = get_profile_token_choice(data.profile_token);
       urls = window.location.protocol + "//" + g_server_device + "/ccm/ccm_pic_get.jpg?hfrom_handle=887330&dsess=1&dsess_nid=" + msdk_agent.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
       data.dom.innerHTML = "<img id='flash_img' width='1px' src='" + urls + "'>";
-      if (mx("#flash_img")) {
-        mx("#flash_img").onload = function () {
+      if (publicFunc.mx("#flash_img")) {
+        publicFunc.mx("#flash_img").onload = function () {
           data.dom.style.background = "url(" + this.src + ")";
           data.dom.style.backgroundSize = "100% 100%";
         }
@@ -265,7 +267,7 @@ const playback = {
   ** 播放封面图
   */
   play_preview_img (data){
-		var url = (data.addr?"http://"+data.addr:window.location.protocol+"//"+window.location.host)+"/ccm/ccm_pic_get.js?dsess=1&dsess_nid="+msdk_agent.create_nid()+"&dsess_sn="+data.sn+"&dtoken="+data.pic_token+"&dflag=2";
+		var url = (data.addr?"http://"+data.addr:window.location.protocol+"//"+window.location.host)+"/ccm/ccm_pic_get.js?dsess=1&dsess_nid="+login.create_nid()+"&dsess_sn="+data.sn+"&dtoken="+data.pic_token+"&dflag=2";
 		data.dom.attr('style', 'background: url('+url+') no-repeat')
 		data.dom.attr('style', 'backgroundSize: 100% 100%')
 	}

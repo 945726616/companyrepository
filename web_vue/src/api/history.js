@@ -2,6 +2,7 @@
 import axios from '@/axios' // 导入http中创建的axios实例
 import login from './login'
 import store from '../store'
+import devlist from './devlist'
 // import md5 from '@/util/mmd5.js'
 // import mcodec from '@/util/mcodec.js'
 const history = {
@@ -93,9 +94,9 @@ const history = {
     for (let i = 0; i < data.token.length; i++) {  // 原本代码为data.dom.length 但由于参数传递导致其将部分无关内容也变成了 数组长度的一部分 所以现改用token.length保证循环次数正常
       img[i] = new Image();
       if (store.state.jumpPageData.loaclFlag) {
-        img[i].src = login.pic_url_get({ sn: data.sn, token: data.token[i], flag: data.flag, is_history: 1 });
+        img[i].src = devlist.pic_url_get({ sn: data.sn, token: data.token[i], flag: data.flag, is_history: 1 });
       } else {
-        img[i].src = login.pic_url_get({ sn: data.sn, token: data.token[i], flag: data.flag, is_history: 1 });
+        img[i].src = devlist.pic_url_get({ sn: data.sn, token: data.token[i], flag: data.flag, is_history: 1 });
       }
       if (data.picFlag) { // 为快照请求图片
         img[i].dom = data.dom[i];

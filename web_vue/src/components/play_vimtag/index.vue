@@ -68,20 +68,20 @@ export default {
         + "</div>")
       let local_play_data = {};
       local_play_data.addr = obj.addr;
-      local_play_data.dom = mx("#play_screen");
+      local_play_data.dom = _this.publicFunc.mx("#play_screen");
       local_play_data.profile_token = "p0";
       local_play_data.func = function (msg) { };
-      let l_dom_snapshot_preview_close = mx("#snapshot_preview_close");
-      let l_dom_page_top_menu = mx("#page_top_menu");
-      let l_dom_play_box = mx("#play_box");
-      let l_dom_play_dev_list = mx("#play_dev_list");
-      let l_dom_device_list_sidebar_up = mx("#device_list_sidebar_up");
-      let l_dom_play_menu_box = mx("#play_menu_box");
-      let l_dom_play_view = mx("#play_view");
-      let l_dom_play_screen = mx("#play_screen");
-      let l_dom_device_list_sidebar_center = mx("#device_list_sidebar_center");
-      let l_dom_play_buffer_ret = mx("#play_buffer_ret");
-      let l_dom_play_view_control = mx("#play_view_control");
+      let l_dom_snapshot_preview_close = _this.publicFunc.mx("#snapshot_preview_close");
+      let l_dom_page_top_menu = _this.publicFunc.mx("#page_top_menu");
+      let l_dom_play_box = _this.publicFunc.mx("#play_box");
+      let l_dom_play_dev_list = _this.publicFunc.mx("#play_dev_list");
+      let l_dom_device_list_sidebar_up = _this.publicFunc.mx("#device_list_sidebar_up");
+      let l_dom_play_menu_box = _this.publicFunc.mx("#play_menu_box");
+      let l_dom_play_view = _this.publicFunc.mx("#play_view");
+      let $("#play_screen") = _this.publicFunc.mx("#play_screen");
+      let l_dom_device_list_sidebar_center = _this.publicFunc.mx("#device_list_sidebar_center");
+      let l_dom_play_buffer_ret = _this.publicFunc.mx("#play_buffer_ret");
+      let l_dom_play_view_control = _this.publicFunc.mx("#play_view_control");
       let l_play_box_width = document.documentElement.clientWidth - 17 - 100;
       l_dom_play_box.style.width = l_play_box_width + 'px';
       // let l_list_width = l_dom_play_dev_list.offsetWidth + 20;
@@ -95,17 +95,17 @@ export default {
       l_dom_play_view.style.width = l_dom_play_view_width + "px";
       l_dom_play_view.style.height = l_dom_play_view_height + "px";
       l_dom_play_dev_list.style.height = l_dom_play_view_height + "px";
-      l_dom_play_screen.style.height = l_dom_play_view_width / 16 * 9 + 'px';
+      $("#play_screen").style.height = l_dom_play_view_width / 16 * 9 + 'px';
       l_dom_device_list_sidebar_center.style.height = (l_dom_play_view_height - l_device_list_sidebar_up_height) + "px";
       // l_dom_play_buffer_ret.style.left = l_play_view_left + "px"; 
       // l_dom_play_buffer_ret.style.top = l_play_view_top + "px";  
-      mx("#play_dev_list").setAttribute("style", "width:234px;float:left;background:#ebebeb;display:block;overflow:hidden;");
-      // mx("#page_top_menu").setAttribute("style","margin-top:15px;margin-bottom:3px;") 
+      _this.publicFunc.mx("#play_dev_list").setAttribute("style", "width:234px;float:left;background:#ebebeb;display:block;overflow:hidden;");
+      // _this.publicFunc.mx("#page_top_menu").setAttribute("style","margin-top:15px;margin-bottom:3px;") 
       l_dom_play_buffer_ret.style.display = "none";
       if (window.fujikam == "fujikam") {
         l_dom_play_buffer_ret.style.display = "block";
         l_dom_play_box.style.width = "1200px";
-        mx("#page_top_menu").setAttribute("style", "margin-top:10px;padding-left:0px;margin-bottom:0px;");
+        _this.publicFunc.mx("#page_top_menu").setAttribute("style", "margin-top:10px;padding-left:0px;margin-bottom:0px;");
         l_dom_play_view.style.width = (1200 - l_list_width) + "px";
         // l_dom_play_view.style.width ="1042px";
         // play_content_box    width=1276px; margin:0 auto; overflow :hidden
@@ -113,12 +113,12 @@ export default {
         l_dom_play_view.style.height = "586px";
         l_dom_device_list_sidebar_center.style.height = "586px";
         l_dom_play_view.style.marginLeft = "0px";
-        l_dom_play_screen.style.height = "100%";
-        l_dom_play_screen.style.width = "100%";
+        $("#play_screen").style.height = "100%";
+        $("#play_screen").style.width = "100%";
         l_dom_play_buffer_ret.style.width = '934px';
-        mx("#play_dev_list").setAttribute("style", "width:234px;float:left;background:#ebebeb;display:block;");
+        _this.publicFunc.mx("#play_dev_list").setAttribute("style", "width:234px;float:left;background:#ebebeb;display:block;");
         if (pc_is_offline == 1) {
-          mx("#play_dev_list").setAttribute("style", "display:none;");
+          _this.publicFunc.mx("#play_dev_list").setAttribute("style", "display:none;");
         }
       }
       play_menu_control({ parent: l_dom_play_menu_box });
@@ -127,7 +127,7 @@ export default {
         device_list_box_sidebar({ parent: l_dom_device_list_sidebar_center });
         play_view_control({ parent: l_dom_play_view_control });
       }
-      mx("#back").onclick = function () {
+      _this.publicFunc.mx("#back").onclick = function () {
         if (obj.box_ipc == 1) {//云盒子设备播放
           createPage("boxlist", obj)//创建云盒子页面
         } else { //否则就是普通ipc
@@ -143,7 +143,6 @@ export default {
           } else {
             device_list(g_device_data)
           }
-          // msdk_ctrl({type:"devlist_get",data:{func:device_list}})
         }
         function device_list (msg) {
           data.parent.innerHTML = "<div id='vimtag_device_list'>"
@@ -219,15 +218,14 @@ export default {
                 $.each(arr2, function (index, item) { //滚动停止的时候发送请求
                   item.setAttribute("data-send", "true");
                 });
-                msdk_ctrl({ type: "play_load_imgs", data: { dom: arr2 } })
+                _this.$api.play.load_imgs({ dom: arr2 }) // 请求图片
               }
             }
           });
-          let l_dom_device_list_img = mx(".device_list_sidebar_img")
+          let l_dom_device_list_img = _this.publicFunc.mx(".device_list_sidebar_img")
           if (obj.box_ipc == 1) { //如果是云盒子播放列表
-            msdk_ctrl({ type: "play_load_imgs", data: { dom: l_dom_device_list_img, box_ipc: 1 } }) //请求图片
+            _this.$api.play.load_imgs({ dom: l_dom_device_list_img, box_ipc: 1 }) // 请求图片
           } else {
-            // msdk_ctrl({type:"play_load_imgs",data:{dom:l_dom_device_list_img}}) //请求图片
             sendAsk();
           }
           function sendAsk () {
@@ -241,17 +239,17 @@ export default {
               }
             });
             let arr = $(".device_list_sidebar_img[data-send='true']");
-            msdk_ctrl({ type: "play_load_imgs", data: { dom: arr } })
+            _this.$api.play.load_imgs({ dom: arr }) // 请求图片
           }
           for (let length = l_dom_device_list_img.length, i = 0; i < length; ++i) {
             if (obj.box_ipc == 1) { //页面一进来选择框显示，如果云盒子播放页面，对比ipc_sn 
               if (l_dom_device_list_img[i].getAttribute("ipc_sn") == obj.ipc_sn) {
-                mx("#active_dev").style.top = (10 * (i + 1) + 145 * i) + "px";
+                _this.publicFunc.mx("#active_dev").style.top = (10 * (i + 1) + 145 * i) + "px";
                 $(".device_sidebar_nick").eq(i).addClass("selected_style");
               }
             } else {
               if (l_dom_device_list_img[i].getAttribute("sn") == _this.$store.state.jumpPageData.selectDeviceIpc) {
-                mx("#active_dev").style.top = (10 * (i + 1) + 145 * i) + "px";
+                _this.publicFunc.mx("#active_dev").style.top = (10 * (i + 1) + 145 * i) + "px";
                 $(".device_sidebar_nick").eq(i).addClass("selected_style");
               }
             }
@@ -272,32 +270,44 @@ export default {
               let old_sn = _this.$store.state.jumpPageData.selectDeviceIpc;
               _this.$store.dispatch('setSelectDeviceIpc', this.getAttribute("sn")) // 点击时存储sn
               if (is_playing) {
-                msdk_ctrl({
-                  type: "play_video_stop", data: {
-                    dom: l_dom_play_screen, func: function () {
-                      let profile_token = sessionStorage.getItem("PlayProfile") ? sessionStorage.getItem("PlayProfile") : "p0";
-                      if (_this.$store.state.jumpPageData.localFlag) {
-                        local_play_data.profile_token = profile_token;
-                        local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-                        msdk_ctrl({ type: "local_play", data: local_play_data });
+                _this.$api.play.video_stop({
+                  dom: $("#play_screen")
+                }).then(() => {
+                  let profile_token = sessionStorage.getItem("PlayProfile") ? sessionStorage.getItem("PlayProfile") : "p0";
+                  if (_this.$store.state.jumpPageData.localFlag) { // 本地方法暂不考虑
+                    local_play_data.profile_token = profile_token;
+                    local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
+                    msdk_ctrl({ type: "local_play", data: local_play_data });
+                  } else {
+                    if (obj.box_ipc == 1) { //点击右侧设备列表的设备，如果是云盒子
+                      if (box_ipc_stat === 'offline') {
+                        $("#play_screen").css('background', 'black')
+                        _this.publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 });
+                        $("#enter_history_img_box_tip").show();
+                        setTimeout(function () {
+                          $("#enter_history_img_box_tip").hide();
+                        }, 6000);
                       } else {
-                        if (obj.box_ipc == 1) { //点击右侧设备列表的设备，如果是云盒子
-                          if (box_ipc_stat == 'offline') {
-                            l_dom_play_screen.style.background = 'black';
-                            _this.publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 });
-                            $("#enter_history_img_box_tip").show();
-                            setTimeout(function () {
-                              $("#enter_history_img_box_tip").hide();
-                            }, 6000);
-                          } else {
-                            msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: "p0_" + ipc_sn + "", func: play_speed } });
-                          }
-                        } else {
-                          $("#resolute_choice").text(screen_token);
-                          $("#high_definition").text(screen_token);
-                          msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: profile_token, func: play_speed } });
-                        }
+                        // 调用播放接口
+                        _this.$api.play.play({
+                          dom: $("#play_screen"),
+                          sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                          profile_token: "p0_" + ipc_sn + ""
+                        }).then(res => {
+                          play_speed(res)
+                        })
                       }
+                    } else {
+                      $("#resolute_choice").text(screen_token);
+                      $("#high_definition").text(screen_token);
+                      // 调用播放接口
+                      _this.$api.play.play({
+                        dom: $("#play_screen"),
+                        sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                        profile_token: profile_token
+                      }).then(res => {
+                        play_speed(res)
+                      })
                     }
                   }
                 })
@@ -310,19 +320,33 @@ export default {
                 } else {
                   if (obj.box_ipc == 1) {
                     if (box_ipc_stat == 'offline') {
-                      l_dom_play_screen.style.background = 'black';
+                      $("#play_screen").style.background = 'black';
                       _this.publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 });
                       $("#enter_history_img_box_tip").show();
                       setTimeout(function () {
                         $("#enter_history_img_box_tip").hide();
                       }, 6000);
                     } else {
-                      msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: "p0_" + ipc_sn + "", func: play_speed } });
+                      // 调用播放接口
+                      _this.$api.play.play({
+                        dom: $("#play_screen"),
+                        sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                        profile_token: "p0_" + ipc_sn + ""
+                      }).then(res => {
+                        play_speed(res)
+                      })
                     }
                   } else {
                     $("#resolute_choice").text(screen_token);
                     $("#high_definition").text(screen_token);
-                    msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: profile_token, func: play_speed } });
+                    // 调用播放接口
+                    _this.$api.play.play({
+                      dom: $("#play_screen"),
+                      sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                      profile_token: profile_token
+                    }).then(res => {
+                      play_speed(res)
+                    })
                   }
                 }
                 is_playing = 1;
@@ -339,32 +363,44 @@ export default {
               let old_sn = _this.$store.state.jumpPageData.selectDeviceIpc;
               _this.$store.dispatch('setSelectDeviceIpc', this.getAttribute("sn")) // 点击时存储sn
               if (is_playing) {
-                msdk_ctrl({
-                  type: "play_video_stop", data: {
-                    dom: l_dom_play_screen, func: function () {
-                      let profile_token = sessionStorage.getItem("PlayProfile") ? sessionStorage.getItem("PlayProfile") : "p0";
-                      if (_this.$store.state.jumpPageData.localFlag) {
-                        local_play_data.profile_token = profile_token;
-                        local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-                        msdk_ctrl({ type: "local_play", data: local_play_data });
+                _this.$api.play.video_stop({
+                  dom: $("#play_screen")
+                }).then(() => {
+                  let profile_token = sessionStorage.getItem("PlayProfile") ? sessionStorage.getItem("PlayProfile") : "p0";
+                  if (_this.$store.state.jumpPageData.localFlag) {
+                    local_play_data.profile_token = profile_token;
+                    local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
+                    msdk_ctrl({ type: "local_play", data: local_play_data });
+                  } else {
+                    if (obj.box_ipc == 1) {
+                      if (box_ipc_stat == 'offline') {
+                        $("#play_screen").style.background = 'black';
+                        _this.publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 });
+                        $("#enter_history_img_box_tip").show();
+                        setTimeout(function () {
+                          $("#enter_history_img_box_tip").hide();
+                        }, 6000);
                       } else {
-                        if (obj.box_ipc == 1) {
-                          if (box_ipc_stat == 'offline') {
-                            l_dom_play_screen.style.background = 'black';
-                            _this.publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 });
-                            $("#enter_history_img_box_tip").show();
-                            setTimeout(function () {
-                              $("#enter_history_img_box_tip").hide();
-                            }, 6000);
-                          } else {
-                            msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: "p0_" + ipc_sn + "", func: play_speed } });
-                          }
-                        } else {
-                          $("#resolute_choice").text(screen_token);
-                          $("#high_definition").text(screen_token);
-                          msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: profile_token, func: play_speed } });
-                        }
+                        // 调用播放接口
+                        _this.$api.play.play({
+                          dom: $("#play_screen"),
+                          sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                          profile_token: "p0_" + ipc_sn + ""
+                        }).then(res => {
+                          play_speed(res)
+                        })
                       }
+                    } else {
+                      $("#resolute_choice").text(screen_token);
+                      $("#high_definition").text(screen_token);
+                      // 调用播放接口
+                      _this.$api.play.play({
+                        dom: $("#play_screen"),
+                        sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                        profile_token: profile_token
+                      }).then(res => {
+                        play_speed(res)
+                      })
                     }
                   }
                 })
@@ -377,19 +413,33 @@ export default {
                 } else {
                   if (obj.box_ipc == 1) {
                     if (box_ipc_stat == 'offline') {
-                      l_dom_play_screen.style.background = 'black';
+                      $("#play_screen").style.background = 'black';
                       _this.publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 });
                       $("#enter_history_img_box_tip").show();
                       setTimeout(function () {
                         $("#enter_history_img_box_tip").hide();
                       }, 6000);
                     } else {
-                      msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: "p0_" + ipc_sn + "", func: play_speed } });
+                      // 调用播放接口
+                      _this.$api.play.play({
+                        dom: $("#play_screen"),
+                        sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                        profile_token: "p0_" + ipc_sn + ""
+                      }).then(res => {
+                        play_speed(res)
+                      })
                     }
                   } else {
                     $("#resolute_choice").text(screen_token);
                     $("#high_definition").text(screen_token);
-                    msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: profile_token, func: play_speed } });
+                    // 调用播放接口
+                    _this.$api.play.play({
+                      dom: $("#play_screen"),
+                      sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                      profile_token: profile_token
+                    }).then(res => {
+                      play_speed(res)
+                    })
                   }
                 }
                 is_playing = 1;
@@ -425,17 +475,17 @@ export default {
           + "<div id='enter_history_img'><div id='enter_history_img_box_tip'>" + mcs_playback + "</div></div>"
           + "</div>";
         get_definition();
-        l_dom_video_play = mx("#video_play");
-        let l_dom_high_definition = mx("#high_definition");
-        let l_dom_standard_definition = mx("#standard_definition");
-        let l_dom_fluency_definition = mx("#fluency_definition");
-        let l_dom_auto_definition = mx("#auto_definition");
-        let l_dom_resolute_choice = mx("#resolute_choice");
-        let l_dom_choice_play_definition = mx("#choice_play_definition");
-        let l_dom_enter_set_img = mx("#enter_set_img");
-        let l_dom_enter_history_img = mx("#enter_history_img");
-        let l_dom_voice_close_open = mx("#voice_close");
-        let l_dom_full_screen = mx("#full_screen");
+        l_dom_video_play = _this.publicFunc.mx("#video_play");
+        let l_dom_high_definition = _this.publicFunc.mx("#high_definition");
+        let l_dom_standard_definition = _this.publicFunc.mx("#standard_definition");
+        let l_dom_fluency_definition = _this.publicFunc.mx("#fluency_definition");
+        let l_dom_auto_definition = _this.publicFunc.mx("#auto_definition");
+        let l_dom_resolute_choice = _this.publicFunc.mx("#resolute_choice");
+        let l_dom_choice_play_definition = _this.publicFunc.mx("#choice_play_definition");
+        let l_dom_enter_set_img = _this.publicFunc.mx("#enter_set_img");
+        let l_dom_enter_history_img = _this.publicFunc.mx("#enter_history_img");
+        let l_dom_voice_close_open = _this.publicFunc.mx("#voice_close");
+        let l_dom_full_screen = _this.publicFunc.mx("#full_screen");
         // 全屏和声音控制按钮浏览器端不支持
         l_dom_full_screen.style.display = 'none'
         l_dom_voice_close_open.style.display = 'none'
@@ -471,7 +521,14 @@ export default {
               local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
               msdk_ctrl({ type: "local_play", data: local_play_data });
             } else {
-              msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: "p2", func: play_speed } });
+              // 调用播放接口
+              _this.$api.play.play({
+                dom: $("#play_screen"),
+                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                profile_token: "p2"
+              }).then(res => {
+                play_speed(res)
+              })
             }
           }
         };
@@ -485,7 +542,14 @@ export default {
               local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
               msdk_ctrl({ type: "local_play", data: local_play_data });
             } else {
-              msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: "p1", func: play_speed } });
+              // 调用播放接口
+              _this.$api.play.play({
+                dom: $("#play_screen"),
+                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                profile_token: 'p1'
+              }).then(res => {
+                play_speed(res)
+              })
             }
           }
         };
@@ -513,27 +577,32 @@ export default {
               local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
               msdk_ctrl({ type: "local_play", data: local_play_data });
             } else {
-              msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: "p0", func: play_speed } });
+              // 调用播放接口
+              _this.$api.play.play({
+                dom: $("#play_screen"),
+                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                profile_token: 'p0'
+              }).then(res => {
+                play_speed(res)
+              })
             }
           }
         };
         l_dom_full_screen.onclick = function () {
-          msdk_ctrl({ type: "play_fullscreen", data: {} });
+          _this.$api.play.fullscreen()
         }
         l_dom_enter_set_img.onclick = function () {
           // $("#buffer_page").show();
           // 展示遮罩层
           _this.publicFunc.showBufferPage()
-          msdk_ctrl({
-            type: "dev_info", data: {
-              sn: _this.$store.state.jumpPageData.selectDeviceIpc, func: function (msg) {
-                _this.publicFunc.closeBufferPage()
-                if (msg.fisheye) {
-                  createPage("set", { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "vimtag" });
-                } else {
-                  createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "vimtag" });
-                }
-              }
+          _this.$api.set.dev_info({
+            sn: _this.$store.state.jumpPageData.selectDeviceIpc
+          }).then(res => {
+            _this.publicFunc.closeBufferPage()
+            if (res.fisheye) {
+              createPage("set", { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "vimtag" });
+            } else {
+              createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "vimtag" });
             }
           })
         }
@@ -555,30 +624,48 @@ export default {
               local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
               msdk_ctrl({ type: "local_play", data: local_play_data });
             } else {
-              if (obj.box_ipc == 1) { //如果云盒子播放时暂停
-                msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: "p0_" + obj.ipc_sn, func: play_speed } });
+              if (obj.box_ipc === 1) { //如果云盒子播放时暂停
+                // 调用播放接口
+                _this.$api.play.play({
+                  dom: $("#play_screen"),
+                  sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                  profile_token: "p0_" + obj.ipc_sn
+                }).then(res => {
+                  play_speed(res)
+                })
               } else {
-                msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: profile_token, func: play_speed } });
+                // 调用播放接口
+                _this.$api.play.play({
+                  dom: $("#play_screen"),
+                  sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                  profile_token: profile_token
+                }).then(res => {
+                  play_speed(res)
+                })
               }
             }
             $("#play_view_control").show();
             this.className = "video_play_start";
           } else if (class_name == "video_play_start") {
             is_playing = 0;
-            msdk_ctrl({ type: "play_video_stop", data: { dom: l_dom_play_screen, func: create_preview } })
+            _this.$api.play.video_stop({
+              dom: $("#play_screen")
+            }).then(res => {
+              create_preview(res)
+            })
             this.className = "video_play_stop";
             $("#play_view_control").hide();
           }
         }
 
-        if (window.fujikam == "fujikam") {
+        if (window.fujikam === "fujikam") {
           l_dom_voice_close_open.onclick = function () { // 关闭/开启播放声音 调用本地方法实现不是调用接口
             let class_name = this.className;
-            if (class_name == "voice_close_close") {
-              msdk_ctrl({ type: "play_voice", data: { flag: 0 } })
+            if (class_name === "voice_close_close") {
+              _this.$api.play.voice({ flag: 0 })
               l_dom_voice_close_open.className = "voice_close_open";
             } else {
-              msdk_ctrl({ type: "play_voice", data: { flag: 1 } })
+              _this.$api.play.voice({ flag: 1 })
               l_dom_voice_close_open.className = "voice_close_close";
             }
           }
@@ -634,17 +721,21 @@ export default {
               $("#resolute_choice").text(mcs_new_hd);//云盒子实时播放不能切换分辩率，显示高清
             } else {
               if (msg.s_sensor == 'ok') {
-                mx("#high_definition").innerHTML = msg.def;
-                mx("#resolute_choice").innerHTML = msg.def;
+                _this.publicFunc.mx("#high_definition").innerHTML = msg.def;
+                _this.publicFunc.mx("#resolute_choice").innerHTML = msg.def;
                 support_1080p = msg.def;
               } else {
-                mx("#high_definition").innerHTML = 'NULL';
-                mx("#resolute_choice").innerHTML = 'NULL';
+                _this.publicFunc.mx("#high_definition").innerHTML = 'NULL';
+                _this.publicFunc.mx("#resolute_choice").innerHTML = 'NULL';
                 support_1080p = 'NULL';
               }
             }
           }
-          msdk_ctrl({ type: "play_get_definition", data: { sn: _this.$store.state.jumpPageData.selectDeviceIpc, func: dev_info_get_ack } }) //ms.send_msg("dev_info_get"
+          _this.$api.set.dev_info({ //ms.send_msg("dev_info_get"
+            sn: _this.$store.state.jumpPageData.selectDeviceIpc
+          }).then(res => {
+            dev_info_get_ack(res)
+          })
         }
       }
       function play_view_control (data) { // 摇头机镜头控制
@@ -749,31 +840,31 @@ export default {
           + "<div id='adjust_reset'>" + mcs_reset + "</div>"
           + "</div>"
           + "</div>";
-        l_dom_delete_adjust_page = mx("#delete_adjust_page");
-        l_dom_mode_auto = mx("#mode_auto");
-        l_dom_mode_daytime = mx("#mode_daytime");
-        l_dom_mode_night = mx("#mode_night");
-        l_dom_mode_white = mx("#mode_white");//白光
-        l_dom_adjust_mode_night = mx("#adjust_mode_night");
-        l_dom_adjust_mode_daytime = mx("#adjust_mode_daytime");
-        l_dom_adjust_mode_auto = mx("#adjust_mode_auto");
-        l_dom_adjust_mode_white = mx("#adjust_mode_white");
-        l_dom_adjust_mode_infrared = mx("#adjust_mode_infrared");
-        l_dom_adjust_reset = mx("#adjust_reset");
-        l_dom_ptz_control_left = mx("#ptz_control_left");
-        l_dom_ptz_control_right = mx("#ptz_control_right");
-        l_dom_ptz_control_up = mx("#ptz_control_up");
-        l_dom_ptz_control_down = mx("#ptz_control_down");
-        l_dom_turn_left = mx("#turn_left");
-        l_dom_turn_right = mx("#turn_right");
-        l_dom_turn_up = mx("#turn_up");
-        l_dom_turn_down = mx("#turn_down");
-        l_dom_video_off_pic = mx("#video_off_pic");
-        l_dom_camera_off_pic = mx("#camera_off_pic");
+        l_dom_delete_adjust_page = _this.publicFunc.mx("#delete_adjust_page");
+        l_dom_mode_auto = _this.publicFunc.mx("#mode_auto");
+        l_dom_mode_daytime = _this.publicFunc.mx("#mode_daytime");
+        l_dom_mode_night = _this.publicFunc.mx("#mode_night");
+        l_dom_mode_white = _this.publicFunc.mx("#mode_white");//白光
+        l_dom_adjust_mode_night = _this.publicFunc.mx("#adjust_mode_night");
+        l_dom_adjust_mode_daytime = _this.publicFunc.mx("#adjust_mode_daytime");
+        l_dom_adjust_mode_auto = _this.publicFunc.mx("#adjust_mode_auto");
+        l_dom_adjust_mode_white = _this.publicFunc.mx("#adjust_mode_white");
+        l_dom_adjust_mode_infrared = _this.publicFunc.mx("#adjust_mode_infrared");
+        l_dom_adjust_reset = _this.publicFunc.mx("#adjust_reset");
+        l_dom_ptz_control_left = _this.publicFunc.mx("#ptz_control_left");
+        l_dom_ptz_control_right = _this.publicFunc.mx("#ptz_control_right");
+        l_dom_ptz_control_up = _this.publicFunc.mx("#ptz_control_up");
+        l_dom_ptz_control_down = _this.publicFunc.mx("#ptz_control_down");
+        l_dom_turn_left = _this.publicFunc.mx("#turn_left");
+        l_dom_turn_right = _this.publicFunc.mx("#turn_right");
+        l_dom_turn_up = _this.publicFunc.mx("#turn_up");
+        l_dom_turn_down = _this.publicFunc.mx("#turn_down");
+        l_dom_video_off_pic = _this.publicFunc.mx("#video_off_pic");
+        l_dom_camera_off_pic = _this.publicFunc.mx("#camera_off_pic");
         l_dom_talkback_off_pic = $("#talkback_off_pic");
-        l_dom_adjust_off_pic = mx("#adjust_off_pic");
-        l_dom_control_menu = mx("#control_menu");
-        l_dom_ptz_control_bottom_center = mx("#ptz_control_bottom_center");
+        l_dom_adjust_off_pic = _this.publicFunc.mx("#adjust_off_pic");
+        l_dom_control_menu = _this.publicFunc.mx("#control_menu");
+        l_dom_ptz_control_bottom_center = _this.publicFunc.mx("#ptz_control_bottom_center");
         l_dom_play_view_control.style.width = l_dom_play_view_width + 'px';
         l_dom_play_view_control.style.height = l_dom_play_view_height - 44 + 'px';
         l_dom_play_view_control.style.left = l_dom_play_view.offsetLeft + "px";
@@ -834,70 +925,102 @@ export default {
           $("#turn_down").hide();
         };
         l_dom_turn_left.onmousedown = function () {
-          msdk_ctrl({ type: "play_ptz_turn", data: { flag: "move", direction: "left" } });
+          _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+            flag: "move",
+            direction: "left"
+          })
 
         };
         l_dom_turn_left.onmouseup = function () {
-          msdk_ctrl({ type: "play_ptz_turn", data: { flag: "stop", direction: "left" } });
+          _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+            flag: "stop",
+            direction: "left"
+          })
         };
         l_dom_turn_up.onmousedown = function () {
-          msdk_ctrl({ type: "play_ptz_turn", data: { flag: "move", direction: "up" } });
+          _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+            flag: "move",
+            direction: "up"
+          })
         };
 
         l_dom_turn_up.onmouseup = function () {
-          msdk_ctrl({ type: "play_ptz_turn", data: { flag: "stop", direction: "up" } });
+          _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+            flag: "stop",
+            direction: "up"
+          })
         };
 
         l_dom_turn_right.onmousedown = function () {
-          msdk_ctrl({ type: "play_ptz_turn", data: { flag: "move", direction: "right" } });
+          _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+            flag: "move",
+            direction: "right"
+          })
         };
 
         l_dom_turn_right.onmouseup = function () {
-          msdk_ctrl({ type: "play_ptz_turn", data: { flag: "stop", direction: "right" } });
+          _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+            flag: "stop",
+            direction: "right"
+          })
         };
 
         l_dom_turn_down.onmousedown = function () {
-          msdk_ctrl({ type: "play_ptz_turn", data: { flag: "move", direction: "down" } });
+          _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+            flag: "move",
+            direction: "down"
+          })
         };
 
         l_dom_turn_down.onmouseup = function () {
-          msdk_ctrl({ type: "play_ptz_turn", data: { flag: "stop", direction: "down" } });
+          _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+            flag: "stop",
+            direction: "down"
+          })
         };
         l_dom_video_off_pic.onclick = function () {
           if (l_dom_video_off_pic.className == "video_on_picture") {
             l_dom_video_off_pic.className = "video_off_picture";
-            msdk_ctrl({ type: "play_record", data: { recording: 1, sn: _this.$store.state.jumpPageData.selectDeviceIpc } });
+            _this.$api.play.play_record({
+              recording: 1,
+              sn: _this.$store.state.jumpPageData.selectDeviceIpc
+            })
           } else {
             l_dom_video_off_pic.className = "video_on_picture";
-            msdk_ctrl({ type: "play_record", data: { recording: 0, sn: _this.$store.state.jumpPageData.selectDeviceIpc } });
+            _this.$api.play.play_record({
+              recording: 0,
+              sn: _this.$store.state.jumpPageData.selectDeviceIpc
+            })
           }
         }
         l_dom_camera_off_pic.onclick = function () {
           function get_snapshot_ack (url) {
             $("#snapshot_preview_div").show();
             $("#snapshot_buffer").hide();
-            mx("#snapshot_preview_content").setAttribute("src", url);
-            mx("#snapshot_preview_content").onload = function () {
+            _this.publicFunc.mx("#snapshot_preview_content").setAttribute("src", url);
+            _this.publicFunc.mx("#snapshot_preview_content").onload = function () {
               $("#snapshot_img_page_download").show();
             }
-            mx("#snapshot_preview_url").download = new Date().getTime() + ".jpg";
-            mx("#snapshot_preview_url").setAttribute("href", url);
+            _this.publicFunc.mx("#snapshot_preview_url").download = new Date().getTime() + ".jpg";
+            _this.publicFunc.mx("#snapshot_preview_url").setAttribute("href", url);
           }
           if (_this.$store.state.jumpPageData.selectDeviceIpc) {
-            if (!mx("#snapshot_buffer")) {
+            if (!_this.publicFunc.mx("#snapshot_buffer")) {
               $("#ptz_control_bottom_center").append("<div id='snapshot_buffer'><img src='imgs/device/snapshot.gif' style='margin-top:30%;'></div>");
             }
-            msdk_ctrl({ type: "play_snapshot", data: { sn: _this.$store.state.jumpPageData.selectDeviceIpc, func: get_snapshot_ack } });
+            _this.$api.play.play_snapshot({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => { // 调用截图接口
+              get_snapshot_ack(res)
+            })
           }
         }
 
         l_dom_ptz_control_bottom_center.ondblclick = function () {
-          msdk_ctrl({ type: "play_fullscreen", data: {} });
+          _this.$api.play.fullscreen()
         }
         // 鼠标点击视频中间窗口弹出菜单
         l_dom_ptz_control_bottom_center.onclick = function () {
           let is_display = 0;
-          let is_innerhtml = mx("#play_buffer_ret").innerHTML;
+          let is_innerhtml = _this.publicFunc.mx("#play_buffer_ret").innerHTML;
           $("#play_view_control").show();
           // if (is_innerhtml) {
           is_display = $("#ptz_control_bottom").css("display") == "none" ? 0 : 1;
@@ -927,13 +1050,17 @@ export default {
         l_dom_talkback_off_pic.on('click', function () {
           let class_name = this.className;
           let that = this;
-          delay_till_last('id', function () {//注意 id 是唯一的  	       
+          delay_till_last('id', function () {//注意 id 是唯一的
             if (class_name == "talkback_off_picture") {
               that.className = "talkback_on_picture";
-              msdk_ctrl({ type: "play_speak", data: { flag: 1 } });
+              _this.$api.play.play_speak({ // 调用对讲
+                flag: 1
+              })
             } else {
               that.className = "talkback_off_picture";
-              msdk_ctrl({ type: "play_speak", data: { flag: 0 } });
+              _this.$api.play.play_speak({ // 调用对讲
+                flag: 0
+              })
             }
           }, 400);
         });
@@ -943,9 +1070,11 @@ export default {
           l_dom_adjust_off_pic.className = "adjust_off_picture";
         }
         l_dom_adjust_off_pic.onclick = function () {
-          if (l_dom_adjust_off_pic.className == "adjust_off_picture") {
-            l_dom_adjust_off_pic.className = "adjust_on_picture";
-            msdk_ctrl({ type: "play_adjust_get", data: { sn: _this.$store.state.jumpPageData.selectDeviceIpc, func: adjust_get_ack } });
+          if (l_dom_adjust_off_pic.className === "adjust_off_picture") {
+            l_dom_adjust_off_pic.className = "adjust_on_picture"
+            _this.$api.play.adjust_get({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
+              adjust_get_ack(res)
+            })
             $("#adjust_setting").show();
           } else {
             l_dom_adjust_off_pic.className = "adjust_off_picture";
@@ -1132,7 +1261,7 @@ export default {
                 l_cam_conf.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
                 l_cam_conf.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
               }
-              msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+              _this.$api.play.adjust_set({ conf: l_cam_conf })
               values_flag = [false, false, false, false];
             }
 
@@ -1194,7 +1323,7 @@ export default {
             l_cam_conf.day_night = "auto";
             l_cam_conf.is_white_light = l_white_light;
             l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-            msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+            _this.$api.play.adjust_set({ conf: l_cam_conf })
           };
 
           l_dom_adjust_mode_daytime.onclick = function () {
@@ -1217,7 +1346,7 @@ export default {
             l_cam_conf.day_night = "day";
             l_cam_conf.light_mode = "auto";
             l_cam_conf.is_white_light = l_white_light;
-            msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+            _this.$api.play.adjust_set({ conf: l_cam_conf })
           };
 
           l_dom_adjust_mode_night.onclick = function () {
@@ -1242,7 +1371,7 @@ export default {
             l_cam_conf.light_mode = "red";
             l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
             l_cam_conf.is_white_light = l_white_light;
-            msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+            _this.$api.play.adjust_set({ conf: l_cam_conf })
           };
           if (l_dom_adjust_mode_white) {
             l_dom_adjust_mode_white.onclick = function () {//白光
@@ -1267,7 +1396,7 @@ export default {
               l_cam_conf.light_mode = "white";
               l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
               l_cam_conf.is_white_light = l_white_light;
-              msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+              _this.$api.play.adjust_set({ conf: l_cam_conf })
             };
           }
 
@@ -1326,12 +1455,12 @@ export default {
             dom_value[1].innerHTML = l_cam_conf_reset[1];
             dom_value[0].innerHTML = l_cam_conf_reset[0];
             l_cam_conf.day_night = "auto";
-            msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+            _this.$api.play.adjust_set({ conf: l_cam_conf })
           };
         }
       }
       function play_speed (data) {
-        mx("#play_buffer_ret").innerHTML = data;
+        _this.publicFunc.mx("#play_buffer_ret").innerHTML = data;
         window.onresize = function () {
           l_dom_play_view_control.style.left = l_dom_play_view.offsetLeft + "px";
           l_dom_play_view_control.style.top = l_play_view_top + "px";
@@ -1344,16 +1473,16 @@ export default {
           + "<div id='play_pause_pic'></div>"
           + "</div>"
         if (_this.$store.state.jumpPageData.localFlag) {
-          msdk_ctrl({ type: "play_preview_img", data: { addr: obj.addr, dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, pic_token: "p1_xxxxxxxxxx" } });
+          _this.$api.play.play_preview_img({ addr: obj.addr, dom: $("#play_screen"), sn: _this.$store.state.jumpPageData.selectDeviceIpc, pic_token: "p1_xxxxxxxxxx" })
         } else {
           if (obj.box_ipc == 1) {
             let pic_token = obj.ipc_sn + "_p3_" + Math.pow(2, 31) + "_" + Math.pow(2, 31);
-            msdk_ctrl({ type: "play_preview_img", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, pic_token: pic_token } });
+            _this.$api.play.play_preview_img({ dom: $("#play_screen"), sn: _this.$store.state.jumpPageData.selectDeviceIpc, pic_token: pic_token })
           } else {
-            msdk_ctrl({ type: "play_preview_img", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, pic_token: "p1_xxxxxxxxxx" } });
+            _this.$api.play.play_preview_img({ dom: $("#play_screen"), sn: _this.$store.state.jumpPageData.selectDeviceIpc, pic_token: "p1_xxxxxxxxxx" })
           }
         }
-        l_dom_play_view_box = mx("#play_view_box");
+        l_dom_play_view_box = _this.publicFunc.mx("#play_view_box");
         l_dom_play_view_box.onclick = function () {
           profile_token = sessionStorage.getItem("PlayProfile") ? sessionStorage.getItem("PlayProfile") : "p0";
           is_playing = 1;
@@ -1362,10 +1491,24 @@ export default {
             local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
             msdk_ctrl({ type: "local_play", data: local_play_data });
           } else {
-            if (obj.box_ipc == 1) {
-              msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: "p0_" + obj.ipc_sn, func: play_speed } });
+            if (obj.box_ipc === 1) {
+              // 调用播放接口
+              _this.$api.play.play({
+                dom: $("#play_screen"),
+                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                profile_token: "p0_" + obj.ipc_sn
+              }).then(res => {
+                play_speed(res)
+              })
             } else {
-              msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: profile_token, func: play_speed } });
+              // 调用播放接口
+              _this.$api.play.play({
+                dom: $("#play_screen"),
+                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                profile_token: profile_token
+              }).then(res => {
+                play_speed(res)
+              })
             }
           }
           $("#video_play").attr("class", "video_play_start");
@@ -1379,14 +1522,22 @@ export default {
         local_play_sign.password = sessionStorage.getItem("pass_" + _this.$store.state.jumpPageData.selectDeviceIpc);
         local_play_sign.func = function () {
           local_play_data.agent = _this.$store.state.jumpPageData.localFlag_agent;
-          create_preview({ parent: l_dom_play_screen });
+          create_preview({ parent: $("#play_screen") });
         };
         msdk_ctrl({ type: "local_sign_in", data: local_play_sign })
       } else {
-        if (obj.box_ipc == 1) { //如果是云盒子实时视频播放 参数token
-          if (obj.ipc_stat == 0) {//页面一进来，标记云盒子设备是否在线
-            msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: "p0_" + obj.ipc_sn + "", ipc_stat: 0, func: play_speed } });
-            l_dom_play_screen.style.background = 'black';
+        if (obj.box_ipc === 1) { //如果是云盒子实时视频播放 参数token
+          if (obj.ipc_stat === 0) {//页面一进来，标记云盒子设备是否在线
+            // 调用播放接口
+            _this.$api.play.play({
+              dom: $("#play_screen"),
+              sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+              profile_token: "p0_" + obj.ipc_sn + "",
+              ipc_stat: 0
+            }).then(res => {
+              play_speed(res)
+            })
+            $("#play_screen").style.background = 'black';
             _this.publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 })
             $("#enter_history_img_box_tip").show();
             setTimeout(function () {
@@ -1394,10 +1545,24 @@ export default {
             }, 6000);
 
           } else {
-            msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: "p0_" + obj.ipc_sn + "", func: play_speed } });
+            // 调用播放接口
+            _this.$api.play.play({
+              dom: $("#play_screen"),
+              sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+              profile_token: "p0_" + obj.ipc_sn + ""
+            }).then(res => {
+              play_speed(res)
+            })
           }
         } else {
-          msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, profile_token: "p0", func: play_speed } });
+          // 调用播放接口
+          _this.$api.play.play({
+            dom: $("#play_screen"),
+            sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+            profile_token: "p0"
+          }).then(res => {
+            play_speed(res)
+          })
         }
         l_dom_video_play.className = 'video_play_start'
         is_playing = 1;
@@ -1406,38 +1571,35 @@ export default {
       // ********** 设置设备的时区是校验时间是否与当前系统时间相符 ********** //
       function time_alert () {
         let nowDate = new Date()
-        msdk_ctrl({ type: "get_date_time", data: { sn: _this.$store.state.jumpPageData.selectDeviceIpc, func: l_dev_time_get_ack } }); // 获取选中时区的时间
+        _this.$api.devlist.time_get({ // 获取选中时区的时间
+          sn: _this.$store.state.jumpPageData.selectDeviceIpc
+        }).then(res => {
+          l_dev_time_get_ack(res)
+        })
         function l_dev_time_get_ack (data) {
-          // console.log(data, "date_time")
-          // console.log(nowDate.getDate(), 'getday')
-          // console.log(nowDate.getHours(), 'getHours')
-          // console.log(nowDate.getMinutes(), 'getmin')
-          // console.log(data.day !== nowDate.getDate() && data.hour !== nowDate.getHours() && data.min !== nowDate.getMinutes(), "dayif")
           if (data.day === nowDate.getDate() && data.hour === nowDate.getHours() && data.min === nowDate.getMinutes()) {
-            msdk_ctrl({ // 调用设置时间
-              type: "set_date_time", data: {
-                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-                type: mx("#checkbox_auto_sync").checked ? "NTP" : "manually",
-                timezone: l_dom_time_zone_selevt.value,
-                hour: l_dom_input_hour.value,
-                min: l_dom_input_minute.value,
-                sec: l_dom_input_second.value,
-                year: l_dom_input_year.value,
-                mon: l_dom_input_month.value,
-                day: l_dom_input_day.value,
-                auto_sync: Number(mx("#checkbox_auto_sync").checked),
-                ntp_addr: l_dom_ntp.value,
-                func: set_result
-              }
+            _this.$api.play.set_date_time({ // 调用设置时间
+              sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+              type: _this.publicFunc.mx("#checkbox_auto_sync").checked ? "NTP" : "manually",
+              timezone: l_dom_time_zone_selevt.value,
+              hour: l_dom_input_hour.value,
+              min: l_dom_input_minute.value,
+              sec: l_dom_input_second.value,
+              year: l_dom_input_year.value,
+              mon: l_dom_input_month.value,
+              day: l_dom_input_day.value,
+              auto_sync: Number(_this.publicFunc.mx("#checkbox_auto_sync").checked),
+              ntp_addr: l_dom_ntp.value
+            }).then(res => {
+              set_result(res)
             })
           } else {
             _this.publicFunc.delete_tips({ content: "您当前的时间与设置的时间不符确定要设置吗?", func: device_set_time }); // 时间设定询问窗
           }
           function device_set_time () { // 设置时间询问框回调
-            msdk_ctrl({ // 调用设置时间
-              type: "set_date_time", data: {
-                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-                type: mx("#checkbox_auto_sync").checked ? "NTP" : "manually",
+          _this.$api.play.set_date_time({ // 调用设置时间
+              sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                type: _this.publicFunc.mx("#checkbox_auto_sync").checked ? "NTP" : "manually",
                 timezone: l_dom_time_zone_selevt.value,
                 hour: l_dom_input_hour.value,
                 min: l_dom_input_minute.value,
@@ -1445,10 +1607,10 @@ export default {
                 year: l_dom_input_year.value,
                 mon: l_dom_input_month.value,
                 day: l_dom_input_day.value,
-                auto_sync: Number(mx("#checkbox_auto_sync").checked),
+                auto_sync: Number(_this.publicFunc.mx("#checkbox_auto_sync").checked),
                 ntp_addr: l_dom_ntp.value,
-                func: set_result
-              }
+            }).then(res => {
+              set_result(res)
             })
           }
         }

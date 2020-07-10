@@ -83,26 +83,13 @@ const devlist = {
   */
   async devlist_check_online (params) {
     let returnItem
-    await axios.get('/ccm/ccm_dev_add', {
-      params: {
-        sess: login.create_nid(),
-        sn: params.sn,
-        pwd: md5.pwd_encrypt(params.pass || '')
-      }
-    }).then(res => {
-      let result = login.get_ret(res)
-      if (result === '') {
-        let device = res.data.info
-        if (device) {
-          devlist.ldev_add(device)
-        }
-      }
+    devlist.dev_add({sn: params.sn, password: params.password}).then(res => {
       // 根据格式化后的结果判断并赋值
-      if (result && result === "accounts.user.invalid") {
+      if (res && res.result === "accounts.user.invalid") {
         returnItem = mcs_device_not_exist
-      } else if (result && result === "accounts.user.offline") {
+      } else if (res && res.result === "accounts.user.offline") {
         returnItem = "user.offline"
-      } else if (result && result === "accounts.system") {
+      } else if (res && res.result === "accounts.system") {
         returnItem = "accounts.system"
       }
     })
@@ -198,7 +185,7 @@ const devlist = {
           nid: login.create_nid(),
           sn: params.sn
         },
-        info: info
+        info: params.info
       }
     })
   },
