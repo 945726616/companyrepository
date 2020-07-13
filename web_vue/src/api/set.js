@@ -41,11 +41,13 @@ const set = {
     let result
     let returnItem
     await axios.get('/ccm/ccm_dev_info_get', {
-      sess: {
-        nid: login.create_nid(),
-        sn: params.sn
-      },
-      select: params.select
+      params: {
+        sess: {
+          nid: login.create_nid(),
+          sn: params.sn
+        },
+        select: params.select
+      }
     }).then(res => {
       result = login.get_ret(res)
       if (result === '') {
@@ -58,7 +60,7 @@ const set = {
         wifi = msg.wifi;
         sensor = msg.sensor;
         if (msg.p) {
-          for (var i = 0; i < msg.p.length; i++) {
+          for (let i = 0; i < msg.p.length; i++) {
             if (msg.p[i].n == "s.logo") {
               logo = msg.p[i].v;
             }
@@ -547,7 +549,7 @@ const set = {
       returnItem = { result: login.get_ret(res) }
     })
     if (returnItem && returnItem.result === "") {
-      if (!g_local) {
+      if (!store.state.jumpPageData.localFlag) {
         devlist.ldev_get(params.sn).nick = params.val;
       }
       returnItem = { msg: mcs_set_successfully, type: "success" }
@@ -563,7 +565,7 @@ const set = {
   */
   nickname_get (params) {
     let returnItem
-    if (g_local) {
+    if (store.state.jumpPageData.localFlag) {
       set.dev_info({ sn: params.sn }).then(res => {
         returnItem = { nick: res.name ? res.name : params.sn }
       })
@@ -589,7 +591,7 @@ const set = {
           devlist.dev_add({ sn: params.sn, password: params.new_pass }).then(res_dev_add => {
             if (res_dev_add && res_dev_add.result === "") {
               returnItem = { msg: mcs_set_successfully, type: "success" }
-              if (!g_local) {
+              if (!store.state.jumpPageData.localFlag) {
                 devlist.ldev_get(res_dev_add.info.sn).stat = res_dev_add.info.stat;
               }
             } else if (res_dev_add.result === "permission.denied") {
@@ -1103,7 +1105,7 @@ const set = {
     }).then(res => {
       let result = get_ret(res);
       if (result === "") {
-        var msg = res.data ? res.data.conf : "";
+        let msg = res.data ? res.data.conf : "";
         io_input = msg.io_in_mode;   /* Open:always open; Close:always close */
         io_output = msg.io_out_mode;    /* Open:always open; Close:always close */
         sensitivity = msg.motion_level;  /* level of sensitivity about motion detect at day 0-100 */
@@ -1167,7 +1169,7 @@ const set = {
     }).then(res => {
       let result = get_ret(res);
       if (result === "") {
-        var msg = res.data ? res.data : "";
+        let msg = res.data ? res.data : "";
         enable = msg.enable;
         actions = msg.actions;
       }
@@ -1191,7 +1193,7 @@ const set = {
     }).then(res => {
       let result = get_ret(res);
       if (result === "") {
-        var msg = res.data ? res.data : "";
+        let msg = res.data ? res.data : "";
         enable = msg.sch.enable;
         full_time = msg.sch.full_time;
         times = msg.sch.times;
@@ -1456,7 +1458,8 @@ const set = {
     })
     if (returnItem.result === "") {
       setTimeout(function () {
-        createPage("devlist", { parent: $("#page") });
+        // createPage("devlist", { parent: $("#page") });
+        _this.$router.push({name:'devlist',params:{parent: obj.parent}})
       }, 3000)
     }
     return null

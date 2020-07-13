@@ -132,7 +132,7 @@ export default {
       }
       if (localStorage.getItem('keep_pw')) { // 存储中保持登录状态被选中
         // JSON.parse(localStorage.getItem('keep_pw'))
-        // console.log('记住密码')
+        // //console.log('记住密码')
         $('#keep_sign_in_check').attr('checked', 'true') // 页面中添加被选中效果
       }
       $('#forget_pass').click(function () { // 忘记密码渲染dom
@@ -249,7 +249,7 @@ export default {
             username: $('#binding_account').val(),
             appid: _this.appid
           }).then(res => {
-            console.log(res, 'binding_email_get')
+            //console.log(res, 'binding_email_get')
             binding_accounts_info_ack(res)
             function binding_accounts_info_ack (msg) {
               // 用户名验证回调函数
@@ -312,7 +312,7 @@ export default {
             name: name,
             lang: sessionStorage.getItem('userLanguage')
           }).then(res => {
-            console.log(res.data, 'recovery_binding_email_res')
+            //console.log(res.data, 'recovery_binding_email_res')
             recovery_binding_email_ack(res.data)
             function recovery_binding_email_ack (msg) {
               // 重置密码回调处理函数
@@ -588,6 +588,7 @@ export default {
                 _this.$store.dispatch('setLid', msg.lid) //登录返回lid head中
                 _this.$store.dispatch('setName', username_value)
                 _this.$store.dispatch('setSid', msg.sid)
+                _this.$store.dispatch('setGuest', msg.guest)
                 let version_type = ''
                 if (navigator.userAgent.indexOf('Intel Mac') > -1) {
                   version_type = 'mac_' + name
@@ -661,13 +662,14 @@ export default {
                           // g_supprot_clogo = 1;
                           _this.$store.commit('SET_JM_LOGO_FLAG', 1)
                           // createPage('top', { parent: $('#top') })
+                          _this.$router.push({name:'top',params:{parent: $("#top")}})
                         }
                       }
                     }
                     _this.$store.dispatch('setDownloadManualUrl', msg.data.server.signal[2])
                     // upload_log("log_app_login")  //登录请求返回后发送日志
                     // createPage('devlist', { parent: obj.parent })
-                    _this.$router.push('/devlist') // 跳转至设备列表页面
+                    _this.$router.push({name:'devlist',params:{parent: obj.parent}}) // 跳转至设备列表页面
                   }
                 })
                 if (!_this.$store.state.jumpPageData.experienceFlag) { // 判断是否为体验
@@ -678,7 +680,7 @@ export default {
                 }
               } else {
                 //登录结果失败
-                console.log('fail_login')
+                //console.log('fail_login')
                 _this.$store.dispatch('setLoginWaitFlag', 0)
                 if (msg.result === 'accounts.user.offline') {
                   _this.publicFunc.msg_tips({

@@ -92,23 +92,28 @@ export default {
           // console.log(this)
           $('#menu_more').attr('class', 'menu_top_li')
           $('#menu_download').attr('class', 'menu_top_li_active')
-          createPage('download', { parent: $('#page') })
+          // createPage('download', { parent: $('#page') })
+          _this.$router.push({name:'download',params:{parent: $('#page')}});
         })
         $('#menu_more').on('click', function () {
           $('#menu_download').attr('class', 'menu_top_li')
           $('#menu_more').attr('class', 'menu_top_li_active')
-          createPage('my', { parent: $('#page') })
+          // createPage('my', { parent: $('#page') })
+          _this.$router.push({name:'my',params:{parent: $('#page')}});
         })
         $('#mipc_logo_img').on('click', function () {
           $('#menu_more').attr('class', 'menu_top_li')
           $('#menu_download').attr('class', 'menu_top_li')
           if (_this.$store.state.jumpPageData.loginFlag) {
-            createPage('devlist', { parent: $('#page') })
+            // createPage('devlist', { parent: $('#page') })
+            _this.$router.push({name:'devlist',params:{parent: $('#page')}});
           } else if (_this.$store.state.jumpPageData.experienceFlag) {
-            createPage('devlist', { parent: $('#page') })
+            // createPage('devlist', { parent: $('#page') })
+            _this.$router.push({name:'devlist',params:{parent: $('#page')}});
           } else {
             _this.$store.dispatch('setLoginWaitFlag', 0)
-            createPage('login', { parent: $('#page') })
+            // createPage('login', { parent: $('#page') })
+            _this.$router.push({name:'login',params:{parent: $('#page')}});
           }
         })
       }
@@ -121,10 +126,10 @@ export default {
       let username_value = mcs_my // 定义用户名
       // console.log(_this.publicFunc.urlParam(), 'url')
       if (_this.$store.state.jumpPageData.localModel) { // 判断是否为本地离线模式
-        g_is_login = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
+        _this.$store.state.jumpPageData.loginFlag = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
         l_remember_data = sessionStorage.get('remember_msg_info')
         l_remember_data = eval('(' + l_remember_data + ')')
-        if (g_is_login) {
+        if (_this.$store.state.jumpPageData.loginFlag) {
           username_value = l_remember_data.user
           l_pwd_val = l_remember_data.password
         }
@@ -163,16 +168,17 @@ export default {
           _this.$store.dispatch('setLocalModel', 1)
         }
         if (_this.$store.state.jumpPageData.localModel) {
-          g_is_login = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
+          _this.$store.state.jumpPageData.loginFlag = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
         }
-        createPage('my', { parent: $('#page') })
+        _this.$router.push('/my')
+        // createPage('my', { parent: $('#page') })
       })
 
       $('#top_login_div').click(function () {
         if (_this.$store.state.jumpPageData.localModel) {
           //如果点击了本地搜索
-          g_is_login = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
-          if (g_is_login) {
+          _this.$store.state.jumpPageData.loginFlag = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
+          if (_this.$store.state.jumpPageData.loginFlag) {
             //已经登录了	点击我的设备无效
             // console.log('登录状态点击我的设备')
             _this.$store.dispatch('setLocalModel', 0)
@@ -188,26 +194,30 @@ export default {
               location.href = location.href.split('&')[0]
               // console.log(location.href, "浏览器部分")
             }
-            createPage('devlist', { parent: $('#page') })
+            // createPage('devlist', { parent: $('#page') })
+            _this.$router.push({name:'devlist',params:{parent: $('#page')}});
           } else {
             //没有登录点击我的设备 跳转到登录页面
-            // console.log("g_is_login === 0")
+            // console.log("_this.$store.state.jumpPageData.loginFlag === 0")
             location.href = location.href.replace('&l=local&c=0', '')
           }
         } else {
           //没有点击本地搜索
           if (_this.$store.state.jumpPageData.experienceFlag === 1) {
             // g_experience为体验权限 0非体验 1体验
-            createPage('login', { parent: $('#page') })
+            // createPage('login', { parent: $('#page') })
+            _this.$router.push({name:'login',params:{parent: $('#page')}});
           } else {
             _this.$store.dispatch('setExperienceFlag', 0)
             if (_this.$store.state.jumpPageData.loginFlag) {
               //已经登录，直接到设备列表页面
               // console.log('点击了设备列表按钮')
-              createPage('devlist', { parent: $('#page') })
+              // createPage('devlist', { parent: $('#page') })
+              _this.$router.push({name:'devlist',params:{parent: $('#page')}});
             } else {
               //没有登录，跳转到登录页面
-              createPage('login', { parent: $('#page') })
+              // createPage('login', { parent: $('#page') })
+              _this.$router.push({name:'login',params:{parent: $('#page')}});
             }
           }
         }
@@ -215,15 +225,16 @@ export default {
 
       $('#top_experience_div').click(function () {
         //点击体验
-        let username = _this.publicFunc.urlParam().ta ? _this.publicFunc.urlParam().ta : 'vimtag'
-        let password = _this.publicFunc.urlParam().tp ? _this.publicFunc.urlParam().tp : 'vimtag'
-        this.$api.login.sign_in({
+        let username = _this.publicFunc.urlParam().ta ? _this.publicFunc.urlParam().ta : 'vimtag';
+        let password = _this.publicFunc.urlParam().tp ? _this.publicFunc.urlParam().tp : 'vimtag';
+        _this.$api.login.sign_in({
           user: username, // 用户名
           password: md5.hex(password) // 密码
         }).then(res => { // 登录回调处理
           console.log(res, 'res')
           // 跳转至设备列表页面
-          // g_experience = 1
+          // _this.$store.state.jumpPageData.experienceFlag = 1
+          _this.$router.push({name:'devlist',params:{parent: $('#page')}});
           // createPage('devlist', { parent: $('#page') })
         })
       })
@@ -231,7 +242,7 @@ export default {
       function select_lang () {
         let l_select_lang = document.getElementsByClassName('select_lang')
         let language_choice_info = sessionStorage.getItem('userLanguage')
-        let l_lang = language_choice_info ? language_choice_info : sessionStorage.getItem('projectName')
+        let l_lang = language_choice_info ? language_choice_info : 'en'
 
         for (let l = 0; l < l_select_lang.length; l++) {
           // console.log(l_select_lang[l].getAttribute('value'), 'lang_val')
@@ -261,7 +272,7 @@ export default {
 
         $('.select_lang').click(function () {
           let val = $(this).attr('value')
-          localStorage.setItem('language_choice_info', val)
+          sessionStorage.setItem('userLanguage', val)
           location.reload()
         })
       }
@@ -276,7 +287,8 @@ export default {
       }
 
       if (pc_is_offline == 1) {
-        createPage('devlist', { parent: $('#page') })
+        // createPage('devlist', { parent: $('#page') })
+        _this.$router.push({name:'devlist',params:{parent: $('#page')}})
       }
       // 截取url登录相关参数
       let exp_username = _this.publicFunc.urlParam().user ? _this.publicFunc.urlParam().user : '' // 用户名

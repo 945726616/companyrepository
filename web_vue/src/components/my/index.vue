@@ -2,6 +2,7 @@
   <div id="my"></div>
 </template>
 <script>
+import mme from '@/util/mme.js'
 export default {
   methods: {
     vimtagMyPage (obj) {
@@ -59,6 +60,23 @@ export default {
         + "<div id='set_right'>"
         + "<div id='my_page_box_back_manage' style='display:none' class='my_page_box_back'>" + mcs_back + "</div>" // 返回
         + "<div id='set_right_content'>"
+        + "<div id='set_my_other_page' class='set_page' style='display:none'>"
+        + "<div id='devilist_num_set'>"
+        + "<div class='menu_list_box'>"
+        + "<div class='menu_list_last'><div class='list_name'>" + mcs_setting_device_list + "</div>"
+        + "<div class='options_float_right'><input id='dev_set_input' type='text' class='normal_input_right'></input></div>"
+        + "</div>"
+        + "</div>"
+        + "<div class='options_float_right' style='clear:both'><button id='button_setup' class='list_right_button' >" + mcs_apply + "</button>"
+        + "</div>"
+        + "</div>"
+        + "</div>"
+        + "<div id='set_about_page' class='set_page' style='display:none'>"
+        + "<div class='about_list'>"
+        + "<div id='about_title' class='about_title'>" + mcs_software_version + "</div>"
+        + "<div class='about_input'>" + _this.$store.state.jumpPageData.webClientV + "</div>"
+        + "</div>"
+        + "</div>"
         + "<div id='set_manage_password_page' class='set_page'>"
         + "<div id='mp_lable'>"
         + "<div class='mp_list'>" // 修改密码 用户管理密码
@@ -200,23 +218,6 @@ export default {
         + "</div>"
         + "</div>"
         + "</div>"
-        + "<div id='set_my_other_page' class='set_page' style='display:none'>"
-        + "<div id='devilist_num_set'>"
-        + "<div class='menu_list_box'>"
-        + "<div class='menu_list_last'><div class='list_name'>" + mcs_setting_device_list + "</div>"
-        + "<div class='options_float_right'><input id='dev_set_input' type='text' class='normal_input_right'></input></div>"
-        + "</div>"
-        + "</div>"
-        + "<div class='options_float_right' style='clear:both'><button id='button_setup' class='list_right_button' >" + mcs_apply + "</button>"
-        + "</div>"
-        + "</div>"
-        + "</div>"
-        + "<div id='set_about_page' class='set_page' style='display:none'>"
-        + "<div class='about_list'>"
-        + "<div id='about_title' class='about_title'>" + mcs_software_version + "</div>"
-        + "<div class='about_input'>" + g_web_client_v + "</div>"
-        + "</div>"
-        + "</div>"
         + "<div id='set_developer_option_page' class='set_page' style='display:none;'>"
         + "<form>"
         + "<p style='margin:10px 0 10px;'><input type='checkbox' name='tree_id' value='1' />&nbsp;&nbsp;Load Plugin</p>"
@@ -236,12 +237,13 @@ export default {
       if (_this.$store.state.jumpPageData.localFlag) {
         l_remember_data = sessionStorage.getItem("remember_msg_info"); //点击本地搜索后这个还有
         l_remember_data = eval('(' + l_remember_data + ')');
-        if (g_is_login) {
+        if (_this.$store.state.jumpPageData.loginFlag) {
           username_value = l_remember_data.user;
           l_pwd_val = l_remember_data.password;
         }
       }
-      if (g_is_login) {
+      if (_this.$store.state.jumpPageData.loginFlag) {
+        let username_value = JSON.parse(localStorage.getItem("remember_msg_info")).user;
         _this.publicFunc.mx("#user_logo_username").innerHTML = username_value ? username_value : mcs_username;
         _this.publicFunc.mx("#about").parentNode.style.display = "block";
         _this.publicFunc.mx("#feedback").parentNode.style.display = "block";
@@ -271,10 +273,10 @@ export default {
         _this.publicFunc.mx("#left_ul_bottom").style.border = 'inherit';
       }
       $(document).ready(function () {
-        create_my_page(obj)
+        _this.$options.methods.create_my_page.call(_this);
       })
     },
-    create_my_page (obj) {
+    create_my_page () {
       let _this = this
       let sd_is_export = 0;
 
@@ -282,6 +284,7 @@ export default {
       set_apply_btn_event();
 
       function set_add_event () {
+        // console.log(_this)
         if (!_this.$store.state.jumpPageData.projectFlag) { // vimtag项目特有的鼠标滑过效果
           $(".set_list").mouseenter(function () {
             $(".set_list").removeClass("active_list");
@@ -305,8 +308,7 @@ export default {
           if (_this.publicFunc.mx("#set_add_email_page").style.display == "block") binding_accounts_info();
           // ********此处代码在当前项目中并未真正应用******** //
           if (id_name == "sd_export") {
-            if (sd_is_export) {
-            } else {
+            if (!sd_is_export) {
               let sd_exist = window.check_SDCard();
               if (sd_exist == 0) {
                 _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "no sd card";
@@ -349,7 +351,7 @@ export default {
               let reader = new FileReader();
               let newimg = new Image();
               reader.readAsDataURL(e.target.files[0]);
-              reader.onload = function (e) {
+              reader.onload = function () {
                 let img = document.getElementById("pre_img");
                 img.src = this.result;
                 img.style.width = '90px';
@@ -371,12 +373,12 @@ export default {
               l_dom_feedback_upload_image.click();
             }
             l_dom_feedback_submit.onclick = function () {
-              let feedback_type = l_dom_feedback_type.value;
-              let feedback_content = l_dom_feedback_content.value;
-              let feedback_email_address = l_dom_feedback_email_address.value;
+              let feedback_type = l_dom_feedback_type.val();
+              let feedback_content = l_dom_feedback_content.val();
+              let feedback_email_address = l_dom_feedback_email_address.val();
               let feedback_pic = document.getElementById("pre_img");
-              let feedback_arr = { data: feedback_content };
-              let filter = /(^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$|^\d{6,12}$)/; // 修改正则验证QQ和邮箱
+              // let feedback_arr = { data: feedback_content };
+              let filter = /(^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$|^\d{6,12}$)/; // 修改正则验证QQ和邮箱
               if (!feedback_content || feedback_content == "") {
                 $(".feedback_error_content_tip").eq(1).show();
                 setTimeout(function () {
@@ -398,8 +400,8 @@ export default {
                 // 	content_title: feedback_type,
                 // 	content_creator: username_value,
                 // 	content_platform: "web",
-                // 	content_native_ver: g_web_client_v,
-                // 	content_web_ver: g_web_client_v,
+                // 	content_native_ver: _this.$store.state.jumpPageData.webClientV,
+                // 	content_web_ver: _this.$store.state.jumpPageData.webClientV,
                 // 	content_create_time: time_stamp,
                 // 	content_item__x_countz_: 1,
                 // 	content_item: 1,
@@ -409,21 +411,12 @@ export default {
                 // 	content_item_content: feedback_content,
                 // 	content_item_pic__x_countz_: 0
                 // }
-                function image2Base64 (img) {
-                  let canvas = document.createElement("canvas");
-                  canvas.width = img.width;
-                  canvas.height = img.height;
-                  let ctx = canvas.getContext("2d");
-                  ctx.drawImage(img, 0, 0, img.width, img.height);
-                  let dataURL = canvas.toDataURL("image/png");
-                  return dataURL;
-                }
 
                 let params = {
                   sign: "vimtag",
                   platform: "pc",
-                  // native_ver: g_web_client_v,
-                  web_ver: g_web_client_v,
+                  // native_ver: _this.$store.state.jumpPageData.webClientV,
+                  web_ver: _this.$store.state.jumpPageData.webClientV,
                   title: feedback_type,
                   creator: username_value,
                   email: feedback_email_address,
@@ -435,7 +428,7 @@ export default {
                     email: feedback_email_address,
                     title: feedback_type,
                     content: feedback_content,
-                    pic: image2Base64(feedback_pic)
+                    pic: feedback_pic.src
                   }
                 }
                 if (!feedback_pic.width) {
@@ -444,36 +437,37 @@ export default {
                 // console.log(params)
                 msdk_agent.feedback_submit(params, null, feedback_submit_ack);
               }
+              function feedback_submit_ack (msg) {
+                  if (msg && msg.result == "") {
+                    _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_success, type: "success", timeout: 3000 });
+                    $("#upload_image").val("");
+                    l_dom_feedback_type.val("");
+                    // $("#pre_img")[0].src = "";
+                    // $("#pre_img")[0].style = "";
+                    l_dom_feedback_content.val("");
+                    l_dom_feedback_email_address.val("");
+                  } else {
+                    _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_fail, type: "error", timeout: 3000 });
+                  }
+                }
             };
-            function feedback_submit_ack (msg, ref) {
-              if (msg && msg.result == "") {
-                _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_success, type: "success", timeout: 3000 });
-                $("#upload_image").value = "";
-                l_dom_feedback_type.value = "";
-                $("#pre_img")[0].src = "";
-                $("#pre_img")[0].style = "";
-                l_dom_feedback_content.value = "";
-                l_dom_feedback_email_address.value = "";
-              } else {
-                _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_fail, type: "error", timeout: 3000 });
-              }
-            }
+            
           }
           if (id_name == "exit_btn_img") {
             if (!_this.$store.state.jumpPageData.projectFlag) { // vimtag项目隐藏退出登录内容页面的返回按钮
               $("#my_page_box_back_manage").hide()
             }
             // g_loacl部分目前仅vimtag可以使用,mipc系列暂不支持相关参数
-            _this.$store.state.jumpPageData.localFlag = (urlparms && urlparms.l === "local") ? 1 : 0;
-            if (g_is_login) {
+            _this.$store.state.jumpPageData.localFlag = (_this.publicFunc.urlParam() && _this.publicFunc.urlParam().l === "local") ? 1 : 0;
+            if (_this.$store.state.jumpPageData.loginFlag) {
               _this.publicFunc.delete_tips({
                 content: mcs_prompt_exit, flag: "my_page", func: function () { //g 5.5 flag是后加的，判断是my_page页面，点击取消
                   sessionStorage.setItem("auto_login", 0);
                   if (!sessionStorage.getItem("keep_pw")) {
-                    let remember_msg_info_data = sessionStorage.getItem("remember_msg_info");
+                    let remember_msg_info_data = localStorage.getItem("remember_msg_info");
                     let remember_msg_info_json = eval("(" + remember_msg_info_data + ")");
                     let username = remember_msg_info_json.user;
-                    sessionStorage.setItem("remember_msg_info", mcodec.obj_2_str({ user: username }));
+                    localStorage.setItem("remember_msg_info", JSON.stringify({ user: username }));
                   }
                   if (_this.$store.state.jumpPageData.localFlag) {
                     let url = location.href;
@@ -502,13 +496,13 @@ export default {
             _this.publicFunc.mx("#sd_export").style.background = "url('./imgs/device/sd.png') no-repeat";
           }
           if (id_name == "local_devs") { // 点击本地搜索按钮后执行
-            // // console.log("进入判断")
-            // // console.log(location.href, "location.href")
-            // // console.log(g_is_login, "g_is_login")
-            // // console.log(urlparms, "urlparms")
+            // console.log("进入判断")
+            // console.log(location.href, "location.href")
+            // console.log(_this.$store.state.jumpPageData.loginFlag, "_this.$store.state.jumpPageData.loginFlag")
+            // console.log(urlparms, "urlparms")
             // // console.log(_this.$store.state.jumpPageData.localFlag, "_this.$store.state.jumpPageData.localFlag")
             // location.href=location.href+"&l=local"+(location.href.indexOf("file=vimtag")>-1?"&file=vimtag":"");
-            location.href = location.href + "&l=local&c=" + g_is_login + "" + (location.href.indexOf("file=vimtag") > -1 ? "&file=vimtag" : "");
+            location.href = location.href + "&l=local&c=" + _this.$store.state.jumpPageData.loginFlag + "" + (location.href.indexOf("file=vimtag") > -1 ? "&file=vimtag" : "");
             // alert(location.href)
           }
           if (id_name == "my_other") {
@@ -516,7 +510,7 @@ export default {
             let l_dome_dev_set_input = _this.publicFunc.mx("#dev_set_input");
             let l_dom_button_setup = _this.publicFunc.mx("#button_setup");
             let dev_set_input_num = "";
-            l_dome_dev_set_input.onkeyup = function (event) {
+            $("#dev_set_input").keyup(function () {
               let reg;
               reg = /^\+?[1-9]\d*$/;
               if (reg.test(this.value)) {
@@ -525,27 +519,28 @@ export default {
                 this.value = "";
                 dev_set_input_num = 4;
               }
-            }
-            l_dom_button_setup.onclick = function () {
+            })
+            $("#button_setup").click(function () {
               if (dev_set_input_num > 0 && dev_set_input_num < 5) {
                 sessionStorage.setItem("device_list_num", dev_set_input_num)
                 _this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 })
               } else {
                 _this.publicFunc.msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 })
               }
-            }
+            })
           }
         })
         if (_this.publicFunc.mx("#my_page_box_back_manage")) {
           _this.publicFunc.mx("#my_page_box_back_manage").onclick = function () {
-            createPage("my", obj)
+            // createPage("my", obj)
+            _this.$router.push({name:'my',params:{parent: obj}})
           }
         }
       }
 
       function binding_accounts_info () {
         let appid = "vimtag.com";
-        let user_info = eval("(" + sessionStorage.getItem("remember_msg_info") + ")")
+        let user_info = eval("(" + localStorage.getItem("remember_msg_info") + ")")
         _this.$api.login.binding_email_get({
           username: user_info.user,
           appid: appid
@@ -611,10 +606,10 @@ export default {
             ua = navigator.userAgent.toLowerCase(),
             url_params = (location.search || location.hash || "");
           $("#set_left").append("<div id='mme_select_path' style='width:1px;height:1px;'></div>");
-          l_dom_search = document.getElementById("mme_select_path");
-          params_key = 'data:application/octet-stream;base64,NGO/Mnqt7aXYO3hdsIe87bCTuqTRRSPMwJGuT26CuSedGTi2h7wroHY0IZObBPKYA/exp+e/efFj35sLiDKQpRfRFz8Th8zlYtrYki24JiN7vpGb2bUN9nY7quZ56SicUoqLd+KcCrvWheZ5NaE+slPpCg+F+hUdhNl4JXbVxzx5U6jS92D/SBoDfpMTvF8n3ELgtVFOm3VG+22f97jzrRT22WqSzmmwsM5CNX3cwVfeM5vSPVzeo/kw0ERT9k1mdqG1lScyhMuYsgrWZ0zQSKUni7AUUoiO8qqSfW28XR6CJgp5/JiLHa0kAQtVCVxm886cpuLLUn2SJCHQwS985Fd6PH49IhI+ZgKK5NA+LX+qV3tHHkGdt0C+4n7AMOxHGB+iqepOiK13Bm3YkX7BB9uR80IAltc5YVA0CWg/jog8cCETr1pWm8XngSP4pJa4ZwJq5VuPcBKDTYzqXPJsnIDpZ7L+oz457Ysz+Cc7N7keTCXuI3aFPOjxvdAdCQqKb0Hra3LuxCr5FCfZxx/mn1rddD24Ol74WXtfRJqDs8K/zYpWMnuLU7NjTNdJGMjDs2zYpq56Vd2gq0sS+yyHyhvU4lcIxT05+YfiDMSznuF4BQuKyK7yxa0X73GjUNZFxV3lqIkGKWXjMf4rv4RyE2j1mEqgqGuAW+s2PZ35xOE';
+          let l_dom_search = $("#mme_select_path");
+          let params_key = 'data:application/octet-stream;base64,NGO/Mnqt7aXYO3hdsIe87bCTuqTRRSPMwJGuT26CuSedGTi2h7wroHY0IZObBPKYA/exp+e/efFj35sLiDKQpRfRFz8Th8zlYtrYki24JiN7vpGb2bUN9nY7quZ56SicUoqLd+KcCrvWheZ5NaE+slPpCg+F+hUdhNl4JXbVxzx5U6jS92D/SBoDfpMTvF8n3ELgtVFOm3VG+22f97jzrRT22WqSzmmwsM5CNX3cwVfeM5vSPVzeo/kw0ERT9k1mdqG1lScyhMuYsgrWZ0zQSKUni7AUUoiO8qqSfW28XR6CJgp5/JiLHa0kAQtVCVxm886cpuLLUn2SJCHQwS985Fd6PH49IhI+ZgKK5NA+LX+qV3tHHkGdt0C+4n7AMOxHGB+iqepOiK13Bm3YkX7BB9uR80IAltc5YVA0CWg/jog8cCETr1pWm8XngSP4pJa4ZwJq5VuPcBKDTYzqXPJsnIDpZ7L+oz457Ysz+Cc7N7keTCXuI3aFPOjxvdAdCQqKb0Hra3LuxCr5FCfZxx/mn1rddD24Ol74WXtfRJqDs8K/zYpWMnuLU7NjTNdJGMjDs2zYpq56Vd2gq0sS+yyHyhvU4lcIxT05+YfiDMSznuF4BQuKyK7yxa0X73GjUNZFxV3lqIkGKWXjMf4rv4RyE2j1mEqgqGuAW+s2PZ35xOE';
           mme_params = {
-            parent: l_dom_search, enable_native_plug: true, enable_flash_plug: true, params: mcodec.obj_2_str(params_key),
+            parent: l_dom_search, enable_native_plug: true, enable_flash_plug: true, params: JSON.stringify(params_key),
             on_event: function (e) { mme_on_event(e) }, ref_obj: obj,
             debug: (0 <= (location.search || location.hash || "").indexOf("debug=1"))
           };
@@ -774,6 +769,27 @@ export default {
             l_dom_progress_bar.style.left = "0";
             l_dom_progress_bar.style.width = "20px";
           }
+          function get_progress () {
+              let progress_time = null;
+              let progress_num = 0;
+              progress_time = setInterval(function () {
+                l_dom_progress_bar_box.css("display","block");
+                progress_num = window.progress(sd_export_path + "\\progress");
+                progress_num = parseInt(progress_num);
+                let show_progress_num = progress_num + "%";
+                l_dom_progress_bar.style.width = show_progress_num;
+                l_dom_progress_bar_num.innerHTML = show_progress_num;
+                if (progress_num == 100) {
+                  $("#export_success_icon").css("display","block");
+                  $("#sd_export_submit_tip").parent().css("display","none");
+                  document.getElementById("sd_export_submit").style.background = "#00a6ba";
+                  clearInterval(progress_time);
+                  l_dom_sd_export_submit.innerHTML = "Export success";
+                  l_dom_sd_export_submit.onclick = sd_export_submit_func;
+                  sd_is_export = 0;
+                }
+              }, 100)
+            }
         }
         l_dom_sd_export_submit.onclick = sd_export_submit_func;
         // l_dom_about_title.ondblclick = function () {
@@ -808,26 +824,26 @@ export default {
           }
           sessionStorage.setItem("developer", checkbox_check);
         };
-        l_dom_manage_password.onclick = function () { // 点击提交修改管理密码按钮
-          if (g_guest) {
+        $("#mp_btn").click(function () { // 点击提交修改管理密码按钮
+          if (_this.$store.state.jumpPageData.guest) {
             _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
           } else {
             let reg;
-            if (!l_dom_admin_pw || l_dom_admin_pw.value == "") { // 未输入当前管理密码
+            if (!l_dom_admin_pw || l_dom_admin_pw.val() == "") { // 未输入当前管理密码
               $(".mp_password_empty").eq(0).show(); // 错误提示语句
               setTimeout(function () {
                 $(".mp_password_empty").eq(0).hide();
               }, 3000)
               return;
             }
-            if (!l_dom_admin_pw1.value || l_dom_admin_pw1.value == "") { // 未输入新管理密码
+            if (!l_dom_admin_pw1.val() || l_dom_admin_pw1.val() == "") { // 未输入新管理密码
               $(".mp_password_empty").eq(1).show();
               setTimeout(function () {
                 $(".mp_password_empty").eq(1).hide();
               }, 3000)
               return;
             }
-            if (!l_dom_admin_pw2.value || l_dom_admin_pw2.value == "") { // 未输入确认密码
+            if (!l_dom_admin_pw2.val() || l_dom_admin_pw2.val() == "") { // 未输入确认密码
               $(".mp_password_empty").eq(2).show();
               setTimeout(function () {
                 $(".mp_password_empty").eq(2).hide();
@@ -835,7 +851,7 @@ export default {
               return;
             } else {
               reg = /^(?![^A-z]+$)(?!\D+$)[A-z\d]{8,32}$/; // 密码格式验证(8-32位字母数字)
-              if (!reg.exec(l_dom_admin_pw1.value)) {
+              if (!reg.exec(l_dom_admin_pw1.val())) {
                 $(".mp_password_demand").eq(0).show();
                 setTimeout(function () {
                   $(".mp_password_demand").eq(0).hide();
@@ -843,46 +859,46 @@ export default {
                 return;
               }
             }
-            if (!l_dom_admin_pw2.value || l_dom_admin_pw2.value == "") {
+            if (!l_dom_admin_pw2.val() || l_dom_admin_pw2.val() == "") {
               $(".mp_password_empty").eq(1).show();
               setTimeout(function () {
                 $(".mp_password_empty").eq(1).hide();
               }, 3000)
               return;
             }
-            if (l_dom_admin_pw1.value != l_dom_admin_pw2.value) { // 两次输入的新密码不一致
+            if (l_dom_admin_pw1.val() != l_dom_admin_pw2.val()) { // 两次输入的新密码不一致
               $(".mp_password_inconsistent").show();
               setTimeout(function () {
                 $(".mp_password_inconsistent").hide();
               }, 3000)
               return;
             }
-            if (l_dom_admin_pw.value === l_dom_admin_pw1.value) { // 修改密码时新密码不能与旧密码一致
+            if (l_dom_admin_pw.val() === l_dom_admin_pw1.val()) { // 修改密码时新密码不能与旧密码一致
               _this.publicFunc.msg_tips({ msg: mrs_new_password_setting_failed, type: "error", timeout: 3000 })
               return
             }
             _this.$api.my.account_passwd_set({ // 修改管理/访客密码(管理)
-              old_pass: l_dom_admin_pw.value,
-              new_pass: l_dom_admin_pw1.value,
+              old_pass: l_dom_admin_pw.val(),
+              new_pass: l_dom_admin_pw1.val(),
               is_guest: 0
             }).then(res => {
               user_passwd_set_ack(res)
             })
           }
-        }
-        l_dom_guest_password.onclick = function () { // 点击提交访客密码按钮
-          if (g_guest) {
+        })
+        $("#gp_btn").click(function () { // 点击提交访客密码按钮
+          if (_this.$store.state.jumpPageData.guest) {
             _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
           } else {
             let reg;
-            if (!l_dom_guest_pw.value || l_dom_guest_pw.value == "") { // 输入为空判断提示
+            if (!l_dom_guest_pw.val() || l_dom_guest_pw.val() == "") { // 输入为空判断提示
               $(".gp_password_empty").eq(0).show();
               setTimeout(function () {
                 $(".gp_password_empty").eq(0).hide();
               }, 3000);
               return;
             }
-            if (!l_dom_guest_pw1.value || l_dom_guest_pw1.value == "") { // 输入为空判断提示
+            if (!l_dom_guest_pw1.val() || l_dom_guest_pw1.val() == "") { // 输入为空判断提示
               $(".gp_password_empty").eq(1).show();
               setTimeout(function () {
                 $(".gp_password_empty").eq(1).hide();
@@ -890,7 +906,7 @@ export default {
               return;
             } else {
               reg = /^\S{6,20}$/;
-              if (!reg.exec(l_dom_guest_pw1.value)) { // 访客密码校验
+              if (!reg.exec(l_dom_guest_pw1.val())) { // 访客密码校验
                 $(".gp_password_demand").eq(0).show();
                 setTimeout(function () {
                   $(".gp_password_demand").eq(0).hide();
@@ -898,21 +914,21 @@ export default {
                 return;
               }
             }
-            if (!l_dom_guest_pw2.value || l_dom_guest_pw2.value == "") { // 输入为空判断提示
+            if (!l_dom_guest_pw2.val() || l_dom_guest_pw2.val() == "") { // 输入为空判断提示
               $(".gp_password_empty").eq(1).show();
               setTimeout(function () {
                 $(".gp_password_empty").eq(1).hide();
               }, 3000)
               return;
             }
-            if (l_dom_guest_pw1.value != l_dom_guest_pw2.value) { // 两次访客密码输入不一致
+            if (l_dom_guest_pw1.val() != l_dom_guest_pw2.val()) { // 两次访客密码输入不一致
               $(".gp_password_inconsistent").eq(0).show();
               setTimeout(function () {
                 $(".gp_password_inconsistent").eq(0).hide();
               }, 3000)
               return;
             }
-            if (l_dom_guest_pw1.value === l_dom_guest_pw.value) { // 输入的访客密码与管理密码一致
+            if (l_dom_guest_pw1.val() === l_dom_guest_pw.val()) { // 输入的访客密码与管理密码一致
               _this.publicFunc.msg_tips({ msg: mrs_guest_password_setting_failed, type: "error", timeout: 3000 })
               // 注释内容为原mipc系列提示
               // $(".gp_same_ap").eq(0).show();
@@ -922,17 +938,17 @@ export default {
               return
             }
             _this.$api.my.account_passwd_set({ // 修改管理/访客密码(访客)
-              old_pass: l_dom_guest_pw.value,
-              new_pass: l_dom_guest_pw2.value,
+              old_pass: l_dom_guest_pw.val(),
+              new_pass: l_dom_guest_pw2.val(),
               is_guest: 1
             }).then(res => {
               user_passwd_set_ack(res)
             })
           }
-        };
-        l_dom_add_email_page.onclick = function () { // 绑定邮箱
-          let email_reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-          if (!l_dom_email_addr.value || l_dom_email_addr.value == "" || !email_reg.test(l_dom_email_addr.value)) {
+        });
+        $("#ae_btn").click(function () { // 绑定邮箱
+          let email_reg = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+          if (!l_dom_email_addr.val() || l_dom_email_addr.val() == "" || !email_reg.test(l_dom_email_addr.val())) {
             $("#email_invalid").show();
             setTimeout(function () {
               $("#email_invalid").hide();
@@ -942,7 +958,7 @@ export default {
           let appid = "vimtag.com";
           let user_info = eval("(" + sessionStorage.getItem("remember_msg_info") + ")")
           _this.$api.my.binding_email({
-            email: l_dom_email_addr.value,
+            email: l_dom_email_addr.val(),
             user: user_info.user,
             pass: user_info.password,
             appid: appid,
@@ -950,9 +966,9 @@ export default {
           }).then(res => {
             binding_email_ack(res)
           })
-        }
+        })
 
-        g_hostname = "vimtag.com";
+        _this.$store.state.jumpPageData.hostname = "vimtag.com";
 
         function binding_email_ack (msg) {
           if (msg && msg.result == "") {
@@ -1002,16 +1018,16 @@ export default {
           }
         }
 
-        function feedback_submit_ack (msg, ref) {
-          if (!msg.result) {
-            l_dom_buffer_page.style.display = "none";
-            _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_success, type: "warning", timeout: 3000 })
-          } else {
-            l_dom_buffer_page.style.display = "none";
-            _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_fail, type: "error", timeout: 3000 })
-          }
-        }
-        $("#set_auto_play_btn").iButton({
+        // function feedback_submit_ack (msg) {
+        //   if (!msg.result) {
+        //     l_dom_buffer_page.parent().css("display","none");
+        //     _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_success, type: "warning", timeout: 3000 })
+        //   } else {
+        //     l_dom_buffer_page.parent().css("display","none");
+        //     _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_fail, type: "error", timeout: 3000 })
+        //   }
+        // }
+        $("#set_auto_play_btn").ibutton.iButton({
           change: function () {
             if (_this.publicFunc.mx("#set_auto_play_btn").checked && g_support_auto_play) {
               sessionStorage.setItem("auto_play", 1)
@@ -1024,9 +1040,9 @@ export default {
         });
         let auto_play = sessionStorage.getItem("auto_play");
         if (auto_play == 0) {
-          $("#set_auto_play_btn").iButton("toggle", false)
+          $("#set_auto_play_btn").ibutton.iButton("toggle", false)
         } else {
-          $("#set_auto_play_btn").iButton("toggle", true)
+          $("#set_auto_play_btn").ibutton.iButton("toggle", true)
         }
       }
 
@@ -1043,13 +1059,14 @@ export default {
       await this.$chooseLanguage.lang('en')
     }
     await this.vimtagMyPage({ parent: $('#my') }) // 进入页面后加载
-    await this.create_my_page({ parent: $('#my') })
-    await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
-    if (window.location.href.indexOf('vimtag') === -1) {
-      // mipc系列
-      languageSelect.mipc($('#login_box'))
-      $('#login_box').append("<div id='is_mipc_div'></div>")
-    }
+    // await this.create_my_page({ parent: $('#my') })
+    // await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
+    // if (window.location.href.indexOf('vimtag') === -1) {
+    //   // mipc系列
+    //   languageSelect.mipc($('#login_box'))
+    //   $('#login_box').append("<div id='is_mipc_div'></div>")
+    // }
+    this.publicFunc.projectReload.call(this);
   }
 }
 </script>

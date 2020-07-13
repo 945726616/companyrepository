@@ -82,7 +82,7 @@ var mcodec = null;
         r += (j < sub_bits) ? map.charAt((bit < 0) ? (v << -bit) : (v >> bit)) : "";
       }
     }
-    console.log(r, 'fn_str_2_b64')
+    //console.log(r, 'fn_str_2_b64')
     return r;
   }
 
@@ -210,8 +210,7 @@ var mcodec = null;
     return s;
   }
   function fn_obj_2_url (obj, split/* default is "&" */) { //日志数据处理后修改
-    console.log(obj, 'obj', split, 'split')
-
+    //console.log(obj, 'obj', split, 'split')
     var nc = "="
     var vc = "&"
     var pfx = "%"
@@ -223,7 +222,7 @@ var mcodec = null;
       }
       for (var objName in obj) {
         var objItem = obj[objName] // 传递过来的对象内容
-        console.log(objItem, "objItem", typeof(objItem), 'typeof(objItem)', objName, "objName", path, 'path')
+        //console.log(objItem, "objItem", typeof(objItem), 'typeof(objItem)', objName, "objName", path, 'path')
         if ((undefined !== objItem) && (null !== objItem)) {
           if ('%' === ("" + objName).charAt(0)) { // 确定键名第一个字符不是%
             objName = objName.substr(1) // 如果第一个字符是% 则去掉%
@@ -235,7 +234,7 @@ var mcodec = null;
               if (objItem.constructor === Uint8Array) {
                 s[n_path] = fn_bytes_2_uri_param(objItem)
               } else {
-                // console.log(objItem.constructor, 'constructor', objItem)
+                // //console.log(objItem.constructor, 'constructor', objItem)
                 if (objItem.constructor !== Array) {
                   s[n_path] = 1
                 }
@@ -245,21 +244,21 @@ var mcodec = null;
             }
             else {
               s[n_path] = objItem
-              // console.log(objItem, 'stringObjItemBefore', )
+              // //console.log(objItem, 'stringObjItemBefore', )
               // if('%' === ("" + objName).charAt(0)) {
               //   s[n_path] = objItem
               // } else {
-              //   console.log(objItem, 'fn_str_2_uri_param')
+              //   //console.log(objItem, 'fn_str_2_uri_param')
               //   s[n_path] = fn_str_2_uri_param("" + objItem, pfx)
               // }
               // // s[n_path] = ('%' === ("" + objName).charAt(0)) ? objItem : fn_str_2_uri_param("" + objItem, pfx)
-              // console.log(s[n_path], 'stringObjItemAfter')
+              // //console.log(s[n_path], 'stringObjItemAfter')
               // s += (("" == s) ? "" : vc) + n_path + nc + (('%' === ("" + objName).charAt(0)) ? objItem : fn_str_2_uri_param("" + objItem, pfx))
             }
           }
         }
       }
-      console.log(s, '打印对象')
+      //console.log(s, '打印对象')
       return s
     }
     return _obj_2_uri(obj, "")
@@ -328,7 +327,7 @@ var mcodec = null;
 
   /* id_type:[ 0:sid, 1:tid, 2:lid ] */
   function fn_nid (seq, id, share_key, id_type, username, password, md5_ex, md5_hex_name) {
-    console.log(seq, id, share_key, id_type, 'fn_nid')
+    //console.log(seq, id, share_key, id_type, 'fn_nid')
     var s_seq = fn_i2a(seq),
       s_id = id ? fn_i2a(id) : "",
       s_id_type = id ? fn_i2a(id_type) : "",

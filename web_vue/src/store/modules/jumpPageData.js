@@ -3,7 +3,7 @@ const jumpPageData = {
   state: {
     pageDom: '',
     pageObj: {},
-    projectName: sessionStorage.getItem('projectName') ? sessionStorage.getItem('projectName') : '',
+    projectName: sessionStorage.getItem('projectName') ? sessionStorage.getItem('projectName') : getProjectName(), // 项目名称获取,考虑后续优化获取方法,并删除相关修改项
     jmLogoFlag: 0,
     localModel: window.location.protocol === "file:" ? 1 : 0,
     loginWaitFlag: 0,
@@ -23,6 +23,9 @@ const jumpPageData = {
     selectNick: '', // 选中的设备nick
     flashIsPlay: null, // flash自动播放
     playInfo: '', // 播放相关详情
+    webClientV: "0.0.0",//版本号
+    hostname : "",
+    guest: 1 //是否为访客模式
   },
   mutations: {
     SET_PAGE_DOM: (state, pageDom) => {
@@ -84,6 +87,15 @@ const jumpPageData = {
     },
     SET_PLAY_INFO: (state, playInfo) => {
       state.playInfo = playInfo
+    },
+    SET_WEB_CLIENT_V: (state, webClientV) => {
+      state.webClientV = webClientV
+    },
+    SET_HOSTNAME: (state, hostname) => {
+      state.hostname = hostname
+    },
+    SET_GUEST: (state, guest) => {
+      state.guest = guest
     }
   },
   actions: {
@@ -106,7 +118,10 @@ const jumpPageData = {
     setSelectDeviceIpc: ({commit}, selectDeviceIpc) => commit('SET_SELECT_DEVICE_IPC', selectDeviceIpc),
     setSelectNick: ({commit}, selectNick) => commit('SET_SELECT_NICK', selectNick),
     setFlashIsPlay: ({commit}, flashIsPlay) => commit('SET_FLASH_IS_PLAY', flashIsPlay),
-    setPlayInfo: ({commit}, playInfo) => commit('SET_PLAY_INFO', playInfo)
+    setPlayInfo: ({commit}, playInfo) => commit('SET_PLAY_INFO', playInfo),
+    setWebClientV: ({commit}, webClientV) => commit('SET_WEB_CLIENT_V', webClientV),
+    setHostname: ({commit}, hostname) => commit('SET_HOSTNAME', hostname),
+    setGuest: ({commit}, guest) => commit('SET_GUEST', guest)
   }
 }
 
@@ -117,4 +132,20 @@ function GetQueryString(name) { // 截取url参数函数判断其中是否含有
   let r = window.location.search.substr(1).match(reg);
   if (r !== null) return unescape(r[2]);
   return null;
+}
+
+function getProjectName () { // 获取项目名称从域名中截取并存储在session中
+  let returnItem
+  let url = window.location.href
+  console.log(url, 'vuex_href')
+  if(url.indexOf('vimtag') > 1) {
+    returnItem = 'vimtag'
+  } else if (url.indexOf('mipcm') > 1) {
+    returnItem = 'mipcm'
+  } else if (url.indexOf('ebitcam') > -1) {
+    returnItem = 'ebitcam'
+  } else if (url.indexOf('vsmahome') > -1) {
+    returnItem = 'vsmahome'
+  }
+  return returnItem
 }

@@ -96,11 +96,11 @@ export default {
             device_list()
           })
         } else {
-          console.log(_this.$store.state.jumpPageData.deviceData, '设备列表')
+          // console.log(_this.$store.state.jumpPageData.deviceData, '设备列表')
           if (_this.$store.state.jumpPageData.deviceData.length === 0 || type === 'refresh') {
             //发送设备列表请求
             _this.$api.devlist.devs_refresh().then(res => {
-              console.log(res, '获取设备列表数据')
+              // console.log(res, '获取设备列表数据')
               devlist_get_ack(res)
             })
           } else {
@@ -111,7 +111,7 @@ export default {
       }
 
       function devlist_get_ack (data) { // 设备列表数据整理并存储
-        console.log("进入devlist_get_ack回调", data)
+        // console.log("进入devlist_get_ack回调", data)
         let flag = 1; //从播放页面返回的标记，不发送cfsf请求
         if (data) {
           _this.$store.dispatch('setDeviceData', data)
@@ -161,10 +161,10 @@ export default {
         // $("#buffer_page").hide();
         let search_id = searchId ? searchId : ""
         console.log(search_id, '检查search_id')
-        console.log(data, 'device_list_data')
+        // console.log(data, 'device_list_data')
         let dev_list_dom = "";
         let dev_list_dom_box = "";
-        if (data.length > 0) {
+        if (data && data.length > 0) {
           for (let i = 0; i < data.length; i++) {
             if (data[i].type === 'IPC') {
               ipc_num = 1
@@ -317,7 +317,7 @@ export default {
         }
         //add list click event
         for (let i = 0; i < $(".camera_sign_picture_div").length; i++) {
-          let l_dom_device_list_img = $(".camera_sign_picture_div")[i].parentNode.parentNode
+          let l_dom_device_list_img = $(".camera_sign_picture_div")[i].parentNode.parentNode;
           let device_sn = l_dom_device_list_img.getAttribute("sn")
           // let device_info = mcloud_agent.devs
           if (i >= n && i < length) {
@@ -326,20 +326,22 @@ export default {
               $(".camera_sign_picture_div")[i].onclick = function () {
                 _this.$store.dispatch('setSelectDeviceIpc', this.parentNode.parentNode.getAttribute("sn")) // 点击时获取sn
                 _this.$store.dispatch('setSelectNick', this.parentNode.parentNode.getAttribute("nick")) // 点击时获取nick
-                g_Select_nick = this.parentNode.parentNode.getAttribute("nick")
+                _this.$store.state.jumpPageData.selectNick= this.parentNode.parentNode.getAttribute("nick")
                 let type = this.parentNode.parentNode.getAttribute("dtype");
                 let state = this.parentNode.parentNode.getAttribute("state");
                 let addr = this.parentNode.parentNode.getAttribute("addr");
                 if (state === "Online" && type === "IPC") {
                   obj.addr = addr;
                   console.log(obj, '创建播放页面')
-                  createPage("play", obj);
+                  // createPage("play", obj);
+                  _this.$router.push({name:'play',params:obj})
                 } else if (state === "Online" && type === "BOX") {
                   let box_live = this.parentNode.parentNode.getAttribute("box_live");//获取云盒子是否支持实时播放
                   obj.addr = addr;
                   obj.box_live = box_live;
                   console.log(obj, '创建云盒子播放页面')
-                  createPage("boxlist", obj);
+                  // createPage("boxlist", obj);
+                  _this.$router.push({name:'bolist',params:obj})
                 }
               }
               if (_this.$store.state.jumpPageData.localFlag === 1) {
@@ -389,7 +391,7 @@ export default {
                   } else {
                     let is_img = l_dom_device_list_img.getAttribute("img");
                     l_dom_device_list_img.setAttribute("img", 1)
-                    if (is_img === 0) {   //6.5.2
+                    if (is_img == 0) {   //6.5.2
                       _this.$api.devlist.load_noid_img({
                         refresh: obj.refresh ? 1 : 0,
                         sn: device_sn,
@@ -401,7 +403,7 @@ export default {
                 } else {
                   let is_img = l_dom_device_list_img.getAttribute("img");
                   l_dom_device_list_img.setAttribute("img", 1)
-                  if (is_img === '0') {
+                  if (is_img == '0') {
                     _this.$api.devlist.load_noid_img({
                       refresh: obj.refresh ? 1 : 0,
                       sn: device_sn,
@@ -726,10 +728,12 @@ export default {
             } else {
               if (data.type == "IPC") {
                 obj.addr = data.addr;
-                createPage("play", obj);
+                // createPage("play", obj);
+                _this.$router.push({name:'play',params:obj})
               } else if (data.type == "BOX") {
                 obj.addr = data.addr;
-                createPage("boxlist", obj);
+                // createPage("boxlist", obj);
+                _this.$router.push({name:'boxlist',params:obj})
               }
               $("#input_password_page").remove();
             }
@@ -842,7 +846,7 @@ export default {
             + "</div>"
             + "</div>")
           function add_device_select_type_event () {
-            add_device_step_time = new Date().getTime(); //进入类型选择页面的时间
+            let add_device_step_time = new Date().getTime(); //进入类型选择页面的时间
             for (let i = 0; i < $(".add_devices_type_list").length; i++) {
               $(".add_devices_type_list")[i].click(function () {
                 d_type = this.getAttribute("d_type");
@@ -882,7 +886,7 @@ export default {
             + "</div>"
             + "</div>")
           function add_device_input_id_event () {
-            add_device_step_time = new Date().getTime();//每步开始时间
+            let add_device_step_time = new Date().getTime();//每步开始时间
             let add_dev_info = {};//每步操作信息
             if (data.sn) {
               add_dev_info.type = 'hint';//日志
@@ -1132,7 +1136,7 @@ export default {
         }
 
         function add_device_input_pass () { //在线 输入密码
-          add_device_step_time = new Date().getTime();//每步开始时间  
+          let add_device_step_time = new Date().getTime();//每步开始时间  
           let add_dev_info = {};//每步操作信息  
           add_dev_info.type = 'input';//日志
           add_dev_info.title = 'input password';
@@ -1271,7 +1275,7 @@ export default {
             + "</div>"
             + "</div>";
           function add_device_edit_pass_event () {
-            add_device_step_time = new Date().getTime();//每步开始时间  
+            let add_device_step_time = new Date().getTime();//每步开始时间  
             let add_dev_info = {};//每步操作信息  
             add_dev_info.type = 'input';//日志
             add_dev_info.title = 'edit password';
@@ -1367,7 +1371,7 @@ export default {
           })
           function add_device_set_wifi_event () {
             let select_wifi = '';
-            add_device_step_time = new Date().getTime();//每步开始时间
+            let add_device_step_time = new Date().getTime();//每步开始时间
             let add_dev_info = {};//每步操作信息
             add_dev_info.type = 'click';//日志
             add_dev_info.title = 'connect wifi';
@@ -1455,7 +1459,7 @@ export default {
             + "</div>"
             + "</div>")
           function add_device_set_nick_event () {
-            add_device_step_time = new Date().getTime();//每步开始时间
+            let add_device_step_time = new Date().getTime();//每步开始时间
             let add_dev_info = {};//每步操作信息
             add_dev_info.type = 'input'//日志
             add_dev_info.title = 'nickname modify'
@@ -1543,7 +1547,7 @@ export default {
             add_device_set_zone_event();
           }
           function add_device_set_zone_event () {
-            add_device_step_time = new Date().getTime();//每步开始时间
+            let add_device_step_time = new Date().getTime();//每步开始时间
             let add_dev_info = {};//每步操作信息
             add_dev_info.type = 'click';//日志
             add_dev_info.title = 'add device set timezone';
@@ -1781,9 +1785,9 @@ export default {
       let version_type = "";
       let app_version = window.appVersion ? window.appVersion : "";
       if (navigator.userAgent.indexOf("Intel Mac") > -1) {
-        version_type = "mac_" + g_oems;
+        version_type = "mac_" + _this.$store.state.jumpPageData.projectName;
       } else if (navigator.userAgent.indexOf("Windows") > -1) {
-        version_type = "windows_" + g_oems;
+        version_type = "windows_" + _this.$store.state.jumpPageData.projectName;
       }
       if (!$("#version_updata_tips_page").length > 0) {
         $("body").append(
@@ -1806,9 +1810,14 @@ export default {
       }).then(res => {
         let msg = res.data
         if (msg && msg.result == "") {
-          g_download_url = "";
+          _this.$store.dispatch('setDownloadManualUrl', '')
           let app_ver = app_version.split(".");
           let new_ver = msg.info.ver_to.split(".");
+          if (window.location.protocol === "https:") { // 赋值下载地址
+            msg.info.link_url = msg.info.link_url.replace("http://209.133.212.170:2080", "https://us10.vimtag.com:2446");
+            msg.info.link_url = msg.info.link_url.replace("http://61.147.109.92:7080", "https://js.vimtag.com:7446");
+          }
+          _this.$store.dispatch('setDownloadManualUrl', msg.info.link_url)
           // 这部分判断需要优化一下
           if (app_ver[0] < new_ver[0]) {
             $("#version_updata_tips_page").show();
@@ -1843,6 +1852,7 @@ export default {
       languageSelect.mipc($('#login_box'))
       $('#login_box').append("<div id='is_mipc_div'></div>")
     }
+    this.publicFunc.projectReload.call(this);
   }
 }
 </script>

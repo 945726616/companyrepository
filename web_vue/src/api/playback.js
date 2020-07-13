@@ -105,7 +105,7 @@ const playback = {
           if (playback) {
             ms.send_msg("playback", { sn: ref_obj.sn, token: ref_obj.token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "playback"; play_ack(msg, ref); });
           } else {
-            if (g_local) {
+            if (store.state.jumpPageData.localFlag) {
               data.agent.play({ sn: ref_obj.sn, token: obj.ref_obj.inner_window_info.profile_token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "play"; play_ack(msg, ref); })
             } else {
               // ms.send_msg("play",{sn:"1jfiegbqaml3q",token:"p0_1jfiegbqcip5q", protocol:proto,ref:obj.ref_obj},obj.ref_obj,function(msg,ref){ msg.type = "play" ; play_ack(msg,ref);}); //6.1.2测试云盒子实时视频播放 
@@ -118,22 +118,22 @@ const playback = {
           obj.panel.html('')
           obj.panel.attr('id', "plugin_install_page")
           let play_oem = "";
-          if (g_oems === "vimtag") {
+          if (store.state.jumpPageData.projectName === "vimtag") {
             play_oem = "Vimtag";
-          } else if (g_oems === "mipc") {
+          } else if (store.state.jumpPageData.projectName === "mipc") {
             mcs_download_client = mcs_download_client.replace("Vimtag", "MIPC");
             play_oem = "MIPC";
-          } else if (g_oems === "ebit") {
+          } else if (store.state.jumpPageData.projectName === "ebit") {
             mcs_download_client = mcs_download_client.replace("Vimtag", "EBIT");
             play_oem = "EBIT";
-          } else if (g_oems === "vsmahome") {
+          } else if (store.state.jumpPageData.projectName === "vsmahome") {
             mcs_download_client = mcs_download_client.replace("Vimtag", "VSMAHOME");
             play_oem = "VSMAHOME";
           }
-          // if(g_oems=="vimtag"){
+          // if(store.state.jumpPageData.projectName=="vimtag"){
           obj.panel.html("<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>"
             + "<div id='plugin_install_tips'>" + mcs_download_client + "</div>"
-            + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + g_download_url + "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>"
+            + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.downloadManualUrl+ "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>"
             + "<div style='margin-top: 85px;'><a name='flash' href='javascript:;'><div id='use_ordinary_video'>" + mcs_temporarily_installed_use_ordinary_video + "</div></a></div>"
             + "</div>")
           let plugin_install_page_width = $("#plugin_install_page").outerWidth() / 2;

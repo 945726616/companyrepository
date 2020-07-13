@@ -90,6 +90,9 @@ mme.prototype =
   /* chls:[], type:"publish"|"play", url:"xxx", running:true|false, timer:inerval, times:time-out-check-counts, refer:user-data */
   get_default_skin: function () { return { dev_panel: { width: 360, height: 180 } }; },
   create_plug: function (parent, enable_flash_plug, enable_native_plug, plug_params) {
+    if (!this.parent.appendChild) {
+      this.parent = this.parent[0]
+    }
     var test, info, plug = null, id = this.id ? this.id : (++this.id_allocer.value), type = null,
       ie = (!!window.ActiveXObject || "ActiveXObject" in window);
 
@@ -251,16 +254,14 @@ mme.prototype =
       + "<a name='flash' href='#'"
       + " style='float:" + flash_float_type + ";background:#333;font-size:" + font_size + "px;color:#fff;text-decoration:none;text-align:center;"
       + "display:inline-block;width:" + button_width + "px;height:auto;line-height:32px;"
-      + "-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5Px;"
-      + mhack.css_box_shadow(1, "#666666") + "'"
+      + "-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5Px;box-shadow: 2px 2px 1px #666;'"
       + " onmouseover='this.style.background=\"#666\";'"
       + " onmouseout='this.style.background=\"#333\";'"
       + " >" + this.lang.try_flash + "</a>"
       + "<a name='plug' href='" + codebase + "' target='_blank'"
       + " style='float:" + plug_float_type + ";background:#333;font-size:" + font_size + "px;color:#fff;text-decoration:none;text-align:center;"
       + "display:inline-block;width:" + button_width + "px;height:auto;margin-top:" + plug_magin_top + "px;line-height:32px;"
-      + "-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5Px;"
-      + mhack.css_box_shadow(1, "#666666") + "'"
+      + "-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5Px;box-shadow: 2px 2px 1px #666;'"
       + " onmouseover='this.style.background=\"#666\";'"
       + " onmouseout='this.style.background=\"#333\";'"
       + ">" + this.lang.download + "</a>"
@@ -312,7 +313,7 @@ mme.prototype =
     this.install_panel.style.visibility = "";
     this.install_test_panel.style.cssText = "position:absolute;left:-1px;top:-1px;width:1px;height:1px;";
     if (a = dom_get_item_by_name(this.install_panel, "*", "flash")) {
-      mevt.bind(a, "click", function (e) {
+      bind(a, "click", function (e) {
         me.clear_install();
         me.status = me.plug_status.initting;
         if (null == (me.plug_obj = me.create_plug(me.parent, true, true, me.create_params))) {
@@ -326,7 +327,7 @@ mme.prototype =
       });
     }
     if (a = dom_get_item_by_name(this.install_panel, "*", "plug")) {
-      mevt.bind(a, "click", function (e) {
+      bind(a, "click", function (e) {
         a = dom_get_item_by_name(me.install_panel, "*", "plug_installing");
         if (a) {
           a.style.display = "";
@@ -336,22 +337,7 @@ mme.prototype =
           }
         }
         else if (a = dom_get_item_by_name(me.install_panel, "*", "plug")) {
-          a.innerHTML = "<b>" + ((mhack.ie || mhack.chrome) ? me.lang.installing : me.lang.rebot_hint) + "</b>";
-        }
-        if (mhack.ie || mhack.chrome) {
-          me.install_timer = setInterval(function () {
-            if (mme.prototype.create_plug(me.install_test_panel, false, true, me.create_params)) {
-              me.clear_install();
-              me.status = me.plug_status.initting;
-              if (null == (me.plug_obj = me.create_plug(me.parent, true, true, me.create_params))) {
-                me.status = me.plug_status.closed;
-                if (me.on_event) { me.on_event({ type: "missing" }); }
-              }
-              else {
-                if (me.on_event) { me.on_event({ type: "create" }); }
-              }
-            }
-          }, 1000);
+          a.innerHTML = "<b>" + me.lang.rebot_hint + "</b>";
         }
       });
     }
@@ -626,6 +612,23 @@ if (userLanguage === 'cn' || userLanguage === 'en') {
   mme.prototype.lang = mme.prototype.langs.userLanguage
 } else {
   mme.prototype.lang = mme.prototype.langs.cn
+}
+// 添加base文件中的dom_get_item_by_name函数
+function dom_get_item_by_name (root, tag_name, name) {
+  let nodes = root.getElementsByTagName(tag_name)
+  if (nodes) {
+    for (let node_index = 0; node_index < nodes.length; ++node_index) {
+      let node = nodes[node_index]
+      if (name === node.getAttribute("name")) { return node }
+    }
+  }
+  return null;
+}
+function bind (element, type, handler) {
+  let s_attachEvent = "attachEvent"
+  let s_addEventListener = "addEventListener"
+  element[s_attachEvent] ? element[s_attachEvent]('on' + type, handler) : (
+    (element[s_addEventListener]) ? element[s_addEventListener](type, handler, 0) : (element['on' + type] = handler))
 }
 // mme.prototype.lang = sessionStorage.getItem('userLanguage') ? lang_get(mme.prototype.langs) : mme.prototype.langs.cn;
 /*-----------------media_engine-------------------------------------------------*/

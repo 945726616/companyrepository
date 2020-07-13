@@ -14,20 +14,20 @@ const play = {
   load_imgs (data) {
     let images = new Array()
     for (let length = data.dom.length, k = 0; k < length; k++) {
-      let sn = data.dom[k].attr("sn")
-      if (data.dom[k].attr("state") === "offline") continue
+      let sn = data.dom[k].getAttribute("sn")
+      if (data.dom[k].getAttribute("state") === "offline") continue
       images[k] = new Image();
-      if (g_local) {
-        images[k].src = "http://" + data.dom[k].attr("addr") + "/ccm/ccm_pic_get.js?dsess=1&dsess_nid=&dsess_sn=" + data.dom[k].attr("sn") + "&dtoken=p1&dflag=2";
+      if (store.state.jumpPageData.localFlag) {
+        images[k].src = "http://" + data.dom[k].getAttribute("addr") + "/ccm/ccm_pic_get.js?dsess=1&dsess_nid=&dsess_sn=" + data.dom[k].getAttribute("sn") + "&dtoken=p1&dflag=2";
       } else {
-        if (mlocal_storage.get(sn) && data.box_ipc !== 1) {
-          $(data.dom)[k].childNodes[0].style.background = "url(" + mlocal_storage.get(sn) + ")";
+        if (sessionStorage.getItem(sn) && data.box_ipc !== 1) {
+          $(data.dom)[k].childNodes[0].style.background = "url(" + sessionStorage.getItem(sn) + ")";
           $(data.dom)[k].childNodes[0].style.backgroundSize = "100% 100%";
         } else {
           if (data.box_ipc == 1) { //如果云盒子列表
-            images[k].src = devlist.pic_url_get({ sn: data.dom[k].attr("sn"), token: data.dom[k].attr("ipc_sn") + "_p3_" + Math.pow(2, 31) + "_" + Math.pow(2, 31), flag: 2, box_ipc: 1 });
+            images[k].src = devlist.pic_url_get({ sn: data.dom[k].getAttribute("sn"), token: data.dom[k].getAttribute("ipc_sn") + "_p3_" + Math.pow(2, 31) + "_" + Math.pow(2, 31), flag: 2, box_ipc: 1 });
           } else {
-            images[k].src = devlist.pic_url_get({ sn: data.dom[k].attr("sn"), token: "p1" });
+            images[k].src = devlist.pic_url_get({ sn: data.dom[k].getAttribute("sn"), token: "p1" });
           }
         }
       }
@@ -114,10 +114,10 @@ const play = {
     if (data.ipc_stat != 0) {
       ref_obj.inner_window_info.mme = new mme(mme_params);
     }
-    play_info = ref_obj;
+    store.dispatch('setPlayInfo', ref_obj)
     function flash_play () {
       let profile_token_choice = get_profile_token_choice(data.profile_token);
-      urls = window.location.protocol + "//" + g_server_device + "/ccm/ccm_pic_get.jpg?hfrom_handle=887330&dsess=1&dsess_nid=" + msdk_agent.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
+      urls = window.location.protocol + "//" + g_server_device + "/ccm/ccm_pic_get.jpg?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
       data.dom.innerHTML = "<img id='flash_img' width='1px' src='" + urls + "'>";
       if (publicFunc.mx("#flash_img")) {
         publicFunc.mx("#flash_img").onload = function () {
@@ -153,7 +153,7 @@ const play = {
           if (playback) {
             ms.send_msg("playback", { sn: ref_obj.sn, token: ref_obj.token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "playback"; play_ack(msg, ref); });
           } else {
-            if (g_local) {
+            if (store.state.jumpPageData.localFlag) {
               data.agent.play({ sn: ref_obj.sn, token: obj.ref_obj.inner_window_info.profile_token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "play"; play_ack(msg, ref); })
             } else {
               // ms.send_msg("play",{sn:"1jfiegbqaml3q",token:"p0_1jfiegbqcip5q", protocol:proto,ref:obj.ref_obj},obj.ref_obj,function(msg,ref){ msg.type = "play" ; play_ack(msg,ref);}); //6.1.2测试云盒子实时视频播放 
@@ -163,27 +163,27 @@ const play = {
           break;
         }
         case "install_ui": {
-          obj.panel.html('')
-          obj.panel.attr('id', "plugin_install_page")
+          obj.panel.innerHTML = ''
+          obj.panel.getAttribute('id', "plugin_install_page")
           let play_oem = "";
-          if (g_oems === "vimtag") {
+          if (store.state.jumpPageData.projectName === "vimtag") {
             play_oem = "Vimtag";
-          } else if (g_oems === "mipc") {
+          } else if (store.state.jumpPageData.projectName === "mipcm") {
             mcs_download_client = mcs_download_client.replace("Vimtag", "MIPC");
             play_oem = "MIPC";
-          } else if (g_oems === "ebit") {
+          } else if (store.state.jumpPageData.projectName === "ebitcam") {
             mcs_download_client = mcs_download_client.replace("Vimtag", "EBIT");
             play_oem = "EBIT";
-          } else if (g_oems === "vsmahome") {
+          } else if (store.state.jumpPageData.projectName === "vsmahome") {
             mcs_download_client = mcs_download_client.replace("Vimtag", "VSMAHOME");
             play_oem = "VSMAHOME";
           }
-          // if(g_oems=="vimtag"){
-          obj.panel.html("<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>"
+          // if(store.state.jumpPageData.projectName=="vimtag"){
+          obj.panel.innerHTML = "<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>"
             + "<div id='plugin_install_tips'>" + mcs_download_client + "</div>"
-            + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + g_download_url + "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>"
+            + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.downloadManualUrl+ "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>"
             + "<div style='margin-top: 85px;'><a name='flash' href='javascript:;'><div id='use_ordinary_video'>" + mcs_temporarily_installed_use_ordinary_video + "</div></a></div>"
-            + "</div>")
+            + "</div>"
           let plugin_install_page_width = $("#plugin_install_page").outerWidth() / 2;
           let plugin_install_download_width = $("#plugin_install_download").outerWidth() / 2;
           // jQuery("#use_ordinary_video").css({"margin-left":(plugin_install_page_width-use_ordinary_video_width)+"px"});
@@ -527,11 +527,13 @@ const play = {
   async play_snapshot (params) {
     let returnItem
     await axios.get('/ccm/ccm_snapshot', {
-      sess: {
-        nid: login.create_nid(),
-        sn: params.sn
-      },
-      token: "p0" // 暂为固定值
+      params: {
+        sess: {
+          nid: login.create_nid(),
+          sn: params.sn
+        },
+        token: "p0" // 暂为固定值
+      }
     }).then(res => {
       returnItem = { result: login.get_ret(res), url: devlist.pic_url_get({ sn: params.sn, token: 'p0' }) }
     })

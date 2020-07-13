@@ -79,7 +79,7 @@ instance.interceptors.request.use(
   config => {
     let param = config.params // 取得当前get传递的对象
     let newParams = {} // 新建对象用于存储变更后的对象
-    console.log(param, 'config_param')
+    // console.log(param, 'config_param')
     newParams = mcodec.obj_2_url(param, '&') // 采用原项目中对参数进行加密的方法进行封装
     // for (let paramName in param) {
     //   newParams['d' + paramName] = param[paramName] // 遍历对象键值对并重新命名属性名 后续此处需要添加两个额外的固定参数数据值通过vuex进行存取
@@ -91,7 +91,7 @@ instance.interceptors.request.use(
     } // 修改后的对象
     if (process.env.NODE_ENV !== 'production') { // 如果是测试环境下接口添加/api采用代理地址进行访问,解决跨域等问题
       let url = config.url
-      console.log(config.params, 'srv', config.params.dsrv)
+      // console.log(config.params, 'srv', config.params.dsrv)
       if (!config.params.dsrv) {
         config.url = '/api' + url + '.js'
       } else {
@@ -99,7 +99,7 @@ instance.interceptors.request.use(
       }
     }
     // config.url = location.host + config.url
-    console.log(config, 'axiosConfig')
+    // console.log(config, 'axiosConfig')
     return config
   },
   error => Promise.error(error))
@@ -110,7 +110,7 @@ instance.interceptors.response.use(
   res => {
     if (res.status === 200) { // 接口请求成功进行接口数据处理
       let getRes = eval(res.data)
-      console.log(getRes, 'getRes')
+      // console.log(getRes, 'getRes')
       /* eslint-disable */
       function message (obj) { // 该函数在服务器端用于渲染iframe 目前暂时先在此处进行返回值处理
         return obj

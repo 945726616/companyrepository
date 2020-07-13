@@ -8,7 +8,6 @@ export default {
       let _this = this
       let videoSize = 0;
       let first = false;
-      let aaa = 0;
       let bo_type = false;
       let play_back_token;
       let play_progress;
@@ -46,8 +45,8 @@ export default {
         let l_video_start_time_stamp = obj.start_time;
         let l_video_end_time_stamp = obj.end_time;
         let l_video_time = l_video_end_time_stamp - l_video_start_time_stamp;
-        let l_video_token = parseInt(obj.token.substring(obj.token.lastIndexOf("_") + 1));
-        let l_video_token_header = obj.token.substring(0, obj.token.lastIndexOf("_") + 1);
+        // let l_video_token = parseInt(obj.token.substring(obj.token.lastIndexOf("_") + 1));
+        // let l_video_token_header = obj.token.substring(0, obj.token.lastIndexOf("_") + 1);
         data.parent.innerHTML =
           "<div id='play_menu_left'>"
           + "<div id='video_play' class='video_play_start'></div>"
@@ -191,16 +190,22 @@ export default {
           _this.publicFunc.mx("#back").onclick = function () {
             // create_history_page({parent:obj.parent,dev_sn:obj.dev_sn,back_page:obj.back_page,agent:obj.agent,addr:obj.addr})
             if (obj.box_ipc == 1) { //如果从云盒子实时播放进来回放播放
-              createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, box_ipc: 1, ipc_sn: obj.ipc_sn, box_sn: obj.box_sn, box_live: 1, backplay_flag: 4, ipc_stat: obj.ipc_stat })
+              let obj = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, box_ipc: 1, ipc_sn: obj.ipc_sn, box_sn: obj.box_sn, box_live: 1, backplay_flag: 4, ipc_stat: obj.ipc_stat};
+              // createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, box_ipc: 1, ipc_sn: obj.ipc_sn, box_sn: obj.box_sn, box_live: 1, backplay_flag: 4, ipc_stat: obj.ipc_stat })
+              _this.$router.push({name:'history',params:obj});
               sessionStorage.clear();
             } else {
-              createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, backplay_flag: 4 })
+              let obj = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, backplay_flag: 4};
+              // createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, backplay_flag: 4 })
+              _this.$router.push({name:'history',params:obj});
               sessionStorage.clear();
             }
           }
         } else {
           _this.publicFunc.mx("#mipcBack").onclick = function () {
-            createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page })
+            let obj = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page};
+            // createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page })
+            _this.$router.push({name:'history',params:obj});
             sessionStorage.clear();
           }
         }
@@ -409,6 +414,7 @@ export default {
       languageSelect.mipc($('#login_box'))
       $('#login_box').append("<div id='is_mipc_div'></div>")
     }
+    this.publicFunc.projectReload.call(this);
   }
 }
 </script>

@@ -224,7 +224,7 @@ var mmd5 = mmd5 || (function () {
       str += hex_tab.charAt((binarray[i >> 2] >> ((i % 4) * 8 + 4)) & 0xF) +
         hex_tab.charAt((binarray[i >> 2] >> ((i % 4) * 8)) & 0xF);
     }
-    console.log(str, 'binl2hex_str')
+    // console.log(str, 'binl2hex_str')
     return str;
   }
 
@@ -268,7 +268,9 @@ var mmd5 = mmd5 || (function () {
     /**
     @Description: Used Internally.
     */
-    hex: function (s) { console.log(s, '进入mmd5时获取到的密码值'); return binl2hex(core(str2binl(s), s.length * chrsz)); },
+    hex: function (s) { 
+      // console.log(s, '进入mmd5时获取到的密码值'); 
+    return binl2hex(core(str2binl(s), s.length * chrsz)); },
 
     /**
     @Description: Used Internally.

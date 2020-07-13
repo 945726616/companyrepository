@@ -204,23 +204,31 @@ export default {
               obj.box_ipc = 1;//给个标记，知道云盒子中的设备跳转到实时播放页面
               obj.ipc_sn = this.getAttribute("sn"); //标记设备的sn
               obj.ipc_stat = this.getAttribute("stat"); //标记云盒子设备的状态，进到播放页面，显示设备已离线
-              createPage("play", obj) //实时视频播放  点击返回时有bug，已解决
+              // createPage("play", obj) //实时视频播放  点击返回时有bug，已解决
+              _this.$router.push({name:'play',params:obj})
             } else {
               let dev_sn = this.getAttribute("sn");
               if (_this.$store.state.jumpPageData.projectFlag) {
-                createPage("history", { parent: $("#dev_main_page"), dev_sn: dev_sn, back_page: "boxlist", addr: obj.addr, agent: obj.agent })
+                let obj = {parent: $("#dev_main_page"), dev_sn: dev_sn, back_page: "boxlist", addr: obj.addr, agent: obj.agent};
+                // createPage("history", { parent: $("#dev_main_page"), dev_sn: dev_sn, back_page: "boxlist", addr: obj.addr, agent: obj.agent })
+              _this.$router.push({name:'history',params:obj})
               } else {
-                createPage("history", { parent: $("#page"), dev_sn: dev_sn, back_page: "boxlist", addr: obj.addr, agent: obj.agent })
+                let obj = {parent: $("#page"), dev_sn: dev_sn, back_page: "boxlist", addr: obj.addr, agent: obj.agent};
+                // createPage("history", { parent: $("#page"), dev_sn: dev_sn, back_page: "boxlist", addr: obj.addr, agent: obj.agent })
+                _this.$router.push({name:'history',params:obj})
               }
             }
           }
         }
         _this.publicFunc.mx("#back").onclick = function () {
           _this.publicFunc.closeBufferPage()
-          createPage("devlist", obj)
+          // createPage("devlist", obj)
+          _this.$router.push({name:'devlist',params:obj})
         }
         _this.publicFunc.mx("#boxlist_set_btn").onclick = function () {
-          createPage("set", { parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live });
+          let obj = {parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live};
+          // createPage("set", { parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live });
+          _this.$router.push({name:'devlist',params:obj})
         }
         _this.publicFunc.mx("#boxlist_edit_btn").onclick = function () {
           if ($(".del_box_ipc_btn").css("display") == "none") { // 删除关联和录像
@@ -283,7 +291,8 @@ export default {
       function create_add_onvif_byip_event () {
         _this.publicFunc.mx("#add_devices_box_close").onclick = function () { // 点击onvif添加设备关闭
           $("#add_device_page").hide();
-          createPage("boxlist", obj);
+          // createPage("boxlist", obj);
+          _this.create_boxlist_page(obj);
         }
         for (let i = 0; i < 4; i++) {
           _this.publicFunc.mx(".add_device_input_id_box_del")[i].onclick = function () {
@@ -322,7 +331,8 @@ export default {
         if (msg.result == "") {
           _this.publicFunc.msg_tips({ msg: mcs_add_successfully, type: "success", timeout: 3000 }); // 添加成功
           $("#add_device_page").hide();
-          createPage("boxlist", obj);
+          // createPage("boxlist", obj);
+          _this.create_boxlist_page(obj);
         } else if (msg.result == "AuthenticateFailed") {
           _this.publicFunc.msg_tips({ msg: mcs_user_or_password_invalid, type: "error", timeout: 3000 })   // 用户名或密码错误
           return
@@ -454,7 +464,8 @@ export default {
 
         $("#add_devices_box_close").click(function () {
           $("#add_device_page").hide();
-          createPage("boxlist", obj);
+          // createPage("boxlist", obj);
+          _this.create_boxlist_page(obj);
         })
         l_dom_onvif_re_searching.click(function () { // 点击重新搜索
           l_dom_onvif_searching.show();
@@ -505,7 +516,8 @@ export default {
         }
         _this.publicFunc.mx("#add_devices_box_close").onclick = function () { // 点击onvif添加设备关闭
           $("#add_device_page").hide();
-          createPage("boxlist", obj);
+          // createPage("boxlist", obj);
+          _this.create_boxlist_page(obj);
         }
         _this.publicFunc.mx("#add_devices_box_back").onclick = function () { // 点击onvif添加设备返回
           create_search_onvif_box({ parent: _this.publicFunc.mx("#add_device_page"), add_onvif_back: 1 }); // onvif搜索页面
@@ -555,6 +567,7 @@ export default {
       languageSelect.mipc($('#login_box'))
       $('#login_box').append("<div id='is_mipc_div'></div>")
     }
+    this.publicFunc.projectReload.call(this);
   }
 }
 </script>

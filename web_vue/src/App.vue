@@ -26,6 +26,8 @@ export default {
     }
   },
   async mounted () {
+    // await import(`@/lib/plugins/jquery.mousewheel.min.js`)
+    // await import(`@/lib/plugins/jquery.mCustomScrollbar.js`)
     let userLanguage = sessionStorage.getItem('userLanguage')
     if (userLanguage) {
       await this.$chooseLanguage.lang(userLanguage)

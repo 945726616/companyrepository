@@ -2,6 +2,7 @@
   <div id="play"></div>
 </template>
 <script>
+import '../../lib/exportModule/mCustomScrollbar'
 export default {
   methods: {
     vimtagPlay (obj) {
@@ -33,7 +34,7 @@ export default {
         l_dom_control_menu,
         l_dom_video_play,
         l_dom_play_view_box,
-        inner_window_info,
+        // inner_window_info,
         // support_1080p=-1,
         support_1080p = "",
         is_playing = 0;
@@ -70,32 +71,30 @@ export default {
       local_play_data.addr = obj.addr;
       local_play_data.dom = _this.publicFunc.mx("#play_screen");
       local_play_data.profile_token = "p0";
-      local_play_data.func = function (msg) { };
+      // local_play_data.func = function (msg) { };
       let l_dom_snapshot_preview_close = _this.publicFunc.mx("#snapshot_preview_close");
-      let l_dom_page_top_menu = _this.publicFunc.mx("#page_top_menu");
       let l_dom_play_box = _this.publicFunc.mx("#play_box");
       let l_dom_play_dev_list = _this.publicFunc.mx("#play_dev_list");
       let l_dom_device_list_sidebar_up = _this.publicFunc.mx("#device_list_sidebar_up");
       let l_dom_play_menu_box = _this.publicFunc.mx("#play_menu_box");
       let l_dom_play_view = _this.publicFunc.mx("#play_view");
-      let $("#play_screen") = _this.publicFunc.mx("#play_screen");
       let l_dom_device_list_sidebar_center = _this.publicFunc.mx("#device_list_sidebar_center");
       let l_dom_play_buffer_ret = _this.publicFunc.mx("#play_buffer_ret");
       let l_dom_play_view_control = _this.publicFunc.mx("#play_view_control");
       let l_play_box_width = document.documentElement.clientWidth - 17 - 100;
-      l_dom_play_box.style.width = l_play_box_width + 'px';
+      $("#play_box").css("width", l_play_box_width + 'px');
       // let l_list_width = l_dom_play_dev_list.offsetWidth + 20;
       let l_list_width = parseInt($("#play_dev_list").css("width")) + 20;
       let l_device_list_sidebar_up_height = l_dom_device_list_sidebar_up.offsetHeight;
-      let l_play_menu_box_height = l_dom_play_menu_box.offsetHeight;
-      let l_play_view_left = l_dom_play_view.offsetLeft + (l_play_box_width - l_list_width) - 50;
+      // let l_play_menu_box_height = l_dom_play_menu_box.offsetHeight;
+      // let l_play_view_left = l_dom_play_view.offsetLeft + (l_play_box_width - l_list_width) - 50;
       let l_play_view_top = l_dom_play_view.offsetTop;
       let l_dom_play_view_width = l_play_box_width - l_list_width;
       let l_dom_play_view_height = l_dom_play_view_width / 16 * 9 + 44;
       l_dom_play_view.style.width = l_dom_play_view_width + "px";
       l_dom_play_view.style.height = l_dom_play_view_height + "px";
       l_dom_play_dev_list.style.height = l_dom_play_view_height + "px";
-      $("#play_screen").style.height = l_dom_play_view_width / 16 * 9 + 'px';
+      $("#play_screen").css('height', l_dom_play_view_width / 16 * 9 + 'px')
       l_dom_device_list_sidebar_center.style.height = (l_dom_play_view_height - l_device_list_sidebar_up_height) + "px";
       // l_dom_play_buffer_ret.style.left = l_play_view_left + "px"; 
       // l_dom_play_buffer_ret.style.top = l_play_view_top + "px";  
@@ -110,8 +109,8 @@ export default {
         // l_dom_play_view.style.width ="1042px";
         // play_content_box    width=1276px; margin:0 auto; overflow :hidden
         // play_screen         background:black
-        l_dom_play_view.style.height = "586px";
-        l_dom_device_list_sidebar_center.style.height = "586px";
+        l_dom_play_view.css("height", "586px");
+        l_dom_device_list_sidebar_center.css("height", "586px");
         l_dom_play_view.style.marginLeft = "0px";
         $("#play_screen").style.height = "100%";
         $("#play_screen").style.width = "100%";
@@ -123,15 +122,17 @@ export default {
       }
       play_menu_control({ parent: l_dom_play_menu_box });
       if (!_this.$store.state.jumpPageData.localFlag) {
-        // if (_this.$store.state.jumpPageData.localFlag) {//本地 
+        // if (_this.$store.state.jumpPageData.localFlag) {//本地
         device_list_box_sidebar({ parent: l_dom_device_list_sidebar_center });
         play_view_control({ parent: l_dom_play_view_control });
       }
       _this.publicFunc.mx("#back").onclick = function () {
         if (obj.box_ipc == 1) {//云盒子设备播放
-          createPage("boxlist", obj)//创建云盒子页面
+          // createPage("boxlist", obj)//创建云盒子页面
+          _this.$router.push({ name: 'boxlist', params: obj })
         } else { //否则就是普通ipc
-          createPage("devlist", obj)//创建设备列表页面
+          // createPage("devlist", obj)//创建设备列表页面
+          _this.$router.push({ name: 'devlist', params: obj })
         }
       }
       function device_list_box_sidebar (data) {
@@ -141,14 +142,14 @@ export default {
           if (obj.box_ipc) {
             device_list(g_box_device_data)
           } else {
-            device_list(g_device_data)
+            device_list(_this.$store.state.jumpPageData.deviceData)
           }
         }
         function device_list (msg) {
           data.parent.innerHTML = "<div id='vimtag_device_list'>"
           let selectNickArr
           let screen_token // 标记设备分辨率
-          if (g_support_tree) { // 如果支持树状结构, 将选中设备的nick分割成数组用于比较使用
+          if (_this.$store.state.jumpPageData.supportTreeFlag) { // 如果支持树状结构, 将选中设备的nick分割成数组用于比较使用
             selectNickArr = g_Select_nick.split('.')
           }
           for (let length = msg.length, i = 0; i < length; i++) {
@@ -171,7 +172,7 @@ export default {
             }
             let sn = dev_data.nick ? dev_data.nick : dev_data.sn;
             // console.log(sn, '获取sn即昵称')
-            if (g_support_tree) { // 如果支持树状结构
+            if (_this.$store.state.jumpPageData.supportTreeFlag) { // 如果支持树状结构
               let sn_nick_arr = sn.split('.')
               let flag_continue = 0
               // 如果分割后的nick数组比较 只展示数组最后一项不同的设备
@@ -183,7 +184,7 @@ export default {
               if (flag_continue) {
                 continue
               }
-              // if (selectNickArr[0] !== sn_nick_arr[0] || selectNickArr[1] !== sn_nick_arr[1] || selectNickArr[2] !== sn_nick_arr[2]) continue
+              // if (selectNickArr.eq(0) !== sn_nick_arr.eq(0) || selectNickArr.eq(1) !== sn_nick_arr.eq(1) || selectNickArr.eq(2) !== sn_nick_arr.eq(2)) continue
             }
             if (_this.$store.state.jumpPageData.localFlag && dev_data.stat != "Online") continue;
             if (obj.box_ipc == 1) { //如果云盒子列表
@@ -233,7 +234,7 @@ export default {
             //swHeight=滚动的高度+窗体的高度；当li的offset高度<=swHeight,那么说明当前li显示在可视区域了
             let swHeight = $(window).scrollTop() + $(window).height();
             $.each(lis, function (index, item) {
-              mTop = item.offsetTop;
+              let mTop = item.offsetTop;
               if (mTop < swHeight && !item.getAttribute("data-send")) {
                 item.setAttribute("data-send", "true");
               }
@@ -259,15 +260,16 @@ export default {
               let screen_token = this.getAttribute("screen_token");//点击列表中的设备，屏幕分辩率跟着变
               let ipc_sn = this.getAttribute("ipc_sn");//点击列表中的设备，获取云盒子中设备id
               let box_ipc_stat = this.getAttribute("state");//获取云盒子设备状态
+              let white_light;//获取设备是否支持白光
               if (this.getAttribute("white_light")) {
-                let white_light = this.getAttribute("white_light");
+                white_light = this.getAttribute("white_light");
               }
               l_white_light = white_light;
               play_view_control({ parent: l_dom_play_view_control });
               obj.ipc_sn = ipc_sn; //给obj.ipc_sn重新赋值 解决回放bug
               $("#active_dev").animate({ "top": active_dev_top + "px" });
               $(this).find(".device_sidebar_nick").addClass("selected_style");
-              let old_sn = _this.$store.state.jumpPageData.selectDeviceIpc;
+              // let old_sn = _this.$store.state.jumpPageData.selectDeviceIpc;
               _this.$store.dispatch('setSelectDeviceIpc', this.getAttribute("sn")) // 点击时存储sn
               if (is_playing) {
                 _this.$api.play.video_stop({
@@ -360,7 +362,7 @@ export default {
               let ipc_sn = this.getAttribute("ipc_sn");//点击列表中的设备，获取云盒子中设备id
               obj.ipc_sn = ipc_sn; //给obj.ipc_sn重新赋值 解决回放bug
               $("#active_dev").animate({ "top": active_dev_top + "px" });
-              let old_sn = _this.$store.state.jumpPageData.selectDeviceIpc;
+              // let old_sn = _this.$store.state.jumpPageData.selectDeviceIpc;
               _this.$store.dispatch('setSelectDeviceIpc', this.getAttribute("sn")) // 点击时存储sn
               if (is_playing) {
                 _this.$api.play.video_stop({
@@ -487,21 +489,21 @@ export default {
         let l_dom_voice_close_open = _this.publicFunc.mx("#voice_close");
         let l_dom_full_screen = _this.publicFunc.mx("#full_screen");
         // 全屏和声音控制按钮浏览器端不支持
-        l_dom_full_screen.style.display = 'none'
-        l_dom_voice_close_open.style.display = 'none'
+        $("#full_screen").css("display", "none")
+        $("#voice_close").css("display", "none")
 
         if (window.fujikam == "fujikam") {
-          l_dom_full_screen.style.display = 'block';
-          l_dom_voice_close_open.style.display = 'block';
+          $("#full_screen").css("display", "block");
+          $("#voice_close").css("display", "block");
           // l_dom_choice_play_definition.style.marginLeft=138+'px'; 
         }
         let l_top = l_dom_resolute_choice.offsetTop - 116;
-        l_dom_choice_play_definition.style.top = l_top + "px";
+        $("#choice_play_definition").css("top", l_top + "px");
         // l_dom_choice_play_definition.style.marginLeft=130+'px';
         if (_this.$store.state.jumpPageData.localFlag) {
           $("#enter_history_img").hide();
           $("#enter_set_img").hide();
-        } else if (g_experience) {
+        } else if (_this.$store.state.jumpPageData.experienceFlag) {
           $("#enter_set_img").hide();
         } else if (obj.box_ipc == 1) {// obj.box_ipc==1如果云盒子实时视频播放
           $("#enter_set_img").hide();
@@ -600,17 +602,25 @@ export default {
           }).then(res => {
             _this.publicFunc.closeBufferPage()
             if (res.fisheye) {
-              createPage("set", { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "vimtag" });
+              let obj = { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "vimtag" };
+              // createPage("set", { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "vimtag" });
+              _this.$router.push({ name: 'set', params: obj })
             } else {
-              createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "vimtag" });
+              let obj = { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "vimtag" };
+              // createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "vimtag" });
+              _this.$router.push({ name: 'set', params: obj })
             }
           })
         }
         l_dom_enter_history_img.onclick = function () {
           if (obj.box_ipc == 1) { //云盒子设备实时播放时点击回放
-            createPage("history", { parent: $("#page"), dev_sn: obj.ipc_sn, back_page: "playpage", addr: obj.addr, agent: obj.agent, box_ipc: obj.box_ipc, ipc_sn: obj.ipc_sn, box_live: 1, ipc_stat: obj.ipc_stat })
+            let obj = { parent: $("#page"), dev_sn: obj.ipc_sn, back_page: "playpage", addr: obj.addr, agent: obj.agent, box_ipc: obj.box_ipc, ipc_sn: obj.ipc_sn, box_live: 1, ipc_stat: obj.ipc_stat };
+            // createPage("history", { parent: $("#page"), dev_sn: obj.ipc_sn, back_page: "playpage", addr: obj.addr, agent: obj.agent, box_ipc: obj.box_ipc, ipc_sn: obj.ipc_sn, box_live: 1, ipc_stat: obj.ipc_stat })
+            _this.$router.push({ name: 'history', params: obj })
           } else {
-            createPage("history", { parent: $("#page"), dev_sn: _this.$store.state.jumpPageData.selectDeviceIpc, back_page: "playpage", addr: obj.addr })
+            let obj = { parent: $("#page"), dev_sn: _this.$store.state.jumpPageData.selectDeviceIpc, back_page: "playpage", addr: obj.addr };
+            // createPage("history", { parent: $("#page"), dev_sn: _this.$store.state.jumpPageData.selectDeviceIpc, back_page: "playpage", addr: obj.addr })
+            _this.$router.push({ name: 'history', params: obj })
           }
         }
 
@@ -674,7 +684,7 @@ export default {
           if (obj.box_ipc == 1) { // 如果云盒子实时播放页面 只显示高清 不能选择播放分辩率
             $("#choice_play_definition").hide();
           } else {
-            let is_show = $(l_dom_choice_play_definition).css("display");
+            let is_show = $("#choice_play_definition").css("display");
             if (is_show == "none") {
               $("#choice_play_definition").show();
             } else {
@@ -715,6 +725,7 @@ export default {
         }
         function get_definition () {
           function dev_info_get_ack (msg) {
+            console.log(msg, 'dev_info_get_ack_msg')
             l_white_light = msg.white_light;
             play_view_control({ parent: l_dom_play_view_control });
             if (obj.box_ipc == 1) {//如果云盒子实时播放页面              	
@@ -840,31 +851,31 @@ export default {
           + "<div id='adjust_reset'>" + mcs_reset + "</div>"
           + "</div>"
           + "</div>";
-        l_dom_delete_adjust_page = _this.publicFunc.mx("#delete_adjust_page");
-        l_dom_mode_auto = _this.publicFunc.mx("#mode_auto");
-        l_dom_mode_daytime = _this.publicFunc.mx("#mode_daytime");
-        l_dom_mode_night = _this.publicFunc.mx("#mode_night");
-        l_dom_mode_white = _this.publicFunc.mx("#mode_white");//白光
-        l_dom_adjust_mode_night = _this.publicFunc.mx("#adjust_mode_night");
-        l_dom_adjust_mode_daytime = _this.publicFunc.mx("#adjust_mode_daytime");
-        l_dom_adjust_mode_auto = _this.publicFunc.mx("#adjust_mode_auto");
-        l_dom_adjust_mode_white = _this.publicFunc.mx("#adjust_mode_white");
-        l_dom_adjust_mode_infrared = _this.publicFunc.mx("#adjust_mode_infrared");
-        l_dom_adjust_reset = _this.publicFunc.mx("#adjust_reset");
-        l_dom_ptz_control_left = _this.publicFunc.mx("#ptz_control_left");
-        l_dom_ptz_control_right = _this.publicFunc.mx("#ptz_control_right");
-        l_dom_ptz_control_up = _this.publicFunc.mx("#ptz_control_up");
-        l_dom_ptz_control_down = _this.publicFunc.mx("#ptz_control_down");
-        l_dom_turn_left = _this.publicFunc.mx("#turn_left");
-        l_dom_turn_right = _this.publicFunc.mx("#turn_right");
-        l_dom_turn_up = _this.publicFunc.mx("#turn_up");
-        l_dom_turn_down = _this.publicFunc.mx("#turn_down");
-        l_dom_video_off_pic = _this.publicFunc.mx("#video_off_pic");
-        l_dom_camera_off_pic = _this.publicFunc.mx("#camera_off_pic");
-        l_dom_talkback_off_pic = $("#talkback_off_pic");
-        l_dom_adjust_off_pic = _this.publicFunc.mx("#adjust_off_pic");
-        l_dom_control_menu = _this.publicFunc.mx("#control_menu");
-        l_dom_ptz_control_bottom_center = _this.publicFunc.mx("#ptz_control_bottom_center");
+        let l_dom_delete_adjust_page = _this.publicFunc.mx("#delete_adjust_page");
+        let l_dom_mode_auto = _this.publicFunc.mx("#mode_auto");
+        let l_dom_mode_daytime = _this.publicFunc.mx("#mode_daytime");
+        let l_dom_mode_night = _this.publicFunc.mx("#mode_night");
+        let l_dom_mode_white = _this.publicFunc.mx("#mode_white");//白光
+        let l_dom_adjust_mode_night = _this.publicFunc.mx("#adjust_mode_night");
+        let l_dom_adjust_mode_daytime = _this.publicFunc.mx("#adjust_mode_daytime");
+        let l_dom_adjust_mode_auto = _this.publicFunc.mx("#adjust_mode_auto");
+        let l_dom_adjust_mode_white = _this.publicFunc.mx("#adjust_mode_white");
+        let l_dom_adjust_mode_infrared = _this.publicFunc.mx("#adjust_mode_infrared");
+        let l_dom_adjust_reset = _this.publicFunc.mx("#adjust_reset");
+        let l_dom_ptz_control_left = _this.publicFunc.mx("#ptz_control_left");
+        let l_dom_ptz_control_right = _this.publicFunc.mx("#ptz_control_right");
+        let l_dom_ptz_control_up = _this.publicFunc.mx("#ptz_control_up");
+        let l_dom_ptz_control_down = _this.publicFunc.mx("#ptz_control_down");
+        let l_dom_turn_left = _this.publicFunc.mx("#turn_left");
+        let l_dom_turn_right = _this.publicFunc.mx("#turn_right");
+        let l_dom_turn_up = _this.publicFunc.mx("#turn_up");
+        let l_dom_turn_down = _this.publicFunc.mx("#turn_down");
+        let l_dom_video_off_pic = _this.publicFunc.mx("#video_off_pic");
+        let l_dom_camera_off_pic = _this.publicFunc.mx("#camera_off_pic");
+        let l_dom_talkback_off_pic = $("#talkback_off_pic");
+        let l_dom_adjust_off_pic = _this.publicFunc.mx("#adjust_off_pic");
+        let l_dom_control_menu = _this.publicFunc.mx("#control_menu");
+        let l_dom_ptz_control_bottom_center = _this.publicFunc.mx("#ptz_control_bottom_center");
         l_dom_play_view_control.style.width = l_dom_play_view_width + 'px';
         l_dom_play_view_control.style.height = l_dom_play_view_height - 44 + 'px';
         l_dom_play_view_control.style.left = l_dom_play_view.offsetLeft + "px";
@@ -874,25 +885,26 @@ export default {
         l_dom_turn_left.className = "left_key";
         l_dom_turn_right.className = "right_key";
         if (window.fujikam == "fujikam") {
-          l_dom_play_view_control.style.width = "946px";
-          l_dom_play_view_control.style.height = "586px";
+          l_dom_play_view_control.css("width", "946px");
+          l_dom_play_view_control.css("height", "586px");
           l_dom_turn_up.className = "window_up_key";
           l_dom_turn_down.className = "window_down_key";
           l_dom_turn_left.className = "window_left_key";
           l_dom_turn_right.className = "window_right_key";
-          l_dom_control_menu.style.left = "239px";
-          l_dom_control_menu.style.top = "393px";
+          l_dom_control_menu.css("left", "239px");
+          l_dom_control_menu.css("top", "393px");
         }
-        let dom_left = $(".left_button")[0],
-          dom_center = $(".center_button")[0],
-          dom_right = $(".right_button")[0],
-          dom_out_box = $(".adjust_out_box"),
+        // let dom_left = $(".left_button").eq(0),
+        // dom_center = $(".center_button").eq(0),
+        // dom_right = $(".right_button").eq(0),
+        let dom_out_box = $(".adjust_out_box"),
           dom_in_box = $(".adjust_in_box"),
           values_flag = [false, false, false, false],
           l_cam_conf_reset = [6, 60, 70, 50],
           dom_circle = $(".adjust_circle"),
           dom_value = $(".adjust_show_value"),
-          l_cam_conf, outX, left, top, mouseX, i, evt;
+          l_cam_conf, outX, mouseX, i, evt;
+        // let left, top;
         l_dom_ptz_control_left.onmouseover = function () {
           $("#turn_left").show();
         };
@@ -1020,7 +1032,7 @@ export default {
         // 鼠标点击视频中间窗口弹出菜单
         l_dom_ptz_control_bottom_center.onclick = function () {
           let is_display = 0;
-          let is_innerhtml = _this.publicFunc.mx("#play_buffer_ret").innerHTML;
+          // let is_innerhtml = _this.publicFunc.mx("#play_buffer_ret").innerHTML;
           $("#play_view_control").show();
           // if (is_innerhtml) {
           is_display = $("#ptz_control_bottom").css("display") == "none" ? 0 : 1;
@@ -1115,51 +1127,51 @@ export default {
           l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
           if (l_cam_conf.day) {
             if ((l_cam_conf.day_night != "auto" && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.red_or_white == 1)) {
-              dom_in_box[0].style.width = parseInt(l_cam_conf.white_light.sharpness * 1.59) + "px";
-              dom_in_box[2].style.width = parseInt(l_cam_conf.white_light.color_saturation * 1.59) + "px";
-              dom_in_box[1].style.width = parseInt(l_cam_conf.white_light.contrast * 1.59) + "px";
-              dom_in_box[3].style.width = parseInt(l_cam_conf.white_light.brightness * 1.59) + "px";
+              dom_in_box.eq(0).css("width", parseInt(l_cam_conf.white_light.sharpness * 1.59) + "px");
+              dom_in_box.eq(2).css("width", parseInt(l_cam_conf.white_light.color_saturation * 1.59) + "px");
+              dom_in_box.eq(1).css("width", parseInt(l_cam_conf.white_light.contrast * 1.59) + "px");
+              dom_in_box.eq(3).css("width", parseInt(l_cam_conf.white_light.brightness * 1.59) + "px");
 
-              dom_value[3].innerHTML = parseInt(l_cam_conf.white_light.brightness);
-              dom_value[1].innerHTML = parseInt(l_cam_conf.white_light.contrast);
-              dom_value[2].innerHTML = parseInt(l_cam_conf.white_light.color_saturation);
-              dom_value[0].innerHTML = parseInt(l_cam_conf.white_light.sharpness);
+              dom_value.eq(3).html(parseInt(l_cam_conf.white_light.brightness));
+              dom_value.eq(1).html(parseInt(l_cam_conf.white_light.contrast));
+              dom_value.eq(2).html(parseInt(l_cam_conf.white_light.color_saturation));
+              dom_value.eq(0).html(parseInt(l_cam_conf.white_light.sharpness));
             } else if ((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "red") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.red_or_white == 0)) {
-              dom_in_box[0].style.width = parseInt(l_cam_conf.night.sharpness * 1.59) + "px";
-              dom_in_box[2].style.width = parseInt(l_cam_conf.night.color_saturation * 1.59) + "px";
-              dom_in_box[1].style.width = parseInt(l_cam_conf.night.contrast * 1.59) + "px";
-              dom_in_box[3].style.width = parseInt(l_cam_conf.night.brightness * 1.59) + "px";
+              dom_in_box.eq(0).css("width", parseInt(l_cam_conf.night.sharpness * 1.59) + "px");
+              dom_in_box.eq(2).css("width", parseInt(l_cam_conf.night.color_saturation * 1.59) + "px");
+              dom_in_box.eq(1).css("width", parseInt(l_cam_conf.night.contrast * 1.59) + "px");
+              dom_in_box.eq(3).css("width", parseInt(l_cam_conf.night.brightness * 1.59) + "px");
 
-              dom_value[3].innerHTML = parseInt(l_cam_conf.night.brightness);
-              dom_value[1].innerHTML = parseInt(l_cam_conf.night.contrast);
-              dom_value[2].innerHTML = parseInt(l_cam_conf.night.color_saturation);
-              dom_value[0].innerHTML = parseInt(l_cam_conf.night.sharpness);
+              dom_value.eq(3).html(parseInt(l_cam_conf.night.brightness));
+              dom_value.eq(1).html(parseInt(l_cam_conf.night.contrast));
+              dom_value.eq(2).html(parseInt(l_cam_conf.night.color_saturation));
+              dom_value.eq(0).html(parseInt(l_cam_conf.night.sharpness));
             } else if (l_cam_conf.day_night == "day" || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 1) || l_cam_conf.day_night == "auto" || l_cam_conf.day_night == "Auto" || l_cam_conf.day_night == "night") {
-              dom_in_box[0].style.width = parseInt(l_cam_conf.day.sharpness * 1.59) + "px";
-              dom_in_box[2].style.width = parseInt(l_cam_conf.day.color_saturation * 1.59) + "px";
-              dom_in_box[1].style.width = parseInt(l_cam_conf.day.contrast * 1.59) + "px";
-              dom_in_box[3].style.width = parseInt(l_cam_conf.day.brightness * 1.59) + "px";
+              dom_in_box.eq(0).css("width", parseInt(l_cam_conf.day.sharpness * 1.59) + "px");
+              dom_in_box.eq(2).css("width", parseInt(l_cam_conf.day.color_saturation * 1.59) + "px");
+              dom_in_box.eq(1).css("width", parseInt(l_cam_conf.day.contrast * 1.59) + "px");
+              dom_in_box.eq(3).css("width", parseInt(l_cam_conf.day.brightness * 1.59) + "px");
 
-              dom_value[3].innerHTML = parseInt(l_cam_conf.day.brightness);
-              dom_value[1].innerHTML = parseInt(l_cam_conf.day.contrast);
-              dom_value[2].innerHTML = parseInt(l_cam_conf.day.color_saturation);
-              dom_value[0].innerHTML = parseInt(l_cam_conf.day.sharpness);
+              dom_value.eq(3).html(parseInt(l_cam_conf.day.brightness));
+              dom_value.eq(1).html(parseInt(l_cam_conf.day.contrast));
+              dom_value.eq(2).html(parseInt(l_cam_conf.day.color_saturation));
+              dom_value.eq(0).html(parseInt(l_cam_conf.day.sharpness));
             }
           } else {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.sharpness * 1.59) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.color_saturation * 1.59) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.contrast * 1.59) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.brightness * 1.59) + "px";
+            dom_in_box.eq(0).css("width", parseInt(l_cam_conf.sharpness * 1.59) + "px");
+            dom_in_box.eq(2).css("width", parseInt(l_cam_conf.color_saturation * 1.59) + "px");
+            dom_in_box.eq(1).css("width", parseInt(l_cam_conf.contrast * 1.59) + "px");
+            dom_in_box.eq(3).css("width", parseInt(l_cam_conf.brightness * 1.59) + "px");
 
-            dom_value[3].innerHTML = parseInt(l_cam_conf.brightness);
-            dom_value[1].innerHTML = parseInt(l_cam_conf.contrast);
-            dom_value[2].innerHTML = parseInt(l_cam_conf.color_saturation);
-            dom_value[0].innerHTML = parseInt(l_cam_conf.sharpness);
+            dom_value.eq(3).html(parseInt(l_cam_conf.brightness));
+            dom_value.eq(1).html(parseInt(l_cam_conf.contrast));
+            dom_value.eq(2).html(parseInt(l_cam_conf.color_saturation));
+            dom_value.eq(0).html(parseInt(l_cam_conf.sharpness));
           }
 
           for (let j = 0; j < 4; j++) {
-            dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-            dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
+            dom_circle[j].css("left", dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px");
+            dom_circle[j].css("top", dom_out_box[j].offsetTop + "px");
           }
           if (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "white") {
             change_cam_mode(l_cam_conf.light_mode);
@@ -1182,84 +1194,84 @@ export default {
             }
             evt = window.event || e;
             outX = this.offsetLeft;
-            mouseX = evt.clientX - getLeft($("#adjust_setting")[0]);
+            mouseX = evt.clientX - getLeft($("#adjust_setting").eq(0));
             let value = mouseX - outX;
             if (value > 160) {
-              dom_in_box[i].style.width = "160px";
-              dom_circle[i].style.left = outX + 160 + "px";
+              dom_in_box[i].css("width", "160px");
+              dom_circle[i].css("left", outX + 160 + "px");
             } else if (value <= 0) {
-              dom_in_box[i].style.width = "0";
-              dom_circle[i].style.left = outX + "px";
+              dom_in_box[i].css("width", "0");
+              dom_circle[i].css("left", outX + "px");
             } else {
-              dom_in_box[i].style.width = value + "px";
-              dom_circle[i].style.left = mouseX + "px";
+              dom_in_box[i].css("width", value + "px");
+              dom_circle[i].css("left", mouseX + "px");
             }
-            dom_value[i].style.display = "block";
+            dom_value[i].css("display", "block");
             dom_value[i].innerHTML = parseInt(dom_in_box[i].offsetWidth / 1.6);
           });
           document.onmousemove = (function (e) {
             evt = window.event || e;
             if (values_flag[0] || values_flag[1] || values_flag[2] || values_flag[3]) {
-              mouseX = evt.clientX - getLeft($("#adjust_setting")[0]);
-              let value = mouseX - outX;
+              mouseX = evt.clientX - getLeft($("#adjust_setting").eq(0));
+              let value = mouseX - outX; selectNickArr
               // // console.log(mouseX)
               if (value > 160) {
-                dom_in_box[i].style.width = "160px";
-                dom_circle[i].style.left = outX + 160 + "px";
+                dom_in_box[i].css("width", "160px");
+                dom_circle[i].css("left", outX + 160 + "px");
               } else if (value <= 0) {
-                dom_in_box[i].style.width = "0";
-                dom_circle[i].style.left = outX + "px";
+                dom_in_box[i].css("width", "0");
+                dom_circle[i].css("left", outX + "px");
               } else {
-                dom_in_box[i].style.width = value + "px";
-                dom_circle[i].style.left = mouseX + "px";
+                dom_in_box[i].css("width", value + "px");
+                dom_circle[i].css("left", mouseX + "px");
               }
               dom_value[i].innerHTML = parseInt(dom_in_box[i].offsetWidth / 1.59);
             }
           });
-          document.onmouseup = (function (e) {
+          document.onmouseup = (function () {
             if (values_flag[0] || values_flag[1] || values_flag[2] || values_flag[3]) {
               if (l_cam_conf.day) {
                 if (l_cam_conf.light_mode == "red" & l_cam_conf.day_night == "night") {//夜间模式
-                  l_cam_conf.night.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                  l_cam_conf.night.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                  l_cam_conf.night.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                  l_cam_conf.night.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                  l_cam_conf.night.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                  l_cam_conf.night.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                  l_cam_conf.night.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                  l_cam_conf.night.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
                 } else if (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "white") {//白光模式
                   l_cam_conf.is_white_light = l_white_light;
-                  l_cam_conf.white_light.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                  l_cam_conf.white_light.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                  l_cam_conf.white_light.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                  l_cam_conf.white_light.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                  l_cam_conf.white_light.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                  l_cam_conf.white_light.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                  l_cam_conf.white_light.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                  l_cam_conf.white_light.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
                 } else if (l_cam_conf.day_night == "auto") {//自动模式
                   if (l_cam_conf.day_or_night == 1 || !l_cam_conf.day_or_night) {
-                    l_cam_conf.day.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                    l_cam_conf.day.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                    l_cam_conf.day.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                    l_cam_conf.day.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                    l_cam_conf.day.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                    l_cam_conf.day.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                    l_cam_conf.day.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                    l_cam_conf.day.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
                   } else if (l_cam_conf.day_or_night == 2) {
                     if (l_cam_conf.red_or_white == 0) {
-                      l_cam_conf.night.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                      l_cam_conf.night.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                      l_cam_conf.night.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                      l_cam_conf.night.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                      l_cam_conf.night.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                      l_cam_conf.night.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                      l_cam_conf.night.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                      l_cam_conf.night.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
                     } else if (l_cam_conf.red_or_white == 1) {
-                      l_cam_conf.white_light.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                      l_cam_conf.white_light.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                      l_cam_conf.white_light.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                      l_cam_conf.white_light.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                      l_cam_conf.white_light.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                      l_cam_conf.white_light.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                      l_cam_conf.white_light.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                      l_cam_conf.white_light.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
                     }
                   }
                 } else {//白天模式
-                  l_cam_conf.day.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                  l_cam_conf.day.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                  l_cam_conf.day.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                  l_cam_conf.day.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                  l_cam_conf.day.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                  l_cam_conf.day.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                  l_cam_conf.day.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                  l_cam_conf.day.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
                 }
               } else {
-                l_cam_conf.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                l_cam_conf.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                l_cam_conf.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                l_cam_conf.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                l_cam_conf.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                l_cam_conf.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                l_cam_conf.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                l_cam_conf.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
               }
               _this.$api.play.adjust_set({ conf: l_cam_conf })
               values_flag = [false, false, false, false];
@@ -1306,18 +1318,18 @@ export default {
                 }
               }
             }
-            dom_in_box[0].style.width = parseInt(sharpness * 1.59) + "px";
-            dom_in_box[2].style.width = parseInt(color_saturation * 1.59) + "px";
-            dom_in_box[1].style.width = parseInt(contrast * 1.59) + "px";
-            dom_in_box[3].style.width = parseInt(brightness * 1.59) + "px";
+            dom_in_box.eq(0).css("width", parseInt(sharpness * 1.59) + "px");
+            dom_in_box.eq(2).css("width", parseInt(color_saturation * 1.59) + "px");
+            dom_in_box.eq(1).css("width", parseInt(contrast * 1.59) + "px");
+            dom_in_box.eq(3).css("width", parseInt(brightness * 1.59) + "px");
 
-            dom_value[3].innerHTML = parseInt(brightness);
-            dom_value[1].innerHTML = parseInt(contrast);
-            dom_value[2].innerHTML = parseInt(color_saturation);
-            dom_value[0].innerHTML = parseInt(sharpness);
+            dom_value.eq(3).html(parseInt(brightness));
+            dom_value.eq(1).html(parseInt(contrast));
+            dom_value.eq(2).html(parseInt(color_saturation));
+            dom_value.eq(0).html(parseInt(sharpness));
             for (let j = 0; j < 4; j++) {
-              dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-              dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
+              dom_circle[j].css("left", dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px");
+              dom_circle[j].css("top", dom_out_box[j].offsetTop + "px");
             }
             change_cam_mode("auto");
             l_cam_conf.day_night = "auto";
@@ -1328,19 +1340,19 @@ export default {
 
           l_dom_adjust_mode_daytime.onclick = function () {
             if (l_cam_conf.day) {
-              dom_in_box[0].style.width = parseInt(l_cam_conf.day.sharpness * 1.59) + "px";
-              dom_in_box[2].style.width = parseInt(l_cam_conf.day.color_saturation * 1.59) + "px";
-              dom_in_box[1].style.width = parseInt(l_cam_conf.day.contrast * 1.59) + "px";
-              dom_in_box[3].style.width = parseInt(l_cam_conf.day.brightness * 1.59) + "px";
+              dom_in_box.eq(0).css("width", parseInt(l_cam_conf.day.sharpness * 1.59) + "px");
+              dom_in_box.eq(2).css("width", parseInt(l_cam_conf.day.color_saturation * 1.59) + "px");
+              dom_in_box.eq(1).css("width", parseInt(l_cam_conf.day.contrast * 1.59) + "px");
+              dom_in_box.eq(3).css("width", parseInt(l_cam_conf.day.brightness * 1.59) + "px");
 
-              dom_value[3].innerHTML = parseInt(l_cam_conf.day.brightness);
-              dom_value[1].innerHTML = parseInt(l_cam_conf.day.contrast);
-              dom_value[2].innerHTML = parseInt(l_cam_conf.day.color_saturation);
-              dom_value[0].innerHTML = parseInt(l_cam_conf.day.sharpness);
+              dom_value.eq(3).html(parseInt(l_cam_conf.day.brightness));
+              dom_value.eq(1).html(parseInt(l_cam_conf.day.contrast));
+              dom_value.eq(2).html(parseInt(l_cam_conf.day.color_saturation));
+              dom_value.eq(0).html(parseInt(l_cam_conf.day.sharpness));
             }
             for (let j = 0; j < 4; j++) {
-              dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-              dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
+              dom_circle[j].css("left", dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px");
+              dom_circle[j].css("top", dom_out_box[j].offsetTop + "px");
             }
             change_cam_mode("day");
             l_cam_conf.day_night = "day";
@@ -1351,20 +1363,20 @@ export default {
 
           l_dom_adjust_mode_night.onclick = function () {
             if (l_cam_conf.night) {
-              dom_in_box[0].style.width = parseInt(l_cam_conf.night.sharpness * 1.59) + "px";
-              dom_in_box[2].style.width = parseInt(l_cam_conf.night.color_saturation * 1.59) + "px";
-              dom_in_box[1].style.width = parseInt(l_cam_conf.night.contrast * 1.59) + "px";
-              dom_in_box[3].style.width = parseInt(l_cam_conf.night.brightness * 1.59) + "px";
+              dom_in_box.eq(0).css("width", parseInt(l_cam_conf.night.sharpness * 1.59) + "px");
+              dom_in_box.eq(2).css("width", parseInt(l_cam_conf.night.color_saturation * 1.59) + "px");
+              dom_in_box.eq(1).css("width", parseInt(l_cam_conf.night.contrast * 1.59) + "px");
+              dom_in_box.eq(3).css("width", parseInt(l_cam_conf.night.brightness * 1.59) + "px");
 
-              dom_value[3].innerHTML = parseInt(l_cam_conf.night.brightness);
-              dom_value[1].innerHTML = parseInt(l_cam_conf.night.contrast);
-              dom_value[2].innerHTML = parseInt(l_cam_conf.night.color_saturation);
-              dom_value[0].innerHTML = parseInt(l_cam_conf.night.sharpness);
+              dom_value.eq(3).html(parseInt(l_cam_conf.night.brightness));
+              dom_value.eq(1).html(parseInt(l_cam_conf.night.contrast));
+              dom_value.eq(2).html(parseInt(l_cam_conf.night.color_saturation));
+              dom_value.eq(0).html(parseInt(l_cam_conf.night.sharpness));
             }
 
             for (let j = 0; j < 4; j++) {
-              dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-              dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
+              dom_circle[j].css("left", dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px");
+              dom_circle[j].css("top", dom_out_box[j].offsetTop + "px");
             }
             change_cam_mode("night");
             l_cam_conf.day_night = "night";
@@ -1376,20 +1388,20 @@ export default {
           if (l_dom_adjust_mode_white) {
             l_dom_adjust_mode_white.onclick = function () {//白光
               if (l_cam_conf.white_light) {
-                dom_in_box[0].style.width = parseInt(l_cam_conf.white_light.sharpness * 1.59) + "px";
-                dom_in_box[2].style.width = parseInt(l_cam_conf.white_light.color_saturation * 1.59) + "px";
-                dom_in_box[1].style.width = parseInt(l_cam_conf.white_light.contrast * 1.59) + "px";
-                dom_in_box[3].style.width = parseInt(l_cam_conf.white_light.brightness * 1.59) + "px";
+                dom_in_box.eq(0).css("width", parseInt(l_cam_conf.white_light.sharpness * 1.59) + "px");
+                dom_in_box.eq(2).css("width", parseInt(l_cam_conf.white_light.color_saturation * 1.59) + "px");
+                dom_in_box.eq(1).css("width", parseInt(l_cam_conf.white_light.contrast * 1.59) + "px");
+                dom_in_box.eq(3).css("width", parseInt(l_cam_conf.white_light.brightness * 1.59) + "px");
 
-                dom_value[3].innerHTML = parseInt(l_cam_conf.white_light.brightness);
-                dom_value[1].innerHTML = parseInt(l_cam_conf.white_light.contrast);
-                dom_value[2].innerHTML = parseInt(l_cam_conf.white_light.color_saturation);
-                dom_value[0].innerHTML = parseInt(l_cam_conf.white_light.sharpness);
+                dom_value.eq(3).html(parseInt(l_cam_conf.white_light.brightness));
+                dom_value.eq(1).html(parseInt(l_cam_conf.white_light.contrast));
+                dom_value.eq(2).html(parseInt(l_cam_conf.white_light.color_saturation));
+                dom_value.eq(0).html(parseInt(l_cam_conf.white_light.sharpness));
               }
 
               for (let j = 0; j < 4; j++) {
-                dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-                dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
+                dom_circle[j].css("left", dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px");
+                dom_circle[j].css("top", dom_out_box[j].offsetTop + "px");
               }
               change_cam_mode("white");
               l_cam_conf.day_night = "night";
@@ -1402,58 +1414,57 @@ export default {
 
           l_dom_adjust_reset.onclick = function () {
             for (let i = 0; i < 4; i++) {
-              dom_in_box[i].style.width = l_cam_conf_reset[i] * 1.6 + "px";
-              dom_circle[i].style.left = dom_out_box[i].offsetLeft + dom_in_box[i].offsetWidth + "px";
-              // // console.log(dom_in_box[i].style.width)
+              dom_in_box[i].css("width", l_cam_conf_reset[i] * 1.6 + "px");
+              dom_circle[i].css("left", dom_out_box[i].offsetLeft + dom_in_box[i].offsetWidth + "px");
             }
             change_cam_mode("auto");
             if (l_cam_conf.day) {
               if (l_cam_conf.light_mode == "red" & l_cam_conf.day_night == "night") {//夜间模式
-                l_cam_conf.night.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                l_cam_conf.night.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                l_cam_conf.night.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                l_cam_conf.night.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                l_cam_conf.night.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                l_cam_conf.night.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                l_cam_conf.night.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                l_cam_conf.night.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
               } else if (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "white") {//白光模式
                 l_cam_conf.is_white_light = l_white_light;
-                l_cam_conf.white_light.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                l_cam_conf.white_light.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                l_cam_conf.white_light.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                l_cam_conf.white_light.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                l_cam_conf.white_light.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                l_cam_conf.white_light.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                l_cam_conf.white_light.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                l_cam_conf.white_light.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
               } else if (l_cam_conf.day_night == "auto") {//自动模式
                 if (l_cam_conf.day_or_night == 1 || !l_cam_conf.day_or_night) {
-                  l_cam_conf.day.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                  l_cam_conf.day.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                  l_cam_conf.day.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                  l_cam_conf.day.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                  l_cam_conf.day.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                  l_cam_conf.day.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                  l_cam_conf.day.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                  l_cam_conf.day.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
                 } else if (l_cam_conf.day_or_night == 2) {
                   if (l_cam_conf.red_or_white == 0) {
-                    l_cam_conf.night.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                    l_cam_conf.night.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                    l_cam_conf.night.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                    l_cam_conf.night.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                    l_cam_conf.night.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                    l_cam_conf.night.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                    l_cam_conf.night.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                    l_cam_conf.night.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
                   } else if (l_cam_conf.red_or_white == 1) {
-                    l_cam_conf.white_light.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                    l_cam_conf.white_light.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                    l_cam_conf.white_light.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                    l_cam_conf.white_light.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                    l_cam_conf.white_light.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                    l_cam_conf.white_light.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                    l_cam_conf.white_light.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                    l_cam_conf.white_light.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
                   }
                 }
               } else {//白天模式
-                l_cam_conf.day.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                l_cam_conf.day.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                l_cam_conf.day.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                l_cam_conf.day.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
+                l_cam_conf.day.sharpness = parseInt(dom_in_box.eq(0).offsetWidth / 1.59);
+                l_cam_conf.day.contrast = parseInt(dom_in_box.eq(1).offsetWidth / 1.59);
+                l_cam_conf.day.color_saturation = parseInt(dom_in_box.eq(2).offsetWidth / 1.59);
+                l_cam_conf.day.brightness = parseInt(dom_in_box.eq(3).offsetWidth / 1.59);
               }
             } else {
-              l_cam_conf.sharpness = l_cam_conf_reset[0];
-              l_cam_conf.color_saturation = l_cam_conf_reset[2];
-              l_cam_conf.contrast = l_cam_conf_reset[1];
-              l_cam_conf.brightness = l_cam_conf_reset[3];
+              l_cam_conf.sharpness = l_cam_conf_reset.eq(0);
+              l_cam_conf.color_saturation = l_cam_conf_reset.eq(2);
+              l_cam_conf.contrast = l_cam_conf_reset.eq(1);
+              l_cam_conf.brightness = l_cam_conf_reset.eq(3);
             }
-            dom_value[3].innerHTML = l_cam_conf_reset[3];
-            dom_value[2].innerHTML = l_cam_conf_reset[2];
-            dom_value[1].innerHTML = l_cam_conf_reset[1];
-            dom_value[0].innerHTML = l_cam_conf_reset[0];
+            dom_value.eq(3).innerHTML = l_cam_conf_reset.eq(3);
+            dom_value.eq(2).innerHTML = l_cam_conf_reset.eq(2);
+            dom_value.eq(1).innerHTML = l_cam_conf_reset.eq(1);
+            dom_value.eq(0).innerHTML = l_cam_conf_reset.eq(0);
             l_cam_conf.day_night = "auto";
             _this.$api.play.adjust_set({ conf: l_cam_conf })
           };
@@ -1462,8 +1473,8 @@ export default {
       function play_speed (data) {
         _this.publicFunc.mx("#play_buffer_ret").innerHTML = data;
         window.onresize = function () {
-          l_dom_play_view_control.style.left = l_dom_play_view.offsetLeft + "px";
-          l_dom_play_view_control.style.top = l_play_view_top + "px";
+          l_dom_play_view_control.css("left", l_dom_play_view.offsetLeft + "px");
+          l_dom_play_view_control.css("top", l_play_view_top + "px");
         }
       }
       function create_preview (data) {
@@ -1597,18 +1608,18 @@ export default {
             _this.publicFunc.delete_tips({ content: "您当前的时间与设置的时间不符确定要设置吗?", func: device_set_time }); // 时间设定询问窗
           }
           function device_set_time () { // 设置时间询问框回调
-          _this.$api.play.set_date_time({ // 调用设置时间
+            _this.$api.play.set_date_time({ // 调用设置时间
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-                type: _this.publicFunc.mx("#checkbox_auto_sync").checked ? "NTP" : "manually",
-                timezone: l_dom_time_zone_selevt.value,
-                hour: l_dom_input_hour.value,
-                min: l_dom_input_minute.value,
-                sec: l_dom_input_second.value,
-                year: l_dom_input_year.value,
-                mon: l_dom_input_month.value,
-                day: l_dom_input_day.value,
-                auto_sync: Number(_this.publicFunc.mx("#checkbox_auto_sync").checked),
-                ntp_addr: l_dom_ntp.value,
+              type: _this.publicFunc.mx("#checkbox_auto_sync").checked ? "NTP" : "manually",
+              timezone: l_dom_time_zone_selevt.value,
+              hour: l_dom_input_hour.value,
+              min: l_dom_input_minute.value,
+              sec: l_dom_input_second.value,
+              year: l_dom_input_year.value,
+              mon: l_dom_input_month.value,
+              day: l_dom_input_day.value,
+              auto_sync: Number(_this.publicFunc.mx("#checkbox_auto_sync").checked),
+              ntp_addr: l_dom_ntp.value,
             }).then(res => {
               set_result(res)
             })
@@ -1619,8 +1630,8 @@ export default {
       // time_alert()
       // ********** 设置设备的时区是校验时间是否与当前系统时间相符 ********** //
       window.onresize = function () {
-        l_dom_play_view_control.style.left = l_dom_play_view.offsetLeft + "px";
-        l_dom_play_view_control.style.top = l_play_view_top + "px";
+        l_dom_play_view_control.css("left", l_dom_play_view.offsetLeft + "px")
+        l_dom_play_view_control.css("top", l_play_view_top + "px");
       }
       $(window).scroll(function () { })
     }
@@ -1639,6 +1650,7 @@ export default {
       languageSelect.mipc($('#login_box'))
       $('#login_box').append("<div id='is_mipc_div'></div>")
     }
+    this.publicFunc.projectReload.call(this);
   }
 }
 </script>

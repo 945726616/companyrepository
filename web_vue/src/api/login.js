@@ -62,7 +62,7 @@ const login = {
   ** password md5转换后的密码
   */
   async sign_up (params) {
-    console.log(params, 'sign_up')
+    //console.log(params, 'sign_up')
     let returnItem // then函数中return并不能正确的返回到调用处 所以添加该变量作为局部中转使用
     await login.mdh().then(res => {
       let data = res ? res.data : null
@@ -96,7 +96,7 @@ const login = {
   async binding_email_get (params) {
     let returnItem // then函数中return并不能正确的返回到调用处 所以添加该变量作为局部中转使用
     await login.mdh().then(res => {
-      console.log(res, 'mdh_res')
+      //console.log(res, 'mdh_res')
       let data = res ? res.data : null
       if ((!data) || data.result) { // 请求失败的情况
         returnItem = false
@@ -170,7 +170,7 @@ const login = {
   dev_msg_listener_add () {
     if (!store.state.user.mmqFlag) {
       login.mmq_create().then(res => { // 创建mmq轮询回调
-        console.log(res, 'mmq_create_res')
+        //console.log(res, 'mmq_create_res')
         if (!res.data.result) { // 如果返回的result为''
           store.dispatch('setMmqFlag', 1) // 存储mmqFlag
           store.dispatch('setQid', res.data.qid)
@@ -226,7 +226,7 @@ const login = {
         timeout: 300000
       }
     }).then(res => {
-      console.log(res, 'mmq_pick_res')
+      //console.log(res, 'mmq_pick_res')
       let returnItem
       if (res && res.type === 'ccm_message') { // 轮询返回消息内容, 需要根据消息调用对应的消息处理方法
         returnItem = {
@@ -253,7 +253,7 @@ const login = {
   ** sess: 默认,创建nid
   */
   mmq_ack_func (params) {
-    console.log(params, '消息处理方法')
+    //console.log(params, '消息处理方法')
     let mmq_data = params.items
     for (let m = 0; m < mmq_data.length; m++) {
       if (mmq_data[m].code == "motion_alert") {
@@ -367,16 +367,16 @@ const login = {
     return CryptoJS.DES.encrypt(CryptoJS.enc.Hex.parse(pwd_md5_hex), CryptoJS.enc.Hex.parse(md5.hex(store.state.user.shareKey)), { iv: CryptoJS.enc.Hex.parse('0000000000000000'), padding: CryptoJS.pad.NoPadding }).ciphertext.toString()
   },
   get_ret (msg) { // 部分函数返回值取舍判断函数
-    console.log(msg, 'get_ret_msg')
+    //console.log(msg, 'get_ret_msg')
     let ret = (msg && msg.data) ? (msg.data.ret || msg.data.result) : null
-    console.log(ret, 'let_ret')
+    //console.log(ret, 'let_ret')
     if (Object.prototype.toString.call(ret) === "[object String]") {
-      console.log(ret, 'ret')
+      //console.log(ret, 'ret')
       return ret
     }
     else {
       let s_ret = ret ? (ret.reason || ret.sub || ret.code) : null
-      console.log(s_ret, 's_ret')
+      //console.log(s_ret, 's_ret')
       return s_ret
     }
   }

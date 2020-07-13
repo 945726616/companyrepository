@@ -299,10 +299,15 @@ export default {
           if (obj.back_page == "boxlist") {
             create_boxlist_page({ parent: obj.parent, agent: obj.agent, addr: obj.addr })
           } else if (obj.back_page == "playpage") {
+            let obj;
             if (obj.box_ipc == 1) { //如果从云盒子设备回放返回到播放页面，把box_ipc传回去 
-              createPage("play", { parent: obj.parent, agent: obj.agent, addr: obj.addr, box_ipc: obj.box_ipc, ipc_sn: obj.ipc_sn, box_live: obj.box_live, ipc_stat: obj.ipc_stat })
+              obj = {parent: obj.parent, agent: obj.agent, addr: obj.addr, box_ipc: obj.box_ipc, ipc_sn: obj.ipc_sn, box_live: obj.box_live, ipc_stat: obj.ipc_stat}
+              _this.$router.push({name:'play',params:obj})
+              // createPage("play", { parent: obj.parent, agent: obj.agent, addr: obj.addr, box_ipc: obj.box_ipc, ipc_sn: obj.ipc_sn, box_live: obj.box_live, ipc_stat: obj.ipc_stat })
             } else {
-              createPage("play", { parent: obj.parent, agent: obj.agent, addr: obj.addr })
+              obj = {parent: obj.parent, agent: obj.agent, addr: obj.addr};
+              _this.$router.push({name:'play',params:obj})
+              // createPage("play", { parent: obj.parent, agent: obj.agent, addr: obj.addr })
             }
 
           }
@@ -348,7 +353,8 @@ export default {
               obj.data = data.video[num].cut_video_data;
               obj.a_start = a_start;
               obj.b_end = b_end;
-              createPage("playback", obj)
+              // createPage("playback", obj)
+              _this.$router.push({name:'playback',params:obj})
             } else {
               // console.log("camera_sign_picture3")
               let token = this.getAttribute("pic_token");
@@ -598,6 +604,7 @@ export default {
       languageSelect.mipc($('#login_box'))
       $('#login_box').append("<div id='is_mipc_div'></div>")
     }
+    this.publicFunc.projectReload.call(this);
   }
 }
 </script>

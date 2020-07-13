@@ -7,6 +7,12 @@ Vue.use(Router)
 
 const login = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/login')
 const devlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/devlist_vimtag')
+const my = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/my')
+const play = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/play_vimtag')
+const playback = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/playback')
+const history = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/history_vimtag')
+// const set = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/set')
+const boxlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/boxlist')
 
 const vimtagRouter = new Router({
   routes: [
@@ -19,6 +25,36 @@ const vimtagRouter = new Router({
       path: '/devlist',
       name: 'devlist',
       component: devlist
+    },
+    {
+      path: '/my',
+      name: 'my',
+      component: my
+    },
+    {
+      path: '/play',
+      name: 'play',
+      component: play
+    },
+    {
+      path: '/playback',
+      name: 'playback',
+      component: playback
+    },
+    {
+      path: '/history',
+      name: 'history',
+      component: history
+    },
+    // {
+    //   path: '/set',
+    //   name: 'set',
+    //   component: set
+    // },
+    {
+      path: '/boxlist',
+      name: 'boxlist',
+      component: boxlist
     }
   ]
 })

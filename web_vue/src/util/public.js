@@ -77,7 +77,8 @@ const publicFunc = {
     $("#delete_tips_cancel").click(function () {
       $("#delete_tips").attr('style', 'display:none;')
       if (obj.flag && obj.flag === "my_page") {
-        createPage("my", { parent: $("#page") }) // 进入我的页面
+        // createPage("my",{ parent: $("#page") }) // 进入我的页面
+        _this.$router.push({name:'my',params:{parent: $('#page')}})
       }
     })
     $("#delete_tips_ok").click(function () {
@@ -109,6 +110,13 @@ const publicFunc = {
     clearTimeout(store.state.jumpPageData.bufferPageFlag)
     $("#buffer_page").hide()
     $("#back_to_dev_list").hide()
+  },
+  projectReload(){
+    window.addEventListener("load",()=>{
+      if(this.$route.path != "/"){
+        this.$router.replace('/')
+      }
+    })
   },
   mx (selector, context) {
     let  doc = context || document;
