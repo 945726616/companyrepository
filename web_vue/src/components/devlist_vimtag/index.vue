@@ -96,7 +96,6 @@ export default {
             device_list()
           })
         } else {
-          // console.log(_this.$store.state.jumpPageData.deviceData, '设备列表')
           if (_this.$store.state.jumpPageData.deviceData.length === 0 || type === 'refresh') {
             //发送设备列表请求
             _this.$api.devlist.devs_refresh().then(res => {
@@ -116,7 +115,7 @@ export default {
         if (data) {
           _this.$store.dispatch('setDeviceData', data)
         } else {
-          data = _this.$store.state.jumpPageData.devlistData;
+          data = _this.$store.state.jumpPageData.deviceData;
           flag = 0;
         }
         for (let key in data) {
@@ -148,7 +147,7 @@ export default {
           // tree_list(tree_back_data);
           // device_list(tree_back_data);
         } else {
-          _this.devlistData = _this.$store.state.jumpPageData.devlistData;
+          _this.devlistData = _this.$store.state.jumpPageData.deviceData;
           _this.searchData = data;
           _this.filterData = data;
           device_list(data);
@@ -160,7 +159,7 @@ export default {
         _this.publicFunc.closeBufferPage()
         // $("#buffer_page").hide();
         let search_id = searchId ? searchId : ""
-        console.log(search_id, '检查search_id')
+        // console.log(search_id, '检查search_id')
         // console.log(data, 'device_list_data')
         let dev_list_dom = "";
         let dev_list_dom_box = "";
@@ -171,13 +170,13 @@ export default {
               dev_list_dom +=
                 "<div class='device_list_img' play='0' img='0' nick='" + data[i].nick + "' state='" + data[i].stat + "' sn=" + data[i].sn + " dtype='" + data[i].type + "' addr='" + data[i].addr + "' sort='" + (data[i].sort ? data[i].sort : '') + "' tree='" + (data[i].tree ? data[i].tree : '') + "' ondrop='drop(event,this)' ondragover='allowDrop(event)' draggable='true' ondragstart='drag(event, this)'>"  //实现拖拽功能
                 + "<div id='device_list_alert_box'>"
-                + "<img class='device_list_move_ico' sn=" + data[i].sn + " src='./imgs/device/move.png'>"
-                + "<img class='device_list_door_ico' sn=" + data[i].sn + " src='./imgs/device/door.png'>"
-                + "<img class='device_list_sos_ico' sn=" + data[i].sn + " src='./imgs/device/sos.png'>"
+                + "<image class='device_list_move_ico' sn=" + data[i].sn + " src='@/assets/device/move.png'>"
+                + "<image class='device_list_door_ico' sn=" + data[i].sn + " src='@/assets/device/door.png'>"
+                + "<image class='device_list_sos_ico' sn=" + data[i].sn + " src='@/assets/device/sos.png'>"
                 + "</div>"
                 + "<div class='box_sign_picture device_list_img_child'>"
                 + "<div class='camera_sign_picture_div'>"
-                + "<img src='" + data[i].def_img + "' class='img_class'>" //图片
+                + "<image src='" + data[i].def_img + "' class='img_class'>" //图片
                 + "</div>"
                 + "<div class='camera_sign_video'></div>"
                 + "</div>"
@@ -197,13 +196,13 @@ export default {
               dev_list_dom_box +=
                 "<div class='device_list_img' play='0' img='0' nick='" + data[i].nick + "' state='" + data[i].stat + "' box_live='" + (data[i].box_live ? data[i].box_live : 0) + "' sn=" + data[i].sn + " dtype='" + data[i].type + "' addr='" + data[i].addr + "' sort='" + (data[i].sort ? data[i].sort : '') + "' tree='" + (data[i].tree ? data[i].tree : '') + "' ondrop='drop(event,this)' ondragover='allowDrop(event)' draggable='true' ondragstart='drag(event, this)'>"
                 + "<div id='device_list_alert_box'>"
-                + "<img class='device_list_move_ico' sn=" + data[i].sn + " src='./imgs/device/move.png'>"
-                + "<img class='device_list_door_ico' sn=" + data[i].sn + " src='./imgs/device/door.png'>"
-                + "<img class='device_list_sos_ico' sn=" + data[i].sn + " src='./imgs/device/sos.png'>"
+                + "<image class='device_list_move_ico' sn=" + data[i].sn + " src='@/assets/device/move.png'>"
+                + "<image class='device_list_door_ico' sn=" + data[i].sn + " src='@/assets/device/door.png'>"
+                + "<image class='device_list_sos_ico' sn=" + data[i].sn + " src='@/assets/device/sos.png'>"
                 + "</div>"
                 + "<div class='box_sign_picture device_list_img_child'>"
                 + "<div class='camera_sign_picture_div'>"
-                + "<img src='" + data[i].def_img + "' class='img_class'>"
+                + "<image src='" + data[i].def_img + "' class='img_class'>"
                 + "</div>"
                 + "<div class='camera_sign_video'></div>"
                 + "</div>"
@@ -258,6 +257,7 @@ export default {
       }
 
       function device_list_load () {
+        console.log(_this.devImgWidth, 'devimgwidth')
         if (_this.devImgWidth[_this.devImgWidth.length - 1] === "%") { //将百分数转换成小数
           _this.devImgWidth = parseFloat(_this.devImgWidth) / 100;
         }
@@ -802,44 +802,44 @@ export default {
             + "<div class='add_devices_type'>"
             + "<div class='add_devices_type_name'>" + mcs_cloud_camera + "</div>"
             + "<div class='add_devices_type_list' d_type='p1'>"
-            + "<div class='add_devices_type_list_img' style='background:url(imgs/device/add_p1.png) no-repeat;'></div>"
+            + "<div class='add_devices_type_list_img' style='background:url("+ require('@/assets/device/add_cp1.png') +") no-repeat;'></div>"
             + "<div class='add_devices_type_list_name'>P1" + mcs_intelligent_cloud_camera + "</div>"
             + "</div>"
             + "<div class='add_devices_type_list' d_type='cp1'>"
-            + "<div class='add_devices_type_list_img' style='background:url(imgs/device/add_cp1.png) no-repeat;'></div>"
+            + "<div class='add_devices_type_list_img' style='background:url(@/assets/device/add_cp1.png) no-repeat;'></div>"
             + "<div class='add_devices_type_list_name'>CP1" + mcs_intelligent_cloud_camera + "</div>"
             + "</div>"
             + "<div class='add_devices_type_list' d_type='m1'>"
-            + "<div class='add_devices_type_list_img' style='background:url(imgs/device/add_m1.png) no-repeat;'></div>"
+            + "<div class='add_devices_type_list_img' style='background:url(@/assets/device/add_m1.png) no-repeat;'></div>"
             + "<div class='add_devices_type_list_name'>M1" + mcs_intelligent_cloud_camera + "</div>"
             + "</div>"
             + "<div class='add_devices_type_list' d_type='361'>"
-            + "<div class='add_devices_type_list_img' style='background:url(imgs/device/add_361.png) no-repeat;'></div>"
+            + "<div class='add_devices_type_list_img' style='background:url(@/assets/device/add_361.png) no-repeat;'></div>"
             + "<div class='add_devices_type_list_name'>361" + mcs_intelligent_cloud_camera + "</div>"
             + "</div>"
             + "<div class='add_devices_type_list' d_type='cm1'>"
-            + "<div class='add_devices_type_list_img' style='background:url(imgs/device/add_cm1.png) no-repeat;'></div>"
+            + "<div class='add_devices_type_list_img' style='background:url(@/assets/device/add_cm1.png) no-repeat;'></div>"
             + "<div class='add_devices_type_list_name'>CM1" + mcs_intelligent_cloud_camera + "</div>"
             + "</div>"
             + "<div class='add_devices_type_list' d_type='b1'>"
-            + "<div class='add_devices_type_list_img' style='background:url(imgs/device/add_b1.png) no-repeat;'></div>"
+            + "<div class='add_devices_type_list_img' style='background:url(@/assets/device/add_b1.png) no-repeat;'></div>"
             + "<div class='add_devices_type_list_name'>B1" + mcs_intelligent_cloud_camera + "</div>"
             + "</div>"
             + "<div class='add_devices_type_list' d_type='s1'>"
-            + "<div class='add_devices_type_list_img' style='background:url(imgs/device/add_s1.png) no-repeat;'></div>"
+            + "<div class='add_devices_type_list_img' style='background:url(@/assets/device/add_s1.png) no-repeat;'></div>"
             + "<div class='add_devices_type_list_name'>" + mcs_cloud_box + "</div>"
             + "</div>"
 
             + "<div class='add_devices_type_list' d_type='fisheye'>"
-            + "<div class='add_devices_type_list_img' style='background:url(imgs/device/add_fisheye.png) no-repeat;'></div>"
+            + "<div class='add_devices_type_list_img' style='background:url(@/assets/device/add_fisheye.png) no-repeat;'></div>"
             + "<div class='add_devices_type_list_name'>fisheye" + mcs_intelligent_cloud_camera + "</div>"
             + "</div>"
             + "<div class='add_devices_type_list' d_type='b2'>"
-            + "<div class='add_devices_type_list_img' style='background:url(imgs/device/b2.png) no-repeat;'></div>"
+            + "<div class='add_devices_type_list_img' style='background:url(@/assets/device/b2.png) no-repeat;'></div>"
             + "<div class='add_devices_type_list_name'>B2" + mcs_intelligent_cloud_camera + "</div>"
             + "</div>"
             + "<div class='add_devices_type_list' d_type='b3'>"
-            + "<div class='add_devices_type_list_img' style='background:url(imgs/device/b3.png) no-repeat;'></div>"
+            + "<div class='add_devices_type_list_img' style='background:url(@/assets/device/b3.png) no-repeat;'></div>"
             + "<div class='add_devices_type_list_name'>B3" + mcs_intelligent_cloud_camera + "</div>"
             + "</div>"
             + "</div>"
@@ -876,7 +876,7 @@ export default {
             + "<div id='add_devices_box_title'>" + mcs_action_add_device + "</div>"
             + "</div>"
             + "<div id='add_devices_box_body'>"
-            + "<div id='add_device_sample_img' style='background:url(imgs/device/id_" + d_type + ".png) no-repeat center center;'></div>"
+            + "<div id='add_device_sample_img' style='background:url(@/assets/device/id_" + d_type + ".png) no-repeat center center;'></div>"
             + "<div class='add_device_input_id_box'>"
             + "<div class='add_device_input_id_box_ico'></div>"
             + "<div id='add_device_input_id_box_del' class='add_device_input_id_box_del'></div>"
@@ -922,8 +922,8 @@ export default {
                 device_existed = 0;
                 d_id = $("#add_device_input_id_box_input").val()
                 add_device_id = d_id;//日志
-                for (let i = 0; i < _this.$store.state.jumpPageData.devlistData.length; i++) {
-                  if (_this.$store.state.jumpPageData.devlistData[i].sn == d_id) {
+                for (let i = 0; i < _this.$store.state.jumpPageData.deviceData.length; i++) {
+                  if (_this.$store.state.jumpPageData.deviceData[i].sn == d_id) {
                     device_existed = 1;
                   }
                 }
@@ -971,7 +971,7 @@ export default {
               + "<div id='add_devices_box_title'>" + mcs_action_add_device + "</div>"
               + "</div>"
               + "<div class='dev_offline_tips'>"
-              + "<img class='dev_offline_tips_img' src='imgs/device/" + d_type + ".png'>"
+              + "<image class='dev_offline_tips_img' src='@/assets/device/" + d_type + ".png'>"
               + "<div class='dev_offline_tips_text'>" + mcs_device_offline_use_iphone + "</div>"
               + "</div>"
               + "</div>")
@@ -988,7 +988,7 @@ export default {
                 + "<div id='add_devices_box_title'>" + mcs_connect_power + "</div>"
                 + "</div>"
                 + "<div id='add_devices_box_body'>"
-                + "<div id='add_device_sample_img' style='background:url(imgs/device/" + d_type + ".gif) no-repeat center center;background-size:100% 100%'></div>"
+                + "<div id='add_device_sample_img' style='background:url(@/assets/device/" + d_type + ".gif) no-repeat center center;background-size:100% 100%'></div>"
                 + "<div class='add_devices_box_info'>" + mcs_device_outdoor_camera_connect_power + "</div>" //接通电源后，请耐心等待30秒，直到摄像机数据线上的绿色指示灯开始闪烁，摄像机启动完成
                 + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
                 + "</div>"
@@ -1002,7 +1002,7 @@ export default {
                 + "<div id='add_devices_box_title'>" + mcs_connect_power + "</div>"
                 + "</div>"
                 + "<div id='add_devices_box_body'>"
-                + "<div id='add_device_sample_img' style='background:url(imgs/device/" + d_type + ".gif) no-repeat center center;background-size:100% 100%'></div>"
+                + "<div id='add_device_sample_img' style='background:url(@/assets/device/" + d_type + ".gif) no-repeat center center;background-size:100% 100%'></div>"
                 + "<div class='add_devices_box_info'>" + mcs_device_box_connect_power + "</div>" //接通电源后，请耐心等待30秒，直到设备面板上的绿色指示灯开始闪烁，设备启动完成
                 + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
                 + "</div>"
@@ -1016,7 +1016,7 @@ export default {
                 + "<div id='add_devices_box_title'>" + mcs_connect_power + "</div>"
                 + "</div>"
                 + "<div id='add_devices_box_body'>"
-                + "<div id='add_device_sample_img' style='background:url(imgs/device/" + d_type + ".gif) no-repeat center center;background-size:100% 100%'></div>"
+                + "<div id='add_device_sample_img' style='background:url(@/assets/device/" + d_type + ".gif) no-repeat center center;background-size:100% 100%'></div>"
                 + "<div class='add_devices_box_info'>" + mcs_normal_device_connect_power + mcs_camera_turn_on_voice + "<div id='add_devices_img'></div></div>"
 
                 + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
@@ -1034,7 +1034,7 @@ export default {
             + "<div id='add_devices_box_title'>" + mcs_ethernet_configuration + "</div>"
             + "</div>"
             + "<div id='add_devices_box_body'>"
-            + "<div id='add_device_sample_img' style='background:url(imgs/device/net_" + d_type + ".png) no-repeat center center;'></div>"
+            + "<div id='add_device_sample_img' style='background:url(@/assets/device/net_" + d_type + ".png) no-repeat center center;'></div>"
             // +"<div class='add_devices_box_note'>"+mcs_device_connect_ethernet+"</div>" //去掉网口、网线
             + "<div class='add_devices_box_info'>" + msc_use_ethernet_cable_connect + "</div>" // 请用网线连接路由器和设备的网口，连接成功后设备会自动上线
             // +"<div id='no_light_twinkle'>"+ mcs_not_see_light +"</div>" // 去掉没看到灯闪
@@ -1613,7 +1613,7 @@ export default {
               + "<div id='add_devices_box_title'>" + mcs_forgot_your_password + "</div>"
               + "</div>"
               + "<div id='add_devices_box_body'>"
-              + "<div id='add_device_sample_img' style='background:url(imgs/device/reset_" + d_type + ".png) no-repeat center center;'></div>"
+              + "<div id='add_device_sample_img' style='background:url(@/assets/device/reset_" + d_type + ".png) no-repeat center center;'></div>"
               + "<div class='add_devices_box_info'>" + mcs_bseries_forget_password + "</div>"
               // +"<div id='failed_to_restore'>"+ mcs_failed_to_restore+"</div>" // 未恢复出厂设置
               + "<div id='add_device_submit'>" + mcs_close + "</div>"
@@ -1628,7 +1628,7 @@ export default {
               + "<div id='add_devices_box_title'>" + mcs_forgot_your_password + "</div>"
               + "</div>"
               + "<div id='add_devices_box_body'>"
-              + "<div id='add_device_sample_img' style='background:url(imgs/device/reset_" + d_type + ".png) no-repeat center center;'></div>"
+              + "<div id='add_device_sample_img' style='background:url(@/assets/device/reset_" + d_type + ".png) no-repeat center center;'></div>"
               + "<div class='add_devices_box_info'>测试用</div>"
               // +"<div class='add_devices_box_info'>"+mcs_reset_s1+"</div>" 
               // +"<div id='failed_to_restore'>"+ mcs_failed_to_restore  +"</div>" //未恢复出厂设置
@@ -1644,7 +1644,7 @@ export default {
               + "<div id='add_devices_box_title'>" + mcs_forgot_your_password + "</div>"
               + "</div>"
               + "<div id='add_devices_box_body'>"
-              + "<div id='add_device_sample_img' style='background:url(imgs/device/reset_" + d_type + ".png) no-repeat center center;'></div>"
+              + "<div id='add_device_sample_img' style='background:url(@/assets/device/reset_" + d_type + ".png) no-repeat center center;'></div>"
               + "<div class='add_devices_box_info'>" + mcs_press_hole_restore_to_reset_password + "</div>"
               // +"<div id='failed_to_restore'>"+ mcs_failed_to_restore  +"</div>" //未恢复出厂设置
               + "<div id='add_device_submit'>" + mcs_close + "</div>"
@@ -1659,7 +1659,7 @@ export default {
               + "<div id='add_devices_box_title'>" + mcs_forgot_your_password + "</div>"
               + "</div>"
               + "<div id='add_devices_box_body'>"
-              + "<div id='add_device_sample_img' style='background:url(imgs/device/reset_" + d_type + ".png) no-repeat center center;'></div>"
+              + "<div id='add_device_sample_img' style='background:url(@/assets/device/reset_" + d_type + ".png) no-repeat center center;'></div>"
               + "<div class='add_devices_box_info'>" + mcs_press_button_restore_to_reset_password + "</div>"
               // +"<div id='heared_sound'>"+mcs_hear_voice +"?</div>" //没听到语音
               + "<div id='add_device_submit'>" + mcs_close + "</div>"
@@ -1682,8 +1682,8 @@ export default {
       }
       function close_add_page (data) {
         if (data == 'add_dev') { //如果在添加设备过程中时关闭
-          add_device_endtime = new Date().getTime();//添加设备结束，点击关闭
-          add_device_totaltime = add_device_endtime - _this.addDeviceTime;
+          let add_device_endtime = new Date().getTime();//添加设备结束，点击关闭
+          let add_device_totaltime = add_device_endtime - _this.addDeviceTime;
           // upload_log('log_app_add_dev');
         }
         $("#add_device_page").hide();
@@ -1745,7 +1745,7 @@ export default {
         data = data.sort(compare);
         tree_back_data = data;
         tree_list(data);
-        this.devlistData = this.$store.state.jumpPageData.devlistData;
+        this.devlistData = this.$store.state.jumpPageData.deviceData;
         this.searchData = data;
         this.filterData = data;
         back_flag = sessionStorage.getItem("back_flag");

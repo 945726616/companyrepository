@@ -52,74 +52,74 @@ const set = {
       result = login.get_ret(res)
       if (result === '') {
         let msg = res.data ? res.data : "";
-        sn = msg.sn;
-        ver = msg.img_ver;
-        name = msg.nick;
-        type = msg.type;//增加返回值的type属性
-        os = msg.os;
-        wifi = msg.wifi;
-        sensor = msg.sensor;
-        if (msg.p) {
-          for (let i = 0; i < msg.p.length; i++) {
-            if (msg.p[i].n == "s.logo") {
-              logo = msg.p[i].v;
+        sn = msg.SerialNumber;
+        ver = msg.FirmwareVersion;
+        name = msg.Nick;
+        type = msg.Type;//增加返回值的type属性
+        os = msg.Os;
+        wifi = msg.Wifi;
+        sensor = msg.Sensor;
+        if (msg.Param) {
+          for (let i = 0; i < msg.Param.length; i++) {
+            if (msg.Param[i].name == "s.logo") {
+              logo = msg.Param[i].value;
             }
-            if (msg.p[i].n == "s.mfc") {
-              mfc = msg.p[i].v;
+            if (msg.Param[i].name == "s.mfc") {
+              mfc = msg.Param[i].value;
             }
-            if (msg.p[i].n == "model") {
-              model = msg.p[i].v;
+            if (msg.Param[i].name == "model") {
+              model = msg.Param[i].value;
             }
-            if (msg.p[i].n == "uptime") {
-              uptime = msg.p[i].v;
+            if (msg.Param[i].name == "uptime") {
+              uptime = msg.Param[i].value;
             }
-            if (msg.p[i].n == "p0") {
-              def = msg.p[i].v;
+            if (msg.Param[i].name == "p0") {
+              def = msg.Param[i].value;
             }
-            if (msg.p[i].n == "s.sensor") {
-              s_sensor = msg.p[i].v;
+            if (msg.Param[i].name == "s.sensor") {
+              s_sensor = msg.Param[i].value;
             }
-            if (msg.p[i].n == "s.exdev") {
-              exdev = msg.p[i].v;
+            if (msg.Param[i].name == "s.exdev") {
+              exdev = msg.Param[i].value;
             }
-            if (msg.p[i].n == "s.rffreq") {
-              rffreq = msg.p[i].v;
+            if (msg.Param[i].name == "s.rffreq") {
+              rffreq = msg.Param[i].value;
             }
-            if (msg.p[i].n == "s.exver") {
-              exver = msg.p[i].v;
+            if (msg.Param[i].name == "s.exver") {
+              exver = msg.Param[i].value;
             }
-            if (msg.p[i].n == "s.oscene") {
-              oscene = msg.p[i].v;
+            if (msg.Param[i].name == "s.oscene") {
+              oscene = msg.Param[i].value;
             }
-            if (msg.p[i].n == "s.white_light") {
-              white_light = msg.p[i].v;
+            if (msg.Param[i].name == "s.white_light") {
+              white_light = msg.Param[i].value;
             }
-            if (msg.p[i].n == "s.motion_track") {
-              motion_track = msg.p[i].v
+            if (msg.Param[i].name == "s.motion_track") {
+              motion_track = msg.Param[i].value
             }
-            if (msg.p[i].n == "s.face_detect") {
-              face_detect = msg.p[i].v;
+            if (msg.Param[i].name == "s.face_detect") {
+              face_detect = msg.Param[i].value;
             }
-            if (msg.p[i].n == "s.sound_detect") {
-              sound_detect = msg.p[i].v;
+            if (msg.Param[i].name == "s.sound_detect") {
+              sound_detect = msg.Param[i].value;
             }
-            if (msg.p[i].n == "onvif") {
-              onvif = msg.p[i].v;
+            if (msg.Param[i].name == "onvif") {
+              onvif = msg.Param[i].value;
             }
             // 添加联动框架参数判断
-            if (msg.p[i].n == "dc.new_ealf") {
-              new_ealf = msg.p[i].v;
+            if (msg.Param[i].name == "dc.new_ealf") {
+              new_ealf = msg.Param[i].value;
             }
             // 移动检测
-            if (msg.p[i].n == "s.human_detect") {
-              human_detect = msg.p[i].v;
+            if (msg.Param[i].name == "s.human_detect") {
+              human_detect = msg.Param[i].value;
             }
             //4G
-            if (msg.p[i].n == "wwan_exist" && msg.p[i].v == "existence") {
-              wwan_exist = msg.p[i].v;
+            if (msg.Param[i].name == "wwan_exist" && msg.Param[i].value == "existence") {
+              wwan_exist = msg.Param[i].value;
             }//鱼眼
-            if (msg.p[i].n == "s.eye") {
-              fisheye = msg.p[i].v;
+            if (msg.Param[i].name == "s.eye") {
+              fisheye = msg.Param[i].value;
             }
           }
         }
@@ -670,7 +670,7 @@ const set = {
             let result = login.get_ret(res_net_get)
             if (result === '') {
               res_net_get.wwan_exist = wwan_exist
-              returnItem = [res_net_get, { ip: g_server_device, select: (data.select == null ? null : data.select) }]
+              returnItem = [res_net_get, { ip: store.state.jumpPageData.serverDevice, select: (data.select == null ? null : data.select) }]
             }
           })
         }
@@ -1567,11 +1567,13 @@ const set = {
   */
   async speaker_get (params) {
     return await axios.get('/ccm/ccm_speaker_get', {
+      params: {
       sess: {
         nid: login.create_nid(),
         sn: params.sn
       },
       token: "ao0"
+      }
     })
   },
   /*

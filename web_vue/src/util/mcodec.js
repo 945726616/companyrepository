@@ -217,7 +217,7 @@ var mcodec = null;
     var s = {}
     function _obj_2_uri (obj, path) {
       var test = {}
-      if (obj.constructor === Array) {
+      if (obj && obj.constructor === Array) {
         s[path + "__x_countz_"] = obj.length
       }
       for (var objName in obj) {

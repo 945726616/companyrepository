@@ -6,6 +6,7 @@
       <div id="buffer_image"></div>
     </div>
     <div id="delete_tips"></div>
+    <div id='add_device_page'></div>
     <topBar />
     <!-- 调用路由部分进行渲染 -->
     <router-view />
@@ -26,8 +27,8 @@ export default {
     }
   },
   async mounted () {
-    // await import(`@/lib/plugins/jquery.mousewheel.min.js`)
-    // await import(`@/lib/plugins/jquery.mCustomScrollbar.js`)
+    import(`@/lib/plugins/jquery.ibutton.js`)
+    import(`@/lib/plugins/jquery.mousewheel.min.js`)
     let userLanguage = sessionStorage.getItem('userLanguage')
     if (userLanguage) {
       await this.$chooseLanguage.lang(userLanguage)

@@ -28,7 +28,7 @@
 
     function init()
     {
-        if(body){return;};
+        if(body){return;}
         body = document.body;
 
         tmp = document[s_createElement]("div");

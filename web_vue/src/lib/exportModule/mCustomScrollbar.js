@@ -42,6 +42,7 @@ and dependencies (minified).
     _njs = typeof module !== "undefined" && module.exports, /* NodeJS */
     _dlp = ("https:" == document.location.protocol) ? "https:" : "http:", /* location protocol */
     _url = "cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js";
+    // 该部分功能直接舍弃在app.vue中进行mousewheel插件的引入
   if (!_rjs) {
     if (_njs) {
       // console.log('调用jquery.mcustomScrollbar.js _rjs 1')
@@ -52,7 +53,8 @@ and dependencies (minified).
       (works when mCustomScrollbar fn is called on window load) */
       // $.event.special.mousewheel || $("head").append(decodeURI("%3Cscript src="+_dlp+"//"+_url+"%3E%3C/script%3E"));
       // console.log('调用jquery.mcustomScrollbar.js _rjs 2')
-      $.event.special.mousewheel || $("head").append(decodeURI("%3Cscript src=./js/jquery.mousewheel.min.js%3E%3C/script%3E"));
+      // $.event.special.mousewheel || $("head").append(decodeURI("%3Cscript src=./js/jquery.mousewheel.min.js%3E%3C/script%3E"));
+      $.event.special.mousewheel || $("head").append('<script src='+require('@/lib/plugins/jquery.mousewheel.min.js')+ '></script>');
     }
   }
   init();
@@ -444,7 +446,6 @@ and dependencies (minified).
 
         /* plugin constructor */
         return $(selector).each(function () {
-
           var $this = $(this);
 
           if (!$this.data(pluginPfx)) { /* prevent multiple instantiations */
@@ -509,7 +510,6 @@ and dependencies (minified).
       */
 
       update: function (el, cb) {
-
         var selector = el || _selector.call(this); /* validate selector */
 
         return $(selector).each(function () {
@@ -544,7 +544,6 @@ and dependencies (minified).
             }
 
             d.overflowed = _overflowed.call(this); /* determine if scrolling is required */
-
             _scrollbarVisibility.call(this); /* show/hide scrollbar(s) */
 
             /* auto-adjust scrollbar dragger length analogous to content */
@@ -734,7 +733,6 @@ and dependencies (minified).
             _unbindEvents.call(this); /* unbind events */
 
             if (r) { _resetContentPosition.call(this); } /* reset content position */
-
             _scrollbarVisibility.call(this, true); /* show/hide scrollbar(s) */
 
             $this.addClass(classes[3]); /* add disable class */
@@ -858,7 +856,9 @@ and dependencies (minified).
     _pluginMarkup = function () {
       var $this = $(this), d = $this.data(pluginPfx), o = d.opt,
         expandClass = o.autoExpandScrollbar ? " " + classes[1] + "_expand" : "",
-        scrollbar = ["<div id='mCSB_" + d.idx + "_scrollbar_vertical' class='mCSB_scrollTools mCSB_" + d.idx + "_scrollbar mCS-" + o.theme + " mCSB_scrollTools_vertical" + expandClass + "'><div class='" + classes[12] + "'><div id='mCSB_" + d.idx + "_dragger_vertical' class='mCSB_dragger' style='position:absolute;' oncontextmenu='return false;'><div class='mCSB_dragger_bar' /></div><div class='mCSB_draggerRail' /></div></div>", "<div id='mCSB_" + d.idx + "_scrollbar_horizontal' class='mCSB_scrollTools mCSB_" + d.idx + "_scrollbar mCS-" + o.theme + " mCSB_scrollTools_horizontal" + expandClass + "'><div class='" + classes[12] + "'><div id='mCSB_" + d.idx + "_dragger_horizontal' class='mCSB_dragger' style='position:absolute;' oncontextmenu='return false;'><div class='mCSB_dragger_bar' /></div><div class='mCSB_draggerRail' /></div></div>"],
+        scrollbar = [
+          "<div id='mCSB_" + d.idx + "_scrollbar_vertical' class='mCSB_scrollTools mCSB_" + d.idx + "_scrollbar mCS-" + o.theme + " mCSB_scrollTools_vertical" + expandClass + "'><div class='" + classes[12] + "'><div id='mCSB_" + d.idx + "_dragger_vertical' class='mCSB_dragger' style='position:absolute;' oncontextmenu='return false;'><div class='mCSB_dragger_bar' /></div><div class='mCSB_draggerRail' /></div></div>", 
+          "<div id='mCSB_" + d.idx + "_scrollbar_horizontal' class='mCSB_scrollTools mCSB_" + d.idx + "_scrollbar mCS-" + o.theme + " mCSB_scrollTools_horizontal" + expandClass + "'><div class='" + classes[12] + "'><div id='mCSB_" + d.idx + "_dragger_horizontal' class='mCSB_dragger' style='position:absolute;' oncontextmenu='return false;'><div class='mCSB_dragger_bar' /></div><div class='mCSB_draggerRail' /></div></div>"],
         wrapperClass = o.axis === "yx" ? "mCSB_vertical_horizontal" : o.axis === "x" ? "mCSB_horizontal" : "mCSB_vertical",
         scrollbars = o.axis === "yx" ? scrollbar[0] + scrollbar[1] : o.axis === "x" ? scrollbar[1] : scrollbar[0],
         contentWrapper = o.axis === "yx" ? "<div id='mCSB_" + d.idx + "_container_wrapper' class='mCSB_container_wrapper' />" : "",
@@ -2357,9 +2357,9 @@ and dependencies (minified).
 
 
 
-  /* 
+  /*
   ----------------------------------------
-  PLUGIN SETUP 
+  PLUGIN SETUP
   ----------------------------------------
   */
 

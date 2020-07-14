@@ -18,6 +18,7 @@
  * Date: 2011-07-26
  * Rev:  1.0.03
  */
+/* eslint-disable */
 (function($){
 	// set default options
 	$.iButton = {
@@ -48,7 +49,7 @@
 					// if first iteration we need to check if we're done processing or need to add it to the jquery chain
 					if( i == 0 && r ){
 						// if this is a jQuery item, we need to store them in a collection
-						if( !!r.jquery ){
+						if( r.jquery ){
 							result = $([]).add(r);
 						// otherwise, just store the result and stop executing
 						} else {
@@ -72,13 +73,13 @@
 			return this.each(function (){
 				new iButton(this, options);
 			});
-		};
+		}
 	};
 
 	// count instances	
 	var counter = 0;
 	// detect iPhone
-	$.browser.iphone = (navigator.userAgent.toLowerCase().indexOf("iphone") > -1);
+	// $.browser.iphone = (navigator.userAgent.toLowerCase().indexOf("iphone") > -1);
 	
 	var iButton = function (input, options){
 		var self = this
@@ -88,12 +89,12 @@
 			, width = {}
 			, mouse = {dragging: false, clicked: null}
 			, dragStart = {position: null, offset: null, time: null }
-			// make a copy of the options and use the metadata if provided
-			, options = $.extend({}, defaults, options, (!!$.metadata ? $input.metadata() : {}))
 			// check to see if we're using the default labels
 			, bDefaultLabelsUsed = (options.labelOn == ON && options.labelOff == OFF)
 			// set valid field types
 			, allow = ":checkbox, :radio";
+			// make a copy of the options and use the metadata if provided
+			options = $.extend({}, defaults, options, ($.metadata ? $input.metadata() : {}))
 
 		// only do for checkboxes buttons, if matches inside that node
     if( !$input.is(allow) ) return $input.find(allow).iButton(options);
@@ -146,11 +147,11 @@
 
     $input
 			// create the wrapper code
-			.wrap('<div class="' + $.trim(options.classContainer + ' ' + options.className) + '" />')
+		.wrap('<div class="' + $.trim(options.classContainer + ' ' + options.className) + '" />')
     	.after(
-				  '<div class="' + options.classHandle + '"><div class="' + options.classHandleRight + '"><div class="' + options.classHandleMiddle + '" /></div></div>'
-      	+ '<div class="' + options.classLabelOff + '"><span><label></label></span></div>'
-      	+ '<div class="' + options.classLabelOn + '"><span><label></label></span></div>'
+			'<div class="' + options.classHandle + '"><div class="' + options.classHandleRight + '"><div class="' + options.classHandleMiddle + '" /></div></div>'
+      		+ '<div class="' + options.classLabelOff + '"><span><label></label></span></div>'
+      		+ '<div class="' + options.classLabelOn + '"><span><label></label></span></div>'
 			);
 
     var $container = $input.parent()
@@ -189,8 +190,8 @@
     
 		var positionHandle = function (animate){
 			var checked = $input[0].checked			
-				, x = (checked) ? handleRight : 0
-				, animate = (arguments.length > 0) ? arguments[0] : true;			
+				, x = (checked) ? handleRight : 0;
+			animate = (arguments.length > 0) ? arguments[0] : true;			
 			if( animate && options.enableFx ){
 				$handle.stop().animate({left: x}, options.duration, options.easing);
 				$onlabel.stop().animate({width: x + 4}, options.duration, options.easing);
@@ -198,9 +199,9 @@
 				$offspan.stop().animate({marginRight: -x}, options.duration, options.easing);
 			} else {			
 				$handle.css("left", x);
-				if(g_hostname=="vimtag.com"){
+				if(_this.$store.state.jumpPageData.hostname=="vimtag.com"){
 					$onlabel.css({"width":$onlabel[0].clientWidth ? $onlabel[0].clientWidth : (x + 4),"background":"#00a6ba"})
-				}else if(g_hostname=="ebitcam.com"){
+				}else if(_this.$store.state.jumpPageData.hostname=="ebitcam.com"){
                     $onlabel.css({"width":$onlabel[0].clientWidth ? $onlabel[0].clientWidth : (x + 4),"background":"#ff781f"})
 				}else{
 					 $onlabel.css({"width":$onlabel[0].clientWidth ? $onlabel[0].clientWidth : (x + 4),"background":"#2988cc"})
@@ -277,7 +278,7 @@
 				var x = getDragPos(e);
 				
 				var pct = (x - dragStart.offset) / handleRight;
-				var checked = (pct >= 0.5);
+				checked = (pct >= 0.5);
 				
 				// if the value is the same, don't run change event
 				if( $input[0].checked == checked ) changed = false;
@@ -381,3 +382,4 @@
 	}, ON = defaults.labelOn, OFF = defaults.labelOff;
 
 })(jQuery);
+

@@ -235,7 +235,7 @@ export default {
       }
 
       if (_this.$store.state.jumpPageData.localFlag) {
-        l_remember_data = sessionStorage.getItem("remember_msg_info"); //点击本地搜索后这个还有
+        l_remember_data = localStorage.getItem("remember_msg_info"); //点击本地搜索后这个还有
         l_remember_data = eval('(' + l_remember_data + ')');
         if (_this.$store.state.jumpPageData.loginFlag) {
           username_value = l_remember_data.user;
@@ -254,7 +254,7 @@ export default {
         _this.publicFunc.mx("#add_email").parentNode.style.display = "block";
         _this.publicFunc.mx('#li_line').style.display = "none";
         // _this.publicFunc.mx("#local_div").parentNode.style.display = "block";// 本地搜索测试	
-        if (g_support_auto_play) {
+        if (_this.$store.state.jumpPageData.autoPlayFlag) {
           _this.publicFunc.mx("#auto_play").parentNode.style.display = "block";
         }
         if (window.fujikam) {
@@ -293,6 +293,7 @@ export default {
         }
 
         $(".set_list").click(function () { // 对功能菜单中的每一项绑定点击事件
+        console.log(111)
           let id_name = $(this).children(".set_img").attr("id");
           // // console.log(id_name, 'id_name')
           $(".set_page").hide();
@@ -336,7 +337,7 @@ export default {
             $("ul#ul_id").on("click", "li", function () {
               $("#pb_select_sl").hide();
               $("#add_device_page").hide();
-              l_dom_feedback_type.value = $(this).text();
+              l_dom_feedback_type.val($(this).text());
             });
 
             let l_dom_feedback_upload_image = _this.publicFunc.mx("#upload_image");
@@ -373,9 +374,9 @@ export default {
               l_dom_feedback_upload_image.click();
             }
             l_dom_feedback_submit.onclick = function () {
-              let feedback_type = l_dom_feedback_type.val();
-              let feedback_content = l_dom_feedback_content.val();
-              let feedback_email_address = l_dom_feedback_email_address.val();
+              let feedback_type = l_dom_feedback_type.value;
+              let feedback_content = l_dom_feedback_content.value;
+              let feedback_email_address = l_dom_feedback_email_address.value;
               let feedback_pic = document.getElementById("pre_img");
               // let feedback_arr = { data: feedback_content };
               let filter = /(^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$|^\d{6,12}$)/; // 修改正则验证QQ和邮箱
@@ -462,8 +463,8 @@ export default {
             if (_this.$store.state.jumpPageData.loginFlag) {
               _this.publicFunc.delete_tips({
                 content: mcs_prompt_exit, flag: "my_page", func: function () { //g 5.5 flag是后加的，判断是my_page页面，点击取消
-                  sessionStorage.setItem("auto_login", 0);
-                  if (!sessionStorage.getItem("keep_pw")) {
+                  localStorage.setItem("auto_login", 0);
+                  if (!localStorage.getItem("keep_pw")) {
                     let remember_msg_info_data = localStorage.getItem("remember_msg_info");
                     let remember_msg_info_json = eval("(" + remember_msg_info_data + ")");
                     let username = remember_msg_info_json.user;
@@ -533,7 +534,7 @@ export default {
         if (_this.publicFunc.mx("#my_page_box_back_manage")) {
           _this.publicFunc.mx("#my_page_box_back_manage").onclick = function () {
             // createPage("my", obj)
-            _this.$router.push({name:'my',params:{parent: obj}})
+            _this.vimtagMyPage({parent: $('#my')})
           }
         }
       }
@@ -550,13 +551,13 @@ export default {
       }
 
       function binding_accounts_info_ack (msg) {
-        if (msg && msg.conf.email !== "") {
-          if (msg.conf.active_email) {
-            _this.publicFunc.mx("#email_addr").value = msg.conf.email;
+        if (msg && msg.data.email !== "") {
+          if (msg.data.active_email) {
+            _this.publicFunc.mx("#email_addr").value = msg.data.email;
             _this.publicFunc.mx("#email_addr").disabled = "true";
             $("#ae_btn").hide();
           } else {
-            _this.publicFunc.mx("#email_addr").value = msg.conf.email;
+            _this.publicFunc.mx("#email_addr").value = msg.data.email;
             _this.publicFunc.mx("#ae_email_inactive").style.display = "block";
           }
         } else {
@@ -677,27 +678,7 @@ export default {
             l_dom_progress_bar.style.width = "20px";
             _this.publicFunc.mx("#sd_export_submit_tip").style.display = "block";
             let sd_export_path = l_dom_sd_export_path_show.innerHTML;
-            function get_progress (path) {
-              let progress_time = null;
-              let progress_num = 0;
-              progress_time = setInterval(function () {
-                l_dom_progress_bar_box.style.display = "block";
-                progress_num = window.progress(sd_export_path + "\\progress");
-                progress_num = parseInt(progress_num);
-                let show_progress_num = progress_num + "%";
-                l_dom_progress_bar.style.width = show_progress_num;
-                l_dom_progress_bar_num.innerHTML = show_progress_num;
-                if (progress_num == 100) {
-                  _this.publicFunc.mx("#export_success_icon").style.display = "block";
-                  _this.publicFunc.mx("#sd_export_submit_tip").style.display = "none";
-                  document.getElementById("sd_export_submit").style.background = "#00a6ba";
-                  clearInterval(progress_time);
-                  l_dom_sd_export_submit.innerHTML = "Export success";
-                  l_dom_sd_export_submit.onclick = sd_export_submit_func;
-                  sd_is_export = 0;
-                }
-              }, 100)
-            }
+          
             setTimeout(function () {
               let result = window.sd_export(sd_export_path);
               let timer = null;
@@ -829,21 +810,21 @@ export default {
             _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
           } else {
             let reg;
-            if (!l_dom_admin_pw || l_dom_admin_pw.val() == "") { // 未输入当前管理密码
+            if (!l_dom_admin_pw || l_dom_admin_pw.value == "") { // 未输入当前管理密码
               $(".mp_password_empty").eq(0).show(); // 错误提示语句
               setTimeout(function () {
                 $(".mp_password_empty").eq(0).hide();
               }, 3000)
               return;
             }
-            if (!l_dom_admin_pw1.val() || l_dom_admin_pw1.val() == "") { // 未输入新管理密码
+            if (!l_dom_admin_pw1.value || l_dom_admin_pw1.value == "") { // 未输入新管理密码
               $(".mp_password_empty").eq(1).show();
               setTimeout(function () {
                 $(".mp_password_empty").eq(1).hide();
               }, 3000)
               return;
             }
-            if (!l_dom_admin_pw2.val() || l_dom_admin_pw2.val() == "") { // 未输入确认密码
+            if (!l_dom_admin_pw2.value || l_dom_admin_pw2.value == "") { // 未输入确认密码
               $(".mp_password_empty").eq(2).show();
               setTimeout(function () {
                 $(".mp_password_empty").eq(2).hide();
@@ -851,7 +832,7 @@ export default {
               return;
             } else {
               reg = /^(?![^A-z]+$)(?!\D+$)[A-z\d]{8,32}$/; // 密码格式验证(8-32位字母数字)
-              if (!reg.exec(l_dom_admin_pw1.val())) {
+              if (!reg.exec(l_dom_admin_pw1.value)) {
                 $(".mp_password_demand").eq(0).show();
                 setTimeout(function () {
                   $(".mp_password_demand").eq(0).hide();
@@ -859,27 +840,27 @@ export default {
                 return;
               }
             }
-            if (!l_dom_admin_pw2.val() || l_dom_admin_pw2.val() == "") {
+            if (!l_dom_admin_pw2.value || l_dom_admin_pw2.value == "") {
               $(".mp_password_empty").eq(1).show();
               setTimeout(function () {
                 $(".mp_password_empty").eq(1).hide();
               }, 3000)
               return;
             }
-            if (l_dom_admin_pw1.val() != l_dom_admin_pw2.val()) { // 两次输入的新密码不一致
+            if (l_dom_admin_pw1.value != l_dom_admin_pw2.value) { // 两次输入的新密码不一致
               $(".mp_password_inconsistent").show();
               setTimeout(function () {
                 $(".mp_password_inconsistent").hide();
               }, 3000)
               return;
             }
-            if (l_dom_admin_pw.val() === l_dom_admin_pw1.val()) { // 修改密码时新密码不能与旧密码一致
+            if (l_dom_admin_pw.value === l_dom_admin_pw1.value) { // 修改密码时新密码不能与旧密码一致
               _this.publicFunc.msg_tips({ msg: mrs_new_password_setting_failed, type: "error", timeout: 3000 })
               return
             }
             _this.$api.my.account_passwd_set({ // 修改管理/访客密码(管理)
-              old_pass: l_dom_admin_pw.val(),
-              new_pass: l_dom_admin_pw1.val(),
+              old_pass: l_dom_admin_pw.value,
+              new_pass: l_dom_admin_pw1.value,
               is_guest: 0
             }).then(res => {
               user_passwd_set_ack(res)
@@ -891,14 +872,14 @@ export default {
             _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
           } else {
             let reg;
-            if (!l_dom_guest_pw.val() || l_dom_guest_pw.val() == "") { // 输入为空判断提示
+            if (!l_dom_guest_pw.value || l_dom_guest_pw.value == "") { // 输入为空判断提示
               $(".gp_password_empty").eq(0).show();
               setTimeout(function () {
                 $(".gp_password_empty").eq(0).hide();
               }, 3000);
               return;
             }
-            if (!l_dom_guest_pw1.val() || l_dom_guest_pw1.val() == "") { // 输入为空判断提示
+            if (!l_dom_guest_pw1.value || l_dom_guest_pw1.value == "") { // 输入为空判断提示
               $(".gp_password_empty").eq(1).show();
               setTimeout(function () {
                 $(".gp_password_empty").eq(1).hide();
@@ -906,7 +887,7 @@ export default {
               return;
             } else {
               reg = /^\S{6,20}$/;
-              if (!reg.exec(l_dom_guest_pw1.val())) { // 访客密码校验
+              if (!reg.exec(l_dom_guest_pw1.value)) { // 访客密码校验
                 $(".gp_password_demand").eq(0).show();
                 setTimeout(function () {
                   $(".gp_password_demand").eq(0).hide();
@@ -914,21 +895,21 @@ export default {
                 return;
               }
             }
-            if (!l_dom_guest_pw2.val() || l_dom_guest_pw2.val() == "") { // 输入为空判断提示
+            if (!l_dom_guest_pw2.value || l_dom_guest_pw2.value == "") { // 输入为空判断提示
               $(".gp_password_empty").eq(1).show();
               setTimeout(function () {
                 $(".gp_password_empty").eq(1).hide();
               }, 3000)
               return;
             }
-            if (l_dom_guest_pw1.val() != l_dom_guest_pw2.val()) { // 两次访客密码输入不一致
+            if (l_dom_guest_pw1.value != l_dom_guest_pw2.value) { // 两次访客密码输入不一致
               $(".gp_password_inconsistent").eq(0).show();
               setTimeout(function () {
                 $(".gp_password_inconsistent").eq(0).hide();
               }, 3000)
               return;
             }
-            if (l_dom_guest_pw1.val() === l_dom_guest_pw.val()) { // 输入的访客密码与管理密码一致
+            if (l_dom_guest_pw1.value === l_dom_guest_pw.value) { // 输入的访客密码与管理密码一致
               _this.publicFunc.msg_tips({ msg: mrs_guest_password_setting_failed, type: "error", timeout: 3000 })
               // 注释内容为原mipc系列提示
               // $(".gp_same_ap").eq(0).show();
@@ -938,8 +919,8 @@ export default {
               return
             }
             _this.$api.my.account_passwd_set({ // 修改管理/访客密码(访客)
-              old_pass: l_dom_guest_pw.val(),
-              new_pass: l_dom_guest_pw2.val(),
+              old_pass: l_dom_guest_pw.value,
+              new_pass: l_dom_guest_pw2.value,
               is_guest: 1
             }).then(res => {
               user_passwd_set_ack(res)
@@ -948,7 +929,7 @@ export default {
         });
         $("#ae_btn").click(function () { // 绑定邮箱
           let email_reg = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-          if (!l_dom_email_addr.val() || l_dom_email_addr.val() == "" || !email_reg.test(l_dom_email_addr.val())) {
+          if (!l_dom_email_addr.value || l_dom_email_addr.value == "" || !email_reg.test(l_dom_email_addr.value)) {
             $("#email_invalid").show();
             setTimeout(function () {
               $("#email_invalid").hide();
@@ -956,9 +937,9 @@ export default {
             return;
           }
           let appid = "vimtag.com";
-          let user_info = eval("(" + sessionStorage.getItem("remember_msg_info") + ")")
+          let user_info = eval("(" + localStorage.getItem("remember_msg_info") + ")")
           _this.$api.my.binding_email({
-            email: l_dom_email_addr.val(),
+            email: l_dom_email_addr.value,
             user: user_info.user,
             pass: user_info.password,
             appid: appid,
@@ -1027,22 +1008,22 @@ export default {
         //     _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_fail, type: "error", timeout: 3000 })
         //   }
         // }
-        $("#set_auto_play_btn").ibutton.iButton({
+        $("#set_auto_play_btn").iButton({
           change: function () {
-            if (_this.publicFunc.mx("#set_auto_play_btn").checked && g_support_auto_play) {
-              sessionStorage.setItem("auto_play", 1)
+            if (_this.publicFunc.mx("#set_auto_play_btn").checked && _this.$store.state.jumpPageData.autoPlayFlag) {
+              localStorage.setItem("auto_play", 1)
               g_auto_play = 1;
             } else {
-              sessionStorage.setItem("auto_play", "0");
+              localStorage.setItem("auto_play", "0");
               g_auto_play = 0;
             }
           }
         });
-        let auto_play = sessionStorage.getItem("auto_play");
+        let auto_play = localStorage.getItem("auto_play");
         if (auto_play == 0) {
-          $("#set_auto_play_btn").ibutton.iButton("toggle", false)
+          $("#set_auto_play_btn").iButton("toggle", false)
         } else {
-          $("#set_auto_play_btn").ibutton.iButton("toggle", true)
+          $("#set_auto_play_btn").iButton("toggle", true)
         }
       }
 

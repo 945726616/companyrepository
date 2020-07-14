@@ -25,7 +25,8 @@ const jumpPageData = {
     playInfo: '', // 播放相关详情
     webClientV: "0.0.0",//版本号
     hostname : "",
-    guest: 1 //是否为访客模式
+    guest: 1, //是否为访客模式
+    serverDevice: '', // get_req接口请求回的服务器地址
   },
   mutations: {
     SET_PAGE_DOM: (state, pageDom) => {
@@ -96,6 +97,9 @@ const jumpPageData = {
     },
     SET_GUEST: (state, guest) => {
       state.guest = guest
+    },
+    SET_SERVER_DEVICE: (state, serverDevice) => {
+      state.serverDevice = serverDevice
     }
   },
   actions: {
@@ -121,7 +125,8 @@ const jumpPageData = {
     setPlayInfo: ({commit}, playInfo) => commit('SET_PLAY_INFO', playInfo),
     setWebClientV: ({commit}, webClientV) => commit('SET_WEB_CLIENT_V', webClientV),
     setHostname: ({commit}, hostname) => commit('SET_HOSTNAME', hostname),
-    setGuest: ({commit}, guest) => commit('SET_GUEST', guest)
+    setGuest: ({commit}, guest) => commit('SET_GUEST', guest),
+    setServerDevice: ({commit}, serverDevice) => commit('SET_SERVER_DEVICE', serverDevice)
   }
 }
 

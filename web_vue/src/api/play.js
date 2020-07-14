@@ -59,8 +59,9 @@ const play = {
   /*
   ** 停止视频播放
   */
-  video_stop (params) {
+  async video_stop (params) {
     let flash_isplay = store.state.jumpPageData.flashIsPlay
+    console.log(flash_isplay, 'flash_isplay')
     let play_info = store.state.jumpPageData.playInfo
     if (flash_isplay) {
       clearInterval(flash_isplay)
@@ -85,13 +86,15 @@ const play = {
     } else {
       params.dom.html('')
     }
-    return { parent: params.dom }
+    let returnItem = null
+    return await returnItem
   },
   /*
   ** 播放总接口
   */
   async play (data) {
     let returnItem
+    let flash_isplay = store.state.jumpPageData.flashIsPlay
     let judge_enable_native_plug = true;
     let judge_enable_flash_plug = false;
     let ref_obj = create_play_ipc(data);
@@ -117,12 +120,12 @@ const play = {
     store.dispatch('setPlayInfo', ref_obj)
     function flash_play () {
       let profile_token_choice = get_profile_token_choice(data.profile_token);
-      urls = window.location.protocol + "//" + g_server_device + "/ccm/ccm_pic_get.jpg?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
-      data.dom.innerHTML = "<img id='flash_img' width='1px' src='" + urls + "'>";
+      let urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.jpg?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
+      data.dom.html("<img id='flash_img' width='1px' src='" + urls + "'>")
       if (publicFunc.mx("#flash_img")) {
         publicFunc.mx("#flash_img").onload = function () {
-          data.dom.style.background = "url(" + this.src + ")";
-          data.dom.style.backgroundSize = "100% 100%";
+          data.dom.css('background', "url(" + this.src + ")")
+          data.dom.css('backgroundSize', "100% 100%")
         }
       } else {
         clearInterval(flash_isplay)
@@ -164,7 +167,7 @@ const play = {
         }
         case "install_ui": {
           obj.panel.innerHTML = ''
-          obj.panel.getAttribute('id', "plugin_install_page")
+          obj.panel.id = "plugin_install_page"
           let play_oem = "";
           if (store.state.jumpPageData.projectName === "vimtag") {
             play_oem = "Vimtag";
@@ -338,6 +341,7 @@ const play = {
   ** 摄像头视角控制
   */
   play_ptz_turn (params) {
+    console.log(params, 'turn_params')
     let l_mark = { flag: "ready" }
     let l_move_x = 0
     let l_move_y = 0
@@ -351,15 +355,12 @@ const play = {
     } else if (params.direction === "down") {
       l_move_y = -12;
     }
-    if (params.flag == "stop") {
-      if (interval) {
-        clearInterval(interval);
-      }
-      interval = null
+    if (l_mark.flag === "ready") {
+      l_mark.flag = "move"
       play.ptz_ctrl({
         sn: store.state.jumpPageData.selectDeviceIpc,
-        x: 0,
-        y: 0
+        x: -l_move_x,
+        y: l_move_y
       }).then(res => {
         if (res.result === '') {
           if (l_mark.flag) {
@@ -368,34 +369,12 @@ const play = {
         }
       })
     }
-    else {
-      if (interval) {
-        // clearInterval(l_interval);
-        // l_mark.flag = "ready";
-      } else {
-        interval = setInterval(function () {
-          if (l_mark.flag == "ready") {
-            l_mark.flag = "move"
-            play.ptz_ctrl({
-              sn: store.state.jumpPageData.selectDeviceIpc,
-              x: -l_move_x,
-              y: l_move_y
-            }).then(res => {
-              if (res.result === '') {
-                if (l_mark.flag) {
-                  l_mark.flag = 'ready'
-                }
-              }
-            })
-          }
-        }, 100);
-      }
-    }
   },
   /*
   ** 摄像头视角控制接口
   */
   async ptz_ctrl (params) {
+    console.log(params, 'ptz_ctrl_params')
     let returnItem
     await axios.get('/ccm/ccm_ptz_ctl', {
       params: {
@@ -856,3 +835,30 @@ const play = {
 }
 
 export default play
+
+function get_profile_token_choice(data){
+  var profile_token_obj=new Object();
+    var profile_token_choice = data;
+  if(profile_token_choice=="" || profile_token_choice == null){
+      if(g_network_environ == "private"){
+          profile_token_obj.profile_token_choice_value = "p0_xxxxxxxxxx";
+          profile_token_obj.few_seconds=3000;
+      }else{
+          profile_token_obj.profile_token_choice_value = "p1_xxxxxxxxxx";
+          profile_token_obj.few_seconds=1000;
+      }
+  }else if(profile_token_choice == "p0"){
+      profile_token_obj.profile_token_choice_value = "p0_xxxxxxxxxx";
+      profile_token_obj.few_seconds=3000;
+  }else if(profile_token_choice == "p1"){
+      profile_token_obj.profile_token_choice_value = "p1_xxxxxxxxxx";
+      profile_token_obj.few_seconds = 1000;
+  }else if(profile_token_choice == "p2"){
+      profile_token_obj.profile_token_choice_value = "p2_xxxxxxxxxx";
+      profile_token_obj.few_seconds=500;
+  }else if(profile_token_choice == "p3"){
+      profile_token_obj.profile_token_choice_value = "p3_xxxxxxxxxx";
+      profile_token_obj.few_seconds = 500;
+  }
+  return profile_token_obj;
+}

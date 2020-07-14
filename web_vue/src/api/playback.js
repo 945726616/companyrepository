@@ -69,7 +69,7 @@ const playback = {
     play_info = ref_obj;
     function flash_play () {
       let profile_token_choice = get_profile_token_choice(data.profile_token);
-      urls = window.location.protocol + "//" + g_server_device + "/ccm/ccm_pic_get.jpg?hfrom_handle=887330&dsess=1&dsess_nid=" + msdk_agent.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
+      urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.jpg?hfrom_handle=887330&dsess=1&dsess_nid=" + msdk_agent.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
       data.dom.innerHTML = "<img id='flash_img' width='1px' src='" + urls + "'>";
       if (publicFunc.mx("#flash_img")) {
         publicFunc.mx("#flash_img").onload = function () {

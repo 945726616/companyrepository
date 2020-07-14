@@ -19,7 +19,7 @@ function mcookie(name)
         }
     }
 
-    if(cookie == null){ return };
+    if(cookie == null){ return }
     me.value = decodeURIComponent(cookie.substring(name.length+1));
 }
 

@@ -219,7 +219,7 @@ mme.prototype =
       description_flag = 'block', button_width = 210, font_size = 18, flash_float_type = 'left', plug_float_type = 'right',
       plug_magin_top = 0, description_div, title_flag = 'block', install_div, flash_a, plug_a, title_center;
     this.clear_install();
-    this.parent.appendChild(this.install_panel = document.createElement("div"));
+    this.parent.append(this.install_panel = document.createElement("div"));
     install_div = this.install_panel;
     function setFloatStyle (obj, style) {
       var sty = obj.style;

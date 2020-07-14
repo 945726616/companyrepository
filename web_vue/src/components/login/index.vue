@@ -631,6 +631,8 @@ export default {
                   },
                   srv: _this.appid
                 }).then(res => {
+                  let host = res.data.server.signal[0].substring(res.data.server.signal[0].indexOf("//")+2,res.data.server.signal[0].lastIndexOf("/"))
+                  _this.$store.dispatch('setServerDevice', host)
                   get_req_ack(res)
                   function get_req_ack (msg) {
                     if (msg && msg.data && msg.data.server && msg.data.server.param) {

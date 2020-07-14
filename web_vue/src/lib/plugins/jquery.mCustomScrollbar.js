@@ -2294,6 +2294,7 @@ and dependencies (minified).
         for (var i = 0; i < props.length; i++) {
           var prop = props[i];
           if (el._mTween[prop].id) {
+					
             if (!window.requestAnimationFrame) {
               clearTimeout(el._mTween[prop].id);
             } else { window.cancelAnimationFrame(el._mTween[prop].id); }
@@ -2427,6 +2428,5 @@ and dependencies (minified).
       });
 
     });
-
   }))
 }));

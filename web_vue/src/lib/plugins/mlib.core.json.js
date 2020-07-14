@@ -27,7 +27,7 @@ function mmerge(d, s)
             }
             else if(typeof(v) != "object"){d[n] = v;}
             else{
-                if (((o = d[n]) == undefined) || (null == o)){ d[n] = (o = {}); };
+                if (((o = d[n]) == undefined) || (null == o)){ d[n] = (o = {}); }
                 mmerge(o, v);
             }
         }

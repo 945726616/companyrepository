@@ -367,16 +367,26 @@ const login = {
     return CryptoJS.DES.encrypt(CryptoJS.enc.Hex.parse(pwd_md5_hex), CryptoJS.enc.Hex.parse(md5.hex(store.state.user.shareKey)), { iv: CryptoJS.enc.Hex.parse('0000000000000000'), padding: CryptoJS.pad.NoPadding }).ciphertext.toString()
   },
   get_ret (msg) { // 部分函数返回值取舍判断函数
-    //console.log(msg, 'get_ret_msg')
-    let ret = (msg && msg.data) ? (msg.data.ret || msg.data.result) : null
-    //console.log(ret, 'let_ret')
+    // console.log(msg, 'get_ret_msg')
+    let ret = (msg && msg.data) ? (msg.data.ret || msg.data.result || msg.data.Result) : null
+    if(Object.prototype.hasOwnProperty.call(ret, "Code")){//将接口返回名称小写
+      ret["code"] = ret.Code;
+      ret["sub"] = ret.SubCode;
+      ret["reason"] = ret.Reason;
+      ret["sesc"] = ret.Desc;
+      delete ret.Code;
+      delete ret.SubCode;
+      delete ret.Reason;
+      delete ret.Desc;
+    }
+    // console.log(ret, 'let_ret')
     if (Object.prototype.toString.call(ret) === "[object String]") {
-      //console.log(ret, 'ret')
+      // console.log(ret, 'ret')
       return ret
     }
     else {
-      let s_ret = ret ? (ret.reason || ret.sub || ret.code) : null
-      //console.log(s_ret, 's_ret')
+      let s_ret = ret ? (ret.reason || ret.sub || ret.code)  : null
+      // console.log(s_ret, 's_ret')
       return s_ret
     }
   }

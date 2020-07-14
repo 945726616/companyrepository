@@ -17,7 +17,7 @@ function mdrag(el, mousedown_evt, on_update, on_update_ref)
     mevt.bind(dc, "mousemove", on_evt);
     mevt.bind(dc, "mouseup", on_evt);
     mevt.bind(dc, "blur", on_evt);
-    if (el.setCapture){ el.setCapture(); mevt.bind(el, "losecapture", on_evt); };/*ie*/
+    if (el.setCapture){ el.setCapture(); mevt.bind(el, "losecapture", on_evt); }/*ie*/
 
     mevt.stop (mousedown_evt);
     mevt.mude (mousedown_evt);
@@ -25,7 +25,7 @@ function mdrag(el, mousedown_evt, on_update, on_update_ref)
    /* title_twinkle (null);
    try {
        im.session.im_box.group_menu.hide (null);
-   } catch (e) {};
+   } catch (e) {}
    xxxxxxxxxx refer im */
     function on_evt(e)
     {
@@ -39,7 +39,7 @@ function mdrag(el, mousedown_evt, on_update, on_update_ref)
                 mevt.unbind(dc, "mousemove", on_evt);
                 mevt.unbind(dc, "mouseup", on_evt);
                 mevt.unbind(dc, "blur", on_evt);
-                if(el.releaseCapture){ mevt.unbind(el, "losecapture", on_evt); el.releaseCapture(); };
+                if(el.releaseCapture){ mevt.unbind(el, "losecapture", on_evt); el.releaseCapture(); }
                 break;
             }
             case "mousemove":
@@ -49,13 +49,13 @@ function mdrag(el, mousedown_evt, on_update, on_update_ref)
                     xmx = Math.max(p.scrollWidth, p.clientWidth),
                     ymx = Math.max(p.scrollHeight, p.clientHeight, (dc_xel && (p == dc.body))?dc_xel.clientHeight:0);
 
-                if((x + el.offsetWidth) > xmx){ x = xmx - el.offsetWidth; };
-                if((y + el.offsetHeight) > ymx){ y = ymx - el.offsetHeight; };
-                if(x < 0){ x = 0; };
-                if(y < 0){ y = 0; };
+                if((x + el.offsetWidth) > xmx){ x = xmx - el.offsetWidth; }
+                if((y + el.offsetHeight) > ymx){ y = ymx - el.offsetHeight; }
+                if(x < 0){ x = 0; }
+                if(y < 0){ y = 0; }
                 stl.left = x + "px";
                 stl.top = y + "px";
-                if(on_update){ on_update(on_update_ref); };
+                if(on_update){ on_update(on_update_ref); }
                 break;
             }
         }

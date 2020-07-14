@@ -4,6 +4,7 @@
 */
 
 /* mining lib js */
+/* eslint-disable */
 function meval(s){ try{return eval("(" + s + ")"); }catch(e){return null;} }
 
 function mobj_merge(d, s)

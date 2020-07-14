@@ -134,7 +134,6 @@ const devlist = {
         sn: params.sn
       }
     }).then(res => {
-      console.log(res)
       let msg = { result: login.get_ret(res) }
       if (msg && msg.result === "") {
         returnItem = { msg: mcs_delete_success, type: "success", dom: params.dom }
