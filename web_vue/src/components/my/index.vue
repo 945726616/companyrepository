@@ -293,7 +293,7 @@ export default {
         }
 
         $(".set_list").click(function () { // 对功能菜单中的每一项绑定点击事件
-        console.log(111)
+          console.log(111)
           let id_name = $(this).children(".set_img").attr("id");
           // // console.log(id_name, 'id_name')
           $(".set_page").hide();
@@ -436,23 +436,22 @@ export default {
                   delete params.item.pic;
                 }
                 // console.log(params)
-                msdk_agent.feedback_submit(params, null, feedback_submit_ack);
+                // msdk_agent.feedback_submit(params, null, feedback_submit_ack);
               }
               function feedback_submit_ack (msg) {
-                  if (msg && msg.result == "") {
-                    _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_success, type: "success", timeout: 3000 });
-                    $("#upload_image").val("");
-                    l_dom_feedback_type.val("");
-                    // $("#pre_img")[0].src = "";
-                    // $("#pre_img")[0].style = "";
-                    l_dom_feedback_content.val("");
-                    l_dom_feedback_email_address.val("");
-                  } else {
-                    _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_fail, type: "error", timeout: 3000 });
-                  }
+                if (msg && msg.result == "") {
+                  _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_success, type: "success", timeout: 3000 });
+                  $("#upload_image").val("");
+                  l_dom_feedback_type.val("");
+                  // $("#pre_img")[0].src = "";
+                  // $("#pre_img")[0].style = "";
+                  l_dom_feedback_content.val("");
+                  l_dom_feedback_email_address.val("");
+                } else {
+                  _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_fail, type: "error", timeout: 3000 });
                 }
+              }
             };
-            
           }
           if (id_name == "exit_btn_img") {
             if (!_this.$store.state.jumpPageData.projectFlag) { // vimtag项目隐藏退出登录内容页面的返回按钮
@@ -534,7 +533,7 @@ export default {
         if (_this.publicFunc.mx("#my_page_box_back_manage")) {
           _this.publicFunc.mx("#my_page_box_back_manage").onclick = function () {
             // createPage("my", obj)
-            _this.vimtagMyPage({parent: $('#my')})
+            _this.vimtagMyPage({ parent: $('#my') })
           }
         }
       }
@@ -678,7 +677,7 @@ export default {
             l_dom_progress_bar.style.width = "20px";
             _this.publicFunc.mx("#sd_export_submit_tip").style.display = "block";
             let sd_export_path = l_dom_sd_export_path_show.innerHTML;
-          
+
             setTimeout(function () {
               let result = window.sd_export(sd_export_path);
               let timer = null;
@@ -751,26 +750,26 @@ export default {
             l_dom_progress_bar.style.width = "20px";
           }
           function get_progress () {
-              let progress_time = null;
-              let progress_num = 0;
-              progress_time = setInterval(function () {
-                l_dom_progress_bar_box.css("display","block");
-                progress_num = window.progress(sd_export_path + "\\progress");
-                progress_num = parseInt(progress_num);
-                let show_progress_num = progress_num + "%";
-                l_dom_progress_bar.style.width = show_progress_num;
-                l_dom_progress_bar_num.innerHTML = show_progress_num;
-                if (progress_num == 100) {
-                  $("#export_success_icon").css("display","block");
-                  $("#sd_export_submit_tip").parent().css("display","none");
-                  document.getElementById("sd_export_submit").style.background = "#00a6ba";
-                  clearInterval(progress_time);
-                  l_dom_sd_export_submit.innerHTML = "Export success";
-                  l_dom_sd_export_submit.onclick = sd_export_submit_func;
-                  sd_is_export = 0;
-                }
-              }, 100)
-            }
+            let progress_time = null;
+            let progress_num = 0;
+            progress_time = setInterval(function () {
+              l_dom_progress_bar_box.css("display", "block");
+              progress_num = window.progress(sd_export_path + "\\progress");
+              progress_num = parseInt(progress_num);
+              let show_progress_num = progress_num + "%";
+              l_dom_progress_bar.style.width = show_progress_num;
+              l_dom_progress_bar_num.innerHTML = show_progress_num;
+              if (progress_num == 100) {
+                $("#export_success_icon").css("display", "block");
+                $("#sd_export_submit_tip").parent().css("display", "none");
+                document.getElementById("sd_export_submit").style.background = "#00a6ba";
+                clearInterval(progress_time);
+                l_dom_sd_export_submit.innerHTML = "Export success";
+                l_dom_sd_export_submit.onclick = sd_export_submit_func;
+                sd_is_export = 0;
+              }
+            }, 100)
+          }
         }
         l_dom_sd_export_submit.onclick = sd_export_submit_func;
         // l_dom_about_title.ondblclick = function () {
@@ -943,7 +942,7 @@ export default {
             user: user_info.user,
             pass: user_info.password,
             appid: appid,
-            lang: g_now_lang
+            lang: sessionStorage.getItem('userLanguage')
           }).then(res => {
             binding_email_ack(res)
           })
@@ -1039,7 +1038,15 @@ export default {
     } else {
       await this.$chooseLanguage.lang('en')
     }
-    await this.vimtagMyPage({ parent: $('#my') }) // 进入页面后加载
+    let pageData;//页面创建相关对象
+    if (this.$route.params) {
+      pageData = this.$route.params;
+      pageData.parent = $("#" + this.$route.name)
+    } else {
+      pageData = { parent: $("#" + this.$route.name) }
+    }
+    console.log(pageData, "pageData")
+    await this.vimtagMyPage(pageData) // 进入页面后加载
     // await this.create_my_page({ parent: $('#my') })
     // await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     // if (window.location.href.indexOf('vimtag') === -1) {

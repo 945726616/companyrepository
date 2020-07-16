@@ -301,6 +301,26 @@ const login = {
       params: params
     })
   },
+  /*
+  ** 获取网络环境变量
+  */
+  async svr_dev_get () {
+    let returnItem
+    await axios.get('/ccm/ccm_info_get').then(res => {
+      if (res.data) {
+        returnItem = {
+          result: login.get_ret(res),
+          type: res.data.type,
+          sn: res.data.sn,
+          nick: res.data.nick,
+          ver: res.data.ver
+        }
+      } else {
+        returnItem = { result: login.get_ret(res) }
+      }
+    })
+    return returnItem
+  },
   // 以下为自封装的工具函数 文件内可以采用this.函数名调用外部需要引入后使用login.函数名调用
   create_nid_ex (type) {
     return mcodec.nid(++store.state.user.seq, type ? store.state.user.lid : store.state.user.sid, store.state.user.shareKey, type, null, null, md5, "hex")

@@ -115,6 +115,7 @@ const play = {
       debug: 0
     };
     if (data.ipc_stat != 0) {
+      console.log('use mme_create')
       ref_obj.inner_window_info.mme = new mme(mme_params);
     }
     store.dispatch('setPlayInfo', ref_obj)
@@ -184,7 +185,7 @@ const play = {
           // if(store.state.jumpPageData.projectName=="vimtag"){
           obj.panel.innerHTML = "<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>"
             + "<div id='plugin_install_tips'>" + mcs_download_client + "</div>"
-            + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.downloadManualUrl+ "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>"
+            + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.downloadManualUrl + "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>"
             + "<div style='margin-top: 85px;'><a name='flash' href='javascript:;'><div id='use_ordinary_video'>" + mcs_temporarily_installed_use_ordinary_video + "</div></a></div>"
             + "</div>"
           let plugin_install_page_width = $("#plugin_install_page").outerWidth() / 2;
@@ -586,8 +587,8 @@ const play = {
         }
       }
     }).then(async res => {
-      let result = get_ret(res)
-      let vss = res.data.vss
+      let result = login.get_ret(res)
+      let vss = res.data.VideoSources
       let day
       let night
       let white_light
@@ -602,42 +603,42 @@ const play = {
       let contrast
       let color_saturation
       let sharpness
-      if (result === "" && vss[0].extension.conf) {
-        if (vss[0].extension.conf.day) {
+      if (result === "" && vss[0].Extension.Imaging) {
+        if (vss[0].Extension.Imaging.day) {
           day = {
-            brightness: vss[0].extension.conf.day.brightness,
-            contrast: vss[0].extension.conf.day.contrast,
-            color_saturation: vss[0].extension.conf.day.color_saturation,
-            sharpness: vss[0].extension.conf.day.sharpness
+            brightness: vss[0].Extension.Imaging.day.brightness,
+            contrast: vss[0].Extension.Imaging.day.contrast,
+            color_saturation: vss[0].Extension.Imaging.day.color_saturation,
+            sharpness: vss[0].Extension.Imaging.day.sharpness
           }
           night = {
-            brightness: vss[0].extension.conf.night.brightness,
-            contrast: vss[0].extension.conf.night.contrast,
-            color_saturation: vss[0].extension.conf.night.color_saturation,
-            sharpness: vss[0].extension.conf.night.sharpness
+            brightness: vss[0].Extension.Imaging.night.brightness,
+            contrast: vss[0].Extension.Imaging.night.contrast,
+            color_saturation: vss[0].Extension.Imaging.night.color_saturation,
+            sharpness: vss[0].Extension.Imaging.night.sharpness
           }
-          if (vss[0].extension.conf.white_light) {
+          if (vss[0].Extension.Imaging.white_light) {
             white_light = {
-              brightness: vss[0].extension.conf.white_light.brightness,
-              contrast: vss[0].extension.conf.white_light.contrast,
-              color_saturation: vss[0].extension.conf.white_light.color_saturation,
-              sharpness: vss[0].extension.conf.white_light.sharpness
+              brightness: vss[0].Extension.Imaging.white_light.brightness,
+              contrast: vss[0].Extension.Imaging.white_light.contrast,
+              color_saturation: vss[0].Extension.Imaging.white_light.color_saturation,
+              sharpness: vss[0].Extension.Imaging.white_light.sharpness
             }
           }
-          day_or_night = vss[0].extension.conf.day_or_night;
-          red_or_white = vss[0].extension.conf.red_or_white;
+          day_or_night = vss[0].Extension.Imaging.day_or_night;
+          red_or_white = vss[0].Extension.Imaging.red_or_white;
         } else {
-          brightness = vss[0].extension.conf.brightness;
-          contrast = vss[0].extension.conf.contrast;
-          color_saturation = vss[0].extension.conf.color_saturation;
-          sharpness = vss[0].extension.conf.sharpness;
+          brightness = vss[0].Extension.Imaging.brightness;
+          contrast = vss[0].Extension.Imaging.contrast;
+          color_saturation = vss[0].Extension.Imaging.color_saturation;
+          sharpness = vss[0].Extension.Imaging.sharpness;
         }
-        if (vss[0].extension.conf.mode) {
-          day_night = vss[0].extension.conf.mode;
+        if (vss[0].Extension.Imaging.mode) {
+          day_night = vss[0].Extension.Imaging.mode;
         } else {
           day_night = "auto";
         }
-        light_mode = vss[0].extension.conf.light_mode
+        light_mode = vss[0].Extension.Imaging.light_mode
         await axios.get('/ccm/ccm_misc_get', { // 该接口仅调用一次所以不单独拆分了
           params: {
             sess: {
@@ -646,7 +647,7 @@ const play = {
             }
           }
         }).then(res_misc => {
-          let result = get_ret(res_misc);
+          let result = login.get_ret(res_misc);
           if (result === "") {
             let msg = res_misc.data ? res_misc.data.info : "";
             flip = msg.flip; /* 0/1 0:none-flip, 1:filp */
@@ -681,7 +682,7 @@ const play = {
   /*
   ** 设置视频地址
   */
-  adjust_set (obj) {
+  async adjust_set (obj) {
     let returnItem
     if (obj.is_white_light == 1 && obj.white_light) {
       play.img_set({
@@ -694,7 +695,7 @@ const play = {
           mode: obj.day_night, light_mode: obj.light_mode
         }
       }).then(res => {
-        let result = get_ret(res);
+        let result = login.get_ret(res);
         if (result === "") {
           play.misc_set({
             sn: obj.sn,
@@ -717,7 +718,7 @@ const play = {
           mode: obj.day_night, light_mode: obj.light_mode
         }
       }).then(res => {
-        let result = get_ret(res);
+        let result = login.get_ret(res);
         if (result == "") {
           play.misc_set({
             sn: obj.sn,
@@ -736,7 +737,7 @@ const play = {
         token: "vs0",
         conf: { brightness: obj.brightness, contrast: obj.contrast, color_saturation: obj.color_saturation, sharpness: obj.sharpness, mode: obj.day_night }
       }).then(res => {
-        let result = get_ret(res);
+        let result = login.get_ret(res);
         if (result === "") {
           play.misc_set({
             sn: obj.sn,
@@ -759,7 +760,7 @@ const play = {
         })
       }
     }
-    return returnItem
+    return await returnItem
   },
   /*
   ** 设置视频地址接口
@@ -836,29 +837,29 @@ const play = {
 
 export default play
 
-function get_profile_token_choice(data){
-  var profile_token_obj=new Object();
-    var profile_token_choice = data;
-  if(profile_token_choice=="" || profile_token_choice == null){
-      if(g_network_environ == "private"){
-          profile_token_obj.profile_token_choice_value = "p0_xxxxxxxxxx";
-          profile_token_obj.few_seconds=3000;
-      }else{
-          profile_token_obj.profile_token_choice_value = "p1_xxxxxxxxxx";
-          profile_token_obj.few_seconds=1000;
-      }
-  }else if(profile_token_choice == "p0"){
+function get_profile_token_choice (data) {
+  var profile_token_obj = new Object();
+  var profile_token_choice = data;
+  if (profile_token_choice == "" || profile_token_choice == null) {
+    if (store.state.jumpPageData.networkEnviron === "private") {
       profile_token_obj.profile_token_choice_value = "p0_xxxxxxxxxx";
-      profile_token_obj.few_seconds=3000;
-  }else if(profile_token_choice == "p1"){
+      profile_token_obj.few_seconds = 3000;
+    } else {
       profile_token_obj.profile_token_choice_value = "p1_xxxxxxxxxx";
       profile_token_obj.few_seconds = 1000;
-  }else if(profile_token_choice == "p2"){
-      profile_token_obj.profile_token_choice_value = "p2_xxxxxxxxxx";
-      profile_token_obj.few_seconds=500;
-  }else if(profile_token_choice == "p3"){
-      profile_token_obj.profile_token_choice_value = "p3_xxxxxxxxxx";
-      profile_token_obj.few_seconds = 500;
+    }
+  } else if (profile_token_choice == "p0") {
+    profile_token_obj.profile_token_choice_value = "p0_xxxxxxxxxx";
+    profile_token_obj.few_seconds = 3000;
+  } else if (profile_token_choice == "p1") {
+    profile_token_obj.profile_token_choice_value = "p1_xxxxxxxxxx";
+    profile_token_obj.few_seconds = 1000;
+  } else if (profile_token_choice == "p2") {
+    profile_token_obj.profile_token_choice_value = "p2_xxxxxxxxxx";
+    profile_token_obj.few_seconds = 500;
+  } else if (profile_token_choice == "p3") {
+    profile_token_obj.profile_token_choice_value = "p3_xxxxxxxxxx";
+    profile_token_obj.few_seconds = 500;
   }
   return profile_token_obj;
 }

@@ -8,7 +8,7 @@
 */
 /*-----------------media_engine-------------------------------------------------*/
 /* dom's background:black for chrome*/
-function mme (obj/*
+var mme = function (obj/*
   {parent:xxx,
    on_event:function(event-object{plug:this, ref_obj:xxx}){},
    ref_obj:xxx,
@@ -17,6 +17,7 @@ function mme (obj/*
    enable_native_plug:true[default]|false,
    enable_flash_plug:true[default]|false
    */) {
+     console.log(obj, 'obj_mme')
   this.create(obj);
 }
 mme.prototype =
@@ -74,7 +75,7 @@ mme.prototype =
     flash: {
       name: "flash", xname: "ShockwaveFlash.ShockwaveFlash", mime: "application/x-shockwave-flash", clsid: "D27CDB6E-AE6D-11cf-96B8-444553540000",
       codebase: "", install_img: "",
-      install_url: "https://www.adobe.com/go/getflashplayer", src: "/mme/mme.swf?0.130715.swf", install_hint: ""
+      install_url: "https://www.adobe.com/go/getflashplayer", src: "/api/mme/mme.swf?0.130715.swf", install_hint: ""
     }
   },
   debug: true,
@@ -90,7 +91,8 @@ mme.prototype =
   /* chls:[], type:"publish"|"play", url:"xxx", running:true|false, timer:inerval, times:time-out-check-counts, refer:user-data */
   get_default_skin: function () { return { dev_panel: { width: 360, height: 180 } }; },
   create_plug: function (parent, enable_flash_plug, enable_native_plug, plug_params) {
-    if (!this.parent.appendChild) {
+    console.log(this.parent, parent, 'mme_parent')
+    if (this.parent && !this.parent.appendChild) {
       this.parent = this.parent[0]
     }
     var test, info, plug = null, id = this.id ? this.id : (++this.id_allocer.value), type = null,
@@ -376,6 +378,7 @@ mme.prototype =
     if ("object" == typeof (obj.skin)) {
       obj_merge(this.skin, obj.skin);
     }
+    console.log(obj, 'create_mme_obj')
     this.parent = parent;
     if (undefined != obj.debug) { this.debug = obj.debug; }
     if (undefined != obj.windowless) { this.windowless = obj.windowless; }

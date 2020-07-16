@@ -2,6 +2,7 @@
   <div id="playback"></div>
 </template>
 <script>
+import fdSliderController from '../../util/fdSliderController'
 export default {
   methods: {
     create_playback_page (obj) {
@@ -190,22 +191,22 @@ export default {
           _this.publicFunc.mx("#back").onclick = function () {
             // create_history_page({parent:obj.parent,dev_sn:obj.dev_sn,back_page:obj.back_page,agent:obj.agent,addr:obj.addr})
             if (obj.box_ipc == 1) { //如果从云盒子实时播放进来回放播放
-              let obj = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, box_ipc: 1, ipc_sn: obj.ipc_sn, box_sn: obj.box_sn, box_live: 1, backplay_flag: 4, ipc_stat: obj.ipc_stat};
+              let jumpData = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, box_ipc: 1, ipc_sn: obj.ipc_sn, box_sn: obj.box_sn, box_live: 1, backplay_flag: 4, ipc_stat: obj.ipc_stat};
               // createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, box_ipc: 1, ipc_sn: obj.ipc_sn, box_sn: obj.box_sn, box_live: 1, backplay_flag: 4, ipc_stat: obj.ipc_stat })
-              _this.$router.push({name:'history',params:obj});
+              _this.$router.push({name:'history',params:jumpData});
               sessionStorage.clear();
             } else {
-              let obj = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, backplay_flag: 4};
+              let jumpData = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, backplay_flag: 4};
               // createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, backplay_flag: 4 })
-              _this.$router.push({name:'history',params:obj});
+              _this.$router.push({name:'history',params:jumpData});
               sessionStorage.clear();
             }
           }
         } else {
           _this.publicFunc.mx("#mipcBack").onclick = function () {
-            let obj = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page};
+            let jumpData = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page};
             // createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page })
-            _this.$router.push({name:'history',params:obj});
+            _this.$router.push({name:'history',params:jumpData});
             sessionStorage.clear();
           }
         }
@@ -401,13 +402,22 @@ export default {
     }
   },
   async mounted () {
+    import(`@/lib/plugins/slider.js`)
     let userLanguage = sessionStorage.getItem('userLanguage')
     if (userLanguage) {
       await this.$chooseLanguage.lang(userLanguage)
     } else {
       await this.$chooseLanguage.lang('en')
     }
-    await this.create_playback_page({ parent: $('#playback') }) // 进入页面后加载
+    let pageData;//页面创建相关对象
+    if(this.$route.params){
+      pageData = this.$route.params;
+      pageData.parent = $("#" + this.$route.name)
+    }else{
+      pageData = {parent: $("#" + this.$route.name)}
+    }
+    console.log(pageData,"pageData")
+    await this.create_playback_page(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {
       // mipc系列

@@ -820,13 +820,41 @@ export default {
     } else {
       await this.$chooseLanguage.lang('en')
     }
-    await this.create_login_page({ parent: $('#login') }) // 进入页面后加载
+    let pageData;//页面创建相关对象
+    if(this.$route.params){
+      pageData = this.$route.params;
+      pageData.parent = $("#" + this.$route.name)
+    }else{
+      pageData = {parent: $("#" + this.$route.name)}
+    }
+    console.log(pageData,"pageData")
+    await this.create_login_page(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {
       // mipc系列
       languageSelect.mipc($('#login_box'))
       $('#login_box').append("<div id='is_mipc_div'></div>")
     }
+    // 获取网络环境
+    await this.$api.login.svr_dev_get().then(res => {
+      if (res.result != "") return;
+      //Access server
+      if (res.type === "MS") {
+        this.$store.dispatch('setNetworkEnviron', 'public')
+      } else if (res.type === "IPC" || res.type === "BOX") {//Visit the IPC or box equipment
+      this.$store.dispatch('setNetworkEnviron', 'private')
+      }
+      // l_server_type = res.type;
+      // l_server_sn = res.sn;
+      // if (g_local) {
+      //   createPage("devlist", { parent: $("#page") });
+      // } else {
+      //   setTimeout(function () {
+      //     createPage("login", { parent: $("#page"), type: l_server_type, sn: l_server_sn });
+      //     // create_login_page({ parent: mx("#page"), type: l_server_type, sn: l_server_sn });
+      //   }, 100)
+      // }
+    })
   }
 }
 </script>

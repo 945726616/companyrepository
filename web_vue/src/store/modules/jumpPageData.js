@@ -27,6 +27,9 @@ const jumpPageData = {
     hostname : "",
     guest: 1, //是否为访客模式
     serverDevice: '', // get_req接口请求回的服务器地址
+    networkEnviron: '', // 内外部网络放完环境标识
+    systemWaitDiv: null, // 系统等待div
+    systemStopWait: null, // 系统停止等待
   },
   mutations: {
     SET_PAGE_DOM: (state, pageDom) => {
@@ -100,6 +103,15 @@ const jumpPageData = {
     },
     SET_SERVER_DEVICE: (state, serverDevice) => {
       state.serverDevice = serverDevice
+    },
+    SET_NETWORK_ENVIRON: (state, networkEnviron) => {
+      state.networkEnviron = networkEnviron
+    },
+    SET_SYSTEM_WAIT_DIV: (state, systemWaitDiv) => {
+      state.systemWaitDiv = systemWaitDiv
+    },
+    SET_SYSTEM_STOP_WAIT: (state, systemStopWait) => {
+      state.systemStopWait = systemStopWait
     }
   },
   actions: {
@@ -126,7 +138,10 @@ const jumpPageData = {
     setWebClientV: ({commit}, webClientV) => commit('SET_WEB_CLIENT_V', webClientV),
     setHostname: ({commit}, hostname) => commit('SET_HOSTNAME', hostname),
     setGuest: ({commit}, guest) => commit('SET_GUEST', guest),
-    setServerDevice: ({commit}, serverDevice) => commit('SET_SERVER_DEVICE', serverDevice)
+    setServerDevice: ({commit}, serverDevice) => commit('SET_SERVER_DEVICE', serverDevice),
+    setNetworkEnviron: ({commit}, networkEnviron) => commit('SET_NETWORK_ENVIRON', networkEnviron),
+    setSystemWaitDiv: ({commit}, systemWaitDiv) => commit('SET_SYSTEM_WAIT_DIV', systemWaitDiv),
+    setSystemStopWait: ({commit}, systemStopWait) => commit('SET_SYSTEM_STOP_WAIT', systemStopWait)
   }
 }
 

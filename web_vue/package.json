@@ -49,7 +49,7 @@
     "rules": {
       "no-undef": 0,
       "no-unused-vars": 0,
-      "no-inner-declarations": ["error", "both"]
+      "no-inner-declarations": 0
     }
   },
   "browserslist": [

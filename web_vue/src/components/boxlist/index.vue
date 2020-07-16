@@ -209,13 +209,13 @@ export default {
             } else {
               let dev_sn = this.getAttribute("sn");
               if (_this.$store.state.jumpPageData.projectFlag) {
-                let obj = {parent: $("#dev_main_page"), dev_sn: dev_sn, back_page: "boxlist", addr: obj.addr, agent: obj.agent};
+                let jumpData = {parent: $("#dev_main_page"), dev_sn: dev_sn, back_page: "boxlist", addr: obj.addr, agent: obj.agent};
                 // createPage("history", { parent: $("#dev_main_page"), dev_sn: dev_sn, back_page: "boxlist", addr: obj.addr, agent: obj.agent })
-              _this.$router.push({name:'history',params:obj})
+              _this.$router.push({name:'history',params:jumpData})
               } else {
-                let obj = {parent: $("#page"), dev_sn: dev_sn, back_page: "boxlist", addr: obj.addr, agent: obj.agent};
+                let jumpData = {parent: $("#page"), dev_sn: dev_sn, back_page: "boxlist", addr: obj.addr, agent: obj.agent};
                 // createPage("history", { parent: $("#page"), dev_sn: dev_sn, back_page: "boxlist", addr: obj.addr, agent: obj.agent })
-                _this.$router.push({name:'history',params:obj})
+                _this.$router.push({name:'history',params:jumpData})
               }
             }
           }
@@ -226,9 +226,9 @@ export default {
           _this.$router.push({name:'devlist',params:obj})
         }
         _this.publicFunc.mx("#boxlist_set_btn").onclick = function () {
-          let obj = {parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live};
+          let jumpData = {parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live};
           // createPage("set", { parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live });
-          _this.$router.push({name:'devlist',params:obj})
+          _this.$router.push({name:'devlist',params:jumpData})
         }
         _this.publicFunc.mx("#boxlist_edit_btn").onclick = function () {
           if ($(".del_box_ipc_btn").css("display") == "none") { // 删除关联和录像
@@ -346,7 +346,7 @@ export default {
       }
       function boxlist_onvif_event () { // 点击搜索设备 搜索onvif
         if (!_this.$store.state.jumpPageData.projectFlag) { // vimtag 特殊添加搜索设备hover提示框
-          if (g_now_lang == "zh") {
+          if (sessionStorage.getItem('userLanguage') == "zh") {
             _this.publicFunc.mx("#boxlist_search_btn").onmouseenter = function () {
               $('#boxlist_search_btn_down').show().delay(1500).hide(0);
             }
@@ -560,7 +560,15 @@ export default {
     } else {
       await this.$chooseLanguage.lang('en')
     }
-    await this.create_boxlist_page({ parent: $('#boxlist') }) // 进入页面后加载
+    let pageData;//页面创建相关对象
+    if(this.$route.params){
+      pageData = this.$route.params;
+      pageData.parent = $("#" + this.$route.name)
+    }else{
+      pageData = {parent: $("#" + this.$route.name)}
+    }
+    console.log(pageData,"pageData")
+    await this.create_boxlist_page(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {
       // mipc系列

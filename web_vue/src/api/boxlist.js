@@ -64,7 +64,7 @@ const boxlist = {
         let url = devlist.pic_url_get({ sn: params.sn, token: token, flag: 2, is_history: 1 })
         console.log(url, 'boxlist_img_get_local')
       } else {
-        let url = window.location.protocol + "//" + window.location.host + "/ccm/ccm_pic_get.js?dsess=1&dsess_nid=" + msdk_agent.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + token + "&dflag=2";
+        let url = window.location.protocol + "//" + window.location.host + "/ccm/ccm_pic_get.js?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + token + "&dflag=2";
         if (l_canvas_dom_array[i]) {
           if (l_canvas_dom_array[i].attribute) {
             if (l_canvas_dom_array[i].attributes.imgId.nodeValue === (i + "")) {

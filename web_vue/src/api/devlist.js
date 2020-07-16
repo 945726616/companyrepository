@@ -4,6 +4,7 @@ import login from './login'
 import store from '../store'
 import md5 from '@/util/mmd5.js'
 import mcodec from '@/util/mcodec.js'
+import publicFunc from '@/util/public.js'
 
 const devlist = {
   /*
@@ -83,14 +84,16 @@ const devlist = {
   */
   async devlist_check_online (params) {
     let returnItem
-    devlist.dev_add({sn: params.sn, password: params.password}).then(res => {
+    await devlist.dev_add({sn: params.sn, password: params.password}).then(res => {
       // 根据格式化后的结果判断并赋值
       if (res && res.result === "accounts.user.invalid") {
-        returnItem = mcs_device_not_exist
+        returnItem = mcs_device_not_exist;
       } else if (res && res.result === "accounts.user.offline") {
-        returnItem = "user.offline"
-      } else if (res && res.result === "accounts.system") {
-        returnItem = "accounts.system"
+        returnItem = "user.offline";
+      } else if (res && res.result == "accounts.pass.invalid") {
+        returnItem = "";
+      }else if (res && res.result === "accounts.system") {
+        returnItem = "accounts.system";
       }
     })
     return returnItem
@@ -104,7 +107,7 @@ const devlist = {
     let pwd_md5_hex = md5.hex(params.password || "")
     await axios.get('/ccm/ccm_dev_add', {
       params: {
-        sess: login.create_nid(),
+        sess: {nid: login.create_nid()},
         sn: params.sn,
         pwd: login.pwd_encrypt(pwd_md5_hex)
       }
@@ -208,7 +211,7 @@ const devlist = {
   /*
   ** 设备可连接wifi获取
   */
-  wifi_get (params) {
+  async wifi_get (params) {
     let returnItem
     devlist.net_get(params).then(res => { // 调用net_get接口
       let result = login.get_ret(res)
@@ -220,7 +223,7 @@ const devlist = {
         }
       }
     })
-    return returnItem
+    return await returnItem
   },
   /*
   ** 设备wifi设置
@@ -302,11 +305,13 @@ const devlist = {
         dev_sn: params.sn
       }
     }).then(res => {
+      console.log(res, 'time_zone_get_res')
       let result = login.get_ret(res)
-      if (result && result === '') {
+      if (result === '') {
         returnItem = res.data.address.zones
       }
     })
+    console.log(returnItem, 'return_time_zone_get')
     return returnItem
   },
   /*
@@ -659,7 +664,7 @@ const devlist = {
         return_data.push(tmp_local_devs_data);
       }
     }
-    let l_dom_search = dom_create_child($("#web"), "div", "search");
+    let l_dom_search = publicFunc.dom_create_child($("#web"), "div", "search");
     l_dom_search[s_style][s_cssText] = "width:1px;height:1px";
     let mme_params,
       ua = navigator.userAgent.toLowerCase(),

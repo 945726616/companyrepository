@@ -9,7 +9,10 @@ export default {
       obj.parent.html()
       let a_start = obj.a_start ? obj.a_start : 0;
       let b_end = obj.b_end ? obj.b_end : 0;
-      let prev_sid = prev_cid = next_cid = next_sid = '';
+      let prev_sid = '';
+      let prev_cid = '';
+      let next_cid = '';
+      let next_sid = '';
       let vedio_day = [];
       let num = 0;//记录点击前一天次数
       // let pic_token = [];//记录请求列表图片传到后台的token
@@ -299,14 +302,14 @@ export default {
           if (obj.back_page == "boxlist") {
             create_boxlist_page({ parent: obj.parent, agent: obj.agent, addr: obj.addr })
           } else if (obj.back_page == "playpage") {
-            let obj;
+            let jumpData;
             if (obj.box_ipc == 1) { //如果从云盒子设备回放返回到播放页面，把box_ipc传回去 
-              obj = {parent: obj.parent, agent: obj.agent, addr: obj.addr, box_ipc: obj.box_ipc, ipc_sn: obj.ipc_sn, box_live: obj.box_live, ipc_stat: obj.ipc_stat}
-              _this.$router.push({name:'play',params:obj})
+              jumpData = {parent: obj.parent, agent: obj.agent, addr: obj.addr, box_ipc: obj.box_ipc, ipc_sn: obj.ipc_sn, box_live: obj.box_live, ipc_stat: obj.ipc_stat}
+              _this.$router.push({name:'play',params:jumpData})
               // createPage("play", { parent: obj.parent, agent: obj.agent, addr: obj.addr, box_ipc: obj.box_ipc, ipc_sn: obj.ipc_sn, box_live: obj.box_live, ipc_stat: obj.ipc_stat })
             } else {
-              obj = {parent: obj.parent, agent: obj.agent, addr: obj.addr};
-              _this.$router.push({name:'play',params:obj})
+              jumpData = {parent: obj.parent, agent: obj.agent, addr: obj.addr};
+              _this.$router.push({name:'play',params:jumpData})
               // createPage("play", { parent: obj.parent, agent: obj.agent, addr: obj.addr })
             }
 
@@ -597,7 +600,15 @@ export default {
     } else {
       await this.$chooseLanguage.lang('en')
     }
-    await this.vimtagHistory({ parent: $('#history') }) // 进入页面后加载
+    let pageData;//页面创建相关对象
+    if(this.$route.params){
+      pageData = this.$route.params;
+      pageData.parent = $("#" + this.$route.name)
+    }else{
+      pageData = {parent: $("#" + this.$route.name)}
+    }
+    console.log(pageData,"pageData")
+    await this.vimtagHistory(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {
       // mipc系列

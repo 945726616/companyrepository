@@ -19,6 +19,7 @@
  * Rev:  1.0.03
  */
 /* eslint-disable */
+import store from '../../store'
 (function($){
 	// set default options
 	$.iButton = {
@@ -76,6 +77,80 @@
 		}
 	};
 
+  $.fn.switchBtn = function (turn, dom, input, func) { // jquery自带的switchBtn
+    var _this = this;
+    var tmp;
+    turn = turn ? turn : false;
+    _this.attr("class", "switch_btn_box");
+    _this.html("<div class='switch_btn'></div>");
+    _this.attr("type", turn);
+    jQuery(_this).unbind('click')
+    jQuery(_this).click(function () {
+      var btn_type = jQuery(_this).attr("type");
+      if (btn_type == "true" || btn_type == true) {
+        jQuery(_this).attr("type", false);
+        if (dom && !input) {
+          dom.slideUp();
+        }
+        if (input) {
+          for (var i = 0; i < dom.children().length; i++) {
+            tmp = dom.children().eq(i).children().eq(1).html();
+            dom.children().eq(i).children().eq(1).html("<input class='set_input_black' value='" + tmp + "'>")
+          }
+        }
+        jQuery(_this).css({ "background": "#dedede" });
+        jQuery(_this).children().animate({ "left": "1px" }, 100, "linear")
+      } else {
+        if (dom && !input) {
+          dom.slideDown();
+        }
+        if (input) {
+          for (let i = 0; i < dom.children().length; i++) {
+            tmp = dom.children().eq(i).children().eq(1).children().val();
+            dom.children().eq(i).children().eq(1).html(tmp)
+          }
+        }
+        jQuery(_this).attr("type", true);
+        if (store.state.jumpPageData.projectName == 'vimtag.com') { jQuery(_this).css({ "background": "#00a6ba" }) }
+        else if (store.state.jumpPageData.projectName == 'ebitcam.com') { jQuery(_this).css({ "background": "#ff781f" }) }
+        else { jQuery(_this).css({ "background": "#2988cc" }); }
+        jQuery(_this).children().animate({ "left": "37px" }, 100, "linear")
+      }//g 5.7.1
+      if (func && typeof (func) == "function") {
+        func();
+      }
+    })
+    if (turn == "true" || turn == true) {
+      jQuery(_this).attr("type", true);
+      if (dom && !input) {
+        dom.slideDown();
+      }
+      if (input) {
+        for (var i = 0; i < dom.children().length; i++) {
+          tmp = dom.children().eq(i).children().eq(1).children().val();
+          dom.children().eq(i).children().eq(1).html(tmp)
+        }
+      }
+      if (store.state.jumpPageData.projectName == 'vimtag.com') { jQuery(_this).css({ "background": "#00a6ba" }) }
+      else if (store.state.jumpPageData.projectName == 'ebitcam.com') { jQuery(_this).css({ "background": "#ff781f" }) }
+      else { jQuery(_this).css({ "background": "#2988cc" }); }
+
+      jQuery(_this).children().animate({ "left": "37px" }, 100, "linear")
+    } else {
+      jQuery(_this).attr("type", false);
+      if (dom && !input) {
+        dom.slideUp();
+      }
+      if (input) {
+        for (let i = 0; i < dom.children().length; i++) {
+          tmp = dom.children().eq(i).children().eq(1).html();
+          dom.children().eq(i).children().eq(1).html("<input class='set_input_black' value='" + tmp + "'>")
+        }
+      }
+      jQuery(_this).css({ "background": "#dedede" });
+      jQuery(_this).children().animate({ "left": "1px" }, 100, "linear")
+    }
+  }
 	// count instances	
 	var counter = 0;
 	// detect iPhone
@@ -164,8 +239,9 @@
 
 		// if we need to do some resizing, get the widths only once
 		if( options.resizeHandle || options.resizeContainer ){
-			width.onspan = $onspan[0].parentNode.clientWidth ? $onspan[0].parentNode.clientWidth : $onspan.outerWidth(); 
-			width.offspan = $offspan[0].parentNode.clientWidth ? $offspan[0].parentNode.clientWidth : $offspan.outerWidth();
+      console.log($onspan, $offspan, '$onspan')
+			width.onspan = $onspan[0] && $onspan[0].parentNode.clientWidth ? $onspan.prevObject.clientWidth : $onspan.outerWidth(); 
+			width.offspan = $offspan[0] && $offspan[0].parentNode.clientWidth ? $offspan.prevObject.clientWidth : $offspan.outerWidth();
 		}
 			
 		// automatically resize the handle
@@ -180,8 +256,9 @@
 		if( options.resizeContainer ){
 			width.container = $container[0].clientWidth ? $container[0].clientWidth : (Math.max(width.onspan, width.offspan) + width.handle + 20);
 			$container.css("width", width.container);
-			// adjust the off label to match the new container size
-			$offlabel.css("width", $offlabel[0].clientWidth ? $offlabel[0].clientWidth : (width.container - 5));
+      // adjust the off label to match the new container size
+      console.log($offlabel, $offlabel[0] , 'offlabel')
+			$offlabel.css("width", $offlabel[0] ? $offlabel[0].clientWidth : (width.container - 5));
 		} else {
 			width.container = $container.width();
 		}
@@ -199,12 +276,12 @@
 				$offspan.stop().animate({marginRight: -x}, options.duration, options.easing);
 			} else {			
 				$handle.css("left", x);
-				if(_this.$store.state.jumpPageData.hostname=="vimtag.com"){
+				if(store.state.jumpPageData.hostname=="vimtag.com"){
 					$onlabel.css({"width":$onlabel[0].clientWidth ? $onlabel[0].clientWidth : (x + 4),"background":"#00a6ba"})
-				}else if(_this.$store.state.jumpPageData.hostname=="ebitcam.com"){
+				}else if(store.state.jumpPageData.hostname=="ebitcam.com"){
                     $onlabel.css({"width":$onlabel[0].clientWidth ? $onlabel[0].clientWidth : (x + 4),"background":"#ff781f"})
 				}else{
-					 $onlabel.css({"width":$onlabel[0].clientWidth ? $onlabel[0].clientWidth : (x + 4),"background":"#2988cc"})
+					 $onlabel.css({"width":$onlabel[0] ? $onlabel[0].clientWidth : (x + 4),"background":"#2988cc"})
 				}
 				
 				$onspan.css("marginLeft", x - handleRight);
@@ -338,12 +415,12 @@
 		if( $input.is(":disabled") ) this.disable(true);
 
 		// special behaviors for IE    
-		if( $.browser.msie ){
-			// disable text selection in IE, other browsers are controlled via CSS
-			$container.find("*").andSelf().attr("unselectable", "on");
-			// IE needs to register to the "click" event to make changes immediately (the change event only occurs on blur)
-			$input.bind("click.iButton", function (){ $input.triggerHandler("change.iButton"); });
-		}
+		// if( $.browser.msie ){
+		// 	// disable text selection in IE, other browsers are controlled via CSS
+		// 	$container.find("*").andSelf().attr("unselectable", "on");
+		// 	// IE needs to register to the "click" event to make changes immediately (the change event only occurs on blur)
+		// 	$input.bind("click.iButton", function (){ $input.triggerHandler("change.iButton"); });
+		// }
 		
 		// run the init callback
 		if( $.isFunction(options.init) ) options.init.apply(self, [$input, options]);

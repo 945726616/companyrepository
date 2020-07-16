@@ -603,30 +603,31 @@ export default {
           // $("#buffer_page").show();
           // 展示遮罩层
           _this.publicFunc.showBufferPage()
+          console.log('play_dev_info')
           _this.$api.set.dev_info({
             sn: _this.$store.state.jumpPageData.selectDeviceIpc
           }).then(res => {
             _this.publicFunc.closeBufferPage()
             if (res.fisheye) {
-              let jumpObj = { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "vimtag" };
+              let jumpData = { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "vimtag" };
               // createPage("set", { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "vimtag" });
-              _this.$router.push({ name: 'set', params: jumpObj })
+              _this.$router.push({ name: 'set', params: jumpData })
             } else {
-              let jumpObj = { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "vimtag" };
+              let jumpData = { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "vimtag" };
               // createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "vimtag" });
-              _this.$router.push({ name: 'set', params: jumpObj })
+              _this.$router.push({ name: 'set', params: jumpData })
             }
           })
         }
         l_dom_enter_history_img.onclick = function () {
           if (obj.box_ipc == 1) { //云盒子设备实时播放时点击回放
-            let jumpObj = { parent: $("#page"), dev_sn: obj.ipc_sn, back_page: "playpage", addr: obj.addr, agent: obj.agent, box_ipc: obj.box_ipc, ipc_sn: obj.ipc_sn, box_live: 1, ipc_stat: obj.ipc_stat };
+            let jumpData = { parent: $("#page"), dev_sn: obj.ipc_sn, back_page: "playpage", addr: obj.addr, agent: obj.agent, box_ipc: obj.box_ipc, ipc_sn: obj.ipc_sn, box_live: 1, ipc_stat: obj.ipc_stat };
             // createPage("history", { parent: $("#page"), dev_sn: obj.ipc_sn, back_page: "playpage", addr: obj.addr, agent: obj.agent, box_ipc: obj.box_ipc, ipc_sn: obj.ipc_sn, box_live: 1, ipc_stat: obj.ipc_stat })
-            _this.$router.push({ name: 'history', params: jumpObj })
+            _this.$router.push({ name: 'history', params: jumpData })
           } else {
-            let jumpObj = { parent: $("#page"), dev_sn: _this.$store.state.jumpPageData.selectDeviceIpc, back_page: "playpage", addr: obj.addr };
+            let jumpData = { parent: $("#page"), dev_sn: _this.$store.state.jumpPageData.selectDeviceIpc, back_page: "playpage", addr: obj.addr };
             // createPage("history", { parent: $("#page"), dev_sn: _this.$store.state.jumpPageData.selectDeviceIpc, back_page: "playpage", addr: obj.addr })
-            _this.$router.push({ name: 'history', params: jumpObj })
+            _this.$router.push({ name: 'history', params: jumpData })
           }
         }
 
@@ -732,6 +733,8 @@ export default {
         }
         function get_definition () {
           function dev_info_get_ack (msg) {
+            // console.log(msg, 'dev_info_get_ack_msg')
+            if(msg.white_light)
             l_white_light = msg.white_light;
             play_view_control({ parent: l_dom_play_view_control });
             if (obj.box_ipc == 1) {//如果云盒子实时播放页面
@@ -748,6 +751,7 @@ export default {
               }
             }
           }
+          console.log('play_dev_info')
           _this.$api.set.dev_info({ //ms.send_msg("dev_info_get"
             sn: _this.$store.state.jumpPageData.selectDeviceIpc
           }).then(res => {
@@ -1642,13 +1646,14 @@ export default {
     } else {
       await this.$chooseLanguage.lang('en')
     }
-    let pageData // 页面创建相关对象
-    if (this.$route.params) {
-      pageData = this.$route.params
+    let pageData;//页面创建相关对象
+    if(this.$route.params){
+      pageData = this.$route.params;
       pageData.parent = $("#" + this.$route.name)
-    } else {
-      pageData = { parent: $("#" + this.$route.name) }
+    }else{
+      pageData = {parent: $("#" + this.$route.name)}
     }
+    console.log(pageData,"pageData")
     await this.vimtagPlay(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {

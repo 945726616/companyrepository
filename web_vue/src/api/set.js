@@ -3,10 +3,10 @@ import axios from '@/axios' // 导入http中创建的axios实例
 import login from './login'
 import devlist from './devlist'
 import play from './play'
-// import store from '../store'
+import store from '../store'
 // import md5 from '@/util/mmd5.js'
 // import mcodec from '@/util/mcodec.js'
-// import mme from '@/util/mme.js'
+import mme from '@/util/mme.js'
 const set = {
   /*
   ** 设备详细信息
@@ -159,7 +159,7 @@ const set = {
   /*
   ** 设置列表选项获取(列表风格)
   */
-  set_list_get (params) {
+  async set_list_get (params) {
     let menu_data = [];
     if (params.flag == 1) {
       menu_data = [
@@ -240,12 +240,12 @@ const set = {
         { name: mcs_delete_device, type: "delete_device" }
       ]
     }
-    return menu_data
+    return await menu_data
   },
   /*
   ** 设置列表选项获取(app方块风格)
   */
-  set_new_list_get (params) {
+  async set_new_list_get (params) {
     let menu_data = [];
     if (params.flag == 1 || params.flag == 3) {
       menu_data = [
@@ -451,7 +451,7 @@ const set = {
         }
       ]
     }
-    return menu_data
+    return await menu_data
   },
   /*
   ** 获取升级
@@ -461,7 +461,7 @@ const set = {
     await axios.get('/ccm/ccm_upgrade_get', {
       params: {
         sess: {
-          nid: create_nid(),
+          nid: login.create_nid(),
           sn: params.sn
         },
         check: params.check ? params.check : 0
@@ -477,14 +477,15 @@ const set = {
       let chang_history
       let ext_prj
       let ext_hw
+      console.log(res, 'upgrade_get_result')
       if (result === "") {
         let msg = res.data ? res.data : ""
-        status = msg.task ? msg.task.stat : msg.stat
-        progress = msg.progress
+        status = msg.task ? msg.task.Status : msg.Status
+        progress = msg.Progress
         os_ver = msg.os_ver ? msg.os_ver : ""
-        ver_current = msg._cur_ver
-        ver_valid = msg._valid_ver
-        ver_extends = msg.remark;
+        ver_current = msg.CurrentVersion
+        ver_valid = msg.ValidVersion
+        ver_extends = msg.Remark;
         chang_history = msg.changes
         ext_prj = msg.prj_ext
         ext_hw = msg.hw_ext
@@ -502,18 +503,20 @@ const set = {
         ext_hw: ext_hw
       }
     })
-    return returnItem
+    return await returnItem
   },
   /*
   ** 关于
   */
-  about (params) {
+  async about (params) {
     let returnItem
-    set.upgrade_get({
+    console.log('enter about')
+    await set.upgrade_get({
       sn: params.sn,
       check: 1
-    }).then(res => {
-      set.dev_info({
+    }).then(async res => {
+      console.log(res, 'upgrade_get_res')
+      await set.dev_info({
         sn: params.sn
       }).then(res_dev_info => {
         if (res.result === '') {
@@ -530,7 +533,8 @@ const set = {
         });
       })
     })
-    return returnItem
+    console.log(returnItem, 'return')
+    return await returnItem
   },
   /*
   ** 设置昵称
@@ -563,9 +567,10 @@ const set = {
   /*
   ** 获取昵称
   */
-  nickname_get (params) {
+  async nickname_get (params) {
     let returnItem
     if (store.state.jumpPageData.localFlag) {
+      console.log('dev_info_use')
       set.dev_info({ sn: params.sn }).then(res => {
         returnItem = { nick: res.name ? res.name : params.sn }
       })
@@ -573,7 +578,7 @@ const set = {
       let nick = devlist.ldev_get(params.sn).nick ? devlist.ldev_get(params.sn).nick : params.sn;
       returnItem = { nick: nick }
     }
-    return returnItem
+    return await returnItem
   },
   /*
   ** 设置管理密码
@@ -651,11 +656,12 @@ const set = {
   /*
   ** 获取有线网络
   */
-  get_network (params) {
+  async get_network (params) {
     let returnItem
-    set.dev_info({
+    let networks, dns
+    await set.dev_info({
       sn: params.sn
-    }).then(res => {
+    }).then(async res => {
       let wwan_exist
       if (res && res.result === "") {   //The beginning of a new version of the old version is no v v v string comparison there is not necessarily greater than v
         if (res.wwan_exist) {
@@ -666,17 +672,22 @@ const set = {
           // ms.send_msg("net_get",{sn:data.sn,force_scan:0},{select:mcs_ethernet},dev_net_get_ack);
         } else {
           // l_old_version = 0;
-          devlist.net_get({ sn: data.sn, force_scan: 0, filter: "all" }).then(res_net_get => {
+          await devlist.net_get({ sn: params.sn, force_scan: 0, filter: "all" }).then(res_net_get => {
             let result = login.get_ret(res_net_get)
             if (result === '') {
-              res_net_get.wwan_exist = wwan_exist
-              returnItem = [res_net_get, { ip: store.state.jumpPageData.serverDevice, select: (data.select == null ? null : data.select) }]
+              let res_net_get_returnItem // 对net_get接口返回的参数进行整理处理后的结果
+              let msg = res_net_get.data ? res_net_get.data.net_info : ""
+              networks = msg.ifs;
+              dns = msg.dns;
+              res_net_get_returnItem = { result: result, networks: networks, dns: dns }
+              res_net_get_returnItem.wwan_exist = wwan_exist
+              returnItem = [res_net_get_returnItem, { ip: store.state.jumpPageData.serverDevice, select: (params.select == null ? null : params.select) }]
             }
           })
         }
       }
     })
-    return returnItem
+    return await returnItem
   },
   /*
   ** 设置osd
@@ -723,16 +734,16 @@ const set = {
         }
       }
     }).then(res => {
-      let result = get_ret(res);
+      let result = login.get_ret(res);
       if (result === "") {
         let msg = res.data ? res.data.osd : "";
         text = msg.text;
         text_enable = msg.text_enable;
         week_enable = msg.week;
-        date_format = msg.date.format;
-        date_enable = msg.date.date_enable;
-        time_12h = msg.date.enable_12h;
-        time_enable = msg.date.time_enable;
+        date_format = msg.datetime.date_format;
+        date_enable = msg.datetime.date_enable;
+        time_12h = msg.datetime.enable_12h;
+        time_enable = msg.datetime.time_enable;
       }
       returnItem = {
         result: result,
@@ -820,15 +831,15 @@ const set = {
         }
       }
     }).then(res => {
-      let result = get_ret(res);
+      let result = login.get_ret(res);
       if (result === "") {
-        let msg = (res.data && res.data.disks) ? res.data.disks[0] : res.data;
-        enable = msg.conf.enable;
-        status = msg.stat;    /* readonly/mount/repairing/formating/umount/empty */
-        capacity = msg.size;  /* Total disk size */
-        usage = msg.used_size;    /* Used size */
-        availableSize = msg.available_size;
-        conf = msg.conf;
+        let msg = (res.data && res.data.Disks) ? res.data.Disks[0] : res.data;
+        enable = msg.sd_conf.enable;
+        status = msg.status;    /* readonly/mount/repairing/formating/umount/empty */
+        capacity = msg.TotalSize;  /* Total disk size */
+        usage = msg.UsedSize;    /* Used size */
+        availableSize = msg.AvailableSize;
+        conf = msg.sd_conf;
       }
       returnItem = {
         result: result,
@@ -840,13 +851,13 @@ const set = {
         conf: conf
       }
     })
-    if (returnItem && returnItem.result === "") {
-      returnItem = { msg: mcs_set_successfully, type: "success" }
-    } else if (msg.result === "permission.denied") {
-      returnItem = { msg: mcs_permission_denied, type: "error" }
-    } else {
-      returnItem = { msg: mcs_failed_to_set_the, type: "error" }
-    }
+    // if (returnItem && returnItem.result === "") {
+    //   returnItem = { msg: mcs_set_successfully, type: "success" }
+    // } else if (msg.result === "permission.denied") {
+    //   returnItem = { msg: mcs_permission_denied, type: "error" }
+    // } else {
+    //   returnItem = { msg: mcs_failed_to_set_the, type: "error" }
+    // }
     return returnItem
   },
   /*
@@ -899,9 +910,9 @@ const set = {
         }
       }
     }).then(res => {
-      let result = get_ret(res)
+      let result = login.get_ret(res)
       if (result === "" && res.data) {
-        returnItem = { result: get_ret(res), conf: res.data }
+        returnItem = { result: login.get_ret(res), conf: res.data }
       } else {
         returnItem = { result: result }
       }
@@ -1095,6 +1106,7 @@ const set = {
   */
   async alarm_device_get (params) {
     let returnItem
+    let io_input, io_output, sensitivity, night_sensitivity, motion_track_switch, face_detect_switch, audio_level
     await axios.get('/ccm/ccm_alert_dev_get', {
       params: {
         sess: {
@@ -1103,17 +1115,17 @@ const set = {
         }
       }
     }).then(res => {
-      let result = get_ret(res);
+      let result = login.get_ret(res);
       if (result === "") {
-        let msg = res.data ? res.data.conf : "";
-        io_input = msg.io_in_mode;   /* Open:always open; Close:always close */
-        io_output = msg.io_out_mode;    /* Open:always open; Close:always close */
-        sensitivity = msg.motion_level;  /* level of sensitivity about motion detect at day 0-100 */
-        night_sensitivity = msg.motion_level_night;    /* level of sensitivity about motion detect at night */
-        motion_track_switch = msg.motion_track_switch;
-        face_detect_switch = msg.face_detect_switch;
+        let msg = res.data ? res.data.Config : "";
+        io_input = msg.IoInputMode;   /* Open:always open; Close:always close */
+        io_output = msg.IoOutputMode;    /* Open:always open; Close:always close */
+        sensitivity = msg.MotionLevel;  /* level of sensitivity about motion detect at day 0-100 */
+        night_sensitivity = msg.MotionLevelNight;    /* level of sensitivity about motion detect at night */
+        motion_track_switch = msg.MotionTrackSwitch;
+        face_detect_switch = msg.FaceDetectSwitch;
         // human_detect_switch =msg.human_detect_switch;
-        audio_level = msg.audio_level;
+        audio_level = msg.AudioLevel;
       }
       returnItem = {
         result: result,
@@ -1167,7 +1179,7 @@ const set = {
         }
       }
     }).then(res => {
-      let result = get_ret(res);
+      let result = login.get_ret(res);
       if (result === "") {
         let msg = res.data ? res.data : "";
         enable = msg.enable;
@@ -1191,7 +1203,7 @@ const set = {
         }
       }
     }).then(res => {
-      let result = get_ret(res);
+      let result = login.get_ret(res);
       if (result === "") {
         let msg = res.data ? res.data : "";
         enable = msg.sch.enable;
@@ -1317,7 +1329,7 @@ const set = {
         }
       }
     }).then(res => {
-      let result = get_ret(msg);
+      let result = login.get_ret(msg);
       if (result === "") {
         sd_ready = res.data.sd_ready
         let msg = res.data ? res.data.task.sch : ""
@@ -1361,7 +1373,7 @@ const set = {
         }
       }
     }).then(async res => {
-      let result = get_ret(res);
+      let result = login.get_ret(res);
       if (result === "") {
         await axios.get('/ccm/ccm_ntp_set', {
           params: {
@@ -1397,13 +1409,13 @@ const set = {
         }
       }
     }).then(async res => {
-      let result = get_ret(res);
+      let result = login.get_ret(res);
       if (result === "") {
-        let msg = res.data ? res.data.info : "";
-        timezone = msg.timezone;
-        g_timezone = msg.timezone;
-        auto_sync = msg.auto_sync_enable;
-        ntp_addr = msg.manual[0].ip;
+        let msg = res.data ? res.data.NTPInformation : "";
+        timezone = msg.TimeZone;
+        // g_timezone = msg.TimeZone;
+        auto_sync = msg.AutoSync;
+        ntp_addr = msg.NTPManual[0].IPv4Address;
         await axios.get('/ccm/ccm_date_get', {
           params: {
             sess: {
@@ -1412,15 +1424,15 @@ const set = {
             }
           }
         }).then(res_date_get => {
-          let result = get_ret(res_date_get);
+          let result = login.get_ret(res_date_get);
           if (result == "") {
-            let msg2 = res_date_get.data ? res_date_get.data.utc_date : "";
-            hour = msg2.time.hour;
-            min = msg2.time.min;
-            sec = msg2.time.sec;
-            year = msg2.date.year;
-            mon = msg2.date.mon;
-            day = msg2.date.day;
+            let msg2 = res_date_get.data ? res_date_get.data.UTCDateTime : "";
+            hour = msg2.Time.Hour;
+            min = msg2.Time.Minute;
+            sec = msg2.Time.Second;
+            year = msg2.Date.Year;
+            mon = msg2.Date.Month;
+            day = msg2.Date.Day;
           }
           returnItem = {
             result: result,
@@ -1459,7 +1471,7 @@ const set = {
     if (returnItem.result === "") {
       setTimeout(function () {
         // createPage("devlist", { parent: $("#page") });
-        _this.$router.push({name:'devlist',params:{parent: obj.parent}})
+        _this.$router.push({ name: 'devlist' })
       }, 3000)
     }
     return null
@@ -1537,7 +1549,7 @@ const set = {
         img_src: "download"
       }
     }).then(res => {
-      returnItem = { result: get_ret(res) }
+      returnItem = { result: login.get_ret(res) }
     })
     if (params.check) {
       returnItem.check_ver = params.check
@@ -1568,11 +1580,11 @@ const set = {
   async speaker_get (params) {
     return await axios.get('/ccm/ccm_speaker_get', {
       params: {
-      sess: {
-        nid: login.create_nid(),
-        sn: params.sn
-      },
-      token: "ao0"
+        sess: {
+          nid: login.create_nid(),
+          sn: params.sn
+        },
+        token: "ao0"
       }
     })
   },
@@ -1633,7 +1645,7 @@ const set = {
               silent: silent,
               level: params.mic_level
             }).then(res_mic_set => {
-              returnItem = { result: get_ret(res_mic_set) }
+              returnItem = { result: login.get_ret(res_mic_set) }
             })
           } else {
             returnItem = { result: login.get_ret(res_mic_get) }
@@ -1648,22 +1660,22 @@ const set = {
   /*
   ** 音频设置获取
   */
-  audio_get (params) {
+  async audio_get (params) {
     let returnItem
-    set.speaker_get({
+    await set.speaker_get({
       sn: params.sn
-    }).then(res_speaker_get => {
+    }).then(async res_speaker_get => {
       if (login.get_ret(res_speaker_get) === '') {
-        set.mic_get({
+        await set.mic_get({
           sn: params.sn
         }).then(res_mic_get => {
-          returnItem = { result: login.get_ret(res_mic_get), speaker_level: res_speaker_get.data.conf.level, mic_level: res_mic_get.data.conf[0].level }
+          returnItem = { result: login.get_ret(res_mic_get), speaker_level: res_speaker_get.data.AudioOutputConfiguration.OutputLevel, mic_level: res_mic_get.data.Configurations[0].SourceLevel }
         })
       } else {
         returnItem = { result: login.get_ret(res_speaker_get) }
       }
     })
-    return returnItem
+    return await returnItem
   },
   /*
   ** 白光设置

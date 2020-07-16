@@ -146,6 +146,29 @@ const publicFunc = {
           mx.funcs.push(selector) // mx选中函数的情况较少如遇到请用其他选择器代替
         }
     }
+  },
+  dom_create_child (child_parent, child_type, child_id, child_class, insert_mode) {
+    var child = document.createElement(child_type);
+    if (child_id) { child["setAttribute"]("id", child_id); }
+    if (child_class) {
+      child["setAttribute"]("className", child_class); //for IE
+      child["setAttribute"]("class", child_class);
+    }
+    if (child_parent) {
+      if (insert_mode) child_parent[insert_mode.type](child, insert_mode.node ? insert_mode.node : null);
+      else child_parent.appendChild(child);
+    }
+    return child;
+  },
+  trigger_click (el) {
+    if (el.click) el.click();
+    else {
+      try {
+        var evt = document.createEvent('Event');
+        evt.initEvent('click', true, true);
+        el.dispatchEvent(evt);
+      } catch (e) { system_pop_confirm_box({ alert: true, str: e }) }
+    }
   }
 }
 

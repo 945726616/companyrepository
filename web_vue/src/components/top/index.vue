@@ -170,7 +170,7 @@ export default {
         if (_this.$store.state.jumpPageData.localModel) {
           _this.$store.state.jumpPageData.loginFlag = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
         }
-        _this.$router.push('/my')
+        _this.$router.push({name:'my'})
         // createPage('my', { parent: $('#page') })
       })
 
