@@ -1,4 +1,5 @@
-﻿/* Chinese initialisation for the jQuery UI date picker plugin. */
+﻿/* eslint-disable */
+/* Chinese initialisation for the jQuery UI date picker plugin. */
 /* Written by Cloudream (cloudream@gmail.com). */
 jQuery(function($){
         // $.datepicker.regional['zh-CN'] = {

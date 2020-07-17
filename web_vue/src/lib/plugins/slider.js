@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*
         Unobtrusive Slider Control by frequency decoder v2.6 (http://www.frequency-decoder.com/)
 
@@ -245,8 +246,8 @@ var fdSliderController = (function() {
 			bW,
 			bH,
 			cover,
-			targetPos;
-      var	from_user = true;
+			targetPos,
+      from_user = true;
 
 		if(max < min) {
 			inc    = -inc;
@@ -830,3 +831,4 @@ var fdSliderController = (function() {
 		enableSlider:           function(id) { if(!(id in sliders)) { return false; }; sliders[id].enable(); }
 	}
 })();
+export default fdSliderController;

@@ -389,6 +389,7 @@ const login = {
   get_ret (msg) { // 部分函数返回值取舍判断函数
     // console.log(msg, 'get_ret_msg')
     let ret = (msg && msg.data) ? (msg.data.ret || msg.data.result || msg.data.Result) : null
+    console.log(Object.prototype.hasOwnProperty.call(ret, "Code"))
     if(Object.prototype.hasOwnProperty.call(ret, "Code")){//将接口返回名称小写
       ret["code"] = ret.Code;
       ret["sub"] = ret.SubCode;
@@ -406,7 +407,6 @@ const login = {
     }
     else {
       let s_ret = ret ? (ret.reason || ret.sub || ret.code)  : null
-      // console.log(s_ret, 's_ret')
       return s_ret
     }
   }

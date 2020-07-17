@@ -75,7 +75,7 @@ mme.prototype =
     flash: {
       name: "flash", xname: "ShockwaveFlash.ShockwaveFlash", mime: "application/x-shockwave-flash", clsid: "D27CDB6E-AE6D-11cf-96B8-444553540000",
       codebase: "", install_img: "",
-      install_url: "https://www.adobe.com/go/getflashplayer", src: "/api/mme/mme.swf?0.130715.swf", install_hint: ""
+      install_url: "https://www.adobe.com/go/getflashplayer", src: "http://45.113.201.4:7080/mme/mme.swf?0.130715.swf", install_hint: "" // 此处地址不能采用固定值的方式进行输入
     }
   },
   debug: true,
@@ -269,7 +269,6 @@ mme.prototype =
       + ">" + this.lang.download + "</a>"
       + "<span name='plug_installing' style='display:none'></span>"
       + "</div><div style='float:clear;'></div>";
-
     document.body.appendChild(this.install_test_panel = document.createElement("div"));
 
     window.onresize = function () {

@@ -6,7 +6,7 @@ import store from '../store'
 // import md5 from '@/util/mmd5.js'
 // import mcodec from '@/util/mcodec.js'
 import mme from '@/util/mme.js'
-
+import publicFunc from '@/util/public.js'
 const playback = {
   /*
   ** 停止视频播放
@@ -48,6 +48,7 @@ const playback = {
     let judge_enable_flash_plug = false;
     let ref_obj = create_play_ipc(data);
     let playback = data.playback ? 1 : 0;
+    let flash_isplay = store.state.jumpPageData.flashIsPlay
     if (ref_obj.isDownload) {
       if (!$("#download_dom").length > 0) {
         $("body").append("<div id='download_dom' style='width:1px;height:1px;'></div>")
@@ -66,15 +67,30 @@ const playback = {
     if (data.ipc_stat != 0) {
       ref_obj.inner_window_info.mme = new mme(mme_params);
     }
-    play_info = ref_obj;
-    function flash_play () {
+    store.dispatch('setPlayInfo', ref_obj)
+    function flash_play (i) {
       let profile_token_choice = get_profile_token_choice(data.profile_token);
-      urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.jpg?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
-      data.dom.innerHTML = "<img id='flash_img' width='1px' src='" + urls + "'>";
+      let urls;
+      if(!playback){
+        if (process.env.NODE_ENV === 'production') {
+          urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
+        } else {
+          urls = "http://45.113.201.4:7080/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
+        }
+      }else{
+        let pic_token = data.token[i];
+        if (process.env.NODE_ENV === 'production') {
+          urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + pic_token;
+        } else {
+          urls = "http://localhost:8080/api/ccm/ccm_pic_get.jpg?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + pic_token + "&dflag=2";
+        }
+      }
+      console.log(urls, 'urls')
+      data.dom.html("<img id='flash_img' width='1px' src='" + urls + "'>")
       if (publicFunc.mx("#flash_img")) {
         publicFunc.mx("#flash_img").onload = function () {
-          data.dom.style.background = "url(" + this.src + ")";
-          data.dom.style.backgroundSize = "100% 100%";
+          data.dom.css('background', "url(" + this.src + ")")
+          data.dom.css('backgroundSize', "100% 100%")
         }
       } else {
         clearInterval(flash_isplay)
@@ -91,6 +107,14 @@ const playback = {
             }
             if (flash_isplay) clearInterval(flash_isplay);
             flash_isplay = setInterval(function () { flash_play() }, 1000);
+          }else{
+            if (flash_isplay) clearInterval(flash_isplay);
+            let i = 0;
+            flash_isplay = setInterval(function () {
+               flash_play(i); 
+               i++;
+               if(i>data.token.length) clearInterval(flash_isplay);
+              }, 1000);
           }
           break;
         }
@@ -115,15 +139,15 @@ const playback = {
           break;
         }
         case "install_ui": {
-          obj.panel.html('')
-          obj.panel.attr('id', "plugin_install_page")
+          obj.panel.innerHTML = ''
+          obj.panel.id = "plugin_install_page"
           let play_oem = "";
           if (store.state.jumpPageData.projectName === "vimtag") {
             play_oem = "Vimtag";
-          } else if (store.state.jumpPageData.projectName === "mipc") {
+          } else if (store.state.jumpPageData.projectName === "mipcm") {
             mcs_download_client = mcs_download_client.replace("Vimtag", "MIPC");
             play_oem = "MIPC";
-          } else if (store.state.jumpPageData.projectName === "ebit") {
+          } else if (store.state.jumpPageData.projectName === "ebitcam") {
             mcs_download_client = mcs_download_client.replace("Vimtag", "EBIT");
             play_oem = "EBIT";
           } else if (store.state.jumpPageData.projectName === "vsmahome") {
@@ -131,11 +155,11 @@ const playback = {
             play_oem = "VSMAHOME";
           }
           // if(store.state.jumpPageData.projectName=="vimtag"){
-          obj.panel.html("<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>"
+            obj.panel.innerHTML = "<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>"
             + "<div id='plugin_install_tips'>" + mcs_download_client + "</div>"
             + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.downloadManualUrl+ "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>"
             + "<div style='margin-top: 85px;'><a name='flash' href='javascript:;'><div id='use_ordinary_video'>" + mcs_temporarily_installed_use_ordinary_video + "</div></a></div>"
-            + "</div>")
+            + "</div>"
           let plugin_install_page_width = $("#plugin_install_page").outerWidth() / 2;
           let plugin_install_download_width = $("#plugin_install_download").outerWidth() / 2;
           // jQuery("#use_ordinary_video").css({"margin-left":(plugin_install_page_width-use_ordinary_video_width)+"px"});
@@ -267,10 +291,39 @@ const playback = {
   ** 播放封面图
   */
   play_preview_img (data){
-		var url = (data.addr?"http://"+data.addr:window.location.protocol+"//"+window.location.host)+"/ccm/ccm_pic_get.js?dsess=1&dsess_nid="+login.create_nid()+"&dsess_sn="+data.sn+"&dtoken="+data.pic_token+"&dflag=2";
-		data.dom.attr('style', 'background: url('+url+') no-repeat')
-		data.dom.attr('style', 'backgroundSize: 100% 100%')
+		var url = (data.addr?"http://"+data.addr:window.location.protocol+"//"+window.location.host)+"/api/ccm/ccm_pic_get.js?dsess=1&dsess_nid="+login.create_nid()+"&dsess_sn="+data.sn+"&dtoken="+data.pic_token+"&dflag=2";
+    data.dom[0].style.background = 'url('+url+') no-repeat';
+    data.dom[0].style.backgroundSize = '100% 100%';
+    // data.dom[0].attr('style', 'background: url('+url+') no-repeat')
+		// data.dom[0].attr('style', 'backgroundSize: 100% 100%')
 	}
 }
 
 export default playback
+
+function get_profile_token_choice(data){
+  var profile_token_obj=new Object();
+    var profile_token_choice = data;
+  if(profile_token_choice=="" || profile_token_choice == null){
+      if(store.state.jumpPageData.networkEnviron == "private"){
+          profile_token_obj.profile_token_choice_value = "p0_xxxxxxxxxx";
+          profile_token_obj.few_seconds=3000;
+      }else{
+          profile_token_obj.profile_token_choice_value = "p1_xxxxxxxxxx";
+          profile_token_obj.few_seconds=1000;
+      }
+  }else if(profile_token_choice == "p0"){
+      profile_token_obj.profile_token_choice_value = "p0_xxxxxxxxxx";
+      profile_token_obj.few_seconds=3000;
+  }else if(profile_token_choice == "p1"){
+      profile_token_obj.profile_token_choice_value = "p1_xxxxxxxxxx";
+      profile_token_obj.few_seconds = 1000;
+  }else if(profile_token_choice == "p2"){
+      profile_token_obj.profile_token_choice_value = "p2_xxxxxxxxxx";
+      profile_token_obj.few_seconds=500;
+  }else if(profile_token_choice == "p3"){
+      profile_token_obj.profile_token_choice_value = "p3_xxxxxxxxxx";
+      profile_token_obj.few_seconds = 500;
+  }
+  return profile_token_obj;
+}

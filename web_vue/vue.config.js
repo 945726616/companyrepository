@@ -39,12 +39,13 @@ module.exports = {
       }
     }
   },
-  publicPath: process.env.NODE_ENV === 'production' ? "/" : "/" + process.env.VUE_APP_PROJECT_NAME + "/", // 设置本地服务域名后缀
+  publicPath: process.env.NODE_ENV === 'production' ? "./" : "/" + process.env.VUE_APP_PROJECT_NAME + "/", // 设置本地服务域名后缀
   outputDir: './dist/http_' + process.env.VUE_APP_VERSION + time, // 项目打包输出路径
   productionSourceMap: false,
   configureWebpack: config => {
     if (process.env.NODE_ENV === 'production') { // 生产环境打包使用插件
       // 为生产环境修改配置...
+      // config.optimization.minimize = false
       config.mode = 'production'
       config.plugins.push(
         new FileManagerPlugin({ // 打包文件处理插件 用于构造合适的压缩包路径以及删除多余的打包内容 打包时需要传递--appVersion=xxx参数

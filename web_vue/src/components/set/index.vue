@@ -12724,7 +12724,6 @@ export default {
   async mounted () {
     import(`@/lib/plugins/jquery.tzSelect.js`)
     import(`@/lib/plugins/time_select.js`)
-    import(`@/lib/plugins/slider.js`)
     let userLanguage = sessionStorage.getItem('userLanguage')
     if (userLanguage) {
       await this.$chooseLanguage.lang(userLanguage)

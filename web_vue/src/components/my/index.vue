@@ -74,7 +74,7 @@ export default {
         + "<div id='set_about_page' class='set_page' style='display:none'>"
         + "<div class='about_list'>"
         + "<div id='about_title' class='about_title'>" + mcs_software_version + "</div>"
-        + "<div class='about_input'>" + _this.$store.state.jumpPageData.webClientV + "</div>"
+        + "<div class='about_input'>" + process.env.VUE_APP_VERSION + "</div>"
         + "</div>"
         + "</div>"
         + "<div id='set_manage_password_page' class='set_page'>"
@@ -293,7 +293,6 @@ export default {
         }
 
         $(".set_list").click(function () { // 对功能菜单中的每一项绑定点击事件
-          console.log(111)
           let id_name = $(this).children(".set_img").attr("id");
           // // console.log(id_name, 'id_name')
           $(".set_page").hide();
@@ -401,8 +400,8 @@ export default {
                 // 	content_title: feedback_type,
                 // 	content_creator: username_value,
                 // 	content_platform: "web",
-                // 	content_native_ver: _this.$store.state.jumpPageData.webClientV,
-                // 	content_web_ver: _this.$store.state.jumpPageData.webClientV,
+                // 	content_native_ver: process.env.VUE_APP_VERSION,
+                // 	content_web_ver: process.env.VUE_APP_VERSION,
                 // 	content_create_time: time_stamp,
                 // 	content_item__x_countz_: 1,
                 // 	content_item: 1,
@@ -416,8 +415,8 @@ export default {
                 let params = {
                   sign: "vimtag",
                   platform: "pc",
-                  // native_ver: _this.$store.state.jumpPageData.webClientV,
-                  web_ver: _this.$store.state.jumpPageData.webClientV,
+                  // native_ver: process.env.VUE_APP_VERSION,
+                  web_ver: process.env.VUE_APP_VERSION,
                   title: feedback_type,
                   creator: username_value,
                   email: feedback_email_address,

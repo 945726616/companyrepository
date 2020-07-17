@@ -24,11 +24,13 @@ const jumpPageData = {
     flashIsPlay: null, // flash自动播放
     playInfo: '', // 播放相关详情
     webClientV: "0.0.0",//版本号
-    hostname : "",
+    hostname: "",
     guest: 1, //是否为访客模式
+    kbwin: 0, //定义全局变量查看app是否为定制kbwin  5.11.3
+    historyData: null, //历史数据
     serverDevice: '', // get_req接口请求回的服务器地址
-    networkEnviron: '', // 内外部网络放完环境标识
-    systemWaitDiv: null, // 系统等待div
+    boxDeviceData: [],// 定义的全局变量，初始化 ,标记实时播放列表显示,解决修改g_device_data 从云盒子返回设备列表页出错问题
+    networkEnviron: '', // 代表内部网络访问或外部网络访问直接连接之间的区别非直接连接
     systemStopWait: null, // 系统停止等待
   },
   mutations: {
@@ -53,7 +55,7 @@ const jumpPageData = {
     SET_EXPERIENCE_FLAG: (state, experienceFlag) => {
       state.experienceFlag = experienceFlag
     },
-    SET_LOGIN_FLAG:(state, loginFlag) => {
+    SET_LOGIN_FLAG: (state, loginFlag) => {
       state.loginFlag = loginFlag
     },
     SET_DOWNLOAD_MANUAL_URL: (state, downloadManualUrl) => {
@@ -101,6 +103,12 @@ const jumpPageData = {
     SET_GUEST: (state, guest) => {
       state.guest = guest
     },
+    SET_KBWIN: (state, kbwin) => {
+      state.kbwin = kbwin
+    },
+    SET_HISTORYDATA: (state, historyData) => {
+      state.historyData = historyData
+    },
     SET_SERVER_DEVICE: (state, serverDevice) => {
       state.serverDevice = serverDevice
     },
@@ -112,42 +120,48 @@ const jumpPageData = {
     },
     SET_SYSTEM_STOP_WAIT: (state, systemStopWait) => {
       state.systemStopWait = systemStopWait
-    }
+    },
+    SET_BOX_DEVICE_DATA: (state, boxDeviceData) => {
+      state.boxDeviceData = boxDeviceData
+    },
   },
   actions: {
-    setPageDom: ({commit}, pageDom) => commit('SET_PAGE_DOM', pageDom),
-    setPageObj: ({commit}, pageObj) => commit('SET_PAGE_OBJ', pageObj),
-    setProjectName: ({commit}, projectName) => commit('SET_PROJECT_NAME', projectName),
-    setJmLogoFlag: ({commit}, jmLogoFlag) => commit('SET_JM_LOGO_FLAG', jmLogoFlag),
-    setLocalModel: ({commit}, localModel) => commit('SET_LOCAL_MODEL', localModel),
-    setLoginWaitFlag: ({commit}, loginWaitFlag) => commit('SET_LOGIN_WAIT_FLAG', loginWaitFlag),
-    setExperienceFlag: ({commit}, experienceFlag) => commit('SET_EXPERIENCE_FLAG', experienceFlag),
-    setLoginFlag: ({commit}, loginFlag) => commit('SET_LOGIN_FLAG', loginFlag),
-    setDownloadManualUrl: ({commit}, downloadManualUrl) => commit('SET_DOWNLOAD_MANUAL_URL', downloadManualUrl),
-    setPlayDownloadUrl: ({commit}, playDownloadUrl) => commit('SET_PLAY_DOWNLOAD_URL', playDownloadUrl),
-    setSupportFilterFlag: ({commit}, supportFilterFlag) => commit('SET_SUPPORT_FILTER_FLAG', supportFilterFlag),
-    setSupportTreeFlag: ({commit}, supportTreeFlag) => commit('SET_SUPPORT_TREE_FLAG', supportTreeFlag),
-    setBufferPageFlag: ({commit}, bufferPageFlag) => commit('SET_BUFFER_PAGE_FLAG', bufferPageFlag),
-    setDeviceData: ({commit}, deviceData) => commit('SET_DEVICE_DATA', deviceData),
-    setLocalFlag: ({commit}, localFlag) => commit('SET_LOCAL_FLAG', localFlag),
-    setAutoPlayFlag: ({commit}, autoPlayFlag) => commit('SET_AUTO_PLAY_FLAG', autoPlayFlag),
-    setSelectDeviceIpc: ({commit}, selectDeviceIpc) => commit('SET_SELECT_DEVICE_IPC', selectDeviceIpc),
-    setSelectNick: ({commit}, selectNick) => commit('SET_SELECT_NICK', selectNick),
-    setFlashIsPlay: ({commit}, flashIsPlay) => commit('SET_FLASH_IS_PLAY', flashIsPlay),
-    setPlayInfo: ({commit}, playInfo) => commit('SET_PLAY_INFO', playInfo),
-    setWebClientV: ({commit}, webClientV) => commit('SET_WEB_CLIENT_V', webClientV),
-    setHostname: ({commit}, hostname) => commit('SET_HOSTNAME', hostname),
-    setGuest: ({commit}, guest) => commit('SET_GUEST', guest),
-    setServerDevice: ({commit}, serverDevice) => commit('SET_SERVER_DEVICE', serverDevice),
-    setNetworkEnviron: ({commit}, networkEnviron) => commit('SET_NETWORK_ENVIRON', networkEnviron),
-    setSystemWaitDiv: ({commit}, systemWaitDiv) => commit('SET_SYSTEM_WAIT_DIV', systemWaitDiv),
-    setSystemStopWait: ({commit}, systemStopWait) => commit('SET_SYSTEM_STOP_WAIT', systemStopWait)
+    setPageDom: ({ commit }, pageDom) => commit('SET_PAGE_DOM', pageDom),
+    setPageObj: ({ commit }, pageObj) => commit('SET_PAGE_OBJ', pageObj),
+    setProjectName: ({ commit }, projectName) => commit('SET_PROJECT_NAME', projectName),
+    setJmLogoFlag: ({ commit }, jmLogoFlag) => commit('SET_JM_LOGO_FLAG', jmLogoFlag),
+    setLocalModel: ({ commit }, localModel) => commit('SET_LOCAL_MODEL', localModel),
+    setLoginWaitFlag: ({ commit }, loginWaitFlag) => commit('SET_LOGIN_WAIT_FLAG', loginWaitFlag),
+    setExperienceFlag: ({ commit }, experienceFlag) => commit('SET_EXPERIENCE_FLAG', experienceFlag),
+    setLoginFlag: ({ commit }, loginFlag) => commit('SET_LOGIN_FLAG', loginFlag),
+    setDownloadManualUrl: ({ commit }, downloadManualUrl) => commit('SET_DOWNLOAD_MANUAL_URL', downloadManualUrl),
+    setPlayDownloadUrl: ({ commit }, playDownloadUrl) => commit('SET_PLAY_DOWNLOAD_URL', playDownloadUrl),
+    setSupportFilterFlag: ({ commit }, supportFilterFlag) => commit('SET_SUPPORT_FILTER_FLAG', supportFilterFlag),
+    setSupportTreeFlag: ({ commit }, supportTreeFlag) => commit('SET_SUPPORT_TREE_FLAG', supportTreeFlag),
+    setBufferPageFlag: ({ commit }, bufferPageFlag) => commit('SET_BUFFER_PAGE_FLAG', bufferPageFlag),
+    setDeviceData: ({ commit }, deviceData) => commit('SET_DEVICE_DATA', deviceData),
+    setLocalFlag: ({ commit }, localFlag) => commit('SET_LOCAL_FLAG', localFlag),
+    setAutoPlayFlag: ({ commit }, autoPlayFlag) => commit('SET_AUTO_PLAY_FLAG', autoPlayFlag),
+    setSelectDeviceIpc: ({ commit }, selectDeviceIpc) => commit('SET_SELECT_DEVICE_IPC', selectDeviceIpc),
+    setSelectNick: ({ commit }, selectNick) => commit('SET_SELECT_NICK', selectNick),
+    setFlashIsPlay: ({ commit }, flashIsPlay) => commit('SET_FLASH_IS_PLAY', flashIsPlay),
+    setPlayInfo: ({ commit }, playInfo) => commit('SET_PLAY_INFO', playInfo),
+    setWebClientV: ({ commit }, webClientV) => commit('SET_WEB_CLIENT_V', webClientV),
+    setHostname: ({ commit }, hostname) => commit('SET_HOSTNAME', hostname),
+    setGuest: ({ commit }, guest) => commit('SET_GUEST', guest),
+    setServerDevice: ({ commit }, serverDevice) => commit('SET_SERVER_DEVICE', serverDevice),
+    setNetworkEnviron: ({ commit }, networkEnviron) => commit('SET_NETWORK_ENVIRON', networkEnviron),
+    setSystemWaitDiv: ({ commit }, systemWaitDiv) => commit('SET_SYSTEM_WAIT_DIV', systemWaitDiv),
+    setSystemStopWait: ({ commit }, systemStopWait) => commit('SET_SYSTEM_STOP_WAIT', systemStopWait),
+    setKbwin: ({ commit }, kbwin) => commit('SET_KBWIN', kbwin),
+    setHistoryData: ({ commit }, historyData) => commit('SET_HISTORYDATA', historyData),
+    setBoxDeviceData: ({ commit }, boxDeviceData) => commit('SET_BOX_DEVICE_DATA', boxDeviceData)
   }
 }
 
 export default jumpPageData
 
-function GetQueryString(name) { // 截取url参数函数判断其中是否含有搜索的字符串(目前用于离线模式的判断)
+function GetQueryString (name) { // 截取url参数函数判断其中是否含有搜索的字符串(目前用于离线模式的判断)
   let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
   let r = window.location.search.substr(1).match(reg);
   if (r !== null) return unescape(r[2]);
@@ -158,7 +172,7 @@ function getProjectName () { // 获取项目名称从域名中截取并存储在
   let returnItem
   let url = window.location.href
   console.log(url, 'vuex_href')
-  if(url.indexOf('vimtag') > 1) {
+  if (url.indexOf('vimtag') > 1) {
     returnItem = 'vimtag'
   } else if (url.indexOf('mipcm') > 1) {
     returnItem = 'mipcm'

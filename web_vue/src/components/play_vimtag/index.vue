@@ -143,7 +143,7 @@ export default {
           msdk_ctrl({ type: "local_devlist_get", data: { func: device_list } })
         } else {
           if (obj.box_ipc) {
-            device_list(g_box_device_data)
+            device_list(_this.$store.state.jumpPageData.boxDeviceData)
           } else {
             device_list(_this.$store.state.jumpPageData.deviceData)
           }

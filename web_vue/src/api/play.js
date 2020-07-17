@@ -21,8 +21,8 @@ const play = {
         images[k].src = "http://" + data.dom[k].getAttribute("addr") + "/ccm/ccm_pic_get.js?dsess=1&dsess_nid=&dsess_sn=" + data.dom[k].getAttribute("sn") + "&dtoken=p1&dflag=2";
       } else {
         if (sessionStorage.getItem(sn) && data.box_ipc !== 1) {
-          $(data.dom)[k].childNodes[0].style.background = "url(" + sessionStorage.getItem(sn) + ")";
-          $(data.dom)[k].childNodes[0].style.backgroundSize = "100% 100%";
+          $(data.dom).eq(k).children()[0].style.background = "url(" + sessionStorage.getItem(sn) + ")";
+          $(data.dom).eq(k).children()[0].style.backgroundSize = "100% 100%";
         } else {
           if (data.box_ipc == 1) { //如果云盒子列表
             images[k].src = devlist.pic_url_get({ sn: data.dom[k].getAttribute("sn"), token: data.dom[k].getAttribute("ipc_sn") + "_p3_" + Math.pow(2, 31) + "_" + Math.pow(2, 31), flag: 2, box_ipc: 1 });
@@ -33,25 +33,27 @@ const play = {
       }
       images[k].onload = function () {
         if (data.box_ipc == 1) { //6.1.2
-          for (let j = 0; j < length; j++) {
+          let j;
+          for (j = 0; j < length; j++) {
             if (!$(data.dom)[j]) return;
             let dev_sn = $(data.dom).eq(j).attr("ipc_sn");
-            if (this.src.$(dev_sn) > -1) {
+            if (this.src.indexOf(dev_sn) > -1) {
               break;
             }
           }
-          $(data.dom)[j].childNodes[0].style.background = "url(" + this.src + ")";
-          $(data.dom)[j].childNodes[0].style.backgroundSize = "100% 100%";
+          $(data.dom).eq(j).children()[0].style.background = "url(" + this.src + ")";
+          $(data.dom).eq(j).children()[0].style.backgroundSize = "100% 100%";
         } else {
-          for (let j = 0; j < length; j++) {
+          let j;
+          for (j = 0; j < length; j++) {
             if (!$(data.dom)[j]) return;
             let dev_sn = $(data.dom).eq(j).attr("sn");
-            if (this.src.$(dev_sn) > -1) {
+            if (this.src.indexOf(dev_sn) > -1) {
               break;
             }
           }
-          $(data.dom)[j].childNodes[0].style.background = "url(" + this.src + ")";
-          $(data.dom)[j].childNodes[0].style.backgroundSize = "100% 100%";
+          $(data.dom).eq(j).children()[0].style.background = "url(" + this.src + ")";
+          $(data.dom).eq(j).children()[0].style.backgroundSize = "100% 100%";
         }
       };
     }
@@ -93,12 +95,13 @@ const play = {
   ** 播放总接口
   */
   async play (data) {
-    let returnItem
+    let returnItem;
     let flash_isplay = store.state.jumpPageData.flashIsPlay
     let judge_enable_native_plug = true;
     let judge_enable_flash_plug = false;
     let ref_obj = create_play_ipc(data);
     let playback = data.playback ? 1 : 0;
+    let l_plug_type = "";
     if (ref_obj.isDownload) {
       if (!$("#download_dom").length > 0) {
         $("body").append("<div id='download_dom' style='width:1px;height:1px;'></div>")
@@ -121,7 +124,13 @@ const play = {
     store.dispatch('setPlayInfo', ref_obj)
     function flash_play () {
       let profile_token_choice = get_profile_token_choice(data.profile_token);
-      let urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.jpg?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
+      let urls
+      if (process.env.NODE_ENV === 'production') {
+        urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
+      } else {
+        urls = "http://45.113.201.4:7080/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
+      }
+      console.log(urls, 'urls')
       data.dom.html("<img id='flash_img' width='1px' src='" + urls + "'>")
       if (publicFunc.mx("#flash_img")) {
         publicFunc.mx("#flash_img").onload = function () {
@@ -132,7 +141,7 @@ const play = {
         clearInterval(flash_isplay)
       }
     }
-    function on_plug_event (obj) {
+    async function on_plug_event (obj) {
       sessionStorage.setItem("type_tip", obj.type);
       sessionStorage.setItem("code_tip", obj.code);
       switch (obj.type) {
@@ -161,7 +170,20 @@ const play = {
               data.agent.play({ sn: ref_obj.sn, token: obj.ref_obj.inner_window_info.profile_token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "play"; play_ack(msg, ref); })
             } else {
               // ms.send_msg("play",{sn:"1jfiegbqaml3q",token:"p0_1jfiegbqcip5q", protocol:proto,ref:obj.ref_obj},obj.ref_obj,function(msg,ref){ msg.type = "play" ; play_ack(msg,ref);}); //6.1.2测试云盒子实时视频播放 
-              ms.send_msg("play", { sn: ref_obj.sn, token: obj.ref_obj.inner_window_info.profile_token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "play"; play_ack(msg, ref); });
+              // ms.send_msg("play", { sn: ref_obj.sn, token: obj.ref_obj.inner_window_info.profile_token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "play"; play_ack(msg, ref); });
+              await axios.get('/ccm/ccm_play', {
+                params: {
+                  sess: { nid: login.create_nid(), sn: ref_obj.sn },
+                  setup: { stream: "RTP_Unicast", trans: { proto: proto } }, token: obj.ref_obj.inner_window_info.profile_token
+            }
+              }).then(res => {
+                returnItem = { 
+                  result: login.get_ret(res),
+                  url: (res.data.MediaUri.Uri ? res.data.MediaUri.Uri : ""),
+                  type: "play"
+          }
+              })
+              return play_ack(returnItem, store.state.jumpPageData.playInfo)
             }
           }
           break;
@@ -210,7 +232,6 @@ const play = {
       }
     }
     function chl_video_create (obj) {
-
       let uri = obj.uri,
         chl_params = (obj.type == "publish") ? "" : ",thread:\"istream\", jitter:{max:3000}"/* for old version's mme plugin */,
         trans_params = (obj.type == "play") ? ",trans:[{flow_ctrl:\"jitter\",thread:\"istream\"}]" :
@@ -319,7 +340,7 @@ const play = {
   ** 播放封面图
   */
   play_preview_img (params) {
-    var url = (params.addr ? "http://" + params.addr : window.location.protocol + "//" + window.location.host) + "/ccm/ccm_pic_get.js?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + params.pic_token + "&dflag=2";
+    var url = (params.addr ? "http://" + params.addr : window.location.protocol + "//" + window.location.host) + "/api/ccm/ccm_pic_get.jpg?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + params.pic_token + "&dflag=2";
     params.dom.attr('style', 'background: url(' + url + ') no-repeat')
     params.dom.attr('style', 'backgroundSize: 100% 100%')
   },
@@ -683,6 +704,7 @@ const play = {
   ** 设置视频地址
   */
   async adjust_set (obj) {
+    obj = obj.conf;
     let returnItem
     if (obj.is_white_light == 1 && obj.white_light) {
       play.img_set({
@@ -768,7 +790,7 @@ const play = {
   async img_set (params) {
     return await axios.get('/ccm/ccm_img_set', {
       params: {
-        sess: { nid: create_nid(), sn: params.sn }, token: "vs0",
+        sess: { nid: login.create_nid(), sn: params.sn }, token: "vs0",
         conf: params.conf
       }
     })

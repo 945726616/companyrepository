@@ -6,11 +6,11 @@ export default {
   data () {
     // 页面内全局变量
     return {
-      l_dom_box_camera_sign_picture,
+      l_dom_box_camera_sign_picture: [],
       onvif_ipc: '',
       box_list_dom: '',
       onvif_ipc_arr: [],
-      margin_width,
+      margin_width: '',
     }
   },
   methods: {
@@ -146,20 +146,21 @@ export default {
       }
       function boxlist_get_ack (data) {
         // console.log(data, "进入boxlist_get_ack")
-        g_box_device_data = []; //定义的全局变量，初始化 ,标记实时播放列表显示,解决修改g_device_data 从云盒子返回设备列表页出错问题
+        let box_device_data = []; //定义的全局变量，初始化 ,标记实时播放列表显示,解决修改g_device_data 从云盒子返回设备列表页出错问题
         if (data.ipcs) { // ccm_box_get没有onvif设备
           for (let i = 0; i < data.ipcs.length; i++) {// 实时视频播放
             data.ipcs[i].type = 'BOX'// 实时视频播放
             data.ipcs[i].box_sn = _this.$store.state.jumpPageData.selectDeviceIpc;// 实时视频播放 参数sn：所在的云盒子
-            g_box_device_data.push(data.ipcs[i])
+            box_device_data.push(data.ipcs[i])
           }// 实时视频播放
+          _this.$store.dispatch('setBoxDeviceData', box_device_data)
           array_diff(data.ipcs, _this.onvif_ipc_arr); //私有中去掉包含的onvif
           // console.log(data.ipcs, "私有设备列表") // 得到的data.ipcs已经是去除过onvif设备的数组了
         }
         // 私有设备数组长度
         let ipcs_length = data.ipcs ? data.ipcs.length : 0;
         for (let i = 0; i < ipcs_length; i++) {
-          box_list_dom +=
+          _this.box_list_dom +=
             "<div class='box_device_list_img' >"
             + "<img class='box_camera_sign_picture' sn='" + data.ipcs[i].sn + "' stat='" + data.ipcs[i].online + "'></img>"
             + "<div class='box_device_nick' sn='" + data.ipcs[i].sn + "'>"
@@ -170,7 +171,7 @@ export default {
             + "</div>";
         }
         if (ipcs_length === 0 && _this.onvif_ipc_arr.length === 0) { //如果云盒子中没有私有设备
-          box_list_dom = "<div id='empty_div_img'></div>"
+          _this.box_list_dom = "<div id='empty_div_img'></div>"
             + "<div class='empty_div_txt'>" + mcs_your_device_list_empty + "</div>"
             + "<div id='empty_search_btn'>" + mcs_search_device + "</div>"
         }
@@ -178,13 +179,14 @@ export default {
         if (ipcs_length == 0) { //如果没有返回私有设备数据 设备列表为空页面
           $("#box_per_ipc").hide();
         } else {
-          $("#box_per_ipc_container").html(box_list_dom)
+          $("#box_per_ipc_container").html(_this.box_list_dom)
           // console.log('第二个请求')
           // 私有设备加载图片的请求
           _this.$api.boxlist.boxlist_img_get({ addr: obj.addr, agent: data.agent, sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: data.ipcs, dom: $(".box_camera_sign_picture"), resolution: "p3" })
           // msdk_ctrl({ type: "boxlist_img_get", data: { addr: obj.addr, agent: data.agent, sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: data.ipcs, dom: _this.publicFunc.mx(".box_camera_sign_picture"), resolution: "p3" } });
         }
-        if (urlparms.m.indexOf('vimtag.com') > -1) {
+        // if (_this.publicFunc.urlParam().m.indexOf('vimtag.com') > -1) {
+        if ( _this.$store.state.jumpPageData.projectName === "vimtag") {
           $(".del_box_ipc_btn").attr("app", "vimtag")
           $(".del_box_ipc_record_btn").attr("app", "vimtag")
         } else {
@@ -197,9 +199,9 @@ export default {
         if (!_this.$store.state.jumpPageData.projectFlag) { // vimtag项目动态自适应   给box_device_list_img 加margin
           $(".box_device_list_img").css({ "margin-right": _this.margin_width / 2, "margin-left": _this.margin_width / 2 });
         }
-        l_dom_box_camera_sign_picture = _this.publicFunc.mx(".box_camera_sign_picture");
-        for (let i = 0; i < l_dom_box_camera_sign_picture.length; i++) {
-          l_dom_box_camera_sign_picture[i].onclick = function () {
+        _this.l_dom_box_camera_sign_picture = _this.publicFunc.mx(".box_camera_sign_picture");
+        for (let i = 0; i < _this.l_dom_box_camera_sign_picture.length; i++) {
+          _this.l_dom_box_camera_sign_picture[i].onclick = function () {
             if (obj.box_live == 1) {//如果云盒子支持实时视频播放                  
               obj.box_ipc = 1;//给个标记，知道云盒子中的设备跳转到实时播放页面
               obj.ipc_sn = this.getAttribute("sn"); //标记设备的sn

@@ -257,7 +257,7 @@ export default {
       }
 
       function device_list_load () {
-        console.log(_this.devImgWidth, 'devimgwidth')
+        // console.log(_this.devImgWidth, 'devimgwidth')
         if (_this.devImgWidth[_this.devImgWidth.length - 1] === "%") { //将百分数转换成小数
           _this.devImgWidth = parseFloat(_this.devImgWidth) / 100;
         }
@@ -323,7 +323,7 @@ export default {
           if (i >= n && i < length) {
             if (l_dom_device_list_img.getAttribute("state") === "Online") {
               //State Normal equipment click event
-              $(".camera_sign_picture_div")[i].onclick = function () {
+              $(".camera_sign_picture_div").eq(i).click(function () {
                 _this.$store.dispatch('setSelectDeviceIpc', this.parentNode.parentNode.getAttribute("sn")) // 点击时获取sn
                 _this.$store.dispatch('setSelectNick', this.parentNode.parentNode.getAttribute("nick")) // 点击时获取nick
                 _this.$store.state.jumpPageData.selectNick= this.parentNode.parentNode.getAttribute("nick")
@@ -332,18 +332,18 @@ export default {
                 let addr = this.parentNode.parentNode.getAttribute("addr");
                 if (state === "Online" && type === "IPC") {
                   obj.addr = addr;
-                  console.log(obj, '创建播放页面')
+                  // console.log(obj, '创建播放页面')
                   // createPage("play", obj);
                   _this.$router.push({name:'play',params:obj})
                 } else if (state === "Online" && type === "BOX") {
                   let box_live = this.parentNode.parentNode.getAttribute("box_live");//获取云盒子是否支持实时播放
                   obj.addr = addr;
                   obj.box_live = box_live;
-                  console.log(obj, '创建云盒子播放页面')
+                  // console.log(obj, '创建云盒子播放页面')
                   // createPage("boxlist", obj);
-                  _this.$router.push({name:'bolist',params:obj})
+                  _this.$router.push({name:'boxlist',params:obj})
                 }
-              }
+              })
               if (_this.$store.state.jumpPageData.localFlag === 1) {
                 if (l_dom_device_list_img.getAttribute("dtype") === "IPC") {
                   let local_play_data = {};
@@ -414,7 +414,7 @@ export default {
                 }
               }
             } else if (l_dom_device_list_img.getAttribute("state") === "InvalidAuth") {
-              $(".camera_sign_picture_div")[i].onclick = function () {
+              $(".camera_sign_picture_div").eq(i).click(function () {
                 _this.$store.dispatch('setSelectDeviceIpc', this.parentNode.parentNode.getAttribute("sn")) // 点击时存储sn
                 let type = this.parentNode.parentNode.getAttribute("dtype");
                 let addr = this.parentNode.parentNode.getAttribute("addr");
@@ -429,9 +429,9 @@ export default {
                   $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
                   create_add_devices_box({ parent: $("#add_device_page"), sn: _this.$store.state.jumpPageData.selectDeviceIpc });
                 }
-              }
+              })
             } else if (l_dom_device_list_img.getAttribute("state") === "Offline") {
-              $(".camera_sign_picture_div")[i].onclick = function () {
+              $(".camera_sign_picture_div").eq(i).click(function () {
                 _this.$store.dispatch('setSelectDeviceIpc', this.parentNode.parentNode.getAttribute("sn")) // 点击时存储sn
                 let type = this.parentNode.parentNode.getAttribute("dtype");
                 let state = this.parentNode.parentNode.getAttribute("state");
@@ -440,7 +440,7 @@ export default {
                 $("#add_device_page").show();
                 $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
                 create_devices_offline({ parent: $("#add_device_page"), sn: _this.$store.state.jumpPageData.selectDeviceIpc, type: type, state: state, addr: addr, nick: nick });
-              }
+              })
             }
           } else {
             if (l_dom_device_list_img.getAttribute("dtype") === "IPC") {
@@ -1288,7 +1288,7 @@ export default {
               add_dev_info.time = new Date().getTime() - add_device_step_time;
             })
             _this.addDeviceList.push(add_dev_info);//日志
-            $("#add_device_submit").onclick = function () {
+            $("#add_device_submit").click(function () {
               let password = $("#add_device_edit_pass").val();
               let re_password = $("#add_device_edit_confirm_pass").val();
               let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,32}$/;
@@ -1316,7 +1316,7 @@ export default {
                   }
                 })
               }
-            }
+            })
             $("#add_devices_box_close").click(function () {
               close_add_page('add_dev')
             })
@@ -1381,7 +1381,7 @@ export default {
             add_dev_info.time = 0;
             $("#add_devices_box_back").click(add_device_input_id)
             for (let i = 0; i < $(".add_device_set_wifi_list").length; i++) {
-              $(".add_device_set_wifi_list")[i].click(function () {
+              $(".add_device_set_wifi_list").eq(i).click(function () {
                 select_wifi = this.html();
                 add_dev_info.desc = 'select wifiname_' + select_wifi + '';//日志
                 select_wifi = select_wifi.length < 20 ? select_wifi : (select_wifi.substr(0, 20) + "...");
@@ -1559,7 +1559,7 @@ export default {
               add_device_set_nick();
             })
             for (let i = 0; i < $(".add_device_set_wifi_list").length; i++) {
-              $(".add_device_set_wifi_list")[i].click(function () {
+              $(".add_device_set_wifi_list").eq(i).click(function () {
                 let timezone_tmp = this.html()
                 add_dev_info.desc = 'set timezone_' + timezone_tmp + '';//日志
                 add_dev_info.time = new Date().getTime() - add_device_step_time;//日志
@@ -1861,6 +1861,9 @@ export default {
       // mipc系列
       languageSelect.mipc($('#login_box'))
       $('#login_box').append("<div id='is_mipc_div'></div>")
+    }
+    if(!this.$store.state.jumpPageData.projectFlag){
+      $("#top_experience_div").css("display","none")
     }
     this.publicFunc.projectReload.call(this);
   }

@@ -97,6 +97,8 @@ instance.interceptors.request.use(
       } else {
         config.url = '/project' + url + '.js'
       }
+    }else{
+      config.url = config.url + '.js'
     }
     // config.url = location.host + config.url
     // console.log(config, 'axiosConfig')
@@ -109,9 +111,10 @@ instance.interceptors.response.use(
   // 请求成功
   res => {
     if (res.status === 200) { // 接口请求成功进行接口数据处理
+      // console.log(res.data, 'eval_token_error')
       let getRes = eval(res.data)
       // console.log(getRes, 'getRes')
-      /* eslint-disable */
+      // /* eslint-disable */
       function message (obj) { // 该函数在服务器端用于渲染iframe 目前暂时先在此处进行返回值处理
         return obj
       }

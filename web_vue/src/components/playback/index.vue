@@ -16,16 +16,51 @@ export default {
       let l_dom_video_play,
         is_playing = 0;
       let vedio_flag_arr = [];//移动侦测标记集合
+
+      if (_this.$store.state.jumpPageData.projectFlag){
+        obj.parent[0].innerHTML = 
+        "<div id='playback_box'>"
+        + "<div id='playback_view'>"
+        + "<div id='playback_buffer_ret'></div>"
+        + "<div id='playback_screen'></div>"
+        + "<div id='playback_menu_box'></div>"
+        + "<div id='playback_download_path_box'>"
+        + "<div id='playback_download_path_main'>" + mcs_input_download_path + "<input id='playback_download_path_input' value='' type='text'></div>"
+        + "<div id='playback_download_path_cancel'>" + mcs_cancel + "</div>"
+        + "<div id='playback_download_path_submit'>" + mcs_ok + "</div>"
+        + "</div>"
+        + "</div>"
+        + "</div>"
+      }else{
+        obj.parent[0].innerHTML = 
+        "<div id='playback_box'>"
+        + "<div id='page_top_menu'>"
+        + "<div id='back'><div id='main_title_box_return_img'></div>" + mcs_back + "</div>"
+        + "</div>"
+        + "<div id='playback_view'>"
+        + "<div id='playback_buffer_ret'></div>"
+        + "<div id='playback_screen'></div>"
+        + "<div id='playback_menu_box'></div>"
+        + "<div id='playback_download_path_box'>"
+        + "<div id='playback_download_path_main'>" + mcs_input_download_path + "<input id='playback_download_path_input' value='' type='text'></div>"
+        + "<div id='playback_download_path_cancel'>" + mcs_cancel + "</div>"
+        + "<div id='playback_download_path_submit'>" + mcs_ok + "</div>"
+        + "</div>"
+        + "</div>"
+        + "</div>"
+      }
+      if(obj.data){
       for (let j = 0; j < obj.data.length; j++) {
         vedio_flag_arr.push(obj.data[j].f)
       }
-
+      }
+      if(_this.publicFunc.mx("#playback_download_path_input"))
       _this.publicFunc.mx("#playback_download_path_input").value = (navigator.platform.indexOf("Win") > -1 ? ('c:/downloads/') : ('/Users/Shared/'));
       let l_dom_playback_view = _this.publicFunc.mx("#playback_view");
       let l_dom_playback_screen = _this.publicFunc.mx("#playback_screen");
       let l_dom_playback_menu_box = _this.publicFunc.mx("#playback_menu_box");
       let l_dom_playback_download_path_box = _this.publicFunc.mx("#playback_download_path_box");
-      let l_height = _this.publicFunc.mx("#web").offsetWidth * 0.4 + 11;
+      let l_height = _this.publicFunc.mx("#top").offsetWidth * 0.4 + 11;
       let l_download_path_box_top = _this.publicFunc.mx("#playback_box").offsetTop + 200;
       let l_download_path_box_left = _this.publicFunc.mx("#playback_box").offsetLeft + 430;
       let l_playback_menu_box_height = l_dom_playback_menu_box.offsetHeight - 1;
@@ -194,12 +229,12 @@ export default {
               let jumpData = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, box_ipc: 1, ipc_sn: obj.ipc_sn, box_sn: obj.box_sn, box_live: 1, backplay_flag: 4, ipc_stat: obj.ipc_stat};
               // createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, box_ipc: 1, ipc_sn: obj.ipc_sn, box_sn: obj.box_sn, box_live: 1, backplay_flag: 4, ipc_stat: obj.ipc_stat })
               _this.$router.push({name:'history',params:jumpData});
-              sessionStorage.clear();
+              // sessionStorage.clear();
             } else {
               let jumpData = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, backplay_flag: 4};
               // createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page, agent: obj.agent, addr: obj.addr, a_start: obj.a_start, b_end: obj.b_end, backplay_flag: 4 })
               _this.$router.push({name:'history',params:jumpData});
-              sessionStorage.clear();
+              // sessionStorage.clear();
             }
           }
         } else {
@@ -207,7 +242,7 @@ export default {
             let jumpData = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page};
             // createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page })
             _this.$router.push({name:'history',params:jumpData});
-            sessionStorage.clear();
+            // sessionStorage.clear();
           }
         }
         _this.publicFunc.mx("#playback_download_path_submit").onclick = function () { // 下载部分函数
@@ -249,7 +284,7 @@ export default {
             })
             // msdk_ctrl({ type: "play_download_stop", data: { dom: l_dom_playback_screen, func: create_preview } })
           }
-          if (g_project == "vimtag") {
+          if (_this.store.state.jumpPageData.projectName == "vimtag") {
             _this.$api.play.play({ // 原play_back_download接口
               agent: obj.agent,
               dom: $("#playback_screen"),
@@ -344,6 +379,7 @@ export default {
             // msdk_ctrl({ type: "play_video_stop", data: { dom: l_dom_playback_screen, func: create_preview } });
           }
         }
+        if(!data)data = null
         _this.publicFunc.mx("#playback_buffer_ret").innerHTML = data;
         fdSliderController.increment("playback_progressbar", progress - _this.publicFunc.mx("#playback_progressbar").value);
       }
@@ -355,7 +391,7 @@ export default {
           + "<div id='play_pause_pic'></div>"
           + "</div>"
         let pic_token = obj.pic_token.replace("_p3_", "_p0_");
-        _this.$api.play_preview_img({
+        _this.$api.playback.play_preview_img({
           dom: $("#playback_screen"),
           sn: _this.$store.state.jumpPageData.selectDeviceIpc,
           pic_token: pic_token
@@ -364,24 +400,28 @@ export default {
         let l_dom_play_view_box = _this.publicFunc.mx("#play_view_box");
 
         l_dom_play_view_box.onclick = function () {
+          let pic_token = [];
+          for(let i = 0; i < obj.data.length; i++){
+            pic_token.push(obj.data[i].pic_token)
+          }
           is_playing = 1;
           if (!first) {
             bo_type = true;
             let bof_start_time = new Date(b_start_time).format("hh:mm:ss");
             $("#playback_start_time").html(bof_start_time);
-            _this.$api.play.play({ // 原playback接口
+            _this.$api.playback.play({ // 原playback接口
               agent: obj.agent,
               dom: $("#playback_screen"),
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
               videoSize: videoSize,
-              token: obj.token,
+              token: pic_token,
               playback: 1 // 此处额外添加参数
             }).then(res => {
-              playback_speed(res[0], res[1], res[2])
+              playback_speed(res)
             })
             // msdk_ctrl({ type: "playback", data: { agent: obj.agent, dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, videoSize: videoSize, token: obj.token, func: playback_speed } });
           } else {
-            _this.$api.play.play({ // 原playback接口
+            _this.$api.playback.play({ // 原playback接口
               agent: obj.agent,
               dom: $("#playback_screen"),
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -417,6 +457,7 @@ export default {
       pageData = {parent: $("#" + this.$route.name)}
     }
     console.log(pageData,"pageData")
+    this.publicFunc.projectReload.call(this);
     await this.create_playback_page(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {
@@ -424,7 +465,7 @@ export default {
       languageSelect.mipc($('#login_box'))
       $('#login_box').append("<div id='is_mipc_div'></div>")
     }
-    this.publicFunc.projectReload.call(this);
+    
   }
 }
 </script>

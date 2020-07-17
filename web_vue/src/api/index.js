@@ -6,6 +6,7 @@ import boxlist from '@/api/boxlist'
 import history from '@/api/history'
 import my from '@/api/my'
 import play from '@/api/play'
+import playback from '@/api/playback'
 import set from '@/api/set'
 // import test2 from '@/api/test2'
 
@@ -16,5 +17,6 @@ export default {
     history,
     my,
     play,
+    playback,
     set
 }

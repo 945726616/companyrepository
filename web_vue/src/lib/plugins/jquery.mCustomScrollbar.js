@@ -52,13 +52,13 @@ and dependencies (minified).
 		if (_njs) {
 		  // console.log('调用jquery.mcustomScrollbar.js _rjs 1')
 		  // require("jquery-mousewheel")($);
-		  import(`@/lib/plugins/jquery.mousewheel.min.js`)
+		  // import(`@/static/jquery.mousewheel.min.js`)
 		} else {
 		  /* load jquery-mousewheel plugin (via CDN) if it's not present or not loaded via RequireJS
 		  (works when mCustomScrollbar fn is called on window load) */
 		  // $.event.special.mousewheel || $("head").append(decodeURI("%3Cscript src="+_dlp+"//"+_url+"%3E%3C/script%3E"));
 		  // console.log('调用jquery.mcustomScrollbar.js _rjs 2')
-		  $.event.special.mousewheel || $("head").append(decodeURI("%3Cscript src=./js/jquery.mousewheel.min.js%3E%3C/script%3E"));
+		  // $.event.special.mousewheel || $("head").append(decodeURI("%3Cscript src=./js/jquery.mousewheel.min.js%3E%3C/script%3E"));
 		}
 	  }
 	  init();

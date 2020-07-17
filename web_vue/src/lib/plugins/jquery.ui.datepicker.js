@@ -1,4 +1,5 @@
-﻿/*
+﻿/* eslint-disable */
+/*
  * jQuery UI Datepicker 1.8.18
  *
  * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)

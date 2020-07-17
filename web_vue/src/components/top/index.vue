@@ -76,14 +76,13 @@ export default {
           '</div></div>' +
           '</div>'
         )
-
         if (window.fujikam === 'fujikam') {
           let mipc_appparam_url = location.href
           if (GetUrlParam_kb('kbwin', mipc_appparam_url)) {
-            g_is_kbwin = GetUrlParam_kb('kbwin', mipc_appparam_url) ? GetUrlParam_kb('kbwin', mipc_appparam_url) : 0
+            _this.$store.dispatch('setKbwin', GetUrlParam_kb('kbwin', mipc_appparam_url) ? GetUrlParam_kb('kbwin', mipc_appparam_url) : 0)
           }
         }
-        if (g_is_kbwin === 1) {
+        if (_this.$store.state.jumpPageData.kbwin === 1) {
           $('#mipc_logo_img').attr('class', 'kbwin_logo_img')
           $('#menu_download').hide()
         }
@@ -330,6 +329,9 @@ export default {
         await this.$chooseLanguage.lang(userLanguage)
       } else {
         await this.$chooseLanguage.lang('en')
+      }
+      if (!this.$store.state.jumpPageData.projectFlag) { 
+        $("#top_experience_div").css("display","none");
       }
       await this.create_top({ parent: $('#top') })
       await this.publicFunc.importCss('Public.scss')

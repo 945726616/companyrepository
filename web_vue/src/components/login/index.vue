@@ -641,9 +641,9 @@ export default {
                         if (param[i].name === 'f_multi_screen' && param[i].value === 1) {
                           mme.prototype.check_plug_install('', function (ref, version) {
                             if (!version) {
-                              g_support_auto_play = 0
+                              _this.$store.dispatch('setAutoPlayFlag', 0)
                             } else {
-                              g_support_auto_play = 1
+                              _this.$store.dispatch('setAutoPlayFlag', 1);
                               let auto_play = localStorage.getItem('auto_play')
                               if (auto_play !== 0) {
                                 _this.$store.dispatch('setAutoPlayFlag', 1)

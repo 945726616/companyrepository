@@ -2,6 +2,8 @@
   <div id="history"></div>
 </template>
 <script>
+import '../../lib/plugins/jquery.ui.datepicker.js'// jQuery日期选择插件
+import '../../lib/plugins/jquery.ui.datepicker-zh-CN.js' // 日期选择中文版
 export default {
   methods: {
     vimtagHistory (obj) {
@@ -21,7 +23,7 @@ export default {
       // 展示遮罩层
       _this.publicFunc.showBufferPage()
       function device_history_list (data) {
-        g_history_data = data;
+        _this.$store.dispatch('setHistoryData', data)
         if (data.date_infos_time) {
           date_infos_time = data.date_infos_time
         }
@@ -243,9 +245,9 @@ export default {
           buttonImageOnly: true,
           date_infos: data.date_infos_time,
           onSelect: function (dateText, inst) {
-            console.log(inst, 'calendar_input_select_inst')
+            // console.log(inst, 'calendar_input_select_inst')
             start_time = new Date(dateText).format("yyyy.MM.dd.00.00.00");
-            start_time = getDateForStringDate(start_time).getTime();
+            start_time = _this.$api.history.getDateForStringDate(start_time).getTime();
             num = vedio_day.length - vedio_day.indexOf(start_time) - 1; //点击完日期cid检索
             end_time = start_time + 60 * 60 * 24 * 1000;
             a_start = start_time;
@@ -367,6 +369,7 @@ export default {
           // console.log("camera_sign_picture4")
           $(".video_delete").click(function () {
             // console.log("camera_sign_picture5")
+            let __this = this;
             let start_time = this.parentNode.parentNode.childNodes[3].getAttribute("start_time");
             let end_time = this.parentNode.parentNode.childNodes[3].getAttribute("end_time");
             _this.publicFunc.delete_tips({
@@ -378,7 +381,7 @@ export default {
                   end_time: end_time
                 }).then(res => {
                   if (res.type === 'success') {
-                    $(_this.parentNode.parentNode).hide();
+                    $(__this.parentNode.parentNode).hide();
                     _this.publicFunc.msg_tips({ msg: mcs_delete_success, type: "success", timeout: 3000 })
                   } else {
                     _this.publicFunc.msg_tips({ msg: mcs_delete_fail, type: "error", timeout: 3000 })
@@ -445,7 +448,7 @@ export default {
           if (!data.date_infos_time) { // 解决日期报错问题
             data.date_infos_time = date_infos_time;
           }
-          g_history_data = data;
+          _this.$store.dispatch('setHistoryData', data)
           _this.publicFunc.closeBufferPage()
           if (data.vedio_day) {
             vedio_day = data.vedio_day;
@@ -534,7 +537,9 @@ export default {
             let l_dom_video_list_picture = _this.publicFunc.mx(".video_list_picture"); // nodeList 需要转换成普通数组之后才能显示正常的数组内容不会多出多余杂项
             let l_dom_new_video_list = [];
             if (l_dom_video_list_picture) {
+              let iData;
               for (let i in l_dom_video_list_picture) {
+                iData = i;
                 let hasSrc = l_dom_video_list_picture[i].src;
                 if (!hasSrc) {
                   l_dom_new_video_list.push(l_dom_video_list_picture[i])
@@ -546,7 +551,7 @@ export default {
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                   flag: 2,
                   token: token,
-                  num: i,
+                  num: iData,
                   dom: l_dom_new_video_list,
                   picFlag: 1,
                   loopTime: loopTime
@@ -558,7 +563,7 @@ export default {
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                   flag: 2,
                   token: token,
-                  num: i,
+                  num: iData,
                   dom: l_dom_new_video_list
                 })
               }
@@ -585,7 +590,7 @@ export default {
       obj.search_type = 1;
       obj.func = device_history_list;
       if (obj.backplay_flag == 4) {// 点击返回无效 修改obj.parent  _this.publicFunc.mx(page
-        device_history_list(g_history_data)
+        device_history_list(_this.$store.state.jumpPageData.historyData)
       } else {
         _this.$api.history.boxlist_device_messages_get(obj).then(res => {
           device_history_list(res)
