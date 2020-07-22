@@ -202,7 +202,7 @@ const playback = {
       }
       obj.inner_window_info.video_chls = obj.inner_window_info.mme.chl_create({ params: params_data });
       if (obj.inner_window_info.video_chls !== null) {
-        obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "speaker.mute", obj.type == "playback" ? "{value:0}" : g_m_speaker_is_mute ? "{value:1}" : "{value:0}")
+        obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "speaker.mute", obj.type == "playback" ? "{value:0}" : "{value:1}") // 参考旧代码此处原本含有一处全局变量判断,但未发现该值有后赋值行为默认删减成单一属性
         if (l_ipc_speed_time) {
           clearInterval(l_ipc_speed_time);
         }

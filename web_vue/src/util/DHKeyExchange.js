@@ -10,6 +10,33 @@ let dh_prime = '791658605174853458830696113306796803'
   // g, a primitive root used as an exponent
   // (2 and 5 are acceptable, but BigInt is faster with odd numbers)
 let dh_g = '5';
+/*
+ * EnanoMath, an abstraction layer for big-integer (arbitrary precision)
+ * mathematics.
+ */
+
+let EnanoMathLayers = {};
+// EnanoMath layer: Leemon (frontend to BigInt library by Leemon Baird)
+
+EnanoMathLayers.Leemon = {
+  Base: 10,
+  PowMod: function (a, b, c) {
+    a = str2bigInt(a, this.Base);
+    b = str2bigInt(b, this.Base);
+    c = str2bigInt(c, this.Base);
+    console.log('EnanoMathLayersPowMod', a, b, c)
+    let result = powMod(a, b, c);
+    result = bigInt2str(result, this.Base);
+    console.log('EnanoMathLayersResult', result)
+    return result;
+  },
+  RandomInt: function (bits) {
+    let result = randBigInt(bits);
+    return bigInt2str(result, this.Base);
+  }
+}
+
+let EnanoMath = EnanoMathLayers.Leemon
 const mdh = {
   // Our prime number as a base for operations.
   prime: dh_prime,
@@ -34,7 +61,7 @@ const mdh = {
    * @param string(BigInt) Remote party's public key
    * @return string(BigInt)
    */
-  gen_shared_secret: function (b, A) { return EnanoMath.PowMod(A, b, dh_prime) }
+  gen_shared_secret: function (b, A) {console.log('enter gen_shared_secret', b, A, dh_prime); return EnanoMath.PowMod(A, b, dh_prime) }
 }
 export default mdh
 
@@ -1370,29 +1397,3 @@ function mont_ (x, y, n, np) {
     sub_(sa, n);
   copy_(x, sa);
 }
-
-/*
- * EnanoMath, an abstraction layer for big-integer (arbitrary precision)
- * mathematics.
- */
-
-let EnanoMathLayers = {};
-// EnanoMath layer: Leemon (frontend to BigInt library by Leemon Baird)
-
-EnanoMathLayers.Leemon = {
-  Base: 10,
-  PowMod: function (a, b, c) {
-    a = str2bigInt(a, this.Base);
-    b = str2bigInt(b, this.Base);
-    c = str2bigInt(c, this.Base);
-    let result = powMod(a, b, c);
-    result = bigInt2str(result, this.Base);
-    return result;
-  },
-  RandomInt: function (bits) {
-    let result = randBigInt(bits);
-    return bigInt2str(result, this.Base);
-  }
-}
-
-let EnanoMath = EnanoMathLayers.Leemon

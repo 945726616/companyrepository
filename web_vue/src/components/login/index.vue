@@ -589,6 +589,7 @@ export default {
                 _this.$store.dispatch('setName', username_value)
                 _this.$store.dispatch('setSid', msg.sid)
                 _this.$store.dispatch('setGuest', msg.guest)
+                _this.$store.dispatch('setSeq', msg.seq)
                 let version_type = ''
                 if (navigator.userAgent.indexOf('Intel Mac') > -1) {
                   version_type = 'mac_' + name

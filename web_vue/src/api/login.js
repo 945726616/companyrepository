@@ -42,6 +42,8 @@ const login = {
       store.dispatch('setLid', data.lid)
       // 注: 此处secret_key值为mdh()函数中所使用的secret_key,使用方法创建会重新随机私钥导致无法匹配
       store.dispatch('setShareKey', mdh.gen_shared_secret(secret_key, data.key_b2a))
+      // store.dispatch('setShareKey', mdh.gen_shared_secret('569506728890274752', '634875532707788715527841908380286147'))
+      console.log('store.state.user.shareKey', store.state.user.shareKey)
       let uctx = login.get_uctx({ app: { id: params.appid } })
       returnItem = axios.get('/ccm/cacs_login_req', { // 调用登录接口
         params: {
@@ -80,7 +82,7 @@ const login = {
           lid: store.state.user.lid,
           nid: login.create_nid_ex(2), // 计算nid
           user: params.username,
-          pass: login.pwd_encrypt(params.password),
+          pass: login.pwd_encrypt(md5.hex(params.password)),
           session_req: 1,
           p: [{ name: "spv", value: "v1" }, { name: "uctx", value: uctx }]
         }
@@ -323,7 +325,13 @@ const login = {
   },
   // 以下为自封装的工具函数 文件内可以采用this.函数名调用外部需要引入后使用login.函数名调用
   create_nid_ex (type) {
-    return mcodec.nid(++store.state.user.seq, type ? store.state.user.lid : store.state.user.sid, store.state.user.shareKey, type, null, null, md5, "hex")
+    console.log(store.state.user.shareKey, 'store.state.user.shareKey')
+    let seqIndex = ++store.state.user.seq
+    store.dispatch('setSeq', seqIndex)
+    // return mcodec.nid(4145, '0x1e331c', "156702581163029395913763866659100044", 0 , null, null, md5, "hex")
+    // return mcodec.nid(2, '0x201153', store.state.user.shareKey, type, null, null, md5, "hex")
+    console.log(seqIndex, type, store.state.user.lid, store.state.user.sid, store.state.user.shareKey, 'create_nid_ex')
+    return mcodec.nid(seqIndex, type ? store.state.user.lid : store.state.user.sid, store.state.user.shareKey, type, null, null, md5, "hex")
   },
   create_nid () {
     return login.create_nid_ex(0);
@@ -350,7 +358,6 @@ const login = {
     let get8bytes_num = parseInt(str.length / 8) + 1
     let addbytes = 8 * get8bytes_num - str.length
     let result = []
-    // let trans_8bytes = "";
     let trans_val = ""
     for (let k = 0; k < addbytes; k++) {
       if (k === 0)
@@ -383,13 +390,10 @@ const login = {
     return c
   },
   pwd_encrypt (pwd_md5_hex) {
-    // let xxx = CryptoJS.enc.Hex.parse(pwd_md5_hex);
     return CryptoJS.DES.encrypt(CryptoJS.enc.Hex.parse(pwd_md5_hex), CryptoJS.enc.Hex.parse(md5.hex(store.state.user.shareKey)), { iv: CryptoJS.enc.Hex.parse('0000000000000000'), padding: CryptoJS.pad.NoPadding }).ciphertext.toString()
   },
   get_ret (msg) { // 部分函数返回值取舍判断函数
-    // console.log(msg, 'get_ret_msg')
     let ret = (msg && msg.data) ? (msg.data.ret || msg.data.result || msg.data.Result) : null
-    console.log(Object.prototype.hasOwnProperty.call(ret, "Code"))
     if(Object.prototype.hasOwnProperty.call(ret, "Code")){//将接口返回名称小写
       ret["code"] = ret.Code;
       ret["sub"] = ret.SubCode;
@@ -400,9 +404,7 @@ const login = {
       delete ret.Reason;
       delete ret.Desc;
     }
-    // console.log(ret, 'let_ret')
     if (Object.prototype.toString.call(ret) === "[object String]") {
-      // console.log(ret, 'ret')
       return ret
     }
     else {

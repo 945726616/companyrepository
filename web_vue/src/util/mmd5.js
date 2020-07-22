@@ -224,7 +224,7 @@ var mmd5 = mmd5 || (function () {
       str += hex_tab.charAt((binarray[i >> 2] >> ((i % 4) * 8 + 4)) & 0xF) +
         hex_tab.charAt((binarray[i >> 2] >> ((i % 4) * 8)) & 0xF);
     }
-    // console.log(str, 'binl2hex_str')
+    console.log(str, 'binl2hex_str')
     return str;
   }
 

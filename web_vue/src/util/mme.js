@@ -91,7 +91,7 @@ mme.prototype =
   /* chls:[], type:"publish"|"play", url:"xxx", running:true|false, timer:inerval, times:time-out-check-counts, refer:user-data */
   get_default_skin: function () { return { dev_panel: { width: 360, height: 180 } }; },
   create_plug: function (parent, enable_flash_plug, enable_native_plug, plug_params) {
-    console.log(this.parent, parent, 'mme_parent')
+    console.log(this.parent, parent, plug_params, 'mme_parent')
     if (this.parent && !this.parent.appendChild) {
       this.parent = this.parent[0]
     }
@@ -632,6 +632,7 @@ function bind (element, type, handler) {
   element[s_attachEvent] ? element[s_attachEvent]('on' + type, handler) : (
     (element[s_addEventListener]) ? element[s_addEventListener](type, handler, 0) : (element['on' + type] = handler))
 }
+function meval(s){ try{return eval("(" + s + ")"); }catch(e){return null;} }
 // mme.prototype.lang = sessionStorage.getItem('userLanguage') ? lang_get(mme.prototype.langs) : mme.prototype.langs.cn;
 /*-----------------media_engine-------------------------------------------------*/
 export default mme // 创建mme对象
