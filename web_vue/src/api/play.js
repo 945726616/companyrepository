@@ -218,7 +218,7 @@ const play = {
               }).then(res => {
                 returnItem = {
                   result: login.get_ret(res),
-                  url: (res.data.MediaUri.Uri ? res.data.MediaUri.Uri : ""),
+                  url: (res.data.uri ? res.data.uri.url : ""),
                   type: "play"
                 }
               })
@@ -715,7 +715,7 @@ const play = {
       }
     }).then(async res => {
       let result = login.get_ret(res)
-      let vss = res.data.VideoSources
+      let vss = res.data.vss
       let day
       let night
       let white_light
@@ -730,43 +730,43 @@ const play = {
       let contrast
       let color_saturation
       let sharpness
-      if (result === "" && vss[0].Extension.Imaging) {
-        if (vss[0].Extension.Imaging.day) {
+      if (result === "" && vss[0].extension.conf) {
+        if (vss[0].extension.conf.day) {
           day = {
-            brightness: vss[0].Extension.Imaging.day.brightness,
-            contrast: vss[0].Extension.Imaging.day.contrast,
-            color_saturation: vss[0].Extension.Imaging.day.color_saturation,
-            sharpness: vss[0].Extension.Imaging.day.sharpness
+            brightness: vss[0].extension.conf.day.brightness,
+            contrast: vss[0].extension.conf.day.contrast,
+            color_saturation: vss[0].extension.conf.day.color_saturation,
+            sharpness: vss[0].extension.conf.day.sharpness
           }
           night = {
-            brightness: vss[0].Extension.Imaging.night.brightness,
-            contrast: vss[0].Extension.Imaging.night.contrast,
-            color_saturation: vss[0].Extension.Imaging.night.color_saturation,
-            sharpness: vss[0].Extension.Imaging.night.sharpness
+            brightness: vss[0].extension.conf.night.brightness,
+            contrast: vss[0].extension.conf.night.contrast,
+            color_saturation: vss[0].extension.conf.night.color_saturation,
+            sharpness: vss[0].extension.conf.night.sharpness
           }
-          if (vss[0].Extension.Imaging.white_light) {
+          if (vss[0].extension.conf.white_light) {
             white_light = {
-              brightness: vss[0].Extension.Imaging.white_light.brightness,
-              contrast: vss[0].Extension.Imaging.white_light.contrast,
-              color_saturation: vss[0].Extension.Imaging.white_light.color_saturation,
-              sharpness: vss[0].Extension.Imaging.white_light.sharpness
+              brightness: vss[0].extension.conf.white_light.brightness,
+              contrast: vss[0].extension.conf.white_light.contrast,
+              color_saturation: vss[0].extension.conf.white_light.color_saturation,
+              sharpness: vss[0].extension.conf.white_light.sharpness
             }
           }
         } else {
-          brightness = vss[0].Extension.Imaging.Brightness;
-          contrast = vss[0].Extension.Imaging.Contrast;
-          color_saturation = vss[0].Extension.Imaging.ColorSaturation;
-          sharpness = vss[0].Extension.Imaging.Sharpness;
+          brightness = vss[0].extension.conf.brightness;
+          contrast = vss[0].extension.conf.contrast;
+          color_saturation = vss[0].extension.conf.color_saturation;
+          sharpness = vss[0].extension.conf.sharpness;
         }
-        day_or_night = vss[0].Extension.Imaging.day_or_night;
-        red_or_white = vss[0].Extension.Imaging.red_or_white;
-        if (vss[0].Extension.Imaging.mode) {
-          day_night = vss[0].Extension.Imaging.mode;
+        day_or_night = vss[0].extension.conf.day_or_night;
+        red_or_white = vss[0].extension.conf.red_or_white;
+        if (vss[0].extension.conf.mode) {
+          day_night = vss[0].extension.conf.mode;
         } else {
           day_night = "auto";
         }
-        if (vss[0].Extension.Imaging.light_mode) {
-          light_mode = vss[0].Extension.Imaging.light_mode;
+        if (vss[0].extension.conf.light_mode) {
+          light_mode = vss[0].extension.conf.light_mode;
         } else {
           light_mode = "auto";
         }

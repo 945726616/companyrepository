@@ -118,8 +118,8 @@ mme.prototype =
 
       /* for chrome video color error bug hack */
       if ((navigator.platform == "Win32") && navigator.userAgent.toLowerCase().match(/chrome\/([\d.]+)/)) {
-        // parent.style.background = "black";
-        parent.css("background","black")
+        parent.style.background = "black";
+        // parent.css("background","black")
       }
 
       parent.innerHTML = "<object id='plug_" + id + "' width='100%' height='100%'"

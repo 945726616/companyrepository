@@ -52,74 +52,74 @@ const set = {
       result = login.get_ret(res)
       if (result === '') {
         let msg = res.data ? res.data : "";
-        sn = msg.SerialNumber;
-        ver = msg.FirmwareVersion;
-        name = msg.Nick;
-        type = msg.Type;//增加返回值的type属性
-        os = msg.Os;
-        wifi = msg.Wifi;
-        sensor = msg.Sensor;
-        if (msg.Param) {
-          for (let i = 0; i < msg.Param.length; i++) {
-            if (msg.Param[i].name == "s.logo") {
-              logo = msg.Param[i].value;
+        sn = msg.sn;
+        ver = msg.img_ver;
+        name = msg.nick;
+        type = msg.type;//增加返回值的type属性
+        os = msg.os;
+        wifi = msg.wifi;
+        sensor = msg.sensor;
+        if (msg.p) {
+          for (let i = 0; i < msg.p.length; i++) {
+            if (msg.p[i].n == "s.logo") {
+              logo = msg.p[i].v;
             }
-            if (msg.Param[i].name == "s.mfc") {
-              mfc = msg.Param[i].value;
+            if (msg.p[i].n == "s.mfc") {
+              mfc = msg.p[i].v;
             }
-            if (msg.Param[i].name == "model") {
-              model = msg.Param[i].value;
+            if (msg.p[i].n == "model") {
+              model = msg.p[i].v;
             }
-            if (msg.Param[i].name == "uptime") {
-              uptime = msg.Param[i].value;
+            if (msg.p[i].n == "uptime") {
+              uptime = msg.p[i].v;
             }
-            if (msg.Param[i].name == "p0") {
-              def = msg.Param[i].value;
+            if (msg.p[i].n == "p0") {
+              def = msg.p[i].v;
             }
-            if (msg.Param[i].name == "s.sensor") {
-              s_sensor = msg.Param[i].value;
+            if (msg.p[i].n == "s.sensor") {
+              s_sensor = msg.p[i].v;
             }
-            if (msg.Param[i].name == "s.exdev") {
-              exdev = msg.Param[i].value;
+            if (msg.p[i].n == "s.exdev") {
+              exdev = msg.p[i].v;
             }
-            if (msg.Param[i].name == "s.rffreq") {
-              rffreq = msg.Param[i].value;
+            if (msg.p[i].n == "s.rffreq") {
+              rffreq = msg.p[i].v;
             }
-            if (msg.Param[i].name == "s.exver") {
-              exver = msg.Param[i].value;
+            if (msg.p[i].n == "s.exver") {
+              exver = msg.p[i].v;
             }
-            if (msg.Param[i].name == "s.oscene") {
-              oscene = msg.Param[i].value;
+            if (msg.p[i].n == "s.oscene") {
+              oscene = msg.p[i].v;
             }
-            if (msg.Param[i].name == "s.white_light") {
-              white_light = msg.Param[i].value;
+            if (msg.p[i].n == "s.white_light") {
+              white_light = msg.p[i].v;
             }
-            if (msg.Param[i].name == "s.motion_track") {
-              motion_track = msg.Param[i].value
+            if (msg.p[i].n == "s.motion_track") {
+              motion_track = msg.p[i].v
             }
-            if (msg.Param[i].name == "s.face_detect") {
-              face_detect = msg.Param[i].value;
+            if (msg.p[i].n == "s.face_detect") {
+              face_detect = msg.p[i].v;
             }
-            if (msg.Param[i].name == "s.sound_detect") {
-              sound_detect = msg.Param[i].value;
+            if (msg.p[i].n == "s.sound_detect") {
+              sound_detect = msg.p[i].v;
             }
-            if (msg.Param[i].name == "onvif") {
-              onvif = msg.Param[i].value;
+            if (msg.p[i].n == "onvif") {
+              onvif = msg.p[i].v;
             }
             // 添加联动框架参数判断
-            if (msg.Param[i].name == "dc.new_ealf") {
-              new_ealf = msg.Param[i].value;
+            if (msg.p[i].n == "dc.new_ealf") {
+              new_ealf = msg.p[i].v;
             }
             // 移动检测
-            if (msg.Param[i].name == "s.human_detect") {
-              human_detect = msg.Param[i].value;
+            if (msg.p[i].n == "s.human_detect") {
+              human_detect = msg.p[i].v;
             }
             //4G
-            if (msg.Param[i].name == "wwan_exist" && msg.Param[i].value == "existence") {
-              wwan_exist = msg.Param[i].value;
+            if (msg.p[i].n == "wwan_exist" && msg.p[i].v == "existence") {
+              wwan_exist = msg.p[i].v;
             }//鱼眼
-            if (msg.Param[i].name == "s.eye") {
-              fisheye = msg.Param[i].value;
+            if (msg.p[i].n == "s.eye") {
+              fisheye = msg.p[i].v;
             }
           }
         }
@@ -479,15 +479,15 @@ const set = {
       let ext_hw
       if (result === "") {
         let msg = res.data ? res.data : ""
-        status = msg.task ? msg.task.Status : msg.Status
-        progress = msg.Progress
-        os_ver = msg.os_ver ? msg.os_ver : ""
-        ver_current = msg.CurrentVersion
-        ver_valid = msg.ValidVersion
-        ver_extends = msg.Remark;
-        chang_history = msg.changes
-        ext_prj = msg.prj_ext
-        ext_hw = msg.hw_ext
+        status = msg.task ? msg.task.stat : msg.stat;
+        progress = msg.progress;
+        os_ver = msg.os_ver ? msg.os_ver : "";
+        ver_current = msg._cur_ver;
+        ver_valid = msg._valid_ver;
+        ver_extends = msg.remark;
+        chang_history = msg.changes;
+        ext_prj = msg.prj_ext;
+        ext_hw = msg.hw_ext;
       }
       returnItem = {
         result: result,
@@ -1407,11 +1407,11 @@ const set = {
     }).then(async res => {
       let result = login.get_ret(res);
       if (result === "") {
-        let msg = res.data ? res.data.NTPInformation : "";
-        timezone = msg.TimeZone;
+        let msg = res.data ? res.data.info : "";
+        timezone = msg.timezone;
         // g_timezone = msg.TimeZone;
-        auto_sync = msg.AutoSync;
-        ntp_addr = msg.NTPManual[0].IPv4Address;
+        auto_sync = msg.auto_sync_enable;
+        ntp_addr = msg.manual[0].ip;
         await axios.get('/ccm/ccm_date_get', {
           params: {
             sess: {
@@ -1422,13 +1422,13 @@ const set = {
         }).then(res_date_get => {
           let result = login.get_ret(res_date_get);
           if (result == "") {
-            let msg2 = res_date_get.data ? res_date_get.data.UTCDateTime : "";
-            hour = msg2.Time.Hour;
-            min = msg2.Time.Minute;
-            sec = msg2.Time.Second;
-            year = msg2.Date.Year;
-            mon = msg2.Date.Month;
-            day = msg2.Date.Day;
+            let msg2 = res_date_get.data ? res_date_get.data.utc_date : "";
+            hour = msg2.time.hour;
+            min = msg2.time.min;
+            sec = msg2.time.sec;
+            year = msg2.date.year;
+            mon = msg2.date.mon;
+            day = msg2.date.day;
           }
           returnItem = {
             result: result,
@@ -1685,10 +1685,10 @@ const set = {
           sn: params.sn
         },
         token: "vs0",
-        conf: {light_mode: params.light_mode}
+        conf: { light_mode: params.light_mode }
       }
     }).then(res => {
-      returnItem = { result:login.get_ret(res) }
+      returnItem = { result: login.get_ret(res) }
     })
     return returnItem;
   },
@@ -1701,7 +1701,7 @@ const set = {
       sn: params.sn
     }).then(res => {
       if (login.get_ret(res) === '' && res.data) {
-        returnItem = { result: login.get_ret(res), conf: res.data.ImagingSettings }
+        returnItem = { result: login.get_ret(res), conf: res.data.conf }
       } else {
         returnItem = { result: login.get_ret(res) }
       }
