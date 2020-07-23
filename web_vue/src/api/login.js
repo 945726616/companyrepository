@@ -43,7 +43,6 @@ const login = {
       // 注: 此处secret_key值为mdh()函数中所使用的secret_key,使用方法创建会重新随机私钥导致无法匹配
       store.dispatch('setShareKey', mdh.gen_shared_secret(secret_key, data.key_b2a))
       // store.dispatch('setShareKey', mdh.gen_shared_secret('569506728890274752', '634875532707788715527841908380286147'))
-      console.log('store.state.user.shareKey', store.state.user.shareKey)
       let uctx = login.get_uctx({ app: { id: params.appid } })
       returnItem = axios.get('/ccm/cacs_login_req', { // 调用登录接口
         params: {
@@ -325,12 +324,10 @@ const login = {
   },
   // 以下为自封装的工具函数 文件内可以采用this.函数名调用外部需要引入后使用login.函数名调用
   create_nid_ex (type) {
-    console.log(store.state.user.shareKey, 'store.state.user.shareKey')
     let seqIndex = ++store.state.user.seq
     store.dispatch('setSeq', seqIndex)
     // return mcodec.nid(4145, '0x1e331c', "156702581163029395913763866659100044", 0 , null, null, md5, "hex")
     // return mcodec.nid(2, '0x201153', store.state.user.shareKey, type, null, null, md5, "hex")
-    console.log(seqIndex, type, store.state.user.lid, store.state.user.sid, store.state.user.shareKey, 'create_nid_ex')
     return mcodec.nid(seqIndex, type ? store.state.user.lid : store.state.user.sid, store.state.user.shareKey, type, null, null, md5, "hex")
   },
   create_nid () {

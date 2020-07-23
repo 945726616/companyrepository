@@ -24,10 +24,8 @@ EnanoMathLayers.Leemon = {
     a = str2bigInt(a, this.Base);
     b = str2bigInt(b, this.Base);
     c = str2bigInt(c, this.Base);
-    console.log('EnanoMathLayersPowMod', a, b, c)
     let result = powMod(a, b, c);
     result = bigInt2str(result, this.Base);
-    console.log('EnanoMathLayersResult', result)
     return result;
   },
   RandomInt: function (bits) {
@@ -61,7 +59,7 @@ const mdh = {
    * @param string(BigInt) Remote party's public key
    * @return string(BigInt)
    */
-  gen_shared_secret: function (b, A) {console.log('enter gen_shared_secret', b, A, dh_prime); return EnanoMath.PowMod(A, b, dh_prime) }
+  gen_shared_secret: function (b, A) { return EnanoMath.PowMod(A, b, dh_prime) }
 }
 export default mdh
 

@@ -6,6 +6,9 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const login = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/login')
+const devlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/devlist/mipc')
+const boxlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/boxlist')
+const play = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/play/mipc')
 
 const mipcRouter = new Router({
   routes: [
@@ -13,6 +16,23 @@ const mipcRouter = new Router({
       path: '/',
       name: 'login',
       component: login
+    },
+    {
+      path: '/devlist',
+      name: 'devlist',
+      component: devlist,
+      children:[
+        {
+          path: '/boxlist',
+          name: 'boxlist',
+          component: boxlist
+        },
+        {
+          path: '/play',
+          name: 'play',
+          component: play
+        }
+      ]
     }
   ]
 })

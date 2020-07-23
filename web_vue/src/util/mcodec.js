@@ -82,7 +82,6 @@ var mcodec = null;
         r += (j < sub_bits) ? map.charAt((bit < 0) ? (v << -bit) : (v >> bit)) : "";
       }
     }
-    console.log(j < sub_bits, 'fn_str_2_b64')
     return r;
   }
 
@@ -327,7 +326,6 @@ var mcodec = null;
 
   /* id_type:[ 0:sid, 1:tid, 2:lid ] */
   function fn_nid (seq, id, share_key, id_type, username, password, md5_ex, md5_hex_name) {
-    console.log(seq, id, share_key, id_type, 'fn_nid')
     var s_seq = fn_i2a(seq),
       s_id = id ? fn_i2a(id) : "",
       s_id_type = id ? fn_i2a(id_type) : "",
@@ -340,7 +338,6 @@ var mcodec = null;
         + (share_key ? (fn_v2c((0 << 5) + share_key.length) + share_key) : "")
         + (s_password_md5 ? (fn_v2c((0 << 5) + s_password_md5.length) + s_password_md5) : "")
     var s_md5 = fn_i2a("0x" + md5_ex[md5_hex_name](s_md5_src));
-    console.log(s_md5, s_md5.length, s_nid_idty, s_md5_src, fn_str_2_b64(fn_v2c((1 << 5) + s_md5.length) + s_md5 + s_nid_idty, 1), 'fn_nid_result')
     return fn_str_2_b64(fn_v2c((1 << 5) + s_md5.length) + s_md5 + s_nid_idty, 1);
   }
 

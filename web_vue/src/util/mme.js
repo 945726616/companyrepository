@@ -90,7 +90,6 @@ mme.prototype =
   /* chls:[], type:"publish"|"play", url:"xxx", running:true|false, timer:inerval, times:time-out-check-counts, refer:user-data */
   get_default_skin: function () { return { dev_panel: { width: 360, height: 180 } }; },
   create_plug: function (parent, enable_flash_plug, enable_native_plug, plug_params) {
-    console.log(this.parent, parent, plug_params, 'mme_parent')
     if (this.parent && !this.parent.appendChild) {
       this.parent = this.parent[0]
     }

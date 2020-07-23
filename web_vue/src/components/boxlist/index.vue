@@ -2,6 +2,7 @@
   <div id="boxlist"></div>
 </template>
 <script>
+import languageSelect from '../../lib/exportModule/languageSelect.js'
 export default {
   data () {
     // 页面内全局变量
@@ -73,7 +74,7 @@ export default {
         })
       }
       function onvif_box_search_ack (msg) { // 延时调用请求设备列表回调至get_onvif_unadd/不延时请求设备列表回调至get_onvif_list(当前页面的公共回调函数)
-        console.log(msg, 'onvif_box_search_ack_msg')
+        // console.log(msg, 'onvif_box_search_ack_msg')
         if (l_get_onvif_flag) {
           _this.$api.boxlist.get_onvif_list({ // 调用ccm_box_conf_get接口
             box_sn: _this.$store.state.jumpPageData.selectDeviceIpc
@@ -230,7 +231,7 @@ export default {
         _this.publicFunc.mx("#boxlist_set_btn").onclick = function () {
           let jumpData = {parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live};
           // createPage("set", { parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live });
-          _this.$router.push({name:'devlist',params:jumpData})
+          _this.$router.push({name:'set',params:jumpData})
         }
         _this.publicFunc.mx("#boxlist_edit_btn").onclick = function () {
           if ($(".del_box_ipc_btn").css("display") == "none") { // 删除关联和录像
@@ -569,7 +570,10 @@ export default {
     }else{
       pageData = {parent: $("#" + this.$route.name)}
     }
-    // console.log(pageData,"pageData")
+    if(pageData.parent.length == 0){
+      pageData.parent = $("#" + pageData.parentId)
+    }
+    console.log(pageData,"pageData")
     await this.create_boxlist_page(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {

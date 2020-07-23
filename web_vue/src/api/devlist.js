@@ -75,7 +75,6 @@ const devlist = {
         }
       }
     })
-
     return returnItem
   },
   /*
