@@ -476,7 +476,7 @@ export default {
                 if (data.video[i].is_photo) {
                   photoShowDom(data, i, start_time)
                 } else {
-                  // // console.log('在该处进行图片请求')
+                  //  console.log('在该处进行图片请求')
                   let end_token = data.video[i].cut_video_data[data.video[i].cut_video_data.length - 1].pic_token.substr(17);
                   let end_new_token = '_end.cid:' + end_token.split('_')[0] + '_end.sid:' + end_token.split('_')[1]; //加上这个解决视频播放不了问题
                   history_list_dom +=
@@ -612,7 +612,7 @@ export default {
     }else{
       pageData = {parent: $("#" + this.$route.name)}
     }
-    console.log(pageData,"pageData")
+    // console.log(pageData,"pageData")
     await this.vimtagHistory(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {

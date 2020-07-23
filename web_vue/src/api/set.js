@@ -278,7 +278,7 @@ const set = {
           content: [
             { name: mcs_sdcord, type: "sdcord" },
             { name: mcs_storage_device, type: "storage_device" },
-            { name: mcs_cloud_storage, type: "cloud_storage" }
+            { name: mcs_cloud_storage, type: "cloud-storage" }
           ]
         },
         {
@@ -423,7 +423,7 @@ const set = {
           content: [
             { name: mcs_sdcord, type: "sdcord" },
             { name: mcs_storage_device, type: "storage_device" },
-            { name: mcs_cloud_storage, type: "cloud_storage" }
+            { name: mcs_cloud_storage, type: "cloud-storage" }
           ]
         },
         {
@@ -477,7 +477,6 @@ const set = {
       let chang_history
       let ext_prj
       let ext_hw
-      console.log(res, 'upgrade_get_result')
       if (result === "") {
         let msg = res.data ? res.data : ""
         status = msg.task ? msg.task.Status : msg.Status
@@ -500,7 +499,8 @@ const set = {
         ver_extends: ver_extends,
         chang_history: chang_history,
         ext_prj: ext_prj,
-        ext_hw: ext_hw
+        ext_hw: ext_hw,
+        check_ver: params.check ? params.check : 0
       }
     })
     return await returnItem
@@ -510,12 +510,10 @@ const set = {
   */
   async about (params) {
     let returnItem
-    console.log('enter about')
     await set.upgrade_get({
       sn: params.sn,
       check: 1
     }).then(async res => {
-      console.log(res, 'upgrade_get_res')
       await set.dev_info({
         sn: params.sn
       }).then(res_dev_info => {
@@ -533,7 +531,6 @@ const set = {
         });
       })
     })
-    console.log(returnItem, 'return')
     return await returnItem
   },
   /*
@@ -570,7 +567,6 @@ const set = {
   async nickname_get (params) {
     let returnItem
     if (store.state.jumpPageData.localFlag) {
-      console.log('dev_info_use')
       set.dev_info({ sn: params.sn }).then(res => {
         returnItem = { nick: res.name ? res.name : params.sn }
       })
@@ -1680,30 +1676,32 @@ const set = {
   /*
   ** 白光设置
   */
-  white_light_set (params) {
-    let returnItem
-    play.img_set({
-      sn: params.sn,
-      conf: params.conf
-    }).then(res => {
-      if (login.get_ret(res) === "") {
-        returnItem = { result: login.get_ret(res) }
-      } else {
-        returnItem = { result: login.get_ret(res) }
+  async white_light_set (params) {
+    let returnItem;
+    await axios.get('/ccm/ccm_img_set', {
+      params: {
+        sess: {
+          nid: login.create_nid(),
+          sn: params.sn
+        },
+        token: "vs0",
+        conf: {light_mode: params.light_mode}
       }
+    }).then(res => {
+      returnItem = { result:login.get_ret(res) }
     })
-    return returnItem
+    return returnItem;
   },
   /*
   ** 白光设置获取
   */
-  white_light_get (params) {
+  async white_light_get (params) {
     let returnItem
-    play.img_get({
+    await play.img_get({
       sn: params.sn
     }).then(res => {
       if (login.get_ret(res) === '' && res.data) {
-        returnItem = { result: login.get_ret(res), conf: res.data.conf }
+        returnItem = { result: login.get_ret(res), conf: res.data.ImagingSettings }
       } else {
         returnItem = { result: login.get_ret(res) }
       }

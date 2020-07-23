@@ -1,6 +1,6 @@
 'use strict'
 // 已经整合到play.js中
-// import axios from '@/axios' // 导入http中创建的axios实例
+import axios from '@/axios' // 导入http中创建的axios实例
 import login from './login'
 import store from '../store'
 // import md5 from '@/util/mmd5.js'
@@ -48,7 +48,8 @@ const playback = {
     let judge_enable_flash_plug = false;
     let ref_obj = create_play_ipc(data);
     let playback = data.playback ? 1 : 0;
-    let flash_isplay = store.state.jumpPageData.flashIsPlay
+    let flash_isplay = store.state.jumpPageData.flashIsPlay;
+    let l_plug_type;
     if (ref_obj.isDownload) {
       if (!$("#download_dom").length > 0) {
         $("body").append("<div id='download_dom' style='width:1px;height:1px;'></div>")
@@ -96,7 +97,7 @@ const playback = {
         clearInterval(flash_isplay)
       }
     }
-    function on_plug_event (obj) {
+    async function on_plug_event (obj) {
       sessionStorage.setItem("type_tip", obj.type);
       sessionStorage.setItem("code_tip", obj.code);
       switch (obj.type) {
@@ -126,17 +127,29 @@ const playback = {
           } else {
             if (proto == "auto") proto = "rtdp";
           }
-          if (playback) {
-            ms.send_msg("playback", { sn: ref_obj.sn, token: ref_obj.token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "playback"; play_ack(msg, ref); });
-          } else {
-            if (store.state.jumpPageData.localFlag) {
-              data.agent.play({ sn: ref_obj.sn, token: obj.ref_obj.inner_window_info.profile_token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "play"; play_ack(msg, ref); })
-            } else {
-              // ms.send_msg("play",{sn:"1jfiegbqaml3q",token:"p0_1jfiegbqcip5q", protocol:proto,ref:obj.ref_obj},obj.ref_obj,function(msg,ref){ msg.type = "play" ; play_ack(msg,ref);}); //6.1.2测试云盒子实时视频播放 
-              ms.send_msg("play", { sn: ref_obj.sn, token: obj.ref_obj.inner_window_info.profile_token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "play"; play_ack(msg, ref); });
+          // ms.send_msg("playback", { sn: ref_obj.sn, token: ref_obj.token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "playback"; play_ack(msg, ref); });
+          await axios.get('/ccm/ccm_replay', {
+            params: {
+              sess: {
+                nid: login.create_nid(),
+                sn: ref_obj.sn
+              },
+              setup: {
+                stream: "RTP_Unicast",
+                trans: {
+                  proto: proto
+                }
+              },
+              token: data.token
             }
-          }
-          break;
+          }).then(res => {
+            returnItem = {
+              result: login.get_ret(res),
+              url: (res.data.Uri ? res.data.Uri : ""),
+              type: "playback"
+            }
+          })
+          return play_ack(returnItem, store.state.jumpPageData.playInfo)
         }
         case "install_ui": {
           obj.panel.innerHTML = ''
@@ -173,11 +186,11 @@ const playback = {
         chl_video_create({ type: msg.type, uri: msg.url, inner_window_info: ref.inner_window_info, localPath: ref.localPath, isDownload: ref.isDownload });
       } else {
         if (msg.result == "accounts.user.offline") { //6.1.1
-          msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 })
+          publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 })
         } else if (msg.result == "ccm.system.err") { //临时解决一下
-          msg_tips({ msg: mcs_video_play_fail, type: "error", timeout: 3000 })
+          publicFunc.msg_tips({ msg: mcs_video_play_fail, type: "error", timeout: 3000 })
         } else if (msg.result == "4g.device.lock") {
-          msg_tips({ msg: mrs_sim_invalid, type: "error", timeout: 3000 })
+          publicFunc.msg_tips({ msg: mrs_sim_invalid, type: "error", timeout: 3000 })
         }
       }
     }
@@ -216,7 +229,7 @@ const playback = {
                   json_speed.data.played_duration = data.videoSize;
                   l_speed = "100%";
                   clearInterval(l_ipc_speed_time);//5.11.3后加
-                  msg_tips({ msg: mrs_download_completed, type: "success", timeout: 3000 });
+                  publicFunc.msg_tips({ msg: mrs_download_completed, type: "success", timeout: 3000 });
                   // }
                 } else {
                   record_played_duration_num = 0;

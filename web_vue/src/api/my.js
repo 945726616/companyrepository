@@ -37,7 +37,7 @@ const my = {
         nid: login.create_nid_ex(2),
         email: params.email,
         user: params.user,
-        pass: login.pwd_encrypt(pass),
+        pass: login.pwd_encrypt(params.pass),
         lang: params.lang,
         p: [{ n: "uctx", v: uctx }]
       }

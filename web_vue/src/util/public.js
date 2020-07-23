@@ -35,7 +35,7 @@ const publicFunc = {
     let $colse = $("#mclose" + bid);
     //
     clearTimeout(window.timer);
-    console.log($tip_container, 'container')
+    // console.log($tip_container, 'container')
     if ($tip_container) {
       $tip.attr("class", options.type).addClass("mtip");
       $tipSpan.html(options.msg);
@@ -78,7 +78,8 @@ const publicFunc = {
       $("#delete_tips").attr('style', 'display:none;')
       if (obj.flag && obj.flag === "my_page") {
         // createPage("my",{ parent: $("#page") }) // 进入我的页面
-        _this.$router.push({name:'my',params:{parent: $('#page')}})
+        // router.push({name:'my',params:{parent: $('#page')}})
+        vimtagMyPage({ parent: $('#my') })
       }
     })
     $("#delete_tips_ok").click(function () {
@@ -93,10 +94,11 @@ const publicFunc = {
     }
     // 返回设备列表页
     $("#back_to_dev_list").click(function () {
-      // // console.log("进入点击返回设备列表")
+      //  console.log("进入点击返回设备列表")
       if (router.currentRoute.path !== '/devlist') {
         publicFunc.closeBufferPage()
-        router.currentRoute.path = '/devlist'
+        // router.currentRoute.path = '/devlist'
+        router.push({name:'devlist'})
       }
     })
     store.dispatch('setBufferPageFlag', setTimeout(function () {

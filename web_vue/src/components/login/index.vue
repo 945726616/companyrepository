@@ -130,9 +130,19 @@ export default {
         l_password_value = l_remember_data_obj.password
         $('#signin_pw').css('color', '#404040')
       }
+      if($('#signin_pw').val() == "••••••"){
+        $('#password_eye').css('display', 'none')
+      }
+      $('#signin_pw').on("input",function(){
+        if($('#signin_pw').val().indexOf("•") == -1){
+          $('#password_eye').css('display', 'block');
+        }else{
+          $('#password_eye').css('display', 'none');
+        }
+      })
       if (localStorage.getItem('keep_pw')) { // 存储中保持登录状态被选中
         // JSON.parse(localStorage.getItem('keep_pw'))
-        // //console.log('记住密码')
+        // console.log('记住密码')
         $('#keep_sign_in_check').attr('checked', 'true') // 页面中添加被选中效果
       }
       $('#forget_pass').click(function () { // 忘记密码渲染dom
@@ -828,7 +838,7 @@ export default {
     }else{
       pageData = {parent: $("#" + this.$route.name)}
     }
-    console.log(pageData,"pageData")
+    // console.log(pageData,"pageData")
     await this.create_login_page(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {

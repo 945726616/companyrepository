@@ -72,7 +72,7 @@ export default {
         $("#lighting").hide();
         $("#accessory").hide();
         $("#set_delete_device").children('span').css('margin-left', "0"); //解决删除设备不居中
-        console.log("get_dev_info_this")
+        //console.log("get_dev_info_this")
         _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
           if (res.result === "") {
             if (res.white_light) {
@@ -86,7 +86,7 @@ export default {
             if (res.rffreq === "868") {
               $("#accessory").show();
             }
-            console.log(res, 'sound_detect_test')
+            //console.log(res, 'sound_detect_test')
             if (res.face_detect === 1 || res.sound_detect === 1) { //人型检测||msg.human_detect==1
               $("#accessory").show();
             }
@@ -102,17 +102,16 @@ export default {
         _this.$api.set.set_new_list_get({ flag: obj.type, sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
           create_new_set_list(res)
         })
-        toggle_setnewpage_click()
+        // toggle_setnewpage_click()
       }
 
       function toggle_setnewpage_click () {
         _this.publicFunc.mx("#toggle_set_new_page").onclick = function () {
           let jumpData;
           if (obj.back_page == "play") {
-            console.log("get_dev_info_this")
             _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
               if (res.result == "") {
-                if (res.fisheye) {
+                if (res && res.fisheye) {
                   jumpData = { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: obj.web_name }
                   // createPage("set", { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: obj.web_name });
                   _this.create_set_page(jumpData);
@@ -133,7 +132,7 @@ export default {
             })
           }
         }
-
+      }
         function create_new_set_list (data) {
           let menu_content = "<div id='set_new_back'><div id='new_back' style='float:left'><div id='main_title_box_return_img'></div>" + mcs_back + "</div><div id='toggle_set_new_page'></div></div>";
           for (let i = 0; i < data.length; i++) {
@@ -153,7 +152,7 @@ export default {
             + menu_content
             + "<div id='delete_dev_btn' class='menu_list_delete' stype='delete_device' style='background:#f1474f;margin:50px auto;border-radius:2px;width:174px;color:#fff;padding:5px;text-align:center;'><div style='cursor:pointer'>" + mcs_delete_device + "</div></div>"
             + "</div>")
-          $("[stype='cloud_storage']").css('display', 'none');   //隐藏掉云存储
+          $("[stype='cloud-storage']").css('display', 'none');   //隐藏掉云存储
           set_new_list_event();
         }
 
@@ -173,11 +172,11 @@ export default {
             l_dom_new_menu_list[j].onclick = function () {
               obj.parent.html("<div id='new_page_back'><div id='main_title_box_return_img'></div>" + mcs_back + "</div>"
                 + "<div id='create_setting_page_new'></div>")
-              let _this = this;
+              let __this = this;
               // let index = _this.index;
               // alarm_device_tips
-              let list_name = $(_this)[0].innerText;  //后加云盒子硬盘显示文字与sd卡区分
-              let info_data = { type: _this.getAttribute('stype'), list_name: list_name, dom: _this.publicFunc.mx("#create_setting_page_new") };
+              let list_name = $(__this)[0].innerText;  //后加云盒子硬盘显示文字与sd卡区分
+              let info_data = { type: __this.getAttribute('stype'), list_name: list_name, dom: _this.publicFunc.mx("#create_setting_page_new") };
               _this.create_right_page(info_data);
               $('#create_setting_page_new').find('#ntp').css({ 'height': '50px', 'border-bottom': '1px solid #d6d7dc', 'border-top': '1px solid #d6d7dc' });
               let system_update_content = $('#create_setting_page_new').find("#system_upgrade_div");
@@ -194,7 +193,7 @@ export default {
           }
           $("#lighting").hide();
           $("#accessory").hide();
-          console.log("get_dev_info_this")
+          //console.log("get_dev_info_this")
           _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
             if (res.result === "") {
               if (res.white_light) {
@@ -203,7 +202,7 @@ export default {
               if (res.rffreq === "868") {
                 $("#accessory").show();
               }
-              console.log(res, 'sound_detect_test')
+              //console.log(res, 'sound_detect_test')
               if (res.face_detect === 1 || res.sound_detect === 1) { //人型检测||msg.human_detect==1
                 $("#accessory").show();
               }
@@ -413,7 +412,7 @@ export default {
         }
 
 
-      }
+      
     },
     async create_set_list (data) { // 创建设置列表
       let _this = this
@@ -441,7 +440,7 @@ export default {
       $("#lighting").hide();
       $("#accessory").hide();
       $("#set_delete_device").children('span').css('margin-left', "0"); //解决删除设备不居中
-      console.log("get_dev_info_this")
+      //console.log("get_dev_info_this")
       await _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
         if (res.result === "") {
           if (res.white_light) {
@@ -455,7 +454,7 @@ export default {
           if (res.rffreq === "868") {
             $("#accessory").show();
           }
-          console.log(res, 'sound_detect_test')
+          //console.log(res, 'sound_detect_test')
           if (res.face_detect === 1 || res.sound_detect === 1) { //人型检测||msg.human_detect==1
             $("#accessory").show();
           }
@@ -1673,8 +1672,8 @@ export default {
             net_info = msg.networks;
             let deviceType // 设备类型(摄像头IPC/云盒子BOX)
             deviceType = _this.$api.devlist.ldev_get(_this.$store.state.jumpPageData.selectDeviceIpc).type
-            console.log(msg, 'get_network_ack_msg')
-            console.log(deviceType, 'get_network_ack_deviceType')
+            //console.log(msg, 'get_network_ack_msg')
+            //console.log(deviceType, 'get_network_ack_deviceType')
             if (net_info) {
               let i, length = net_info.length, inner_html = "";
               for (i = 0; i < length; ++i) {
@@ -2119,7 +2118,7 @@ export default {
             await _this.$api.set.get_network({
               sn: _this.$store.state.jumpPageData.selectDeviceIpc
             }).then(res => {
-              console.log(res, 'net_get_res')
+              //console.log(res, 'net_get_res')
               get_network_ack(res[0], res[1])
             })
           }
@@ -2390,7 +2389,6 @@ export default {
             //     $(this).removeClass('list_info_select_img').addClass('list_info_clickselect_img');
             //     }
             // }
-
             l_dom_labels[0].onclick = function () {
               if (g_switch_flag == 0) {
                 g_switch_flag = 1;
@@ -2436,7 +2434,7 @@ export default {
           }
 
           function sdcord_get_ack (msg) {
-            console.log(msg, 'sdcord_get_ack_msg')
+            //console.log(msg, 'sdcord_get_ack_msg')
             $(l_dom_format_content).hide();
             $(l_dom_input_available_content).hide();
             $(l_dom_input_capacity_content).hide();
@@ -3331,7 +3329,7 @@ export default {
               + "<div class='option_scene_list_text_left'></div>"
               + "</div>";
             scene_list_event();
-            console.log("get_dev_info_this")
+            //console.log("get_dev_info_this")
             _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
               let length = _this.publicFunc.mx(".option_scene_list_btn").length;
               let face_detect = res.face_detect;
@@ -4369,7 +4367,7 @@ export default {
           // 展示遮罩层
           _this.publicFunc.showBufferPage()
           // console.log("调用获取设备参数")
-          console.log("get_dev_info_this")
+          //console.log("get_dev_info_this")
           _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
             face_detect = res.face_detect;
             sound_detect = res.sound_detect;
@@ -5376,7 +5374,7 @@ export default {
           // $("#buffer_page").show();
           // 展示遮罩层
           _this.publicFunc.showBufferPage()
-          console.log("get_dev_info_this")
+          //console.log("get_dev_info_this")
           _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
             face_detect = res.face_detect;
             sound_detect = res.sound_detect;
@@ -6934,7 +6932,7 @@ export default {
             dev_time_get_ack(res)
           })
           _this.$api.devlist.time_zone_get({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res_time_zone_get => {
-            console.log(res_time_zone_get, 'time_zone_get_res')
+            //console.log(res_time_zone_get, 'time_zone_get_res')
             time_zone_get_ack(res_time_zone_get)
           })
           break
@@ -7031,7 +7029,7 @@ export default {
             });
           }
           function system_dev_upgrade_get_ack (msg) {
-            console.log(msg.check_ver, 'system_dev_upgrade_get_ack_msg')
+            //console.log(msg.check_ver, 'system_dev_upgrade_get_ack_msg')
             if (null == _this.$store.state.jumpPageData.systemWaitDiv) {
               let g_system_wait_div = function (str) {
                 let wait_div = _this.publicFunc.mx("#system_wait_div"),
@@ -7144,10 +7142,10 @@ export default {
                 }
                 // if(msg.ext_hw=="unknown"){is_unknown="";msg.ext_hw=is_unknown} //bug
                 if ((msg.ver_valid.length != 0 && msg.ver_current.length != 0 && msg.ver_valid != msg.ver_current) || (msg.ext_prj != msg.ext_hw && msg.ext_hw.length != 0)) {
-                  console.log('test error')
+                  //console.log('test error')
                   l_dom_system_upgrade_left.innerHTML = mcs_online_upgrade;
                   l_dom_system_upgrade_div.innerHTML = "<div style='float:left;margin-right:8px;" + ((sessionStorage.getItem('userLanguage') == "vi" || sessionStorage.getItem('userLanguage') == "ja") ? "width:242px" : "width:233px") + "'>" + mcs_new_version + msg.ver_valid + mcs_valid + "</div><div style='padding-top:20px;float:left'><div id='Detail_id'></div></div>&nbsp;<button class='list_right_button_ex'>" + mcs_upgrade + "</button>";
-                  console.log('test error')
+                  //console.log('test error')
                   _this.publicFunc.mx("#Detail_id").onclick = function () {
                     $(l_dom_detail_div_page).toggle();
                     $(l_dom_detail_div_inner).mCustomScrollbar("update");
@@ -7198,7 +7196,7 @@ export default {
                 }
               }
               else {
-                console.log('enter this')
+                //console.log('enter this')
                 //Reboot the device upgrade is successful
                 _this.publicFunc.delete_tips({
                   content: mcs_upgrade_successful_restart_to_take_effect, func: function () {
@@ -7354,14 +7352,14 @@ export default {
             })
           }
           function dev_audio_get_ack (msg) {
-            console.log(msg, 'test error')
+            //console.log(msg, 'test error')
             if (l_dom_input_speaker) {
               fdSliderController.increment("input_speaker", msg.speaker_level - l_dom_input_speaker.value);
             }
             if (l_dom_input_microphone) {
               fdSliderController.increment("input_microphone", msg.mic_level - l_dom_input_microphone.value);
             }
-            console.log('test error')
+            //console.log('test error')
           }
           function others_cam_get_ack (msg) {
             l_ipc_turnover_true = 1;
@@ -7483,6 +7481,8 @@ export default {
               _this.$api.set.white_light_set({
                 ...conf,
                 sn: _this.$store.state.jumpPageData.selectDeviceIpc
+              }).then(res => {
+                conf.func(res)
               })
             }
           }
@@ -7592,7 +7592,7 @@ export default {
             });
           }
           function dev_upgrade_get_ack (msg) {
-            console.log(msg, 'dev_upgrade_get_ack_msg')
+            //console.log(msg, 'dev_upgrade_get_ack_msg')
             if (null == _this.$store.state.jumpPageData.systemWaitDiv) {
               let g_system_wait_div = function (str) {
                 let wait_div = _this.publicFunc.mx("#system_wait_div"),
@@ -8717,14 +8717,14 @@ export default {
           }
 
           function dev_audio_get_ack (msg) {
-            console.log('test error2')
+            //console.log('test error2')
             if (l_dom_input_speaker) {
               fdSliderController.increment("input_speaker", msg.speaker_level - l_dom_input_speaker.value);
             }
             if (l_dom_input_microphone) {
               fdSliderController.increment("input_microphone", msg.mic_level - l_dom_input_microphone.value);
             }
-            console.log('test error2')
+            //console.log('test error2')
           }
 
           sound_add_others_event();
@@ -9822,7 +9822,7 @@ export default {
           // $("#buffer_page").show();
           // 展示遮罩层
           _this.publicFunc.showBufferPage()
-          console.log("get_dev_info_this")
+          //console.log("get_dev_info_this")
           _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
             face_detect = res.face_detect;
             sound_detect = res.sound_detect;
@@ -9848,7 +9848,7 @@ export default {
             + "</div>"
             + "</div>"
             + "</div>";
-          console.log("get_dev_info_this")
+          //console.log("get_dev_info_this")
           _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
             _this.g_motion_track = res.motion_track;
           })
@@ -9963,7 +9963,7 @@ export default {
               conf.motion_track_switch = motion_track_switch;
               _this.$api.set.alarm_device_set(conf)
             }
-            console.log(fdSliderController, 'fdSliderController')
+            //console.log(fdSliderController, 'fdSliderController')
             fdSliderController.create();
 
             function alarm_get_ack (msg) {
@@ -10139,7 +10139,7 @@ export default {
             // + "<div class='alarm_repeat_word'>" + mcs_repeat + "</div>"
             // + "<div class='alarm_day_str_box'>"
             // + "<div class='alarm_day_str'>" + week_str + "</div>"
-            // // + "<img src='" + ASSETS_IMG + "arrow@3x.png' alt=''>"
+            //  + "<img src='" + ASSETS_IMG + "arrow@3x.png' alt=''>"
             // + "</div>"
             // + "</div>"
             // + "</div>"
@@ -10747,7 +10747,7 @@ export default {
                       })(j)
                     }
                   }
-                  // // console.log(sche_form)
+                  //  //console.log(sche_form)
                   for (let i = 0; i < plan_temp.length; i++) {
                     let temp = plan_temp[i]
                     let day_arr = sche_form[temp.day]
@@ -10905,7 +10905,7 @@ export default {
               let dev_item = new_record_final_all_dev[i]
               let classNameString = (i == new_record_final_all_dev.length - 1 ? "class='menu_list2_last record_event_btn_new flag_click_event'" : "class='menu_list2 record_event_btn_new flag_click_event'")
               let nickNameStrting = (dev_item.type == 2 || dev_item.type == 4 || dev_item.type == 5 || dev_item.type == 6 ? (dev_item.nick == "" ? all_dev_name[dev_item.type] : dev_item.nick) : all_dev_name[dev_item.type])
-              // // console.log("<div "+ classNameString + " style='overflow:hidden;border-top:1px solid #ccc' sn='"+dev_item.id+"' type='"+dev_item.type+"'>", "firstLineDom")
+              //  //console.log("<div "+ classNameString + " style='overflow:hidden;border-top:1px solid #ccc' sn='"+dev_item.id+"' type='"+dev_item.type+"'>", "firstLineDom")
               l_dom_record_event.innerHTML +=
                 "<div " + classNameString + " style='overflow:hidden;border-top:1px solid #ccc' sn='" + dev_item.id + "' type='" + dev_item.type + "'>"
                 + "<div class='list_name'>"
@@ -11045,12 +11045,12 @@ export default {
 
           // 展示遮罩层
           _this.publicFunc.showBufferPage()
-          console.log("get_dev_info_this")
+          //console.log("get_dev_info_this")
           _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
             face_detect = res.face_detect;
             sound_detect = res.sound_detect;
             human_detect = res.human_detect;
-            console.log(res, 'res_profile_get')
+            //console.log(res, 'res_profile_get')
             _this.$api.set.profile_get({
               sn: _this.$store.state.jumpPageData.selectDeviceIpc
             }).then(res_profile_get => {
@@ -11197,7 +11197,7 @@ export default {
             // + "<div class='alarm_repeat_word'>" + mcs_repeat + "</div>"
             // + "<div class='alarm_day_str_box'>"
             // + "<div class='alarm_day_str'>" + week_str + "</div>"
-            // // + "<img src='" + ASSETS_IMG + "arrow@3x.png' alt=''>"
+            //  + "<img src='" + ASSETS_IMG + "arrow@3x.png' alt=''>"
             // + "</div>"
             // + "</div>"
             // + "</div>"
@@ -11732,7 +11732,7 @@ export default {
                       })(j)
                     }
                   }
-                  // // console.log(sche_form)
+                  //  //console.log(sche_form)
                   for (let i = 0; i < plan_temp.length; i++) {
                     let temp = plan_temp[i]
                     let day_arr = sche_form[temp.day]
@@ -12056,9 +12056,9 @@ export default {
           }
           // 开启遮罩层
           _this.publicFunc.showBufferPage()
-          console.log("get_dev_info_this1111")
+          //console.log("get_dev_info_this1111")
           await _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(async res => {
-            console.log(res, 'get_dev_info_this1111')
+            //console.log(res, 'get_dev_info_this1111')
             face_detect = res.face_detect;
             sound_detect = res.sound_detect;
             human_detect = res.human_detect;
@@ -12222,7 +12222,7 @@ export default {
               if (face_detect == 0) { continue; }
               record_event_name = mcs_face_detection;
             } else if (l_scene_data_out.dev[j].type == 9) {
-              console.log(res, 'sound_detect_test')
+              //console.log(res, 'sound_detect_test')
               if (sound_detect == 0) { continue; }
               record_event_name = mcs_sound_detection;
             } else if (l_scene_data_out.dev[j].type == 2) {
@@ -12332,7 +12332,7 @@ export default {
     },
 
     sche_format (sche) { // 生成7*24小时计划表
-      // // console.log(sche)
+      //  //console.log(sche)
       let start_h = ''
       let end_h = ''
       let start_day = ''
@@ -12345,7 +12345,7 @@ export default {
       for (let i = 0; i < 7; i++) {
         day_h.push(arr_h.join(''))
       }
-      // // console.log(day_h)
+      //  //console.log(day_h)
       if (sche.length > 0) {
         sche.forEach(function (item, index) {
           start_h = parseInt(item.start / 3600 % 24)
@@ -12418,7 +12418,7 @@ export default {
       day_h.forEach(function (item, index) {
         final_form.push(item.split('').map(Number))
       })
-      // // console.log(final_form)
+      //  //console.log(final_form)
       return final_form;
     },
 

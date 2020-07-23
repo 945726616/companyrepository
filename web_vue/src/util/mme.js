@@ -17,7 +17,6 @@ var mme = function (obj/*
    enable_native_plug:true[default]|false,
    enable_flash_plug:true[default]|false
    */) {
-     console.log(obj, 'obj_mme')
   this.create(obj);
 }
 mme.prototype =
@@ -119,7 +118,8 @@ mme.prototype =
 
       /* for chrome video color error bug hack */
       if ((navigator.platform == "Win32") && navigator.userAgent.toLowerCase().match(/chrome\/([\d.]+)/)) {
-        parent.style.background = "black";
+        // parent.style.background = "black";
+        parent.css("background","black")
       }
 
       parent.innerHTML = "<object id='plug_" + id + "' width='100%' height='100%'"
@@ -377,7 +377,6 @@ mme.prototype =
     if ("object" == typeof (obj.skin)) {
       obj_merge(this.skin, obj.skin);
     }
-    console.log(obj, 'create_mme_obj')
     this.parent = parent;
     if (undefined != obj.debug) { this.debug = obj.debug; }
     if (undefined != obj.windowless) { this.windowless = obj.windowless; }

@@ -111,7 +111,6 @@ instance.interceptors.response.use(
   // 请求成功
   res => {
     if (res.status === 200) { // 接口请求成功进行接口数据处理
-      // console.log(res.data, 'eval_token_error')
       let getRes = eval(res.data)
       // console.log(getRes, 'getRes')
       // /* eslint-disable */

@@ -284,7 +284,7 @@ export default {
             })
             // msdk_ctrl({ type: "play_download_stop", data: { dom: l_dom_playback_screen, func: create_preview } })
           }
-          if (_this.store.state.jumpPageData.projectName == "vimtag") {
+          if (_this.$store.state.jumpPageData.projectName == "vimtag") {
             _this.$api.play.play({ // 原play_back_download接口
               agent: obj.agent,
               dom: $("#playback_screen"),
@@ -414,7 +414,7 @@ export default {
               dom: $("#playback_screen"),
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
               videoSize: videoSize,
-              token: pic_token,
+              token: obj.token,
               playback: 1 // 此处额外添加参数
             }).then(res => {
               playback_speed(res)
@@ -456,7 +456,7 @@ export default {
     }else{
       pageData = {parent: $("#" + this.$route.name)}
     }
-    console.log(pageData,"pageData")
+    // console.log(pageData,"pageData")
     this.publicFunc.projectReload.call(this);
     await this.create_playback_page(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)

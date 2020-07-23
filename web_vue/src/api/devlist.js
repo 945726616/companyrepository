@@ -305,13 +305,13 @@ const devlist = {
         dev_sn: params.sn
       }
     }).then(res => {
-      console.log(res, 'time_zone_get_res')
+      // console.log(res, 'time_zone_get_res')
       let result = login.get_ret(res)
       if (result === '') {
         returnItem = res.data.address.zones
       }
     })
-    console.log(returnItem, 'return_time_zone_get')
+    // console.log(returnItem, 'return_time_zone_get')
     return returnItem
   },
   /*

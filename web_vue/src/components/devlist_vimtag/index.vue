@@ -75,10 +75,10 @@ export default {
       get_dev_list() //创建设备列表页面
 
       function get_dev_list (type) {   // 获取设备列表
-        // // console.log('获取设备列表', type)
-        // // console.log(_this.treeListFlag, "_this.treeListFlag")
-        // // console.log(pc_is_offline, "pc_is_offline")
-        // // console.log(_this.$store.state.jumpPageData.localFlag, "_this.$store.state.jumpPageData.localFlag")
+        //  console.log('获取设备列表', type)
+        //  console.log(_this.treeListFlag, "_this.treeListFlag")
+        //  console.log(pc_is_offline, "pc_is_offline")
+        //  console.log(_this.$store.state.jumpPageData.localFlag, "_this.$store.state.jumpPageData.localFlag")
         let g_block = $("#device_list_tree_box").css('display')
         if (type === 'refresh' && g_block === 'block') {
           if (_this.treeListFlag == 1) {
@@ -492,7 +492,7 @@ export default {
               }).then(res => {
                 _this.publicFunc.msg_tips({
                   msg: res.msg,
-                  type: 'error',
+                  type: res.type,
                   timeout: 3000
                 })
                 if (res.type === 'success') {
@@ -793,7 +793,7 @@ export default {
           d_type = "s1"
         }
         function add_device_select_type () {
-          data.parent.html("<div id='add_devices_box'>"
+          let text = "<div id='add_devices_box'>"
             + "<div id='add_devices_box_menu'>"
             + "<div id='add_devices_box_close'></div>"
             + "<div id='add_devices_box_title'>" + mcs_choose_device_type + "</div>"
@@ -844,7 +844,13 @@ export default {
             + "</div>"
             + "</div>"
             + "</div>"
-            + "</div>")
+            + "</div>"
+          if(data.parent.innerHTML){
+            data.parent.innerHTML = text;
+          }else{
+            data.parent.html(text);
+          }
+          
           function add_device_select_type_event () {
             let add_device_step_time = new Date().getTime(); //进入类型选择页面的时间
             for (let i = 0; i < $(".add_devices_type_list").length; i++) {
@@ -869,7 +875,7 @@ export default {
         }
 
         function add_device_input_id (existed) {
-          data.parent.html("<div id='add_devices_box'>"
+          let text = "<div id='add_devices_box'>"
             + "<div id='add_devices_box_menu'>"
             + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
             + "<div id='add_devices_box_close'></div>"
@@ -884,7 +890,12 @@ export default {
             + "</div>"
             + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
             + "</div>"
-            + "</div>")
+            + "</div>"
+          if(data.parent.innerHTML){
+            data.parent.innerHTML = text;
+          }else{
+            data.parent.html(text)
+          }
           function add_device_input_id_event () {
             let add_device_step_time = new Date().getTime();//每步开始时间
             let add_dev_info = {};//每步操作信息
@@ -901,7 +912,9 @@ export default {
               add_dev_info.desc = 'add_sn_' + this.value + '';
               add_dev_info.time = new Date().getTime() - add_device_step_time;
             })
-            $("#add_devices_box_back").click(add_device_select_type)
+            $("#add_devices_box_back").click(function (){
+              add_device_select_type()
+            })
             $("#add_device_input_id_box_del").click(function () {
               $("#add_device_input_id_box_input").val('')
             })
@@ -1025,6 +1038,20 @@ export default {
                 + "</div>")
               add_device_connect_power_event();
             }
+            function add_device_connect_power_event() {
+              $("#add_devices_box_back").click(function () {
+                add_device_input_id();
+              })
+              $("#add_devices_img").click(function () { //缺少删除步骤
+                $('body').append('<embed src="./theme/device/startSound.mp3" autostart="true" hidden="true" loop="false">');
+              });
+              $("#add_devices_box_close").click(function () {
+                close_add_page('add_dev');
+              });
+              $("#add_device_submit").click(function(){
+                add_device_connect_ethernet();
+              }) 
+            }
           }
         }
         function add_device_connect_ethernet () { //连接网线
@@ -1053,7 +1080,7 @@ export default {
             let timer1 = setInterval(function () { // 倒计时出现负数(360浏览器出现) 修改方法两种 1.将定时器清除判断放入timer1中 2.在判断时提前-4秒防止360浏览器定时不准的问题
               --div.innerHTML;
               if (div.innerHTML <= 0) {
-                // // console.log('进入小于等于0的判断123')
+                //  console.log('进入小于等于0的判断123')
                 clearInterval(timer1);
                 clearInterval(timer2)
                 add_device_unconnect_ethernet(); //等于0还没配置上，跳转到配置失败页面
@@ -1668,11 +1695,16 @@ export default {
               + "</div>"
               + "</div>";
           }
-
           function add_device_forget_pass_event () {
-            $("#add_devices_box_back").click(add_device_input_pass())
-            $("#add_devices_box_close").click(close_add_page())
-            $("#add_device_submit").click(add_device_input_pass())
+            $("#add_devices_box_back").click(function (){
+              add_device_input_pass();
+            })
+            $("#add_devices_box_close").click(function (){
+              close_add_page();
+            })
+            $("#add_device_submit").click(function (){
+              add_device_input_pass()
+            })
           }
           add_device_forget_pass_event();
         }
@@ -1854,7 +1886,7 @@ export default {
     }else{
       pageData = {parent: $("#" + this.$route.name)}
     }
-    console.log(pageData,"pageData")
+    // console.log(pageData,"pageData")
     await this.vimtagDevlist(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {

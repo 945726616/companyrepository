@@ -52,7 +52,7 @@ const login = {
           user: params.user,
           pass: login.pwd_encrypt(params.password),
           session_req: 1,
-          p: [{ name: "spv", value: "v1" }, { name: "uctx", value: uctx }]
+          param: [{ name: "spv", value: "v1" }, { name: "uctx", value: uctx }]
         }
       })
     })
@@ -84,7 +84,7 @@ const login = {
           user: params.username,
           pass: login.pwd_encrypt(md5.hex(params.password)),
           session_req: 1,
-          p: [{ name: "spv", value: "v1" }, { name: "uctx", value: uctx }]
+          param: [{ name: "spv", value: "v1" }, { name: "uctx", value: uctx }]
         }
       })
     })
@@ -114,7 +114,7 @@ const login = {
           lid: store.state.user.lid,
           nid: login.create_nid_ex(2), // 计算nid
           user: params.username,
-          p: [{ n: "uctx", v: uctx }]
+          param: [{ n: "uctx", v: uctx }]
         }
       })
     })

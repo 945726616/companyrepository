@@ -294,7 +294,7 @@ export default {
 
         $(".set_list").click(function () { // 对功能菜单中的每一项绑定点击事件
           let id_name = $(this).children(".set_img").attr("id");
-          // // console.log(id_name, 'id_name')
+          //  console.log(id_name, 'id_name')
           $(".set_page").hide();
           $("#set_" + id_name + "_page").show();
           if (!_this.$store.state.jumpPageData.projectFlag) { // vimtag项目将会隐藏列表内容单独展示选项内容
@@ -336,7 +336,7 @@ export default {
             $("ul#ul_id").on("click", "li", function () {
               $("#pb_select_sl").hide();
               $("#add_device_page").hide();
-              l_dom_feedback_type.val($(this).text());
+              l_dom_feedback_type.value = $(this).text();
             });
 
             let l_dom_feedback_upload_image = _this.publicFunc.mx("#upload_image");
@@ -441,7 +441,7 @@ export default {
                 if (msg && msg.result == "") {
                   _this.publicFunc.msg_tips({ msg: mcs_feedback_submit_success, type: "success", timeout: 3000 });
                   $("#upload_image").val("");
-                  l_dom_feedback_type.val("");
+                  l_dom_feedback_type.value = "";
                   // $("#pre_img")[0].src = "";
                   // $("#pre_img")[0].style = "";
                   l_dom_feedback_content.val("");
@@ -499,7 +499,7 @@ export default {
             // console.log(location.href, "location.href")
             // console.log(_this.$store.state.jumpPageData.loginFlag, "_this.$store.state.jumpPageData.loginFlag")
             // console.log(urlparms, "urlparms")
-            // // console.log(_this.$store.state.jumpPageData.localFlag, "_this.$store.state.jumpPageData.localFlag")
+            //  console.log(_this.$store.state.jumpPageData.localFlag, "_this.$store.state.jumpPageData.localFlag")
             // location.href=location.href+"&l=local"+(location.href.indexOf("file=vimtag")>-1?"&file=vimtag":"");
             location.href = location.href + "&l=local&c=" + _this.$store.state.jumpPageData.loginFlag + "" + (location.href.indexOf("file=vimtag") > -1 ? "&file=vimtag" : "");
             // alert(location.href)
@@ -946,8 +946,8 @@ export default {
             binding_email_ack(res)
           })
         })
-
-        _this.$store.state.jumpPageData.hostname = "vimtag.com";
+        
+        _this.$store.dispatch('setHostname', "vimtag.com")
 
         function binding_email_ack (msg) {
           if (msg && msg.result == "") {
@@ -1010,10 +1010,10 @@ export default {
           change: function () {
             if (_this.publicFunc.mx("#set_auto_play_btn").checked && _this.$store.state.jumpPageData.autoPlayFlag) {
               localStorage.setItem("auto_play", 1)
-              g_auto_play = 1;
+              _this.$store.dispatch('setAutoPlayFlag', 1)
             } else {
               localStorage.setItem("auto_play", "0");
-              g_auto_play = 0;
+              _this.$store.dispatch('setAutoPlayFlag', 0)
             }
           }
         });
@@ -1044,7 +1044,7 @@ export default {
     } else {
       pageData = { parent: $("#" + this.$route.name) }
     }
-    console.log(pageData, "pageData")
+    // console.log(pageData, "pageData")
     await this.vimtagMyPage(pageData) // 进入页面后加载
     // await this.create_my_page({ parent: $('#my') })
     // await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
@@ -1054,6 +1054,7 @@ export default {
     //   $('#login_box').append("<div id='is_mipc_div'></div>")
     // }
     this.publicFunc.projectReload.call(this);
+    window.vimtagMyPage = this.vimtagMyPage;
   }
 }
 </script>

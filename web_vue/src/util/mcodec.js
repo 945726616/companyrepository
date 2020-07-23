@@ -234,7 +234,7 @@ var mcodec = null;
               if (objItem.constructor === Uint8Array) {
                 s[n_path] = fn_bytes_2_uri_param(objItem)
               } else {
-                // //console.log(objItem.constructor, 'constructor', objItem)
+                // console.log(objItem.constructor, 'constructor', objItem)
                 if (objItem.constructor !== Array) {
                   s[n_path] = 1
                 }
@@ -244,15 +244,15 @@ var mcodec = null;
             }
             else {
               s[n_path] = objItem
-              // //console.log(objItem, 'stringObjItemBefore', )
+              // console.log(objItem, 'stringObjItemBefore', )
               // if('%' === ("" + objName).charAt(0)) {
               //   s[n_path] = objItem
               // } else {
               //   //console.log(objItem, 'fn_str_2_uri_param')
               //   s[n_path] = fn_str_2_uri_param("" + objItem, pfx)
               // }
-              // // s[n_path] = ('%' === ("" + objName).charAt(0)) ? objItem : fn_str_2_uri_param("" + objItem, pfx)
-              // //console.log(s[n_path], 'stringObjItemAfter')
+              //  s[n_path] = ('%' === ("" + objName).charAt(0)) ? objItem : fn_str_2_uri_param("" + objItem, pfx)
+              // console.log(s[n_path], 'stringObjItemAfter')
               // s += (("" == s) ? "" : vc) + n_path + nc + (('%' === ("" + objName).charAt(0)) ? objItem : fn_str_2_uri_param("" + objItem, pfx))
             }
           }

@@ -9,9 +9,9 @@ import mme from '@/util/mme.js'
 import publicFunc from '@/util/public.js'
 const play = {
   /*
-  ** 请求图片
-  */
-  load_imgs (data) {
+   ** 请求图片
+   */
+  load_imgs(data) {
     let images = new Array()
     for (let length = data.dom.length, k = 0; k < length; k++) {
       let sn = data.dom[k].getAttribute("sn")
@@ -25,9 +25,17 @@ const play = {
           $(data.dom).eq(k).children()[0].style.backgroundSize = "100% 100%";
         } else {
           if (data.box_ipc == 1) { //如果云盒子列表
-            images[k].src = devlist.pic_url_get({ sn: data.dom[k].getAttribute("sn"), token: data.dom[k].getAttribute("ipc_sn") + "_p3_" + Math.pow(2, 31) + "_" + Math.pow(2, 31), flag: 2, box_ipc: 1 });
+            images[k].src = devlist.pic_url_get({
+              sn: data.dom[k].getAttribute("sn"),
+              token: data.dom[k].getAttribute("ipc_sn") + "_p3_" + Math.pow(2, 31) + "_" + Math.pow(2, 31),
+              flag: 2,
+              box_ipc: 1
+            });
           } else {
-            images[k].src = devlist.pic_url_get({ sn: data.dom[k].getAttribute("sn"), token: "p1" });
+            images[k].src = devlist.pic_url_get({
+              sn: data.dom[k].getAttribute("sn"),
+              token: "p1"
+            });
           }
         }
       }
@@ -59,9 +67,9 @@ const play = {
     }
   },
   /*
-  ** 停止视频播放
-  */
-  async video_stop (params) {
+   ** 停止视频播放
+   */
+  async video_stop(params) {
     let flash_isplay = store.state.jumpPageData.flashIsPlay
     console.log(flash_isplay, 'flash_isplay')
     let play_info = store.state.jumpPageData.playInfo
@@ -92,9 +100,9 @@ const play = {
     return await returnItem
   },
   /*
-  ** 播放总接口
-  */
-  async play (data) {
+   ** 播放总接口
+   */
+  async play(data) {
     let returnItem;
     let flash_isplay = store.state.jumpPageData.flashIsPlay
     let judge_enable_native_plug = true;
@@ -113,16 +121,20 @@ const play = {
       enable_native_plug: judge_enable_native_plug,
       enable_flash_plug: judge_enable_flash_plug,
       params: "{key:'data:application/octet-stream;base64,OenOl2/PvPX7EuqqZdvMsNf5PqEOlOJZ4sROOBtnvW8F6Fc+azokLNtti6Cb/oiuO9qhOxvDfL8cVpGY4UcCe81OIVHkbiNzuHKwiE+K6gmmWwIoHgSRn2RN4qsZO62QkqGePdR6L94n2ruSeixjqAgWFTW8AIlQptovRZSN1Dh/8M87RIRdYyVFqKqsZoZTYibPLyDFONKIqxzrFkJPtqR/wn8jnYMc1qUH/w3IYJZh/OqctPTDp8tYuQSWN3EE6+kVmDIMV9F92SZJORMnvxy+zYzpbO7Gz44fBQNQSGMelsf7yQpfTF/X8t1Qn73fu53xp3MTIGH0kklFH2tMPkO/Raelhw5A4JQbczWg0n4pcNxpRl6mCEIjFprTboJ/B2eI0qUX/zTPM7l1hBmxjxsewORsXp0y2+NnCRH0uVBGUq6fOWrdhJwotIIu5ZAZwdoDZZu6eaycol2TIS5smusoD0ODPtQ2xZoCy7djIC4MVhB5uKe0zDXbLr+Serdlq6en5HyvUN0EEmYle0fORmgNFn0DTqqTab6cx8WfFkysciJSveN4swoR66qMQUi9+TfkHTnZ/REp3kHJtSq8XJyzTe+KCXlJXGx07nAbK4svIPanx39A5o5XlpLK/ohxiMpEJZ6OhmWb9yAnL+8Bedw+epvbNQkhADh2QqB4ItsIq5KTOsNzA0aNn3FEXzyd7WLVBqcF1lUVxu1vpYRPKv01im1ORbVhDoJ9eiqkfchutpAGYOwhYzxFWOIhTMouY+m/oQhc1d8FF4T+zSx6WVmj2f+RDUdOKbQVxJdEeiGKyIDm14K34Kz+RdzF0fY50sbs/SUfMWwuKQsEPFU5KQ'}",
-      on_event: function (e) { e.sn = data.sn; on_plug_event(e) },
+      on_event: function (e) {
+        e.sn = data.sn;
+        on_plug_event(e)
+      },
       ref_obj: ref_obj,
       debug: 0
     };
     if (data.ipc_stat != 0) {
-      console.log('use mme_create')
+      // console.log('use mme_create')
       ref_obj.inner_window_info.mme = new mme(mme_params);
     }
     store.dispatch('setPlayInfo', ref_obj)
-    function flash_play () {
+
+    function flash_play() {
       let profile_token_choice = get_profile_token_choice(data.profile_token);
       let urls
       if (process.env.NODE_ENV === 'production') {
@@ -141,7 +153,7 @@ const play = {
         clearInterval(flash_isplay)
       }
     }
-    async function on_plug_event (obj) {
+    async function on_plug_event(obj) {
       sessionStorage.setItem("type_tip", obj.type);
       sessionStorage.setItem("code_tip", obj.code);
       switch (obj.type) {
@@ -151,7 +163,9 @@ const play = {
               location.href = "https://www.adobe.com/go/getflashplayer";
             }
             if (flash_isplay) clearInterval(flash_isplay);
-            flash_isplay = setInterval(function () { flash_play() }, 1000);
+            flash_isplay = setInterval(function () {
+              flash_play()
+            }, 1000);
           }
           break;
         }
@@ -164,24 +178,49 @@ const play = {
             if (proto == "auto") proto = "rtdp";
           }
           if (playback) {
-            ms.send_msg("playback", { sn: ref_obj.sn, token: ref_obj.token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "playback"; play_ack(msg, ref); });
+            ms.send_msg("playback", {
+              sn: ref_obj.sn,
+              token: ref_obj.token,
+              protocol: proto,
+              ref: obj.ref_obj
+            }, obj.ref_obj, function (msg, ref) {
+              msg.type = "playback";
+              play_ack(msg, ref);
+            });
           } else {
             if (store.state.jumpPageData.localFlag) {
-              data.agent.play({ sn: ref_obj.sn, token: obj.ref_obj.inner_window_info.profile_token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "play"; play_ack(msg, ref); })
+              data.agent.play({
+                sn: ref_obj.sn,
+                token: obj.ref_obj.inner_window_info.profile_token,
+                protocol: proto,
+                ref: obj.ref_obj
+              }, obj.ref_obj, function (msg, ref) {
+                msg.type = "play";
+                play_ack(msg, ref);
+              })
             } else {
               // ms.send_msg("play",{sn:"1jfiegbqaml3q",token:"p0_1jfiegbqcip5q", protocol:proto,ref:obj.ref_obj},obj.ref_obj,function(msg,ref){ msg.type = "play" ; play_ack(msg,ref);}); //6.1.2测试云盒子实时视频播放 
               // ms.send_msg("play", { sn: ref_obj.sn, token: obj.ref_obj.inner_window_info.profile_token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "play"; play_ack(msg, ref); });
               await axios.get('/ccm/ccm_play', {
                 params: {
-                  sess: { nid: login.create_nid(), sn: ref_obj.sn },
-                  setup: { stream: "RTP_Unicast", trans: { proto: proto } }, token: obj.ref_obj.inner_window_info.profile_token
-            }
+                  sess: {
+                    nid: login.create_nid(),
+                    sn: ref_obj.sn
+                  },
+                  setup: {
+                    stream: "RTP_Unicast",
+                    trans: {
+                      proto: proto
+                    }
+                  },
+                  token: obj.ref_obj.inner_window_info.profile_token
+                }
               }).then(res => {
-                returnItem = { 
+                returnItem = {
                   result: login.get_ret(res),
                   url: (res.data.MediaUri.Uri ? res.data.MediaUri.Uri : ""),
                   type: "play"
-          }
+                }
               })
               return play_ack(returnItem, store.state.jumpPageData.playInfo)
             }
@@ -205,37 +244,59 @@ const play = {
             play_oem = "VSMAHOME";
           }
           // if(store.state.jumpPageData.projectName=="vimtag"){
-          obj.panel.innerHTML = "<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>"
-            + "<div id='plugin_install_tips'>" + mcs_download_client + "</div>"
-            + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.downloadManualUrl + "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>"
-            + "<div style='margin-top: 85px;'><a name='flash' href='javascript:;'><div id='use_ordinary_video'>" + mcs_temporarily_installed_use_ordinary_video + "</div></a></div>"
-            + "</div>"
+          obj.panel.innerHTML = "<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>" +
+            "<div id='plugin_install_tips'>" + mcs_download_client + "</div>" +
+            "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.downloadManualUrl + "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>" +
+            "<div style='margin-top: 85px;'><a name='flash' href='javascript:;'><div id='use_ordinary_video'>" + mcs_temporarily_installed_use_ordinary_video + "</div></a></div>" +
+            "</div>"
           let plugin_install_page_width = $("#plugin_install_page").outerWidth() / 2;
           let plugin_install_download_width = $("#plugin_install_download").outerWidth() / 2;
           // jQuery("#use_ordinary_video").css({"margin-left":(plugin_install_page_width-use_ordinary_video_width)+"px"});
-          $("#plugin_install_download").css({ "margin-left": (plugin_install_page_width - plugin_install_download_width) + "px" })
+          $("#plugin_install_download").css({
+            "margin-left": (plugin_install_page_width - plugin_install_download_width) + "px"
+          })
           break;
         }
       }
     }
-    function play_ack (msg, ref) {
+
+    function play_ack(msg, ref) {
       if (msg.result == "") {
-        chl_video_create({ type: msg.type, uri: msg.url, inner_window_info: ref.inner_window_info, localPath: ref.localPath, isDownload: ref.isDownload });
+        chl_video_create({
+          type: msg.type,
+          uri: msg.url,
+          inner_window_info: ref.inner_window_info,
+          localPath: ref.localPath,
+          isDownload: ref.isDownload
+        });
       } else {
         if (msg.result == "accounts.user.offline") { //6.1.1
-          msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 })
+          publicFunc.msg_tips({
+            msg: mcs_video_play_offline,
+            type: "error",
+            timeout: 3000
+          })
         } else if (msg.result == "ccm.system.err") { //临时解决一下
-          msg_tips({ msg: mcs_video_play_fail, type: "error", timeout: 3000 })
+          publicFunc.msg_tips({
+            msg: mcs_video_play_fail,
+            type: "error",
+            timeout: 3000
+          })
         } else if (msg.result == "4g.device.lock") {
-          msg_tips({ msg: mrs_sim_invalid, type: "error", timeout: 3000 })
+          publicFunc.msg_tips({
+            msg: mrs_sim_invalid,
+            type: "error",
+            timeout: 3000
+          })
         }
       }
     }
-    function chl_video_create (obj) {
+
+    function chl_video_create(obj) {
       let uri = obj.uri,
-        chl_params = (obj.type == "publish") ? "" : ",thread:\"istream\", jitter:{max:3000}"/* for old version's mme plugin */,
+        chl_params = (obj.type == "publish") ? "" : ",thread:\"istream\", jitter:{max:3000}" /* for old version's mme plugin */ ,
         trans_params = (obj.type == "play") ? ",trans:[{flow_ctrl:\"jitter\",thread:\"istream\"}]" :
-          ((obj.type == "playback") ? ",trans:[{flow_ctrl:\"delay\",thread:\"istream\"}]" : "");
+        ((obj.type == "playback") ? ",trans:[{flow_ctrl:\"delay\",thread:\"istream\"}]" : "");
       let params_data;
       let l_ipc_speed_time;
       let l_Last_speed = 0;
@@ -249,7 +310,9 @@ const play = {
       } else {
         params_data = "{" + ((obj.type == "publish") ? "dst" : "src") + ":[{url:\"" + uri + "\"}]" + trans_params + chl_params + "}";
       }
-      obj.inner_window_info.video_chls = obj.inner_window_info.mme.chl_create({ params: params_data });
+      obj.inner_window_info.video_chls = obj.inner_window_info.mme.chl_create({
+        params: params_data
+      });
       if (obj.inner_window_info.video_chls !== null) {
         obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "speaker.mute", obj.type == "playback" ? "{value:0}" :  "{value:1}") // 参考旧代码此处原本含有一处全局变量判断,但未发现该值有后赋值行为默认删减成单一属性
         if (l_ipc_speed_time) {
@@ -264,8 +327,12 @@ const play = {
                 if (json_speed.data.played_duration / data.videoSize > 1) {
                   json_speed.data.played_duration = data.videoSize;
                   l_speed = "100%";
-                  clearInterval(l_ipc_speed_time);//5.11.3后加
-                  msg_tips({ msg: mrs_download_completed, type: "success", timeout: 3000 });
+                  clearInterval(l_ipc_speed_time); //5.11.3后加
+                  publicFunc.msg_tips({
+                    msg: mrs_download_completed,
+                    type: "success",
+                    timeout: 3000
+                  });
                   // }
                 } else {
                   record_played_duration_num = 0;
@@ -300,28 +367,41 @@ const play = {
         }
       }
       if (obj.type == "playback") {
-        setTimeout(function () { play_ipc(obj) }, 1000)
+        setTimeout(function () {
+          play_ipc(obj)
+        }, 1000)
       }
     }
-    function play_ipc (obj) {
+
+    function play_ipc(obj) {
       obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "play", "");
       obj.inner_window_info.playback_state = "play";
       return 0;
     }
-    function create_play_ipc (obj) {
+
+    function create_play_ipc(obj) {
       obj.protocol = "auto";
       obj.videoSize = obj.videoSize ? obj.videoSize : 0;
       obj.localPath = obj.download_path ? obj.download_path : null;
       obj.isDownload = obj.isDownload ? 1 : 0;
-      obj.inner_window_info = { dom_id: ("play_screen"), index: 1, video_chls: null, audio_chls: null, mme: null, ipc_state: "", node_sn: obj.sn, profile_token: obj.profile_token };
+      obj.inner_window_info = {
+        dom_id: ("play_screen"),
+        index: 1,
+        video_chls: null,
+        audio_chls: null,
+        mme: null,
+        ipc_state: "",
+        node_sn: obj.sn,
+        profile_token: obj.profile_token
+      };
       return obj;
     }
     return returnItem
   },
   /*
-  ** 暂停下载
-  */
-  pause_ipc () {
+   ** 暂停下载
+   */
+  pause_ipc() {
     let play_info = store.state.jumpPageData.playInfo
     if (play_info.inner_window_info.mme) {
       play_info.inner_window_info.mme.ctrl(play_info.inner_window_info.video_chls, "pause", "")
@@ -329,42 +409,44 @@ const play = {
     play_info.inner_window_info.playback_state = "pause"
   },
   /*
-  ** 继续下载
-  */
-  play_download_continue () {
+   ** 继续下载
+   */
+  play_download_continue() {
     let play_info = store.state.jumpPageData.playInfo
     play_info.inner_window_info.mme.ctrl(play_info.inner_window_info.video_chls, "play", "");
     play_info.inner_window_info.playback_state = "play";
   },
   /*
-  ** 播放封面图
-  */
-  play_preview_img (params) {
+   ** 播放封面图
+   */
+  play_preview_img(params) {
     var url = (params.addr ? "http://" + params.addr : window.location.protocol + "//" + window.location.host) + "/api/ccm/ccm_pic_get.jpg?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + params.pic_token + "&dflag=2";
     params.dom.attr('style', 'background: url(' + url + ') no-repeat')
     params.dom.attr('style', 'backgroundSize: 100% 100%')
   },
   /*
-  ** 全屏播放
-  */
-  fullscreen () {
+   ** 全屏播放
+   */
+  fullscreen() {
     let play_info = store.state.jumpPageData.playInfo
     play_info.inner_window_info.mme.ctrl(0, "fullscreen", "");
   },
   /*
-  ** 音量控制
-  */
-  voice (params) {
+   ** 音量控制
+   */
+  voice(params) {
     let play_info = store.state.jumpPageData.playInfo
     var video_chls = play_info.inner_window_info.video_chls;
     play_info.inner_window_info.mme.ctrl(video_chls, "speaker.mute", params.flag ? "{value:1}" : "{value:0}");
   },
   /*
-  ** 摄像头视角控制
-  */
-  play_ptz_turn (params) {
+   ** 摄像头视角控制
+   */
+  play_ptz_turn(params) {
     console.log(params, 'turn_params')
-    let l_mark = { flag: "ready" }
+    let l_mark = {
+      flag: "ready"
+    }
     let l_move_x = 0
     let l_move_y = 0
     let interval
@@ -393,9 +475,9 @@ const play = {
     }
   },
   /*
-  ** 摄像头视角控制接口
-  */
-  async ptz_ctrl (params) {
+   ** 摄像头视角控制接口
+   */
+  async ptz_ctrl(params) {
     console.log(params, 'ptz_ctrl_params')
     let returnItem
     await axios.get('/ccm/ccm_ptz_ctl', {
@@ -418,14 +500,16 @@ const play = {
         }
       }
     }).then(res => {
-      returnItem = { result: login.get_ret(res) }
+      returnItem = {
+        result: login.get_ret(res)
+      }
     })
     return returnItem
   },
   /*
-  ** 摄像头录像处理
-  */
-  play_record (params) {
+   ** 摄像头录像处理
+   */
+  play_record(params) {
     if (params.sn) {
       if (params.recording === 1) {
         play.record({
@@ -445,9 +529,9 @@ const play = {
     }
   },
   /*
-  ** 摄像头录像接口
-  */
-  async record (params) {
+   ** 摄像头录像接口
+   */
+  async record(params) {
     let returnItem
     await axios.get('/ccm/ccm_record_task_get', {
       params: {
@@ -479,9 +563,9 @@ const play = {
     return returnItem
   },
   /*
-  ** 摄像头录像设置任务接口
-  */
-  async record_task_set (params) {
+   ** 摄像头录像设置任务接口
+   */
+  async record_task_set(params) {
     let task
     let returnItem
     if (params.task) { // 为两个不同的调用设置task参数值
@@ -511,21 +595,31 @@ const play = {
     return returnItem
   },
   /*
-  ** 录像回调处理函数
-  */
-  record_ack (msg, ref) {
+   ** 录像回调处理函数
+   */
+  record_ack(msg, ref) {
     if (msg && msg.sd_ready === 0) {
-      publicFunc.msg_tips({ msg: mcs_sdcard_not_ready, type: "error", timeout: 3000 });
+      publicFunc.msg_tips({
+        msg: mcs_sdcard_not_ready,
+        type: "error",
+        timeout: 3000
+      });
     } else if (msg && msg.result === "") {
-      if (ref.recording === 1) { console.log('do nothing') }
+      if (ref.recording === 1) {
+        console.log('do nothing')
+      }
     } else if (msg.result === "permission.denied") {
-      publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
+      publicFunc.msg_tips({
+        msg: mcs_permission_denied,
+        type: "error",
+        timeout: 3000
+      });
     }
   },
   /*
-  ** 实时截图
-  */
-  async play_snapshot (params) {
+   ** 实时截图
+   */
+  async play_snapshot(params) {
     let returnItem
     await axios.get('/ccm/ccm_snapshot', {
       params: {
@@ -536,7 +630,13 @@ const play = {
         token: "p0" // 暂为固定值
       }
     }).then(res => {
-      returnItem = { result: login.get_ret(res), url: devlist.pic_url_get({ sn: params.sn, token: 'p0' }) }
+      returnItem = {
+        result: login.get_ret(res),
+        url: devlist.pic_url_get({
+          sn: params.sn,
+          token: 'p0'
+        })
+      }
     })
     if (returnItem && returnItem.result === '') { // 最终返回值
       returnItem = returnItem.url
@@ -546,9 +646,9 @@ const play = {
     return returnItem
   },
   /*
-  ** 对讲处理
-  */
-  play_speak (params) {
+   ** 对讲处理
+   */
+  play_speak(params) {
     let play_info = store.state.jumpPageData.playInfo
     if (params.flag) {
       play.push_talk({
@@ -556,22 +656,28 @@ const play = {
         protocol: "rtdp",
         token: "p1"
       }).then(res => {
-        chl_audio_create({ type: "publish", uri: res.url, inner_window_info: play_info.inner_window_info })
+        chl_audio_create({
+          type: "publish",
+          uri: res.url,
+          inner_window_info: play_info.inner_window_info
+        })
       })
     } else {
       play_info.inner_window_info.mme.chl_destroy(play_info.inner_window_info.audio_chls);
     }
-    function chl_audio_create (obj) {
-      var uri = obj.uri, chl_params = "";
+
+    function chl_audio_create(obj) {
+      var uri = obj.uri,
+        chl_params = "";
       obj.inner_window_info.audio_chls = obj.inner_window_info.mme.chl_create({
         params: ("{src:[{url:'mic://0',type:'audio'}], dst:[{url:'" + uri + "'}]" + (("" != chl_params) ? "," : "") + chl_params + "}")
       })
     }
   },
   /*
-  ** 对讲接口
-  */
-  async push_talk (params) {
+   ** 对讲接口
+   */
+  async push_talk(params) {
     let returnItem
     await axios.get('/ccm/ccm_talk', {
       params: {
@@ -596,9 +702,9 @@ const play = {
     return returnItem
   },
   /*
-  ** 获取视频地址
-  */
-  async adjust_get (params) {
+   ** 获取视频地址
+   */
+  async adjust_get(params) {
     let returnItem
     await axios.get('/ccm/ccm_video_srcs_get', {
       params: {
@@ -646,20 +752,24 @@ const play = {
               sharpness: vss[0].Extension.Imaging.white_light.sharpness
             }
           }
-          day_or_night = vss[0].Extension.Imaging.day_or_night;
-          red_or_white = vss[0].Extension.Imaging.red_or_white;
         } else {
-          brightness = vss[0].Extension.Imaging.brightness;
-          contrast = vss[0].Extension.Imaging.contrast;
-          color_saturation = vss[0].Extension.Imaging.color_saturation;
-          sharpness = vss[0].Extension.Imaging.sharpness;
+          brightness = vss[0].Extension.Imaging.Brightness;
+          contrast = vss[0].Extension.Imaging.Contrast;
+          color_saturation = vss[0].Extension.Imaging.ColorSaturation;
+          sharpness = vss[0].Extension.Imaging.Sharpness;
         }
+        day_or_night = vss[0].Extension.Imaging.day_or_night;
+        red_or_white = vss[0].Extension.Imaging.red_or_white;
         if (vss[0].Extension.Imaging.mode) {
           day_night = vss[0].Extension.Imaging.mode;
         } else {
           day_night = "auto";
         }
-        light_mode = vss[0].Extension.Imaging.light_mode
+        if (vss[0].Extension.Imaging.light_mode) {
+          light_mode = vss[0].Extension.Imaging.light_mode;
+        } else {
+          light_mode = "auto";
+        }
         await axios.get('/ccm/ccm_misc_get', { // 该接口仅调用一次所以不单独拆分了
           params: {
             sess: {
@@ -672,7 +782,7 @@ const play = {
           if (result === "") {
             let msg = res_misc.data ? res_misc.data.info : "";
             flip = msg.flip; /* 0/1 0:none-flip, 1:filp */
-            flicker_freq = msg.power_freq;    /* 0/1 0:60hz, 1:50hz */
+            flicker_freq = msg.power_freq; /* 0/1 0:60hz, 1:50hz */
             resolute = res_misc.data.resolute; /*0/1 0:(4:3) 1:(16:9) */
           }
           returnItem = {
@@ -693,17 +803,18 @@ const play = {
             sharpness: sharpness
           }
         })
-      }
-      else {
-        returnItem = { result: result }
+      } else {
+        returnItem = {
+          result: result
+        }
       }
     })
     return returnItem
   },
   /*
-  ** 设置视频地址
-  */
-  async adjust_set (obj) {
+   ** 设置视频地址
+   */
+  async adjust_set(obj) {
     obj = obj.conf;
     let returnItem
     if (obj.is_white_light == 1 && obj.white_light) {
@@ -711,23 +822,44 @@ const play = {
         sn: obj.sn,
         token: "vs0",
         conf: {
-          day: { brightness: obj.day.brightness, contrast: obj.day.contrast, color_saturation: obj.day.color_saturation, sharpness: obj.day.sharpness },
-          night: { brightness: obj.night.brightness, contrast: obj.night.contrast, color_saturation: obj.night.color_saturation, sharpness: obj.night.sharpness },
-          white_light: { brightness: obj.white_light.brightness, contrast: obj.white_light.contrast, color_saturation: obj.white_light.color_saturation, sharpness: obj.white_light.sharpness },
-          mode: obj.day_night, light_mode: obj.light_mode
+          day: {
+            brightness: obj.day.brightness,
+            contrast: obj.day.contrast,
+            color_saturation: obj.day.color_saturation,
+            sharpness: obj.day.sharpness
+          },
+          night: {
+            brightness: obj.night.brightness,
+            contrast: obj.night.contrast,
+            color_saturation: obj.night.color_saturation,
+            sharpness: obj.night.sharpness
+          },
+          white_light: {
+            brightness: obj.white_light.brightness,
+            contrast: obj.white_light.contrast,
+            color_saturation: obj.white_light.color_saturation,
+            sharpness: obj.white_light.sharpness
+          },
+          mode: obj.day_night,
+          light_mode: obj.light_mode
         }
       }).then(res => {
         let result = login.get_ret(res);
         if (result === "") {
           play.misc_set({
             sn: obj.sn,
-            info: { flip: obj.flip, power_freq: obj.flicker_freq },
+            info: {
+              flip: obj.flip,
+              power_freq: obj.flicker_freq
+            },
             resolute: obj.resolute
           }).then(res_misc => {
             returnItem = res_misc
           })
         } else {
-          returnItem = { result: result }
+          returnItem = {
+            result: result
+          }
         }
       })
     } else if (obj.day) {
@@ -735,104 +867,143 @@ const play = {
         sn: obj.sn,
         token: "vs0",
         conf: {
-          day: { brightness: obj.day.brightness, contrast: obj.day.contrast, color_saturation: obj.day.color_saturation, sharpness: obj.day.sharpness },
-          night: { brightness: obj.night.brightness, contrast: obj.night.contrast, color_saturation: obj.night.color_saturation, sharpness: obj.night.sharpness },
-          mode: obj.day_night, light_mode: obj.light_mode
+          day: {
+            brightness: obj.day.brightness,
+            contrast: obj.day.contrast,
+            color_saturation: obj.day.color_saturation,
+            sharpness: obj.day.sharpness
+          },
+          night: {
+            brightness: obj.night.brightness,
+            contrast: obj.night.contrast,
+            color_saturation: obj.night.color_saturation,
+            sharpness: obj.night.sharpness
+          },
+          mode: obj.day_night,
+          light_mode: obj.light_mode
         }
       }).then(res => {
         let result = login.get_ret(res);
         if (result == "") {
           play.misc_set({
             sn: obj.sn,
-            info: { flip: obj.flip, power_freq: obj.flicker_freq },
+            info: {
+              flip: obj.flip,
+              power_freq: obj.flicker_freq
+            },
             resolute: obj.resolute
           }).then(res_misc => {
             returnItem = res_misc
           })
         } else {
-          returnItem = { result: result }
+          returnItem = {
+            result: result
+          }
         }
       })
     } else {
       play.img_set({
         sn: obj.sn,
         token: "vs0",
-        conf: { brightness: obj.brightness, contrast: obj.contrast, color_saturation: obj.color_saturation, sharpness: obj.sharpness, mode: obj.day_night }
+        conf: {
+          brightness: obj.brightness,
+          contrast: obj.contrast,
+          color_saturation: obj.color_saturation,
+          sharpness: obj.sharpness,
+          mode: obj.day_night
+        }
       }).then(res => {
         let result = login.get_ret(res);
         if (result === "") {
           play.misc_set({
             sn: obj.sn,
-            info: { flip: obj.flip, power_freq: obj.flicker_freq },
+            info: {
+              flip: obj.flip,
+              power_freq: obj.flicker_freq
+            },
             resolute: obj.resolute
           }).then(res_misc => {
             returnItem = res_misc
           })
         } else {
-          returnItem = { result: result }
+          returnItem = {
+            result: result
+          }
         }
       })
       if (obj.light_mode === "white" || obj.light_mode === "red") {
         play.img_set({
           sn: obj.sn,
           token: "vs0",
-          conf: { light_mode: obj.light_mode }
+          conf: {
+            light_mode: obj.light_mode
+          }
         }).then(res => {
-          returnItem = { result: login.get_ret(res) }
+          returnItem = {
+            result: login.get_ret(res)
+          }
         })
       }
     }
     return await returnItem
   },
   /*
-  ** 设置视频地址接口
-  */
-  async img_set (params) {
+   ** 设置视频地址接口
+   */
+  async img_set(params) {
     return await axios.get('/ccm/ccm_img_set', {
       params: {
-        sess: { nid: login.create_nid(), sn: params.sn }, token: "vs0",
+        sess: {
+          nid: login.create_nid(),
+          sn: params.sn
+        },
+        token: "vs0",
         conf: params.conf
       }
     })
   },
   /*
-  ** 获取设置视频地址接口
-  */
-  async img_get (params) {
+   ** 获取设置视频地址接口
+   */
+  async img_get(params) {
     return await axios.get('/ccm/ccm_img_get', {
       params: {
         sess: {
           nid: login.create_nid(),
           sn: params.sn
-        }
+        },
+        token: "vs0"
       }
     })
   },
   /*
-  ** 杂项设置接口
-  */
-  async misc_set (params) {
+   ** 杂项设置接口
+   */
+  async misc_set(params) {
     let returnItem
     await axios.get('/ccm/ccm_misc_set', {
       params: {
         sess: {
           nid: login.create_nid(),
           sn: params.sn
-        }, info: {
+        },
+        info: {
           flip: params.flip,
           power_freq: params.flicker_freq
         },
         resolute: params.resolute
       }
     }).then(res => {
-      returnItem = { result: login.get_ret(res) }
+      returnItem = {
+        result: login.get_ret(res)
+      }
     })
     return returnItem
   },
   /*
-  ** 设置设备详细时间
-  */
-  set_date_time (params) {
+   ** 设置设备详细时间
+   */
+  set_date_time(params) {
     let returnItem
     // 调用设置设备日期
     devlist.date_set(params).then(res_date_set => {
@@ -840,18 +1011,31 @@ const play = {
       if (result_date_set === '') {
         // 调用设置设备ntp
         devlist.ntp_set(params).then(res_ntp_set => {
-          returnItem = { result: login.get_ret(res_ntp_set) }
+          returnItem = {
+            result: login.get_ret(res_ntp_set)
+          }
         })
       } else {
-        returnItem = { result: result_date_set }
+        returnItem = {
+          result: result_date_set
+        }
       }
     })
     if (returnItem && returnItem.result == "") {
-      returnItem = { msg: mcs_set_successfully, type: "success" }
+      returnItem = {
+        msg: mcs_set_successfully,
+        type: "success"
+      }
     } else if (returnItem.result == "permission.denied") {
-      returnItem = { msg: mcs_permission_denied, type: "error" }
+      returnItem = {
+        msg: mcs_permission_denied,
+        type: "error"
+      }
     } else {
-      returnItem = { msg: mcs_failed_to_set_the, type: "error" }
+      returnItem = {
+        msg: mcs_failed_to_set_the,
+        type: "error"
+      }
     }
     return returnItem
   },
@@ -859,7 +1043,7 @@ const play = {
 
 export default play
 
-function get_profile_token_choice (data) {
+function get_profile_token_choice(data) {
   var profile_token_obj = new Object();
   var profile_token_choice = data;
   if (profile_token_choice == "" || profile_token_choice == null) {
