@@ -582,6 +582,7 @@ export default {
       $('#login_box').append("<div id='is_mipc_div'></div>")
     }
     this.publicFunc.projectReload.call(this);
+    window.create_boxlist_page = this.create_boxlist_page;
   }
 }
 </script>

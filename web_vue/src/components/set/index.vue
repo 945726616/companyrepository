@@ -542,7 +542,7 @@ export default {
             + "</div>"
             + "</div>";
           await _this.$api.set.about({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
-            console.log(res, 'about_res')
+            // console.log(res, 'about_res')
             if (res.check_ver) {
               $("#system_new_version").show();
             }

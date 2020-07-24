@@ -486,7 +486,6 @@ and dependencies (minified).
             }
 
             _pluginMarkup.call(this); /* add plugin markup */
-
             if (d && o.callbacks.onCreate && typeof o.callbacks.onCreate === "function") { o.callbacks.onCreate.call(this); } /* callbacks: onCreate */
 
             $("#mCSB_" + d.idx + "_container img:not(." + classes[2] + ")").addClass(classes[2]); /* flag loaded images */
@@ -526,7 +525,6 @@ and dependencies (minified).
             if (!mCSB_container.length) { return; }
 
             if (d.tweenRunning) { _stop($this); } /* stop any running tweens while updating */
-
             if (cb && d && o.callbacks.onBeforeUpdate && typeof o.callbacks.onBeforeUpdate === "function") { o.callbacks.onBeforeUpdate.call(this); } /* callbacks: onBeforeUpdate */
 
             /* if element was disabled or destroyed, remove class(es) */
@@ -854,21 +852,21 @@ and dependencies (minified).
 
     /* generates plugin markup */
     _pluginMarkup = function () {
-      var $this = $(this), d = $this.data(pluginPfx), o = d.opt,
+      let $this = $(this), d = $this.data(pluginPfx), o = d.opt,
         expandClass = o.autoExpandScrollbar ? " " + classes[1] + "_expand" : "",
         scrollbar = [
-          "<div id='mCSB_" + d.idx + "_scrollbar_vertical' class='mCSB_scrollTools mCSB_" + d.idx + "_scrollbar mCS-" + o.theme + " mCSB_scrollTools_vertical" + expandClass + "'><div class='" + classes[12] + "'><div id='mCSB_" + d.idx + "_dragger_vertical' class='mCSB_dragger' style='position:absolute;' oncontextmenu='return false;'><div class='mCSB_dragger_bar' /></div><div class='mCSB_draggerRail' /></div></div>", 
-          "<div id='mCSB_" + d.idx + "_scrollbar_horizontal' class='mCSB_scrollTools mCSB_" + d.idx + "_scrollbar mCS-" + o.theme + " mCSB_scrollTools_horizontal" + expandClass + "'><div class='" + classes[12] + "'><div id='mCSB_" + d.idx + "_dragger_horizontal' class='mCSB_dragger' style='position:absolute;' oncontextmenu='return false;'><div class='mCSB_dragger_bar' /></div><div class='mCSB_draggerRail' /></div></div>"],
+          "<div id='mCSB_" + d.idx + "_scrollbar_vertical' class='mCSB_scrollTools mCSB_" + d.idx + "_scrollbar mCS-" + o.theme + " mCSB_scrollTools_vertical" + expandClass + "'><div class='" + classes[12] + "'><div id='mCSB_" + d.idx + "_dragger_vertical' class='mCSB_dragger' style='position:absolute;' oncontextmenu='return false;'><div class='mCSB_dragger_bar'></div></div><div class='mCSB_draggerRail'></div></div></div>", 
+          "<div id='mCSB_" + d.idx + "_scrollbar_horizontal' class='mCSB_scrollTools mCSB_" + d.idx + "_scrollbar mCS-" + o.theme + " mCSB_scrollTools_horizontal" + expandClass + "'><div class='" + classes[12] + "'><div id='mCSB_" + d.idx + "_dragger_horizontal' class='mCSB_dragger' style='position:absolute;' oncontextmenu='return false;'><div class='mCSB_dragger_bar'></div></div><div class='mCSB_draggerRail'></div></div></div>"],
         wrapperClass = o.axis === "yx" ? "mCSB_vertical_horizontal" : o.axis === "x" ? "mCSB_horizontal" : "mCSB_vertical",
         scrollbars = o.axis === "yx" ? scrollbar[0] + scrollbar[1] : o.axis === "x" ? scrollbar[1] : scrollbar[0],
-        contentWrapper = o.axis === "yx" ? "<div id='mCSB_" + d.idx + "_container_wrapper' class='mCSB_container_wrapper' />" : "",
+        contentWrapper = o.axis === "yx" ? "<div id='mCSB_" + d.idx + "_container_wrapper' class='mCSB_container_wrapper'></div>" : "",
         autoHideClass = o.autoHideScrollbar ? " " + classes[6] : "",
         scrollbarDirClass = (o.axis !== "x" && d.langDir === "rtl") ? " " + classes[7] : "";
       if (o.setWidth) { $this.css("width", o.setWidth); } /* set element width */
       if (o.setHeight) { $this.css("height", o.setHeight); } /* set element height */
       o.setLeft = (o.axis !== "y" && d.langDir === "rtl") ? "989999px" : o.setLeft; /* adjust left position for rtl direction */
-      $this.addClass(pluginNS + " _" + pluginPfx + "_" + d.idx + autoHideClass + scrollbarDirClass).wrapInner("<div id='mCSB_" + d.idx + "' class='mCustomScrollBox mCS-" + o.theme + " " + wrapperClass + "'><div id='mCSB_" + d.idx + "_container' class='mCSB_container' style='position:relative; top:" + o.setTop + "; left:" + o.setLeft + ";' dir=" + d.langDir + " /></div>");
-      var mCustomScrollBox = $("#mCSB_" + d.idx),
+      $this.addClass(pluginNS + "_" + pluginPfx + "_" + d.idx + autoHideClass + scrollbarDirClass).wrapInner("<div id='mCSB_" + d.idx + "' class='mCustomScrollBox mCS-" + o.theme + " " + wrapperClass + "'><div id='mCSB_" + d.idx + "_container' class='mCSB_container' style='position:relative; top:" + o.setTop + "; left:" + o.setLeft + ";' dir=" + d.langDir + " ></div></div>");
+      let mCustomScrollBox = $("#mCSB_" + d.idx),
         mCSB_container = $("#mCSB_" + d.idx + "_container");
       if (o.axis !== "y" && !o.advanced.autoExpandHorizontalScroll) {
         mCSB_container.css("width", _contentWidth(mCSB_container));
@@ -885,7 +883,7 @@ and dependencies (minified).
       }
       _scrollButtons.call(this); /* add scrollbar buttons */
       /* minimum dragger length */
-      var mCSB_dragger = [$("#mCSB_" + d.idx + "_dragger_vertical"), $("#mCSB_" + d.idx + "_dragger_horizontal")];
+      let mCSB_dragger = [$("#mCSB_" + d.idx + "_dragger_vertical"), $("#mCSB_" + d.idx + "_dragger_horizontal")];
       mCSB_dragger[0].css("min-height", mCSB_dragger[0].height());
       mCSB_dragger[1].css("min-width", mCSB_dragger[1].width());
     },
@@ -917,7 +915,7 @@ and dependencies (minified).
           We must let the browser set the width as browser zoom values are impossible to calculate.
           */
           mCSB_container.css({ "overflow-x": "inherit", "position": "absolute" })
-            .wrap("<div class='mCSB_h_wrapper' style='position:relative; left:0; width:999999px;' />")
+            .wrap("<div class='mCSB_h_wrapper' style='position:relative; left:0; width:999999px;'></div>")
             .css({ /* set actual width, original position and un-wrap */
               /* 
               get the exact width (with decimals) and then round-up. 
@@ -1054,7 +1052,7 @@ and dependencies (minified).
     _bindEvents = function () {
       var $this = $(this), d = $this.data(pluginPfx), o = d.opt;
       if (!d.bindEvents) { /* check if events are already bound */
-        _draggable.call(this);
+        // _draggable.call(this);
         if (o.contentTouchScroll) { _contentDraggable.call(this); }
         _selectable.call(this);
         if (o.mouseWheel.enable) { /* bind mousewheel fn when plugin is available */

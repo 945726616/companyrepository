@@ -151,11 +151,16 @@ export default {
                         _this.publicFunc.mx(".dev_list")[i].className = "dev_list dev_list_active";
                         if(type == 'IPC'){
                             // createPage("play", {parent:$("#dev_main_right")})
-                            _this.$router.push({name:'play',params:{parent:$("#dev_main_right")}})
+                            _this.$router.push({name:'play',params:{parent:$("#dev_main_right"),parentId:"dev_main_right"}})
                         }else if(type == "BOX"){
                             let jumpData = {parent:$("#dev_main_right"),parentId:"dev_main_right"}
                             // createPage("boxlist", {parent:$("#dev_main_right")})
                             _this.$router.push({name:'boxlist',params:jumpData})
+                            if(_this.$route.path != '/boxlist'){
+                                _this.$router.push({name:'boxlist',params:jumpData})
+                            }else{
+                                create_boxlist_page(jumpData)
+                            }
                         }
                     }
                     if(state == "Online"){
@@ -179,10 +184,14 @@ export default {
                             this.className = "dev_list dev_list_active";
                             if(type == 'IPC'){
                                 // createPage("play", {parent: $("#dev_main_right")})
-                                _this.$router.push({name:'play',params:{parent:$("#dev_main_right")}})
+                                _this.$router.push({name:'play',params:{parent:$("#dev_main_right"),parentId:"dev_main_right"}})
                             }else if(type == "BOX"){
                                 // createPage("boxlist", {parent: $("#dev_main_right")})
-                                _this.$router.push({name:'boxlist',params:{parent:$("#dev_main_right")}})
+                                if(_this.$route.path != '/boxlist'){
+                                    _this.$router.push({name:'boxlist',params:{parent:$("#dev_main_right")}})
+                                }else{
+                                    create_boxlist_page({parent:$("#dev_main_right")})
+                                }
                             }
                         }else if(state == "InvalidAuth"){
                             $("#add_device_page").show();

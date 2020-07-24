@@ -672,7 +672,7 @@ const set = {
             let result = login.get_ret(res_net_get)
             if (result === '') {
               let res_net_get_returnItem // 对net_get接口返回的参数进行整理处理后的结果
-              let msg = res_net_get.data ? res_net_get.data.net_info : ""
+              let msg = res_net_get.data ? res_net_get.data.info : ""
               networks = msg.ifs;
               dns = msg.dns;
               res_net_get_returnItem = { result: result, networks: networks, dns: dns }
@@ -736,10 +736,10 @@ const set = {
         text = msg.text;
         text_enable = msg.text_enable;
         week_enable = msg.week;
-        date_format = msg.datetime.date_format;
-        date_enable = msg.datetime.date_enable;
-        time_12h = msg.datetime.enable_12h;
-        time_enable = msg.datetime.time_enable;
+        date_format = msg.date.date_format;
+        date_enable = msg.date.date_enable;
+        time_12h = msg.date.enable_12h;
+        time_enable = msg.date.time_enable;
       }
       returnItem = {
         result: result,
@@ -829,13 +829,13 @@ const set = {
     }).then(res => {
       let result = login.get_ret(res);
       if (result === "") {
-        let msg = (res.data && res.data.Disks) ? res.data.Disks[0] : res.data;
-        enable = msg.sd_conf.enable;
-        status = msg.status;    /* readonly/mount/repairing/formating/umount/empty */
-        capacity = msg.TotalSize;  /* Total disk size */
-        usage = msg.UsedSize;    /* Used size */
-        availableSize = msg.AvailableSize;
-        conf = msg.sd_conf;
+        let msg = (res.data && res.data.disks) ? res.data.disks[0] : res.data;
+        enable = msg.conf.enable;
+        status = msg.stat;    /* readonly/mount/repairing/formating/umount/empty */
+        capacity = msg.size;  /* Total disk size */
+        usage = msg.used_size;    /* Used size */
+        availableSize = msg.available_size;
+        conf = msg.conf;
       }
       returnItem = {
         result: result,
@@ -1665,7 +1665,7 @@ const set = {
         await set.mic_get({
           sn: params.sn
         }).then(res_mic_get => {
-          returnItem = { result: login.get_ret(res_mic_get), speaker_level: res_speaker_get.data.AudioOutputConfiguration.OutputLevel, mic_level: res_mic_get.data.Configurations[0].SourceLevel }
+          returnItem = { result: login.get_ret(res_mic_get), speaker_level: res_speaker_get.data.conf.level, mic_level: res_mic_get.data.conf[0].level }
         })
       } else {
         returnItem = { result: login.get_ret(res_speaker_get) }

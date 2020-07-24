@@ -217,9 +217,9 @@ const login = {
   ** 该方法定义计时器进行循环, 根据不同情况选择循环的方法
   */
   mmq_pick () {
-    if (store.state.user.setMmqPickTimeFlag) { // 判断现在定时器标识是否存在
-      clearInterval(store.state.user.setMmqPickTimeFlag)
-      store.dispatch('setMmqPickTimeFlag', null)
+    if (store.state.user.setMmqPickTimeFlag1) { // 判断现在定时器标识是否存在
+      clearInterval(store.state.user.setMmqPickTimeFlag1)
+      store.dispatch('setMmqPickTimeFlag1', null)
     }
     axios.get('/ccm/mmq_pick', {
       params: {
@@ -227,9 +227,9 @@ const login = {
         timeout: 300000
       }
     }).then(res => {
-      //console.log(res, 'mmq_pick_res')
+      // console.log(res, 'mmq_pick_res')
       let returnItem
-      if (res && res.type === 'ccm_message') { // 轮询返回消息内容, 需要根据消息调用对应的消息处理方法
+      if (res && res.type === 'ccm_msg') { // 轮询返回消息内容, 需要根据消息调用对应的消息处理方法
         returnItem = {
           result: '',
           items: res.data.items

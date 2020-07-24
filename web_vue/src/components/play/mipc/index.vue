@@ -16,6 +16,12 @@ export default {
             l_dom_ptz_control_right,
             l_dom_ptz_control_up,
             l_dom_ptz_control_down,
+            l_dom_ptz_control_center,
+            l_dom_mipc_ptz_control,
+            l_dom_play_view_width,
+            l_dom_play_view_height,
+            l_dom_play_view_top,
+            l_dom_play_view_left,
             l_dom_turn_left,
             l_dom_turn_right,
             l_dom_turn_up,
@@ -34,7 +40,7 @@ export default {
             // support_1080p=-1,
             support_1080p = "",
             is_playing = 0;
-        if (g_local) {
+        if (_this.$store.state.jumpPageData.localFlag) {
             // console.log("本地")
         } else {
             // console.log("非本地")
@@ -61,7 +67,7 @@ export default {
             + "</div>")
         let local_play_data = {};
         local_play_data.addr = obj.addr;
-        local_play_data.password = mlocal_storage.get("pass_" + g_select_device_ipc);
+        local_play_data.password = sessionStorage.getItem("pass_" + _this.$store.state.jumpPageData.selectDeviceIpc);
         local_play_data.dom = _this.publicFunc.mx("#play_screen");
         local_play_data.profile_token = "p0";
         local_play_data.func = function (msg) { _this.publicFunc.msg_tips({ msg: msg, type: "error", timeout: 3000 }) };
@@ -77,14 +83,18 @@ export default {
         let l_dom_play_buffer_ret = _this.publicFunc.mx("#play_buffer_ret");
         let l_play_box_width = l_dom_play_box.offsetWidth;
         let l_dev_main_left = _this.publicFunc.mx("#dev_main_left");
-        let l_height = _this.publicFunc.mx("#web").offsetWidth * 0.4 + 11;
+        let l_height = _this.publicFunc.mx("#top").offsetWidth * 0.4 + 11;
         let l_play_menu_box_height = l_dom_play_menu_box.offsetHeight - 1;
         let l_play_view_top = l_dom_play_view.offsetTop;
         let l_dom_play_box_width = document.body.clientWidth - l_dev_main_left.offsetWidth - 60;
         l_dom_play_box.style.width = l_dom_play_box_width + "px";
         l_dom_play_view.style.height = l_height + "px";
         l_dom_play_screen.style.height = (l_dom_play_box_width * 0.563) + "px";
-        msdk_ctrl({ type: "play_get_definition", data: { sn: g_select_device_ipc, func: function (msg) { l_white_light = msg.white_light; } } })
+        _this.$api.set.dev_info({ //ms.send_msg("dev_info_get"
+            sn: _this.$store.state.jumpPageData.selectDeviceIpc
+          }).then(res => {
+            l_white_light = res.white_light;
+          })
         get_definition();
         play_menu_control({ parent: l_dom_play_menu_box });
         play_view_control({ parent: l_dom_play_view_control });
@@ -180,7 +190,7 @@ export default {
                 + g_text
                 + "<div id='adjust_reset'>" + mcs_reset + "</div>"
                 + "</div>";
-            if (g_experience) {
+            if (_this.$store.state.jumpPageData.experienceFlag) {
                 $("#enter_set").hide();
             }
             // get_definition();
@@ -217,7 +227,7 @@ export default {
             l_dom_voice_close_open.style.display = 'none'
 
             let l_dom_definition_cha = _this.publicFunc.mx(".definition_cha")
-            if (g_now_lang == 'vi') {
+            if (sessionStorage.getItem('userLanguage') == 'vi') {
                 for (let i = 0; i < l_dom_definition_cha.length; i++) {
                     l_dom_definition_cha[i].style.width = 78 + 'px'
                 }
@@ -237,35 +247,47 @@ export default {
             };
             l_dom_fluency_definition.onclick = function () {
                 $("#choice_play_definition").hide();
-                mlocal_storage.set("PlayProfile", "p2");
+                sessionStorage.setItem("PlayProfile", "p2");
                 $("#resolute_choice").text(mcs_fluent_clear);
                 if (is_playing) {
-                    if (g_local) {
+                    if (_this.$store.state.jumpPageData.localFlag) {
                         local_play_data.profile_token = "p2";
-                        local_play_data.sn = g_select_device_ipc;
+                        local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
                         msdk_ctrl({ type: "local_device_play", data: local_play_data });
                     } else {
-                        msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: g_select_device_ipc, profile_token: "p2", func: play_speed } });
+                        _this.$api.play.play({
+                            dom: $("#play_screen"),
+                            sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                            profile_token: "p2"
+                        }).then(res => {
+                            play_speed(res)
+                        })
                     }
                 }
             };
             l_dom_standard_definition.onclick = function () {
                 $("#choice_play_definition").hide();
-                mlocal_storage.set("PlayProfile", "p1");
+                sessionStorage.setItem("PlayProfile", "p1");
                 $("#resolute_choice").text(mcs_standard_clear);
                 if (is_playing) {
-                    if (g_local) {
+                    if (_this.$store.state.jumpPageData.localFlag) {
                         local_play_data.profile_token = "p1";
-                        local_play_data.sn = g_select_device_ipc;
+                        local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
                         msdk_ctrl({ type: "local_device_play", data: local_play_data });
                     } else {
-                        msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: g_select_device_ipc, profile_token: "p1", func: play_speed } });
+                        _this.$api.play.play({
+                            dom: $("#play_screen"),
+                            sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                            profile_token: "p1"
+                        }).then(res => {
+                            play_speed(res)
+                        })
                     }
                 }
             };
             l_dom_high_definition.onclick = function () {
                 $("#choice_play_definition").hide();
-                mlocal_storage.set("PlayProfile", "p0");
+                sessionStorage.setItem("PlayProfile", "p0");
                 if (g_oems == "vsmahome") {
                     $("#resolute_choice").text(mcs_new_hd);
                 } else {
@@ -285,70 +307,84 @@ export default {
                     $("#resolute_choice").text(support_1080p);
                 }
                 if (is_playing) {
-                    if (g_local) {
+                    if (_this.$store.state.jumpPageData.localFlag) {
                         local_play_data.profile_token = "p0";
-                        local_play_data.sn = g_select_device_ipc;
+                        local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
                         msdk_ctrl({ type: "local_device_play", data: local_play_data });
                     } else {
-                        msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: g_select_device_ipc, profile_token: "p0", func: play_speed } });
+                        _this.$api.play.play({
+                            dom: $("#play_screen"),
+                            sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                            profile_token: "p0"
+                        }).then(res => {
+                            play_speed(res)
+                        })
                     }
                 }
             };
             l_dom_full_screen.onclick = function () {
-                msdk_ctrl({ type: "play_fullscreen", data: {} });
+                _this.$api.play.fullscreen()
             }
             l_dom_enter_set.onclick = function () {
                 _this.publicFunc.showBufferPage()
-                msdk_ctrl({
-                    type: "dev_info", data: {
-                        sn: g_select_device_ipc, func: function (msg) {
-                            // $("#buffer_page").hide();
-                            let jumpData;
-                            _this.publicFunc.closeBufferPage()
-                            if (msg.result == "") {
-                                if (msg.fisheye) {
-                                    jumpData = { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "mipc" };
-                                    // createPage("set", { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "mipc" });
-                                    _this.$route.push({name:'set',params:jumpData})
-                                } else if (msg.oscene) {
-                                    jumpData = { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" };
-                                    // createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" });
-                                    _this.$route.push({name:'set',params:jumpData})
-                                } else {
-                                    jumpData = { parent: $("#page"), back_page: "play", type: 3, addr: obj.addr, web_name: "mipc" };
-                                    // createPage("set", { parent: $("#page"), back_page: "play", type: 3, addr: obj.addr, web_name: "mipc" });
-                                    _this.$route.push({name:'set',params:jumpData})
-                                }
-                            } else {
-                                jumpData = { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" };
-                                // createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" });
-                                _this.$route.push({name:'set',params:jumpData})
-                            }
+                _this.$api.set.dev_info({
+                    sn: _this.$store.state.jumpPageData.selectDeviceIpc
+                }).then(res => {
+                    _this.publicFunc.closeBufferPage()
+                    if (res.result == "") {
+                        if (res.fisheye) {
+                            jumpData = { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "mipc" };
+                            // createPage("set", { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "mipc" });
+                            _this.$route.push({name:'set',params:jumpData})
+                        } else if (res.oscene) {
+                            jumpData = { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" };
+                            // createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" });
+                            _this.$route.push({name:'set',params:jumpData})
+                        } else {
+                            jumpData = { parent: $("#page"), back_page: "play", type: 3, addr: obj.addr, web_name: "mipc" };
+                            // createPage("set", { parent: $("#page"), back_page: "play", type: 3, addr: obj.addr, web_name: "mipc" });
+                            _this.$route.push({name:'set',params:jumpData})
                         }
+                    } else {
+                        jumpData = { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" };
+                        // createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" });
+                        _this.$route.push({name:'set',params:jumpData})
                     }
                 })
             }
 
             l_dom_enter_history.onclick = function () {
-                createPage("history", { parent: $("#dev_main_page"), dev_sn: g_select_device_ipc, back_page: "playpage" })
+                let jumpData = { parent: $("#dev_main_page"), dev_sn: _this.$store.state.jumpPageData.selectDeviceIpc, back_page: "playpage" };
+                // createPage("history", { parent: $("#dev_main_page"), dev_sn: _this.$store.state.jumpPageData.selectDeviceIpc, back_page: "playpage" })
+                _this.$route.push({name:'history',params:jumpData})
             }
             l_dom_video_play.onclick = function () {
                 let class_name = this.className;
                 if (class_name == "video_play_stop") {
                     is_playing = 1;
-                    let profile_token = mlocal_storage.get("PlayProfile") ? mlocal_storage.get("PlayProfile") : "p0";
-                    if (g_local) {
+                    let profile_token = sessionStorage.getItem("PlayProfile") ? sessionStorage.getItem("PlayProfile") : "p0";
+                    if (_this.$store.state.jumpPageData.localFlag) {
                         local_play_data.profile_token = profile_token;
-                        local_play_data.sn = g_select_device_ipc;
+                        local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
                         msdk_ctrl({ type: "local_device_play", data: local_play_data });
                     } else {
-                        msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: g_select_device_ipc, profile_token: profile_token, func: play_speed } });
+                        _this.$api.play.play({
+                            dom: $("#play_screen"),
+                            sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                            profile_token: profile_token
+                        }).then(res => {
+                            play_speed(res)
+                        })
                     }
                     $("#play_view_control").show();
                     this.className = "video_play_start";
                 } else if (class_name == "video_play_start") {
                     is_playing = 0;
-                    msdk_ctrl({ type: "play_video_stop", data: { dom: l_dom_play_screen, func: create_preview } })
+                    _this.$api.play.video_stop({
+                        dom: $("#play_screen")
+                    }).then(res => {
+                        create_preview(res)
+                    })
                     this.className = "video_play_stop";
                     $("#play_view_control").hide();
                 }
@@ -356,21 +392,27 @@ export default {
             l_dom_voice_close_open.onclick = function () {
                 let class_name = this.className;
                 if (class_name == "voice_close_close") {
-                    msdk_ctrl({ type: "play_voice", data: { flag: 0 } })
+                    _this.$api.play.voice({ flag: 0 })
                     l_dom_voice_close_open.className = "voice_close_open";
                 } else {
-                    msdk_ctrl({ type: "play_voice", data: { flag: 1 } })
+                    _this.$api.play.voice({ flag: 1 })
                     l_dom_voice_close_open.className = "voice_close_close";
                 }
             };
             l_dom_video_off_pic.onclick = function () {
                 if (l_dom_video_off_pic.className == "video_on_picture") {
                     l_dom_video_off_pic.className = "video_off_picture";
-                    msdk_ctrl({ type: "play_record", data: { recording: 1, sn: g_select_device_ipc } });
+                    _this.$api.play.play_record({
+                        recording: 1,
+                        sn: _this.$store.state.jumpPageData.selectDeviceIpc
+                    })
                 }
                 else {
                     l_dom_video_off_pic.className = "video_on_picture";
-                    msdk_ctrl({ type: "play_record", data: { recording: 0, sn: g_select_device_ipc } });
+                    _this.$api.play.play_record({
+                        recording: 0,
+                        sn: _this.$store.state.jumpPageData.selectDeviceIpc
+                    })
                 }
             }
             l_dom_resolute_choice.onclick = function () {
@@ -389,11 +431,13 @@ export default {
                     _this.publicFunc.mx("#snapshot_preview_url").download = new Date().getTime() + ".jpg";
                     _this.publicFunc.mx("#snapshot_preview_url").setAttribute("href", url);
                 }
-                if (g_select_device_ipc) {
+                if (_this.$store.state.jumpPageData.selectDeviceIpc) {
                     if (!_this.publicFunc.mx("#snapshot_buffer")) {
                         $("#ptz_control_bottom_center").append("<div id='snapshot_buffer'><img src='imgs/device/snapshot.gif' style='margin-top:30%;'></div>");
                     }
-                    msdk_ctrl({ type: "play_snapshot", data: { sn: g_select_device_ipc, func: get_snapshot_ack } });
+                    _this.$api.play.play_snapshot({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => { // 调用截图接口
+                        get_snapshot_ack(res)
+                    })
                 }
             }
             l_dom_snapshot_preview_close.onclick = function () {
@@ -405,10 +449,14 @@ export default {
                     let class_name = this.className;
                     if (class_name == "talkback_off_picture") {
                         this.className = "talkback_on_picture";
-                        msdk_ctrl({ type: "play_speak", data: { flag: 1 } });
+                        _this.$api.play.play_speak({ // 调用对讲
+                            flag: 1
+                        })
                     } else {
                         this.className = "talkback_off_picture";
-                        msdk_ctrl({ type: "play_speak", data: { flag: 0 } });
+                        _this.$api.play.play_speak({ // 调用对讲
+                            flag: 0
+                        })
                     }
                 }
             }
@@ -420,7 +468,9 @@ export default {
             l_dom_adjust_off_pic.onclick = function () {
                 if (l_dom_adjust_off_pic.className == "adjust_off_picture") {
                     l_dom_adjust_off_pic.className = "adjust_on_picture";
-                    msdk_ctrl({ type: "play_adjust_get", data: { sn: g_select_device_ipc, func: adjust_get_ack } });
+                    _this.$api.play.adjust_get({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
+                        adjust_get_ack(res)
+                    })
                     $("#adjust_setting").show();
                 } else {
                     l_dom_adjust_off_pic.className = "adjust_off_picture";
@@ -488,7 +538,7 @@ export default {
             }
             function adjust_get_ack(data) {
                 l_cam_conf = data;
-                l_cam_conf.sn = g_select_device_ipc;
+                l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
                 if (l_cam_conf.day) {
                     //night,white;night,auto,1;auto,2,white;auto,2,auto,1
                     if((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1) || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1)){
@@ -607,7 +657,7 @@ export default {
                             l_cam_conf.color_saturation = parseInt(dom_in_box[2].offsetWidth / 2);
                             l_cam_conf.brightness = parseInt(dom_in_box[3].offsetWidth / 2);
                         }
-                        msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+                        _this.$api.play.adjust_set({ conf: l_cam_conf });
                         values_flag = [false, false, false, false];
                     }
                 });
@@ -647,8 +697,8 @@ export default {
                     change_cam_mode("auto");
                     l_cam_conf.day_night = "auto";
                     l_cam_conf.is_white_light = l_white_light;
-                    l_cam_conf.sn = g_select_device_ipc;
-                    msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+                    l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
+                    _this.$api.play.adjust_set({ conf: l_cam_conf });
                 };
 
                 l_dom_adjust_mode_daytime.onclick = function () {
@@ -665,7 +715,7 @@ export default {
                     change_cam_mode("day");
                     l_cam_conf.day_night = "day";
                     l_cam_conf.is_white_light = l_white_light;
-                    msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+                    _this.$api.play.adjust_set({ conf: l_cam_conf });
                 };
 
                 l_dom_adjust_mode_night.onclick = function () {
@@ -687,9 +737,9 @@ export default {
                     }
                     change_cam_mode("night");
                     l_cam_conf.day_night = "night";
-                    l_cam_conf.sn = g_select_device_ipc;
+                    l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
                     l_cam_conf.is_white_light = l_white_light;
-                    msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+                    _this.$api.play.adjust_set({ conf: l_cam_conf });
                 };
                 if (l_dom_adjust_mode_white_light) {
                     l_dom_adjust_mode_white_light.onclick = function () {
@@ -705,11 +755,11 @@ export default {
                                 dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
                             }
                         }
-                        l_cam_conf.sn = g_select_device_ipc;
+                        l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
                         l_cam_conf.is_white_light = l_white_light;
                         change_cam_light_mode("white");
                         l_cam_conf.light_mode = "white";
-                        msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+                        _this.$api.play.adjust_set({ conf: l_cam_conf });
                     };
                     l_dom_adjust_mode_infrared_light.onclick = function (){
                         if(l_cam_conf.day_night == "night"){ 
@@ -725,11 +775,11 @@ export default {
                                 dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
                             }
                         }
-                        l_cam_conf.sn = g_select_device_ipc;
+                        l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
                         l_cam_conf.is_white_light = l_white_light;
                         change_cam_light_mode("red");
                         l_cam_conf.light_mode = "red";
-                        msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+                        _this.$api.play.adjust_set({ conf: l_cam_conf });
                     }
                     l_dom_adjust_mode_smart_light.onclick = function (){
                         if(l_cam_conf.day_night == "night"){
@@ -745,11 +795,11 @@ export default {
                                 dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
                             }
                         }
-                        l_cam_conf.sn = g_select_device_ipc;
+                        l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
                         l_cam_conf.is_white_light = l_white_light;
                         change_cam_light_mode("smart");
                         l_cam_conf.light_mode = "auto";
-                        msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+                        _this.$api.play.adjust_set({ conf: l_cam_conf });
                     }
                 }
                 l_dom_adjust_reset.onclick = function () {
@@ -786,11 +836,11 @@ export default {
                     }
                     l_cam_conf.day_night = "auto";
                     l_cam_conf.light_mode = "auto";
-                    msdk_ctrl({ type: "play_adjust_set", data: { conf: l_cam_conf } });
+                    _this.$api.play.adjust_set({ conf: l_cam_conf });
                 };
             }
             //Get local storage resolution
-            if (mlocal_storage.get("PlayProfile") == "p0") {
+            if (sessionStorage.getItem("PlayProfile") == "p0") {
                 if (g_oems == "vsmahome") {
                     $("#resolute_choice").text(mcs_new_hd);
                 } else {
@@ -810,13 +860,13 @@ export default {
                     $("#resolute_choice").text(support_1080p);
                 }
             }
-            else if (mlocal_storage.get("PlayProfile") == "p1") {
+            else if (sessionStorage.getItem("PlayProfile") == "p1") {
                 $("#resolute_choice").text(mcs_standard_clear);
             }
-            else if (mlocal_storage.get("PlayProfile") == "p2") {
+            else if (sessionStorage.getItem("PlayProfile") == "p2") {
                 $("#resolute_choice").text(mcs_fluent_clear);
             }
-            else if (mlocal_storage.get("PlayProfile") == "p3") {
+            else if (sessionStorage.getItem("PlayProfile") == "p3") {
                 $("#resolute_choice").text(mcs_fluent_clear);
             }
             else {
@@ -869,7 +919,11 @@ export default {
                     }
                 }
             }
-            msdk_ctrl({ type: "play_get_definition", data: { sn: g_select_device_ipc, func: dev_info_get_ack } })
+            _this.$api.set.dev_info({ //ms.send_msg("dev_info_get"
+                sn: _this.$store.state.jumpPageData.selectDeviceIpc
+            }).then(res => {
+                dev_info_get_ack(res)
+            })
         }
         function play_view_control(data) {
             data.parent.innerHTML =
@@ -907,7 +961,7 @@ export default {
             l_dom_mipc_ptz_control.style.top = l_dom_play_view_top + "px";
             l_dom_mipc_ptz_control.style.left = l_dom_play_view_left + "px";
             l_dom_ptz_control_center.ondblclick = function () {
-                msdk_ctrl({ type: "play_fullscreen", data: {} });
+                _this.$api.play.fullscreen()
             }
             l_dom_ptz_control_left.onmouseover = function () {
                 $("#turn_left").show();
@@ -941,34 +995,57 @@ export default {
                 $("#turn_down").hide();
             };
             l_dom_turn_left.onmousedown = function () {
-                msdk_ctrl({ type: "play_ptz_turn", data: { flag: "move", direction: "left" } });
-
+                _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+                    flag: "move",
+                    direction: "left"
+                })
             };
             l_dom_turn_left.onmouseup = function () {
-                msdk_ctrl({ type: "play_ptz_turn", data: { flag: "stop", direction: "left" } });
+                _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+                    flag: "stop",
+                    direction: "left"
+                })
             };
             l_dom_turn_up.onmousedown = function () {
-                msdk_ctrl({ type: "play_ptz_turn", data: { flag: "move", direction: "up" } });
+                _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+                    flag: "move",
+                    direction: "up"
+                })
             };
 
             l_dom_turn_up.onmouseup = function () {
-                msdk_ctrl({ type: "play_ptz_turn", data: { flag: "stop", direction: "up" } });
+                _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+                    flag: "stop",
+                    direction: "up"
+                })
             };
 
             l_dom_turn_right.onmousedown = function () {
-                msdk_ctrl({ type: "play_ptz_turn", data: { flag: "move", direction: "right" } });
+                _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+                    flag: "move",
+                    direction: "right"
+                })
             };
 
             l_dom_turn_right.onmouseup = function () {
-                msdk_ctrl({ type: "play_ptz_turn", data: { flag: "stop", direction: "right" } });
+                _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+                    flag: "stop",
+                    direction: "right"
+                })
             };
 
             l_dom_turn_down.onmousedown = function () {
-                msdk_ctrl({ type: "play_ptz_turn", data: { flag: "move", direction: "down" } });
+                _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+                    flag: "move",
+                    direction: "down"
+                })
             };
 
             l_dom_turn_down.onmouseup = function () {
-                msdk_ctrl({ type: "play_ptz_turn", data: { flag: "stop", direction: "down" } });
+                _this.$api.play.play_ptz_turn({ // 摄像头转向控制
+                    flag: "stop",
+                    direction: "down"
+                })
             };
         }
         function play_speed(data) {
@@ -979,21 +1056,27 @@ export default {
                 "<div id='play_view_box'>"
                 + "<div id='play_pause_pic'></div>"
                 + "</div>"
-            if (g_local) {
-                msdk_ctrl({ type: "play_preview_img", data: { addr: obj.addr, dom: l_dom_play_screen, sn: g_select_device_ipc, pic_token: "p1_xxxxxxxxxx" } });
+            if (_this.$store.state.jumpPageData.localFlag) {
+                _this.$api.play.play_preview_img({ addr: obj.addr, dom: $("#play_screen"), sn: _this.$store.state.jumpPageData.selectDeviceIpc, pic_token: "p1_xxxxxxxxxx" })
             } else {
-                msdk_ctrl({ type: "play_preview_img", data: { dom: l_dom_play_screen, sn: g_select_device_ipc, pic_token: "p1_xxxxxxxxxx" } });
+                _this.$api.play.play_preview_img({ dom: $("#play_screen"), sn: _this.$store.state.jumpPageData.selectDeviceIpc, pic_token: "p1_xxxxxxxxxx" })
             }
             l_dom_play_view_box = _this.publicFunc.mx("#play_view_box");
             l_dom_play_view_box.onclick = function () {
-                let profile_token = mlocal_storage.get("PlayProfile") ? mlocal_storage.get("PlayProfile") : "p0";
+                let profile_token = sessionStorage.getItem("PlayProfile") ? sessionStorage.getItem("PlayProfile") : "p0";
                 is_playing = 1;
-                if (g_local) {
+                if (_this.$store.state.jumpPageData.localFlag) {
                     local_play_data.profile_token = profile_token;
-                    local_play_data.sn = g_select_device_ipc;
+                    local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
                     msdk_ctrl({ type: "local_device_play", data: local_play_data });
                 } else {
-                    msdk_ctrl({ type: "play", data: { dom: l_dom_play_screen, sn: g_select_device_ipc, profile_token: profile_token, func: play_speed } });
+                    _this.$api.play.play({
+                        dom: $("#play_screen"),
+                        sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                        profile_token: profile_token
+                    }).then(res => {
+                        play_speed(res)
+                    })
                 }
                 $("#video_play").attr("class", "video_play_start");
                 $("#play_view_control").show();
@@ -1028,6 +1111,9 @@ export default {
       pageData.parent = $("#" + this.$route.name)
     }else{
       pageData = {parent: $("#" + this.$route.name)}
+    }
+    if(pageData.parent.length == 0){
+      pageData.parent = $("#" + pageData.parentId)
     }
     // console.log(pageData,"pageData")
     await this.mipcPlay(pageData) // 进入页面后加载
