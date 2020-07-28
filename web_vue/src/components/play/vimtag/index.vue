@@ -119,8 +119,8 @@ export default {
         l_dom_play_view.style.height = "586px";
         l_dom_device_list_sidebar_center.style.height = "586px";
         l_dom_play_view.style.marginLeft = "0px";
-        $("#play_screen").style.height = "100%";
-        $("#play_screen").style.width = "100%";
+        $("#play_screen").css('height', '100%')
+        $("#play_screen").css('width', '100%')
         l_dom_play_buffer_ret.style.width = '934px';
         _this.publicFunc.mx("#play_dev_list").setAttribute("style", "width:234px;float:left;background:#ebebeb;display:block;");
         if (pc_is_offline == 1) {

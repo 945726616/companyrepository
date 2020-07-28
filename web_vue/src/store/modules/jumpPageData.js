@@ -139,7 +139,11 @@ const jumpPageData = {
     setSupportFilterFlag: ({ commit }, supportFilterFlag) => commit('SET_SUPPORT_FILTER_FLAG', supportFilterFlag),
     setSupportTreeFlag: ({ commit }, supportTreeFlag) => commit('SET_SUPPORT_TREE_FLAG', supportTreeFlag),
     setBufferPageFlag: ({ commit }, bufferPageFlag) => commit('SET_BUFFER_PAGE_FLAG', bufferPageFlag),
-    setDeviceData: ({ commit }, deviceData) => commit('SET_DEVICE_DATA', deviceData),
+    setDeviceData: ({ commit }, deviceData) => {
+      if (deviceData) {
+        commit('SET_DEVICE_DATA', deviceData)
+      }
+    },
     setLocalFlag: ({ commit }, localFlag) => commit('SET_LOCAL_FLAG', localFlag),
     setAutoPlayFlag: ({ commit }, autoPlayFlag) => commit('SET_AUTO_PLAY_FLAG', autoPlayFlag),
     setSelectDeviceIpc: ({ commit }, selectDeviceIpc) => commit('SET_SELECT_DEVICE_IPC', selectDeviceIpc),

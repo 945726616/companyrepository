@@ -145,7 +145,7 @@ const playback = {
           }).then(res => {
             returnItem = {
               result: login.get_ret(res),
-              url: (res.data.Uri ? res.data.Uri : ""),
+              url: (res.data.url ? res.data.url : ""),
               type: "playback"
             }
           })

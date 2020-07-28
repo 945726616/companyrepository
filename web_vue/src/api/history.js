@@ -528,7 +528,7 @@ const history = {
       return result;
     }
     let cutVideoData = {
-      local_cut_video_data: local_cut_video_data.reverse(),
+      local_cut_video_data: local_cut_video_data,
       local_video_time_duration: local_video_time_duration
     };
     return cutVideoData;
@@ -636,10 +636,6 @@ const history = {
   },
   async boxlist_device_messages_get_ack(msg, ref) {
     let returnItem;
-    function getDateForStringDate(strDate) {
-      let s = strDate.split(".");
-      return new Date(s[0], s[1] - 1, s[2], s[3], s[4], s[5]);
-    }
     if (msg && !msg.result && msg.date_infos) {
       let l_local_date_infos = [];
       let date_infos_time = [];
@@ -650,10 +646,10 @@ const history = {
         let date_mis = new Date(l_date_infos[i].date * 1000).format("yyyy.MM.dd.00.00.00");
         if (i > 0) {
           l_local_date_infos[l_local_date_infos.length] = date_mis;
-          date_infos_time[date_infos_time.length] = (getDateForStringDate(l_local_date_infos[l_local_date_infos.length - 1])).getTime();
+          date_infos_time[date_infos_time.length] = (this.getDateForStringDate(l_local_date_infos[l_local_date_infos.length - 1])).getTime();
         } else if (i === 0) {
           l_local_date_infos[i] = date_mis;
-          date_infos_time[i] = (getDateForStringDate(l_local_date_infos[i])).getTime();
+          date_infos_time[i] = (this.getDateForStringDate(l_local_date_infos[i])).getTime();
         }
       }
       let nowtime = new Date().getTime(); //当前的时间 如果记录哪天有视频的返回时间超过该值，过滤掉
@@ -669,7 +665,7 @@ const history = {
       }); //从小到大排序
       if (ref.start_time === 0) {
         start_time = new Date(l_date_infos[l_date_infos.length - 1].date * 1000).format("yyyy.MM.dd.00.00.00");
-        start_time = getDateForStringDate(start_time).getTime();
+        start_time = this.getDateForStringDate(start_time).getTime();
         if (start_time === -28800000) {
           start_time = 0
         }
@@ -708,6 +704,10 @@ const history = {
       }
     }
     return returnItem
+  },
+  getDateForStringDate(strDate) {
+    let s = strDate.split(".");
+    return new Date(s[0], s[1] - 1, s[2], s[3], s[4], s[5]);
   },
   /*
    ** 历史记录删除

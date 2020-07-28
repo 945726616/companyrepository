@@ -9,6 +9,9 @@ const login = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/l
 const devlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/devlist/mipc')
 const boxlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/boxlist')
 const play = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/play/mipc')
+const history = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/history/mipc')
+const set = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/set')
+const playback = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/playback')
 
 const mipcRouter = new Router({
   routes: [
@@ -33,6 +36,21 @@ const mipcRouter = new Router({
           component: play
         }
       ]
+    },
+    {
+      path: '/history',
+      name: 'history',
+      component: history
+    },
+    {
+      path: '/set',
+      name: 'set',
+      component: set
+    },
+    {
+      path: '/playback',
+      name: 'playback',
+      component: playback
     }
   ]
 })

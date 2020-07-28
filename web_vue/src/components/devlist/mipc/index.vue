@@ -83,13 +83,13 @@ export default {
                 create_dev_left_event();
             }
 
-            function get_dev_list(type){
+            async function get_dev_list(type){
                 if(_this.$store.state.jumpPageData.deviceData.length == 0 || type === 'refresh'){
-                   _this.$api.devlist.devs_refresh().then(res => {
+                   await _this.$api.devlist.devs_refresh().then( res => {
                         device_list(res)
                     })
                 }else{
-                    device_list(_this.$store.state.jumpPageData.deviceData);
+                    await device_list(_this.$store.state.jumpPageData.deviceData);
                 }
             }
             get_dev_list()
@@ -955,6 +955,7 @@ export default {
         }
   },
   async mounted() {
+    this.publicFunc.projectReload.call(this);
     let userLanguage = sessionStorage.getItem("userLanguage");
     if (userLanguage) {
       await this.$chooseLanguage.lang(userLanguage);
@@ -979,7 +980,7 @@ export default {
     if (!this.$store.state.jumpPageData.projectFlag) {
       $("#top_experience_div").css("display", "none");
     }
-    this.publicFunc.projectReload.call(this);
+    
   }
 };
 </script>

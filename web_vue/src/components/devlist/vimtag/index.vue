@@ -64,7 +64,7 @@ export default {
         + "</div>"
         + "<div id='vimtag_device_list_box'></div>")
       if (window.fujikam === "fujikam") { // 判断平台是否为客户端
-        this.check_app_version()
+        // this.check_app_version()
         $("#device_list_menu").attr("style", "width:85%;height:40px;margin:0 auto;margin-top:20px")
         $("#vimtag_device_list_box").attr("style", "width:90%")
       }
@@ -1816,6 +1816,7 @@ export default {
     },
     //实现拖拽功能
     check_app_version () {
+      let _this = this
       let version_type = "";
       let app_version = window.appVersion ? window.appVersion : "";
       if (navigator.userAgent.indexOf("Intel Mac") > -1) {

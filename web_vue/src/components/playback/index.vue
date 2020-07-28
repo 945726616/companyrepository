@@ -3,6 +3,7 @@
 </template>
 <script>
 import fdSliderController from '../../util/fdSliderController'
+import languageSelect from '../../lib/exportModule/languageSelect.js'
 export default {
   methods: {
     create_playback_page (obj) {
@@ -160,13 +161,6 @@ export default {
                 playback_speed(res[0], res[1], res[2])
               })
             })
-            // msdk_ctrl({
-            //   type: "play_video_stop", data: {
-            //     dom: l_dom_playback_screen, func: function () {
-            //       msdk_ctrl({ type: "playback", data: { agent: obj.agent, dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, videoSize: videoSize, token: play_back_token, func: playback_speed } });
-            //     }
-            //   }
-            // });
           }
         }
         if (window.fujikam == "fujikam") { // 客户端播放方法
@@ -180,7 +174,6 @@ export default {
               }).then(res => {
                 create_preview(res)
               })
-              // msdk_ctrl({ type: "play_video_stop", data: { dom: l_dom_playback_screen, func: create_preview } });
             } else {
               is_playing = 1;
               if (!first) {
@@ -196,7 +189,6 @@ export default {
                 }).then(res => {
                   playback_speed(res[0], res[1], res[2])
                 })
-                // msdk_ctrl({ type: "playback", data: { agent: obj.agent, dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, videoSize: videoSize, token: obj.token, func: playback_speed } });
               } else {
                 // console.log('运行至此处')
                 _this.$api.play.play({ // 原playback接口
@@ -209,7 +201,6 @@ export default {
                 }).then(res => {
                   playback_speed(res[0], res[1], res[2])
                 })
-                // msdk_ctrl({ type: "playback", data: { agent: obj.agent, dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, videoSize: videoSize, token: play_back_token, func: playback_speed } });
               }
               $("#video_play").attr("class", "video_play_start");
             }
@@ -296,7 +287,6 @@ export default {
             }).then(res => {
               download_info(res)
             })
-            // msdk_ctrl({ type: "play_back_download", data: { dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, token: obj.download_token, download_path: download_path, videoSize: videoSize, func: download_info } });
           } else {
             _this.$api.play.play({ // 原play_back_download接口
               agent: obj.agent,
@@ -309,7 +299,6 @@ export default {
             }).then(res => {
               download_info(res)
             })
-            // msdk_ctrl({ type: "play_back_download", data: { dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, token: obj.token, download_path: download_path, videoSize: videoSize, func: download_info } });
           }
         }
       }
@@ -376,7 +365,6 @@ export default {
             }).then(res => {
               create_preview(res)
             })
-            // msdk_ctrl({ type: "play_video_stop", data: { dom: l_dom_playback_screen, func: create_preview } });
           }
         }
         if(!data)data = null
@@ -419,7 +407,6 @@ export default {
             }).then(res => {
               playback_speed(res)
             })
-            // msdk_ctrl({ type: "playback", data: { agent: obj.agent, dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, videoSize: videoSize, token: obj.token, func: playback_speed } });
           } else {
             _this.$api.playback.play({ // 原playback接口
               agent: obj.agent,
@@ -431,7 +418,6 @@ export default {
             }).then(res => {
               playback_speed(res[0], res[1], res[2])
             })
-            // msdk_ctrl({ type: "playback", data: { agent: obj.agent, dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, videoSize: videoSize, token: play_back_token, func: playback_speed } });
           }
           $("#video_play").attr("class", "video_play_start");
         }

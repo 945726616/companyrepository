@@ -390,17 +390,7 @@ const login = {
     return CryptoJS.DES.encrypt(CryptoJS.enc.Hex.parse(pwd_md5_hex), CryptoJS.enc.Hex.parse(md5.hex(store.state.user.shareKey)), { iv: CryptoJS.enc.Hex.parse('0000000000000000'), padding: CryptoJS.pad.NoPadding }).ciphertext.toString()
   },
   get_ret (msg) { // 部分函数返回值取舍判断函数
-    let ret = (msg && msg.data) ? (msg.data.ret || msg.data.result || msg.data.Result) : null
-    if(Object.prototype.hasOwnProperty.call(ret, "Code")){//将接口返回名称小写
-      ret["code"] = ret.Code;
-      ret["sub"] = ret.SubCode;
-      ret["reason"] = ret.Reason;
-      ret["sesc"] = ret.Desc;
-      delete ret.Code;
-      delete ret.SubCode;
-      delete ret.Reason;
-      delete ret.Desc;
-    }
+    let ret = (msg && msg.data) ? (msg.data.ret || msg.data.result) : null
     if (Object.prototype.toString.call(ret) === "[object String]") {
       return ret
     }

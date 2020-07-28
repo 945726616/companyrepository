@@ -94,9 +94,9 @@ export default {
             sn: _this.$store.state.jumpPageData.selectDeviceIpc
           }).then(res => {
             l_white_light = res.white_light;
+            play_menu_control({ parent: l_dom_play_menu_box });
+            get_definition();
           })
-        get_definition();
-        play_menu_control({ parent: l_dom_play_menu_box });
         play_view_control({ parent: l_dom_play_view_control });
         create_preview({ parent: l_dom_play_screen });
 
@@ -288,7 +288,7 @@ export default {
             l_dom_high_definition.onclick = function () {
                 $("#choice_play_definition").hide();
                 sessionStorage.setItem("PlayProfile", "p0");
-                if (g_oems == "vsmahome") {
+                if (_this.$store.state.jumpPageData.projectName == "vsmahome") {
                     $("#resolute_choice").text(mcs_new_hd);
                 } else {
                     // if(support_1080p==-1){  
@@ -331,24 +331,25 @@ export default {
                     sn: _this.$store.state.jumpPageData.selectDeviceIpc
                 }).then(res => {
                     _this.publicFunc.closeBufferPage()
+                    let jumpData;
                     if (res.result == "") {
                         if (res.fisheye) {
                             jumpData = { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "mipc" };
                             // createPage("set", { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "mipc" });
-                            _this.$route.push({name:'set',params:jumpData})
+                            _this.$router.push({name:'set',params:jumpData})
                         } else if (res.oscene) {
                             jumpData = { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" };
                             // createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" });
-                            _this.$route.push({name:'set',params:jumpData})
+                            _this.$router.push({name:'set',params:jumpData})
                         } else {
                             jumpData = { parent: $("#page"), back_page: "play", type: 3, addr: obj.addr, web_name: "mipc" };
                             // createPage("set", { parent: $("#page"), back_page: "play", type: 3, addr: obj.addr, web_name: "mipc" });
-                            _this.$route.push({name:'set',params:jumpData})
+                            _this.$router.push({name:'set',params:jumpData})
                         }
                     } else {
                         jumpData = { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" };
                         // createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" });
-                        _this.$route.push({name:'set',params:jumpData})
+                        _this.$router.push({name:'set',params:jumpData})
                     }
                 })
             }
@@ -356,7 +357,7 @@ export default {
             l_dom_enter_history.onclick = function () {
                 let jumpData = { parent: $("#dev_main_page"), dev_sn: _this.$store.state.jumpPageData.selectDeviceIpc, back_page: "playpage" };
                 // createPage("history", { parent: $("#dev_main_page"), dev_sn: _this.$store.state.jumpPageData.selectDeviceIpc, back_page: "playpage" })
-                _this.$route.push({name:'history',params:jumpData})
+                _this.$router.push({name:'history',params:jumpData})
             }
             l_dom_video_play.onclick = function () {
                 let class_name = this.className;
@@ -841,7 +842,7 @@ export default {
             }
             //Get local storage resolution
             if (sessionStorage.getItem("PlayProfile") == "p0") {
-                if (g_oems == "vsmahome") {
+                if (_this.$store.state.jumpPageData.projectName == "vsmahome") {
                     $("#resolute_choice").text(mcs_new_hd);
                 } else {
                     // if(support_1080p==-1){  
@@ -878,7 +879,7 @@ export default {
             function dev_info_get_ack(msg) {
                 l_white_light = msg.white_light;
                 play_menu_control({ parent: l_dom_play_menu_box });
-                if (g_oems == "vsmahome") {
+                if (_this.$store.state.jumpPageData.projectName == "vsmahome") {
                     _this.publicFunc.mx("#high_definition").innerHTML = mcs_high_clear;
                 } else {
                     // if(!msg.def){

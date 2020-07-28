@@ -94,6 +94,8 @@ export default {
       }
       // 获取onvif设备列表(用于展示渲染列表)
       function get_onvif_list (msg) {
+        _this.onvif_ipc_arr = [];
+        _this.onvif_ipc = '';
         if (msg.conf && msg.connect_infos) {
           $("#box_onvif_ipc").show(); //显示onvif
           for (let i = 0; i < msg.conf.length; i++) {
@@ -160,6 +162,7 @@ export default {
         }
         // 私有设备数组长度
         let ipcs_length = data.ipcs ? data.ipcs.length : 0;
+        _this.box_list_dom = '';
         for (let i = 0; i < ipcs_length; i++) {
           _this.box_list_dom +=
             "<div class='box_device_list_img' >"
@@ -223,38 +226,38 @@ export default {
             }
           }
         }
-        _this.publicFunc.mx("#back").onclick = function () {
-          _this.publicFunc.closeBufferPage()
-          // createPage("devlist", obj)
-          _this.$router.push({name:'devlist',params:obj})
-        }
-        _this.publicFunc.mx("#boxlist_set_btn").onclick = function () {
-          let jumpData = {parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live};
-          // createPage("set", { parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live });
-          _this.$router.push({name:'set',params:jumpData})
-        }
-        _this.publicFunc.mx("#boxlist_edit_btn").onclick = function () {
-          if ($(".del_box_ipc_btn").css("display") == "none") { // 删除关联和录像
-            $(".del_box_ipc_btn").show();
-          } else {
-            $(".del_box_ipc_btn").hide();
+        if(_this.publicFunc.mx("#back")){
+          _this.publicFunc.mx("#back").onclick = function () {
+            _this.publicFunc.closeBufferPage()
+            // createPage("devlist", obj)
+            _this.$router.push({name:'devlist',params:obj})
           }
-          if ($(".del_box_ipc_record_btn").css("display") == "none") { // 删除关联和录像
-            $(".del_box_ipc_record_btn").show();
-          } else {
-            $(".del_box_ipc_record_btn").hide();
+          _this.publicFunc.mx("#boxlist_set_btn").onclick = function () {
+            let jumpData = {parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live};
+            // createPage("set", { parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: "vimtag", box_live: obj.box_live });
+            _this.$router.push({name:'set',params:jumpData})
           }
-        }
-        if (_this.publicFunc.mx("#empty_search_btn")) {
+          _this.publicFunc.mx("#boxlist_edit_btn").onclick = function () {
+            if ($(".del_box_ipc_btn").css("display") == "none") { // 删除关联和录像
+              $(".del_box_ipc_btn").show();
+            } else {
+              $(".del_box_ipc_btn").hide();
+            }
+            if ($(".del_box_ipc_record_btn").css("display") == "none") { // 删除关联和录像
+              $(".del_box_ipc_record_btn").show();
+            } else {
+              $(".del_box_ipc_record_btn").hide();
+            }
+          }
           _this.publicFunc.mx("#empty_search_btn").onclick = function () { // 点击你的设备列表为空 搜索设备 注意这里就是搜索onvif设备的，私有设备没有相应接口
             $("#add_device_page").show();
             $("#add_device_page").css('position', 'absolute');
             create_search_onvif_box({ parent: _this.publicFunc.mx("#add_device_page") });
           }
-        }
-        _this.publicFunc.mx("#boxlist_add_btn").onclick = function () { // 根据ip 端口号进行添加设备
-          $("#add_device_page").show();
-          create_add_onvif_byip({ parent: _this.publicFunc.mx("#add_device_page") });
+          _this.publicFunc.mx("#boxlist_add_btn").onclick = function () { // 根据ip 端口号进行添加设备
+            $("#add_device_page").show();
+            create_add_onvif_byip({ parent: _this.publicFunc.mx("#add_device_page") });
+          }
         }
       }
       function create_add_onvif_byip (data) { // 绘制添加设备弹窗
@@ -355,10 +358,12 @@ export default {
             }
           }
         }
-        _this.publicFunc.mx("#boxlist_search_btn").onclick = function () {
-          $("#add_device_page").show();
-          $("#add_device_page").css('position', 'absolute');
-          create_search_onvif_box({ parent: _this.publicFunc.mx("#add_device_page") });
+        if(_this.publicFunc.mx("#boxlist_search_btn")){
+          _this.publicFunc.mx("#boxlist_search_btn").onclick = function () {
+            $("#add_device_page").show();
+            $("#add_device_page").css('position', 'absolute');
+            create_search_onvif_box({ parent: _this.publicFunc.mx("#add_device_page") });
+          }
         }
       }
       function create_search_onvif_box (data) { // 搜索onvif设备页面
@@ -573,7 +578,7 @@ export default {
     if(pageData.parent.length == 0){
       pageData.parent = $("#" + pageData.parentId)
     }
-    console.log(pageData,"pageData")
+    // console.log(pageData,"pageData")
     await this.create_boxlist_page(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {

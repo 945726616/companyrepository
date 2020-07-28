@@ -923,6 +923,15 @@ $projectColor: #2988cc;
 	align-items: center;
 	justify-content: space-around;
 }
+#adjust_setting {
+	& > .adjust_line {
+		&:nth-child(6) {
+		.adjust_mode {
+			margin-left: 55px;
+		}
+		}
+	}
+}
 .mode_cha{
 	float: left;
 	margin-left: 12px;
@@ -3053,6 +3062,9 @@ div.ibutton-label-on {
 #plugin_install_cancel_a{
 	text-align: center;
 	color: #fff;
+}
+#playback_screen{
+	position: relative;
 }
 #plugin_install_tips{
 	text-align: center;

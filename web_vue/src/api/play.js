@@ -420,9 +420,9 @@ const play = {
    ** 播放封面图
    */
   play_preview_img(params) {
-    var url = (params.addr ? "http://" + params.addr : window.location.protocol + "//" + window.location.host) + "/api/ccm/ccm_pic_get.jpg?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + params.pic_token + "&dflag=2";
-    params.dom.attr('style', 'background: url(' + url + ') no-repeat')
-    params.dom.attr('style', 'backgroundSize: 100% 100%')
+    let url = (params.addr ? "http://" + params.addr : window.location.protocol + "//" + window.location.host) + "/api/ccm/ccm_pic_get.js?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + params.pic_token + "&dflag=2";
+    params.dom.css('background', 'url(' + url + ') 100% 100% no-repeat')
+    params.dom.css('background-size', '100% 100%')
   },
   /*
    ** 全屏播放

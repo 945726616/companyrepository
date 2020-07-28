@@ -818,7 +818,7 @@ const set = {
   */
   async sd_get (params) {
     let returnItem
-    let enable, status, capacity, usage, availableSize, conf
+    let enable, status, capacity, usage, availableSize, conf, no_sdcard;
     await axios.get('/ccm/ccm_disk_get', {
       params: {
         sess: {
@@ -836,6 +836,9 @@ const set = {
         usage = msg.used_size;    /* Used size */
         availableSize = msg.available_size;
         conf = msg.conf;
+        if (status == "empty") {
+          no_sdcard = devlist.ldev_get(params.sn).type == "BOX" ? mcs_no_hard_disk : mcs_no_sdcard;
+        }
       }
       returnItem = {
         result: result,
@@ -844,7 +847,8 @@ const set = {
         capacity: capacity,
         usage: usage,
         availableSize: availableSize,
-        conf: conf
+        conf: conf,
+        no_sdcard: no_sdcard
       }
     })
     // if (returnItem && returnItem.result === "") {
@@ -1114,6 +1118,7 @@ const set = {
       let result = login.get_ret(res);
       if (result === "") {
         let msg = res.data ? res.data.Config : "";
+        console.log(msg)
         io_input = msg.IoInputMode;   /* Open:always open; Close:always close */
         io_output = msg.IoOutputMode;    /* Open:always open; Close:always close */
         sensitivity = msg.MotionLevel;  /* level of sensitivity about motion detect at day 0-100 */

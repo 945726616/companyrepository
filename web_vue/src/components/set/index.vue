@@ -3,6 +3,7 @@
 </template>
 <script>
 import fdSliderController from '../../util/fdSliderController'
+import languageSelect from '../../lib/exportModule/languageSelect.js'
 export default {
   data () {
     return {
@@ -10571,7 +10572,6 @@ export default {
                 record_new_set_time(index)
               })
               $("#submit_apply").click(function () {
-
                 _this.publicFunc.showBufferPage()
 
                 let sche = []
@@ -10953,7 +10953,7 @@ export default {
           }
 
           // ccm_dev_profile_get获取附件接口回调函数
-          function new_record_get_ack (msg) {
+          async function new_record_get_ack (msg) {
             // console.log(msg, "进入获取附件接口函数")
             // 关闭弹窗
             // _this.publicFunc.closeBufferPage()
@@ -10986,9 +10986,9 @@ export default {
               }
               //将所有外设的id改为io以方便计划表的设置
               record_all_dev = record_all_dev.sort(_this.dev_type_sort)
-              record_all_dev.forEach(function (item, index) {
+              await record_all_dev.forEach(async function (item, index) {
                 let plan_eftiv_val = [] //计划表有效值（index==0）
-                _this.$api.set.alarm_sche_get({
+                await _this.$api.set.alarm_sche_get({
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                   exdev_id: item.id
                 }).then(res => {
@@ -11554,7 +11554,6 @@ export default {
                 new_set_time(index)
               })
               $("#submit_apply").click(function () {
-
                 _this.publicFunc.showBufferPage()
 
                 let sche = []
@@ -11590,7 +11589,6 @@ export default {
                     })
 
                   } else {
-                    // console.log("调用该方法进行报警设置")
                     let sche_form = g_js_param.set_plan.sche_form
                     let cut_flag = g_set_record_alarm == 'alarm' ? 4 : 2
                     let arr_flag_index = g_set_record_alarm == 'alarm' ? 1 : 2
@@ -11616,7 +11614,6 @@ export default {
                       })
                     }
                     let plan_sel = _this.sche_trans_to_second_format(sche_form)
-                    // console.log(plan_sel)
                     let plan = _this.sche_add_action_name(plan_sel, g_js_param.set_plan.type)
                     sche = { all: 0, dev_name: g_js_param.set_plan.id, plan: plan }
                     _this.$api.set.alarm_sche_set({
@@ -11966,7 +11963,7 @@ export default {
             })
           }
 
-          function alarm_get_ack (msg, ref) {
+          async function alarm_get_ack (msg, ref) {
             if (msg && msg.result == "") {
               alarm_all_dev = msg.data.info.dev
               for (let index = 0; index < alarm_all_dev.length; index++) {
@@ -11996,8 +11993,8 @@ export default {
                   }
                 }
               }
-              alarm_all_dev.forEach(function (item, index) {
-                _this.$api.set.alarm_sche_get({
+              await alarm_all_dev.forEach(async function (item, index) {
+                await _this.$api.set.alarm_sche_get({
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                   exdev_id: item.id
                 }).then(res => {
@@ -12531,6 +12528,7 @@ export default {
     },
 
     sche_trans_to_second_format (sche) { //将7*24小时计划表转换成秒的形式
+      let _this = this;
       let plan_final = []
       let plan_info = []
       let start_index = 0
@@ -12596,6 +12594,7 @@ export default {
     },
 
     sche_add_action_name (sche, type) { // 计划表附带上动作
+      let _this = this;
       let control_time = 0
       if (type == 1 || type == 8 || type == 9 || type == 10) {
         control_time = 8000
