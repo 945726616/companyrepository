@@ -14,7 +14,7 @@ const jumpPageData = {
     supportFilterFlag: 0, // 是否支持筛选标识
     supportTreeFlag: 0, // 是否支持树形结构标识
     bufferPageFlag: null, // 遮罩层计时器
-    pcOfflineFlag: GetQueryString("pc_is_offline") ? GetQueryString("pc_is_offline") : 0, // 是否为离线模式(没有修改该数据的地方所以不设置mutation以及action)
+    // pcOfflineFlag: GetQueryString("pc_is_offline") ? GetQueryString("pc_is_offline") : 0, // 是否为离线模式(没有修改该数据的地方所以不设置mutation以及action)
     localFlag: 0, // 本地模式标识
     deviceData: [], // 全局设备列表内容数据
     autoPlayFlag: 0, // 自动播放标识
@@ -32,6 +32,7 @@ const jumpPageData = {
     boxDeviceData: [],// 定义的全局变量，初始化 ,标记实时播放列表显示,解决修改g_device_data 从云盒子返回设备列表页出错问题
     networkEnviron: '', // 代表内部网络访问或外部网络访问直接连接之间的区别非直接连接
     systemStopWait: null, // 系统停止等待
+    loginStatus:'',//Keeping the login is ipc or user
   },
   mutations: {
     SET_PAGE_DOM: (state, pageDom) => {
@@ -124,6 +125,9 @@ const jumpPageData = {
     SET_BOX_DEVICE_DATA: (state, boxDeviceData) => {
       state.boxDeviceData = boxDeviceData
     },
+    SET_LOGIN_STATUS: (state, loginStatus) => {
+      state.loginStatus = loginStatus
+    }
   },
   actions: {
     setPageDom: ({ commit }, pageDom) => commit('SET_PAGE_DOM', pageDom),
@@ -159,7 +163,8 @@ const jumpPageData = {
     setSystemStopWait: ({ commit }, systemStopWait) => commit('SET_SYSTEM_STOP_WAIT', systemStopWait),
     setKbwin: ({ commit }, kbwin) => commit('SET_KBWIN', kbwin),
     setHistoryData: ({ commit }, historyData) => commit('SET_HISTORYDATA', historyData),
-    setBoxDeviceData: ({ commit }, boxDeviceData) => commit('SET_BOX_DEVICE_DATA', boxDeviceData)
+    setBoxDeviceData: ({ commit }, boxDeviceData) => commit('SET_BOX_DEVICE_DATA', boxDeviceData),
+    setLoginStatus: ({ commit }, loginStatus) => commit('SET_LOGIN_STATUS', loginStatus)
   }
 }
 
@@ -175,7 +180,7 @@ function GetQueryString (name) { // 截取url参数函数判断其中是否含�
 function getProjectName () { // 获取项目名称从域名中截取并存储在session中
   let returnItem
   let url = window.location.href
-  console.log(url, 'vuex_href')
+  // console.log(url, 'vuex_href')
   if (url.indexOf('vimtag') > 1) {
     returnItem = 'vimtag'
   } else if (url.indexOf('mipcm') > 1) {

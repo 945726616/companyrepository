@@ -5,6 +5,7 @@ import App from './App.vue'
 import Api from './api'
 import $ from 'jquery'
 import Public from './util/public.js'
+import './util/msdk.min.js'
 
 // 引入多国语言切换插件
 import chooseLanguage from './lib/exportModule/languageExport'
@@ -39,6 +40,12 @@ Date.prototype.format = function (format) {
 			RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
 	return format;
 }
+
+// router.beforeEach((to, from, next) => {
+// 	console.log(to,"router to")
+// 	console.log(from,"router from")
+// 	next()
+// })
 
 Vue.prototype.$ = $
 Vue.prototype.$api = Api

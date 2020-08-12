@@ -315,12 +315,12 @@ export default {
                 _this.publicFunc.mx("#sd_export_submit_tip").style.color = "#ff0000";
               } else {
                 _this.publicFunc.mx("#sd_export_submit_tip").style.display = 'none';
-                _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src='./imgs/device/add_loading.gif'>";
+                _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src="+require('@/assets/device/add_loading.gif')+">";
                 // 暂时将双项目的代码简单捏合
                 if (location.href.indexOf("ebit") > -1) { // 判断页面是否为ebit
-                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src='./imgs/mipc/ebit_loading.gif'>";
+                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src="+require('@/assets/mipc/ebit_loading.gif')+">";
                 } else { // vshome/mipc
-                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src='./imgs/mipc/mipc_loading.gif'>";
+                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src="+require('@/assets/mipc/mipc_loading.gif')+">";
                 }
               }
             }
@@ -490,9 +490,9 @@ export default {
             }
           }
           if (id_name == "sd_export") {
-            _this.publicFunc.mx("#sd_export").style.background = "url('./imgs/device/c-sd.png') no-repeat";
+            _this.publicFunc.mx("#sd_export").style.background = "url("+require('@/assets/device/c-sd.png')+") no-repeat";
           } else {
-            _this.publicFunc.mx("#sd_export").style.background = "url('./imgs/device/sd.png') no-repeat";
+            _this.publicFunc.mx("#sd_export").style.background = "url("+require('@/assets/device/sd.png')+") no-repeat";
           }
           if (id_name == "local_devs") { // 点击本地搜索按钮后执行
             // console.log("进入判断")

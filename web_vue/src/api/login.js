@@ -169,9 +169,10 @@ const login = {
   ** 登录时调用创建mmq整合方法,内置判断以及多个接口的调用回调方法
   */
   dev_msg_listener_add () {
+    // console.log(store.state.user.mmqFlag,"mmqFlag")
     if (!store.state.user.mmqFlag) {
       login.mmq_create().then(res => { // 创建mmq轮询回调
-        //console.log(res, 'mmq_create_res')
+        // console.log(res, 'mmq_create_res')
         if (!res.data.result) { // 如果返回的result为''
           store.dispatch('setMmqFlag', 1) // 存储mmqFlag
           store.dispatch('setQid', res.data.qid)
@@ -180,6 +181,8 @@ const login = {
           return -1
         }
       })
+    } else {
+      login.mmq_pick()
     }
   },
   /*
@@ -201,6 +204,7 @@ const login = {
     }).then(res => {
       let mmqReason // 记录获取的回调reason
       if (res.data && res.data.ret) {
+        // console.log(res.data,"记录获取的回调reason")
         mmqReason = res.data.ret.reason
       } else {
         mmqReason = null
@@ -217,14 +221,17 @@ const login = {
   ** 该方法定义计时器进行循环, 根据不同情况选择循环的方法
   */
   mmq_pick () {
-    if (store.state.user.setMmqPickTimeFlag1) { // 判断现在定时器标识是否存在
-      clearInterval(store.state.user.setMmqPickTimeFlag1)
-      store.dispatch('setMmqPickTimeFlag1', null)
-    }
+    clearInterval(store.state.user.setMmqPickTimeFlag1)
+    store.dispatch('setMmqPickTimeFlag1', null)
+    // if (store.state.user.setMmqPickTimeFlag1) { // 判断现在定时器标识是否存在
+    //   console.log("清除setMmqPickTimeFlag1")
+    //   clearInterval(store.state.user.setMmqPickTimeFlag1)
+    //   store.dispatch('setMmqPickTimeFlag1', null)
+    // }
     axios.get('/ccm/mmq_pick', {
       params: {
         qid: store.state.user.qid,
-        timeout: 300000
+        timeout: 100000
       }
     }).then(res => {
       // console.log(res, 'mmq_pick_res')
@@ -234,20 +241,24 @@ const login = {
           result: '',
           items: res.data.items
         }
+        // console.log('此处回调至mmq_ack1')
         login.mmq_pick()
       } else if (res && res.type === 'mmq_pick_ack') { // 检测mmq是否超时失效,需要重新创建mmq_create,返回调用mmq_create函数
+        // console.log('此处回调至mmq_ack2')
         store.dispatch('setMmqFlag', 0)
         store.dispatch('setMmqPickTimeFlag2', setTimeout(function () { // 存储重新调用mmq_create定时器
           login.dev_msg_listener_add()
         }, 3000))
       }
-      store.dispatch('setMmqPickTimeFlag1', setTimeout(function () { // 存储重新调用mmq_pick定时器
-        login.mmq_pick()
-      }, 330000))
+      // store.dispatch('setMmqPickTimeFlag1', setInterval(function () { // 存储重新调用mmq_pick定时器
+      //   console.log('此处回调至mmq_ack3')
+      //   login.mmq_pick()
+      // }, 330000))
       if (returnItem) { // 如果有需要处理的消息则调用处理消息方法
         login.mmq_ack_func(returnItem)
       }
     })
+    
   },
   /*
   ** mmq轮询结果处理函数

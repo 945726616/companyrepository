@@ -74,6 +74,164 @@ export default {
 
       get_dev_list() //创建设备列表页面
 
+      if ($("#device_refresh_btn").length > 0) {
+          $("#device_refresh_btn").click(function () {
+            get_dev_list("refresh")
+          })
+        }
+        if ($("#device_list_edit").length > 0) {
+          $("#device_list_edit").click(function () {
+            if ($(".device_list_del_ico").css("display") === "none") {
+              $(".device_list_del_ico").show();
+            } else {
+              $(".device_list_del_ico").hide();
+            }
+            if (_this.$store.state.jumpPageData.supportTreeFlag) {
+              if ($(".device_list_sort_box").css("display") === "none") {
+                $(".device_list_sort_box").show();
+              } else {
+                $(".device_list_sort_box").hide();
+              }
+            }
+          })
+        }
+        $(".device_list_del_ico").on('click', function () {
+          let _this_sn = this.parentNode.parentNode.getAttribute("sn");
+          let _this_parent = this.parentNode.parentNode;
+          _this.publicFunc.delete_tips({
+            content: mcs_delete_device + "?", func: function () {
+              _this.$api.devlist.dev_del({
+                sn: _this_sn,
+                dom: _this_parent
+              }).then(res => {
+                _this.publicFunc.msg_tips({
+                  msg: res.msg,
+                  type: res.type,
+                  timeout: 3000
+                })
+                if (res.type === 'success') {
+                  _this.$api.devlist.devs_refresh().then($(res.dom).hide())
+                }
+              })
+            }
+          })
+        })
+        $(".device_list_sort_btn").click(function () { // 向cfsf添加sort（设备排序用） tree（显示树状列表用，不和昵称绑定）数据
+          let sn = this.parentNode.parentNode.parentNode.getAttribute("sn");
+          let tree = this.parentNode.parentNode.parentNode.getAttribute("tree");
+          let sort = this.parentNode.parentNode.parentNode.getAttribute("sort");
+          create_devices_group({ parent: $("#vimtag_device_list_box"), sn: sn, tree: tree, sort: sort });// 点击编辑，显示设置设备分组页面
+        })
+        if ($("#device_add_btn").length > 0) {
+          if (sessionStorage.getItem('userLanguage') === "zh") {
+            $("#device_add_btn").mouseenter(function () {
+              $('#device_add_btn_down').show().delay(1500).hide(0);
+            })
+          }
+          $("#device_add_btn").click(function () {
+            _this.addDeviceTime = new Date().getTime();//日志 点击添加设备时间
+            $('#device_add_btn_down').hide();
+            $("#add_device_page").show();
+            $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
+            create_add_devices_box({ parent: $("#add_device_page") });
+          })
+        }
+        if ($("#dev_search_btn")) {
+          $("#dev_search_btn").click(function () {
+            let search_id = $("#dev_search_input").val();
+            let tmp_data = [];
+            if (search_id) {
+              for (let i = 0; i < _this.filterData.length; i++) {
+                if (_this.filterData[i].nick.indexOf(search_id) > -1 || _this.filterData[i].sn.indexOf(search_id) > -1) {
+                  tmp_data.push(_this.filterData[i])
+                }
+                _this.searchData = tmp_data;
+                device_list(tmp_data, search_id)
+              }
+            } else {
+              _this.searchData = _this.devlistData;
+              device_list(_this.filterData)
+            }
+          })
+          $("#dev_search_input").keyup(function () {
+            let search_id = $("#dev_search_input").val();
+            let tmp_data = [];
+            if (search_id != _this.searchDevId) {
+              _this.searchDevId = search_id;
+              if (search_id) {
+                for (let i = 0; i < _this.filterData.length; i++) {
+                  if (_this.filterData[i].nick.indexOf(search_id) > -1 || _this.filterData[i].sn.indexOf(search_id) > -1) {
+                    tmp_data.push(_this.filterData[i])
+                  }
+                }
+                _this.searchData = tmp_data;
+                device_list(tmp_data, search_id)
+              } else {
+                _this.searchData = _this.devlistData;
+                device_list(_this.filterData)
+              }
+            }
+          })
+          $("#online_btn").click(function () {
+            if ($("#online_btn_box").css("display") == "none") {
+              $("#online_btn_box").slideDown();
+              $("#online_btn_direction").attr('class', 'online_btn_up')
+            } else {
+              $("#online_btn_box").slideUp();
+              $("#online_btn_direction").attr('class', 'online_btn_down')
+            }
+          })
+          $("#online_btn_select_all").click(function () {
+            $("#online_btn_box").hide();
+            $("#online_btn_direction").attr('class', 'online_btn_down')
+            $("#online_btn_span").html(mcs_all)
+            $("#online_btn").attr('class', 'online_btn')
+            _this.filterData = _this.devlistData;
+            device_list(_this.searchData)
+          })
+
+          $("#online_btn_select_online").click(function () {
+            $("#online_btn_box").hide();
+            $("#online_btn_direction").attr('class', 'online_btn_down')
+            $("#online_btn_span").html(mcs_state_device_online)
+            let tmp_data = [];
+            let tmp_filter_data = [];
+            $("#online_btn").attr('class', 'online_btn_active')
+            for (let i = 0; i < _this.searchData.length; i++) {
+              if (_this.searchData[i].stat == "Online") {
+                tmp_data.push(_this.searchData[i])
+              }
+            }
+            for (let j = 0; j < _this.devlistData.length; j++) {
+              if (_this.devlistData[j].stat == "Online") {
+                tmp_filter_data.push(_this.devlistData[j])
+              }
+            }
+            _this.filterData = tmp_filter_data;
+            device_list(tmp_data)
+          })
+          $("#online_btn_select_offline").click(function () {
+            $("#online_btn_box").hide();
+            $("#online_btn_direction").attr('class', 'online_btn_down')
+            $("#online_btn_span").html(mcs_offline_status)
+            let tmp_data = [];
+            let tmp_filter_data = [];
+            $("#online_btn").attr('class', 'online_btn_active')
+            for (let i = 0; i < _this.searchData.length; i++) {
+              if (_this.searchData[i].stat == "Offline") {
+                tmp_data.push(_this.searchData[i])
+              }
+            }
+            for (let j = 0; j < _this.devlistData.length; j++) {
+              if (_this.devlistData[j].stat == "Offline") {
+                tmp_filter_data.push(_this.devlistData[j])
+              }
+            }
+            _this.filterData = tmp_filter_data;
+            device_list(tmp_data)
+          })
+        }
+
       function get_dev_list (type) {   // 获取设备列表
         //  console.log('获取设备列表', type)
         //  console.log(_this.treeListFlag, "_this.treeListFlag")
@@ -124,7 +282,6 @@ export default {
         }
         if (_this.$store.state.jumpPageData.supportTreeFlag && flag === 1) { //是不是支持树状结构
           // console.log('是否为树形结构')
-
           get_service_record_list(0);
         } else if (_this.$store.state.jumpPageData.supportTreeFlag && flag === 0) { //从播放页面返回，不发cfsf请求
           back_flag = sessionStorage.getItem("back_flag");
@@ -459,164 +616,6 @@ export default {
             }
           }
         }
-
-        if ($("#device_refresh_btn").length > 0) {
-          $("#device_refresh_btn").click(function () {
-            get_dev_list("refresh")
-          })
-        }
-        if ($("#device_list_edit").length > 0) {
-          $("#device_list_edit").click(function () {
-            if ($(".device_list_del_ico").css("display") === "none") {
-              $(".device_list_del_ico").show();
-            } else {
-              $(".device_list_del_ico").hide();
-            }
-            if (_this.$store.state.jumpPageData.supportTreeFlag) {
-              if ($(".device_list_sort_box").css("display") === "none") {
-                $(".device_list_sort_box").show();
-              } else {
-                $(".device_list_sort_box").hide();
-              }
-            }
-          })
-        }
-        $(".device_list_del_ico").bind('click', function () {
-          let _this_sn = this.parentNode.parentNode.getAttribute("sn");
-          let _this_parent = this.parentNode.parentNode;
-          _this.publicFunc.delete_tips({
-            content: mcs_delete_device + "?", func: function () {
-              _this.$api.devlist.dev_del({
-                sn: _this_sn,
-                dom: _this_parent
-              }).then(res => {
-                _this.publicFunc.msg_tips({
-                  msg: res.msg,
-                  type: res.type,
-                  timeout: 3000
-                })
-                if (res.type === 'success') {
-                  _this.$api.devlist.devs_refresh().then($(res.dom).hide())
-                }
-              })
-            }
-          })
-        })
-        $(".device_list_sort_btn").click(function () { // 向cfsf添加sort（设备排序用） tree（显示树状列表用，不和昵称绑定）数据
-          let sn = this.parentNode.parentNode.parentNode.getAttribute("sn");
-          let tree = this.parentNode.parentNode.parentNode.getAttribute("tree");
-          let sort = this.parentNode.parentNode.parentNode.getAttribute("sort");
-          create_devices_group({ parent: $("#vimtag_device_list_box"), sn: sn, tree: tree, sort: sort });// 点击编辑，显示设置设备分组页面
-        })
-        if ($("#device_add_btn").length > 0) {
-          if (sessionStorage.getItem('userLanguage') === "zh") {
-            $("#device_add_btn").mouseenter(function () {
-              $('#device_add_btn_down').show().delay(1500).hide(0);
-            })
-          }
-          $("#device_add_btn").click(function () {
-            _this.addDeviceTime = new Date().getTime();//日志 点击添加设备时间
-            $('#device_add_btn_down').hide();
-            $("#add_device_page").show();
-            $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
-            create_add_devices_box({ parent: $("#add_device_page") });
-          })
-        }
-        if ($("#dev_search_btn")) {
-          $("#dev_search_btn").click(function () {
-            let search_id = $("#dev_search_input").val();
-            let tmp_data = [];
-            if (search_id) {
-              for (let i = 0; i < _this.filterData.length; i++) {
-                if (_this.filterData[i].nick.indexOf(search_id) > -1 || _this.filterData[i].sn.indexOf(search_id) > -1) {
-                  tmp_data.push(_this.filterData[i])
-                }
-                _this.searchData = tmp_data;
-                device_list(tmp_data, search_id)
-              }
-            } else {
-              _this.searchData = _this.devlistData;
-              device_list(_this.filterData)
-            }
-          })
-          $("#dev_search_input").keyup(function () {
-            let search_id = $("#dev_search_input").val();
-            let tmp_data = [];
-            if (search_id != _this.searchDevId) {
-              _this.searchDevId = search_id;
-              if (search_id) {
-                for (let i = 0; i < _this.filterData.length; i++) {
-                  if (_this.filterData[i].nick.indexOf(search_id) > -1 || _this.filterData[i].sn.indexOf(search_id) > -1) {
-                    tmp_data.push(_this.filterData[i])
-                  }
-                }
-                _this.searchData = tmp_data;
-                device_list(tmp_data, search_id)
-              } else {
-                _this.searchData = _this.devlistData;
-                device_list(_this.filterData)
-              }
-            }
-          })
-          $("#online_btn").click(function () {
-            if ($("#online_btn_box").css("display") == "none") {
-              $("#online_btn_box").slideDown();
-              $("#online_btn_direction").attr('class', 'online_btn_up')
-            } else {
-              $("#online_btn_box").slideUp();
-              $("#online_btn_direction").attr('class', 'online_btn_down')
-            }
-          })
-          $("#online_btn_select_all").click(function () {
-            $("#online_btn_box").hide();
-            $("#online_btn_direction").attr('class', 'online_btn_down')
-            $("#online_btn_span").html(mcs_all)
-            $("#online_btn").attr('class', 'online_btn')
-            _this.filterData = _this.devlistData;
-            device_list(_this.searchData)
-          })
-
-          $("#online_btn_select_online").click(function () {
-            $("#online_btn_box").hide();
-            $("#online_btn_direction").attr('class', 'online_btn_down')
-            $("#online_btn_span").html(mcs_state_device_online)
-            let tmp_data = [];
-            let tmp_filter_data = [];
-            $("#online_btn").attr('class', 'online_btn_active')
-            for (let i = 0; i < _this.searchData.length; i++) {
-              if (_this.searchData[i].stat == "Online") {
-                tmp_data.push(_this.searchData[i])
-              }
-            }
-            for (let j = 0; j < _this.devlistData.length; j++) {
-              if (_this.devlistData[j].stat == "Online") {
-                tmp_filter_data.push(_this.devlistData[j])
-              }
-            }
-            _this.filterData = tmp_filter_data;
-            device_list(tmp_data)
-          })
-          $("#online_btn_select_offline").click(function () {
-            $("#online_btn_box").hide();
-            $("#online_btn_direction").attr('class', 'online_btn_down')
-            $("#online_btn_span").html(mcs_offline_status)
-            let tmp_data = [];
-            let tmp_filter_data = [];
-            $("#online_btn").attr('class', 'online_btn_active')
-            for (let i = 0; i < _this.searchData.length; i++) {
-              if (_this.searchData[i].stat == "Offline") {
-                tmp_data.push(_this.searchData[i])
-              }
-            }
-            for (let j = 0; j < _this.devlistData.length; j++) {
-              if (_this.devlistData[j].stat == "Offline") {
-                tmp_filter_data.push(_this.devlistData[j])
-              }
-            }
-            _this.filterData = tmp_filter_data;
-            device_list(tmp_data)
-          })
-        }
       }
 
       function create_devices_group (data) {  //tree后设备树状分组弹出框
@@ -764,7 +763,7 @@ export default {
       }
 
       function create_search_help (data) {
-        data.parent.innerHTML =
+        data.parent.html(
           "<div id='add_devices_box'>"
           + "<div id='add_devices_box_menu'>"
           + "<div id='add_devices_box_close'></div>"
@@ -776,7 +775,7 @@ export default {
           + "<div class='device_offline_reason_public'>2、" + mcs_device_offline_check + "<span id='reconfig_wifi'>" + mcs_reconfigure + "</span>" + "</div>"
           + "<div class='device_offline_reason_public'>3、" + mcs_device_offline_fourth_reson + "</div>"
           + "</div>"
-          + "</div>";
+          + "</div>")
         $("#add_devices_box_close").click(function () {
           close_add_page()
         })
@@ -978,7 +977,7 @@ export default {
 
         function add_device_connect_power () {  //添加设备 
           if (d_type == "cm1" || d_type == "m1" || d_type == "fisheye") {
-            data.parent.html("<div id='add_devices_box'>"
+            let text = "<div id='add_devices_box'>"
               + "<div id='add_devices_box_menu'>"
               + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
               + "<div id='add_devices_box_close'></div>"
@@ -988,14 +987,19 @@ export default {
               + "<img class='dev_offline_tips_img' src="+ require( "@/assets/device/" + d_type + ".png" )+") alt=''>"
               + "<div class='dev_offline_tips_text'>" + mcs_device_offline_use_iphone + "</div>"
               + "</div>"
-              + "</div>")
+              + "</div>"
+            if(data.parent.innerHTML){
+              data.parent.innerHTML = text;
+            }else{
+              data.parent.html(text)
+            }
             $("#add_devices_box_close").click(close_add_page)
             $("#add_devices_box_back").click(function () {
               add_device_input_id()
             })
           } else {
             if (d_type === "b1" || d_type === "b2" || d_type === "b3") {
-              data.parent.html("<div id='add_devices_box'>"
+              let text = "<div id='add_devices_box'>"
                 + "<div id='add_devices_box_menu'>"
                 + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
                 + "<div id='add_devices_box_close'></div>"
@@ -1006,10 +1010,15 @@ export default {
                 + "<div class='add_devices_box_info'>" + mcs_device_outdoor_camera_connect_power + "</div>" //接通电源后，请耐心等待30秒，直到摄像机数据线上的绿色指示灯开始闪烁，摄像机启动完成
                 + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
                 + "</div>"
-                + "</div>")
+                + "</div>"
+              if(data.parent.innerHTML){
+                data.parent.innerHTML = text;
+              }else{
+                data.parent.html(text)
+              }
               add_device_connect_power_event()
             } else if (d_type === "s1") {
-              data.parent.html("<div id='add_devices_box'>"
+              let text = "<div id='add_devices_box'>"
                 + "<div id='add_devices_box_menu'>"
                 + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
                 + "<div id='add_devices_box_close'></div>"
@@ -1020,10 +1029,15 @@ export default {
                 + "<div class='add_devices_box_info'>" + mcs_device_box_connect_power + "</div>" //接通电源后，请耐心等待30秒，直到设备面板上的绿色指示灯开始闪烁，设备启动完成
                 + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
                 + "</div>"
-                + "</div>")
+                + "</div>"
+              if(data.parent.innerHTML){
+                data.parent.innerHTML = text;
+              }else{
+                data.parent.html(text)
+              }
               add_device_connect_power_event();
             } else {
-              data.parent.html("<div id='add_devices_box'>"
+              let text = "<div id='add_devices_box'>"
                 + "<div id='add_devices_box_menu'>"
                 + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
                 + "<div id='add_devices_box_close'></div>"
@@ -1035,7 +1049,12 @@ export default {
 
                 + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
                 + "</div>"
-                + "</div>")
+                + "</div>"
+              if(data.parent.innerHTML){
+                data.parent.innerHTML = text;
+              }else{
+                data.parent.html(text)
+              }
               add_device_connect_power_event();
             }
             function add_device_connect_power_event() {
@@ -1108,7 +1127,7 @@ export default {
         }
 
         function add_device_unconnect_ethernet () { //配置失败
-          data.parent.innerHTML =
+          data.parent.html(
             "<div id='add_devices_box'>"
             + "<div id='add_devices_box_menu'>"
             + "<div id='add_device_unconnect_box'>"
@@ -1121,7 +1140,7 @@ export default {
             + "<div id='add_device_fail_img'></div>"
             + "<div id='add_devices_unconnect_info' class='add_devices_box_info'>" + mcs_wifi_config_failure_reconnect + "</div>" // 配置失败，请点击重试
             + "</div>"
-            + "</div>";
+            + "</div>")
 
           function add_device_unconnect_ethernet_event () {
             $("#add_devices_box_close").click(function () {
@@ -1279,7 +1298,7 @@ export default {
         }
         function add_device_edit_pass (old_password) {
           let b_id = d_id.toUpperCase();
-          data.parent.innerHTML =
+          data.parent.innerHTML = 
             "<div id='add_devices_box'>"
             + "<div id='add_devices_box_menu'>"
             + "<div id='add_devices_box_back' style='display:none;'>" + mcs_back + "</div>"
@@ -1310,7 +1329,7 @@ export default {
             add_dev_info.title = 'edit password';
             add_dev_info.desc = 'edit password';
             add_dev_info.time = 0;
-            $("#add_devices_box_back").click(add_device_input_pass())
+            // $("#add_devices_box_back").click(add_device_input_pass()) //修改密码处无返回键，暂时隐藏
             $('#add_device_edit_confirm_pass').keyup(function () {//日志 修改密码再次确认后时间   
               add_dev_info.time = new Date().getTime() - add_device_step_time;
             })
@@ -1328,8 +1347,8 @@ export default {
               } else {
                 _this.$api.devlist.dev_passwd_set({ // 设备密码设置
                   sn: d_id,
-                  old_password: old_password,
-                  new_password: password
+                  old_pass: old_password,
+                  new_pass: password
                 }).then(res => {
                   if (res) {
                     _this.$api.devlist.dev_add({ // 添加设备
@@ -1409,7 +1428,7 @@ export default {
             $("#add_devices_box_back").click(add_device_input_id)
             for (let i = 0; i < $(".add_device_set_wifi_list").length; i++) {
               $(".add_device_set_wifi_list").eq(i).click(function () {
-                select_wifi = this.html();
+                select_wifi = this.innerHTML;
                 add_dev_info.desc = 'select wifiname_' + select_wifi + '';//日志
                 select_wifi = select_wifi.length < 20 ? select_wifi : (select_wifi.substr(0, 20) + "...");
                 $("#add_device_set_wifi_input").html(select_wifi)
@@ -1431,7 +1450,7 @@ export default {
             })
             $("#add_device_submit").click(function () {
               // console.log("点击添加wifi下一步")
-              add_set_wifi_startime = new Date().getTime(); //日志 wifi配置开始时间
+              let add_set_wifi_startime = new Date().getTime(); //日志 wifi配置开始时间
               let wifi_password = $("#add_device_wifi_password").val();
               let wifi_ssid = $("#add_device_set_wifi_input").html();
               // 展示遮罩层
@@ -1444,13 +1463,13 @@ export default {
                 _this.publicFunc.closeBufferPage()
                 if (res.type === 'error') {
                   add_dev_info.desc = 'set wifi_' + select_wifi + 'error';//日志
-                  add_set_wifi_endtime = new Date().getTime(); //日志 wifi配置结束时间
-                  add_set_wifi_totaltime = add_set_wifi_endtime - add_set_wifi_startime;//日志 wifi配置耗时
+                  let add_set_wifi_endtime = new Date().getTime(); //日志 wifi配置结束时间
+                  let add_set_wifi_totaltime = add_set_wifi_endtime - add_set_wifi_startime;//日志 wifi配置耗时
                   _this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 });
                 } else if (res.type === 'success') {
                   add_dev_info.desc = 'set wifi_' + select_wifi + 'success';//日志
-                  add_set_wifi_endtime = new Date().getTime(); //日志 wifi配置结束时间
-                  add_set_wifi_totaltime = add_set_wifi_endtime - add_set_wifi_startime;//日志 wifi配置耗时
+                  let add_set_wifi_endtime = new Date().getTime(); //日志 wifi配置结束时间
+                  let add_set_wifi_totaltime = add_set_wifi_endtime - add_set_wifi_startime;//日志 wifi配置耗时
                   _this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 });
                   add_device_set_nick();
                 } else {
@@ -1471,7 +1490,7 @@ export default {
         }
         function add_device_set_nick () {
           let b_id = d_id.toUpperCase();
-          data.parent.html("<div id='add_devices_box'>"
+          data.parent.innerHTML = "<div id='add_devices_box'>"
             + "<div id='add_devices_box_menu'>"
             + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
             + "<div id='add_devices_box_close'></div>"
@@ -1486,7 +1505,7 @@ export default {
             + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
             + "<div id='add_device_skip'>" + mcs_action_skip + "</div>"
             + "</div>"
-            + "</div>")
+            + "</div>";
           function add_device_set_nick_event () {
             let add_device_step_time = new Date().getTime();//每步开始时间
             let add_dev_info = {};//每步操作信息
@@ -1526,7 +1545,7 @@ export default {
         }
         function add_device_set_zone () {
           let timezone = "";
-          data.parent.html("<div id='add_devices_box'>"
+          data.parent.innerHTML = "<div id='add_devices_box'>"
             + "<div id='add_devices_box_menu'>"
             + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
             + "<div id='add_devices_box_close'></div>"
@@ -1542,7 +1561,7 @@ export default {
             + "<div id='add_device_submit'>" + mcs_ok + "</div>"
             + "<div id='add_device_skip'>" + mcs_action_skip + "</div>"
             + "</div>"
-            + "</div>")
+            + "</div>";
           // 展示遮罩层
           _this.publicFunc.showBufferPage()
           _this.$api.devlist.time_zone_get({ // 设备时区获取
@@ -1610,7 +1629,7 @@ export default {
             $("#add_device_submit").click(function () {
               // 展示遮罩层
               _this.publicFunc.showBufferPage()
-              _thie.$api.devlist.time_set({ // 设置设备时区及时间
+              _this.$api.devlist.time_set({ // 设置设备时区及时间
                 sn: d_id,
                 timezone: timezone
               }).then(res => {
@@ -1631,6 +1650,7 @@ export default {
               close_add_page('add_dev');
             })
           }
+          function meval(s){ try{return eval("(" + s + ")"); }catch(e){return null;} }
         }
         function add_device_forget_pass () {
           if (d_type == 'b1' || d_type == 'b2' || d_type == 'b3') {

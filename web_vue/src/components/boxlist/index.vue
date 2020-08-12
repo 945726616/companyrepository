@@ -96,6 +96,7 @@ export default {
       function get_onvif_list (msg) {
         _this.onvif_ipc_arr = [];
         _this.onvif_ipc = '';
+
         if (msg.conf && msg.connect_infos) {
           $("#box_onvif_ipc").show(); //显示onvif
           for (let i = 0; i < msg.conf.length; i++) {
@@ -106,8 +107,8 @@ export default {
               + "<div class='" + (msg.connect_infos[i].status == 1 ? "box_device_online" : "box_device_offline") + "'></div>"
               + "<span class='box_device_nick_span'>" + (decodeURI(msg.conf[i].nick) ? decodeURI(msg.conf[i].nick) : msg.conf[i].sn) + "</span>"
               + "<div class='box_delete_btn'>"
-              + "<div class='del_box_ipc_btn' onclick='p(this)' app='vimtag'></div>"//删除关联和录像
-              + "<div class='del_box_ipc_record_btn' onclick='m(this)' app='vimtag'></div>" //删除关联
+              + "<div class='del_box_ipc_btn' app='vimtag'></div>"//删除关联和录像
+              + "<div class='del_box_ipc_record_btn' app='vimtag'></div>" //删除关联
               + "</div>"
               + "</div>"
               + "</div>";
@@ -139,6 +140,72 @@ export default {
           _this.$api.boxlist.boxlist_img_get({ addr: obj.addr, agent: 'undefined', sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: _this.onvif_ipc_arr, dom: $(".box_camera_sign_picture"), resolution: "p3" })
           // msdk_ctrl({ type: "boxlist_img_get", data: { addr: obj.addr, agent: 'undefined', sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: _this.onvif_ipc_arr, dom: _this.publicFunc.mx(".box_camera_sign_picture"), resolution: "p3" } });
         }
+        $(".del_box_ipc_btn").click(function(){
+          let data = $(this);
+          let app=data.attr("app");
+          let conf={};
+          conf.box_sn = _this.$store.state.jumpPageData.selectDeviceIpc;
+          conf.sn =data.parent().parent().attr("sn");
+          conf.flag=2;
+          conf.uuid=data.parent().parent().attr("uuid");
+          conf.func=onvif_box_add_ipc_ack;
+          // console.log(conf)
+          _this.publicFunc.delete_tips({content:mrs_delete_association_and_video,func:function(){
+            _this.$api.boxlist.onvif_box_add_ipc(conf) // ccm_box_set_ipc_req
+          }})
+          
+          function onvif_box_add_ipc_ack(msg){
+            if(msg.result==''){ //如果删除关联成功 //ccm_box_set
+              _this.$api.history.history_delete({ // 调用历史删除接口
+                box_sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                dev_sn: data.parent().parent().attr("sn"),
+              }).then(res => {
+                if (res.type === 'success') {
+                  _this.publicFunc.msg_tips({ msg: mrs_delete_association_and_video_succeed, type: "success", timeout: 3000 })
+                  if(app=='mipc'){
+                    _this.create_boxlist_page({parent:_this.publicFunc.mx("#dev_main_right")})
+                    // create_boxlist_page({parent:mx("#dev_main_right")}) 
+                  }else{
+                    _this.create_boxlist_page({parent:_this.publicFunc.mx("#page")})
+                    // create_boxlist_page({parent:mx("#page")}) 
+                  }
+                } else {
+                  _this.publicFunc.msg_tips({ msg: mcs_delete_fail, type: "error", timeout: 3000 })
+                }
+              })
+            }else if(msg.result=='DevNotFound'){
+              _this.publicFunc.msg_tips({msg:mrs_devide_does_not_exist, type:"error", timeout:3000})
+            }
+          }
+        })
+        $(".del_box_ipc_record_btn").click(function(){
+          let data = $(this);
+          let app=data.attr("app");
+          let conf={};
+          conf.box_sn = _this.$store.state.jumpPageData.selectDeviceIpc;
+          conf.sn =data.parent().parent().attr("sn");
+          conf.flag=2;
+          conf.uuid=data.parent().parent().attr("uuid");
+          conf.func=onvif_box_add_ipc_ack;
+          _this.publicFunc.delete_tips({content:mrs_delete_association,func:function(){
+            _this.$api.boxlist.onvif_box_add_ipc(conf) //发送删除设备请求
+          }})
+          
+          function onvif_box_add_ipc_ack(msg){
+            if(msg.result==''){
+              _this.publicFunc.msg_tips({msg:mrs_delete_association_succeed, type:"success", timeout:3000});
+              if(app=='mipc'){
+                // create_boxlist_page({parent:mx("#dev_main_right")}) 
+                _this.create_boxlist_page({parent:_this.publicFunc.mx("#dev_main_right")})
+              }else{
+                _this.create_boxlist_page({parent:_this.publicFunc.mx("#page")})
+                // create_boxlist_page({parent:mx("#page")}) 
+              }
+            }else if(msg.result=='DevNotFound'){
+              _this.publicFunc.msg_tips({msg:mrs_devide_does_not_exist, type:"error", timeout:3000})
+            }
+          }
+        })
         _this.$api.boxlist.box_get({ //返回onvif后发送ccm_box_get，解决有时私有去不掉onvif问题
           box_sn: _this.$store.state.jumpPageData.selectDeviceIpc,
           flag: 1
@@ -163,6 +230,9 @@ export default {
         // 私有设备数组长度
         let ipcs_length = data.ipcs ? data.ipcs.length : 0;
         _this.box_list_dom = '';
+
+        
+
         for (let i = 0; i < ipcs_length; i++) {
           _this.box_list_dom +=
             "<div class='box_device_list_img' >"
@@ -170,10 +240,11 @@ export default {
             + "<div class='box_device_nick' sn='" + data.ipcs[i].sn + "'>"
             + "<div class='" + (data.ipcs[i].online ? "box_device_online" : "box_device_offline") + "'></div>"
             + "<span class='box_device_nick_span'>" + data.ipcs[i].nick + "</span>"
-            + "<div class='del_box_ipc_btn'  onclick='t(this)' app='vimtag'></div>"
+            + "<div class='del_box_ipc_btn' app='vimtag'></div>"
             + "</div>"
             + "</div>";
         }
+
         if (ipcs_length === 0 && _this.onvif_ipc_arr.length === 0) { //如果云盒子中没有私有设备
           _this.box_list_dom = "<div id='empty_div_img'></div>"
             + "<div class='empty_div_txt'>" + mcs_your_device_list_empty + "</div>"
@@ -184,11 +255,38 @@ export default {
           $("#box_per_ipc").hide();
         } else {
           $("#box_per_ipc_container").html(_this.box_list_dom)
+          
           // console.log('第二个请求')
           // 私有设备加载图片的请求
           _this.$api.boxlist.boxlist_img_get({ addr: obj.addr, agent: data.agent, sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: data.ipcs, dom: $(".box_camera_sign_picture"), resolution: "p3" })
           // msdk_ctrl({ type: "boxlist_img_get", data: { addr: obj.addr, agent: data.agent, sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: data.ipcs, dom: _this.publicFunc.mx(".box_camera_sign_picture"), resolution: "p3" } });
         }
+        $(".del_box_ipc_btn").click(function(){
+          let data = $(this);
+          let app=data.attr("app");
+          // let dev_sn=(app=='mipc')?data.parentNode.parentNode.getAttribute("sn"):data.parentNode.getAttribute("sn");
+          let dev_sn=data.parent().attr("sn");
+          _this.publicFunc.delete_tips({content:mrs_delete_video,func:function(){
+              _this.$api.history.history_delete({ // 调用历史删除接口
+              box_sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+              dev_sn: dev_sn,
+            }).then(res => {
+                if (res.type === 'success') {
+                    _this.publicFunc.msg_tips({ msg: mrs_delete_video_succeed, type: "success", timeout: 3000 })
+                if(app=='mipc'){
+                    _this.create_boxlist_page({parent:$("#dev_main_right")})
+                  // create_boxlist_page({parent:mx("#dev_main_right")}) 
+                }else{
+                  _this.create_boxlist_page({parent:$("#boxlist")})
+                  // create_boxlist_page({parent:mx("#page")}) 
+                }
+              } else {
+                _this.publicFunc.msg_tips({ msg: mcs_delete_fail, type: "error", timeout: 3000 })
+              }
+            })
+          }})
+        })
+
         // if (_this.publicFunc.urlParam().m.indexOf('vimtag.com') > -1) {
         if ( _this.$store.state.jumpPageData.projectName === "vimtag") {
           $(".del_box_ipc_btn").attr("app", "vimtag")
@@ -249,14 +347,16 @@ export default {
               $(".del_box_ipc_record_btn").hide();
             }
           }
-          _this.publicFunc.mx("#empty_search_btn").onclick = function () { // 点击你的设备列表为空 搜索设备 注意这里就是搜索onvif设备的，私有设备没有相应接口
-            $("#add_device_page").show();
-            $("#add_device_page").css('position', 'absolute');
-            create_search_onvif_box({ parent: _this.publicFunc.mx("#add_device_page") });
-          }
           _this.publicFunc.mx("#boxlist_add_btn").onclick = function () { // 根据ip 端口号进行添加设备
             $("#add_device_page").show();
             create_add_onvif_byip({ parent: _this.publicFunc.mx("#add_device_page") });
+          }
+          if(_this.publicFunc.mx("#empty_search_btn")){
+            _this.publicFunc.mx("#empty_search_btn").onclick = function () { // 点击你的设备列表为空 搜索设备 注意这里就是搜索onvif设备的，私有设备没有相应接口
+              $("#add_device_page").show();
+              $("#add_device_page").css('position', 'absolute');
+              create_search_onvif_box({ parent: _this.publicFunc.mx("#add_device_page") });
+            }
           }
         }
       }
@@ -406,7 +506,7 @@ export default {
               l_dom_box_onvif_unadd_box.show();
               onvif_unadd +=
                 "<div class='box_onvif_unadd_img_box'>"
-                + "<img class='box_onvif_unadd_img' src='./imgs/device/onvif_camera.png'></img>"
+                + "<img class='box_onvif_unadd_img' src="+require('@/assets/device/onvif_camera.png')+"></img>"
                 + "<div class='box_onvif_unadd_device_nick'>" + mcs_old_nick + "</div>" //昵称
                 + "<div class='box_onvif_unadd_ip'>" + mcs_ip_address + ":" + msg.list[i].ip + "</div>"//IP地址
                 + "<div class='box_onvif_unadd_port'>" + mcs_port + ":" + msg.list[i].port + "</div>"

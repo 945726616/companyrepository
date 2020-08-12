@@ -6,6 +6,7 @@ import mme from '@/util/mme.js'
 export default {
   methods: {
     mipcMyPage (obj) {
+      let _this = this;
       let feedback_url
       let g_now_lang = sessionStorage.getItem('userLanguage')
       if (window.location.protocol == "https:") {
@@ -128,7 +129,7 @@ export default {
         + "<div id='ae_email_inactive' class='ae_email'>" + mcs_email_inactive + "</div>"
         + "</div>"
         + "<div id='set_feedback_page' class='set_page' style='display:none;'>"
-        + "<iframe style='display:block;' id='feedback_ifr' src='" + feedback_url + "'></iframe>"
+        // + "<iframe style='display:block;' id='feedback_ifr' src='" + feedback_url + "'></iframe>"
         + "</div>"
         //sd export
         + "<div id='set_sd_export_page' class='set_page'>"
@@ -165,7 +166,7 @@ export default {
         + "<div class='about_list'>"
         + "<div id='version_logo_img_mipc_new'></div>"
         + "<div id='about_title' class='about_title'>" + mcs_software_version + "</div>"
-        + "<div class='about_input'>" + g_web_client_v + "</div>"
+        + "<div class='about_input'>" + process.env.VUE_APP_VERSION  + "</div>"
         + "</div>"
         + "</div>"
         + "<div id='set_developer_option_page' class='set_page' style='display:none;'>"
@@ -189,7 +190,7 @@ export default {
         _this.publicFunc.mx("#about").parentNode.style.display = "block";
       }
       $(document).ready(function () {
-        create_my_page(obj)
+        _this.$options.methods.create_my_page.call(_this);
       })
     },
     create_my_page () {
@@ -231,12 +232,12 @@ export default {
                 _this.publicFunc.mx("#sd_export_submit_tip").style.color = "#ff0000";
               } else {
                 _this.publicFunc.mx("#sd_export_submit_tip").style.display = 'none';
-                _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src='./imgs/device/add_loading.gif'>";
+                _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src="+require('@/assets/device/add_loading.gif')+">";
                 // 暂时将双项目的代码简单捏合
                 if (location.href.indexOf("ebit") > -1) { // 判断页面是否为ebit
-                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src='./imgs/mipc/ebit_loading.gif'>";
+                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src="+require('@/assets/mipc/ebit_loading.gif')+">";
                 } else { // vshome/mipc
-                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src='./imgs/mipc/mipc_loading.gif'>";
+                  _this.publicFunc.mx("#sd_export_submit_tip").innerHTML = "<img src="+require('@/assets/mipc/mipc_loading.gif')+">";
                 }
               }
             }
@@ -373,7 +374,7 @@ export default {
               $("#my_page_box_back_manage").hide()
             }
             // g_loacl部分目前仅vimtag可以使用,mipc系列暂不支持相关参数
-            _this.$store.state.jumpPageData.localFlag = (_this.publicFunc.urlParam() && _this.publicFunc.urlParam().l === "local") ? 1 : 0;
+            _this.$store.dispatch('setLocalFlag', (_this.publicFunc.urlParam() && _this.publicFunc.urlParam().l === "local") ? 1 : 0)
             if (_this.$store.state.jumpPageData.loginFlag) {
               _this.publicFunc.delete_tips({
                 content: mcs_prompt_exit, flag: "my_page", func: function () { //g 5.5 flag是后加的，判断是my_page页面，点击取消
@@ -406,9 +407,9 @@ export default {
             }
           }
           if (id_name == "sd_export") {
-            _this.publicFunc.mx("#sd_export").style.background = "url('./imgs/device/c-sd.png') no-repeat";
+            _this.publicFunc.mx("#sd_export").style.background = "url("+require('@/assets/device/c-sd.png')+") no-repeat";
           } else {
-            _this.publicFunc.mx("#sd_export").style.background = "url('./imgs/device/sd.png') no-repeat";
+            _this.publicFunc.mx("#sd_export").style.background = "url("+require('@/assets/device/sd.png')+") no-repeat";
           }
           if (id_name == "local_devs") { // 点击本地搜索按钮后执行
             // console.log("进入判断")
@@ -448,7 +449,7 @@ export default {
         if (_this.publicFunc.mx("#my_page_box_back_manage")) {
           _this.publicFunc.mx("#my_page_box_back_manage").onclick = function () {
             // createPage("my", obj)
-            _this.vimtagMyPage({ parent: $('#my') })
+            _this.MipcMyPage({ parent: $('#my') })
           }
         }
       }
@@ -946,6 +947,7 @@ export default {
     }
   },
   async mounted () {
+    this.publicFunc.projectReload.call(this)
     let userLanguage = sessionStorage.getItem('userLanguage')
     if (userLanguage) {
       await this.$chooseLanguage.lang(userLanguage)
@@ -968,7 +970,6 @@ export default {
     //   languageSelect.mipc($('#login_box'))
     //   $('#login_box').append("<div id='is_mipc_div'></div>")
     // }
-    this.publicFunc.projectReload.call(this)
     window.mipcMyPage = this.mipcMyPage
   }
 }

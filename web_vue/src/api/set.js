@@ -4,6 +4,7 @@ import login from './login'
 import devlist from './devlist'
 import play from './play'
 import store from '../store'
+import router from '@/router/vimtag'
 // import md5 from '@/util/mmd5.js'
 // import mcodec from '@/util/mcodec.js'
 import mme from '@/util/mme.js'
@@ -123,35 +124,35 @@ const set = {
             }
           }
         }
-        returnItem = {
-          result: result,
-          sn: sn,
-          mfc: mfc,
-          model: model,
-          ver: ver,
-          name: name,
-          logo: logo,
-          type: type,
-          os: os,
-          wifi: wifi,
-          sensor: sensor,
-          uptime: uptime,
-          def: def,
-          s_sensor: s_sensor,
-          exdev: exdev,
-          rffreq: rffreq,
-          exver: exver,
-          oscene: oscene,
-          white_light: white_light,
-          face_detect: face_detect,
-          sound_detect: sound_detect,
-          motion_track: motion_track,
-          onvif: onvif,
-          new_ealf: new_ealf,
-          human_detect: human_detect,
-          wwan_exist: wwan_exist,
-          fisheye: fisheye
-        }
+      }
+      returnItem = {
+        result: result,
+        sn: sn,
+        mfc: mfc,
+        model: model,
+        ver: ver,
+        name: name,
+        logo: logo,
+        type: type,
+        os: os,
+        wifi: wifi,
+        sensor: sensor,
+        uptime: uptime,
+        def: def,
+        s_sensor: s_sensor,
+        exdev: exdev,
+        rffreq: rffreq,
+        exver: exver,
+        oscene: oscene,
+        white_light: white_light,
+        face_detect: face_detect,
+        sound_detect: sound_detect,
+        motion_track: motion_track,
+        onvif: onvif,
+        new_ealf: new_ealf,
+        human_detect: human_detect,
+        wwan_exist: wwan_exist,
+        fisheye: fisheye
       }
     })
     return returnItem
@@ -579,17 +580,17 @@ const set = {
   /*
   ** 设置管理密码
   */
-  admin_password_set (params) {
+  async admin_password_set (params) {
     let returnItem
-    devlist.dev_passwd_set({
+    await devlist.dev_passwd_set({
       sn: params.sn,
       old_pass: params.old_pass,
       new_pass: params.new_pass,
       is_guest: 0
-    }).then(res => {
+    }).then(async res => {
       if (res && res.result === "") {
-        if (g_login_status === "register_user") {
-          devlist.dev_add({ sn: params.sn, password: params.new_pass }).then(res_dev_add => {
+        if (store.state.jumpPageData.loginStatus === "register_user") {
+          await devlist.dev_add({ sn: params.sn, password: params.new_pass }).then(res_dev_add => {
             if (res_dev_add && res_dev_add.result === "") {
               returnItem = { msg: mcs_set_successfully, type: "success" }
               if (!store.state.jumpPageData.localFlag) {
@@ -611,13 +612,13 @@ const set = {
   /*
   ** 设置访客密码
   */
-  guest_password_set (params) {
+  async guest_password_set (params) {
     let returnItem
-    devlist.dev_passwd_set({
+    await devlist.dev_passwd_set({
       sn: params.sn,
       old_pass: params.old_pass,
       new_pass: params.new_pass,
-      is_guest: 0
+      is_guest: 1
     }).then(res => {
       if (res && res.result == "") {
         returnItem = { msg: mcs_set_successfully, type: "success" }
@@ -631,20 +632,20 @@ const set = {
   /*
   ** 设置有线网络
   */
-  set_network (params) {
+  async set_network (params) {
     let returnItem
-    devlist.net_set({
+    await devlist.net_set({
       sn: params.sn,
       networks: params.networks,
       dns: params.dns
     }).then(res => {
       let result = login.get_ret(res)
       if (result === '') {
-        returnItem = { msg: mcs_set_successfully, type: "success", select: data.select }
+        returnItem = { msg: mcs_set_successfully, type: "success", select: params.select }
       } else if (result === "permission.denied") {
-        returnItem = { msg: mcs_permission_denied, type: "error", select: data.select }
+        returnItem = { msg: mcs_permission_denied, type: "error", select: params.select }
       } else {
-        returnItem = { msg: mcs_failed_to_set_the, type: "error", select: data.select }
+        returnItem = { msg: mcs_failed_to_set_the, type: "error", select: params.select }
       }
     })
     return returnItem
@@ -770,10 +771,10 @@ const set = {
   /*
   ** sd卡设置
   */
-  sd_set (params) {
+  async sd_set (params) {
     let returnItem
     if (params.no_conf) {
-      set.disk_ctl({
+      await set.disk_ctl({
         sess: {
           nid: login.create_nid(),
           sn: params.sn
@@ -786,8 +787,8 @@ const set = {
         }
       })
     } else {
-      let record_mode = obj.record_mode || ""
-      set.disk_ctl({
+      let record_mode = params.record_mode || ""
+      await set.disk_ctl({
         sess: {
           nid: login.create_nid(),
           sn: params.sn
@@ -1099,6 +1100,13 @@ const set = {
         result: login.get_ret(res)
       }
     })
+    if (returnItem && returnItem.result === "") {
+      returnItem = { msg: mcs_set_successfully, type: "success" }
+    } else if (returnItem.result === "permission.denied") {
+      returnItem = { msg: mcs_permission_denied, type: "error" }
+    } else {
+      returnItem = { msg: mcs_failed_to_set_the, type: "error" }
+    }
     return returnItem
   },
   /*
@@ -1117,16 +1125,15 @@ const set = {
     }).then(res => {
       let result = login.get_ret(res);
       if (result === "") {
-        let msg = res.data ? res.data.Config : "";
-        console.log(msg)
-        io_input = msg.IoInputMode;   /* Open:always open; Close:always close */
-        io_output = msg.IoOutputMode;    /* Open:always open; Close:always close */
-        sensitivity = msg.MotionLevel;  /* level of sensitivity about motion detect at day 0-100 */
-        night_sensitivity = msg.MotionLevelNight;    /* level of sensitivity about motion detect at night */
-        motion_track_switch = msg.MotionTrackSwitch;
-        face_detect_switch = msg.FaceDetectSwitch;
+        let msg = res.data ? res.data.conf : "";
+        io_input = msg.io_in_mode;   /* Open:always open; Close:always close */
+        io_output = msg.io_out_mode;    /* Open:always open; Close:always close */
+        sensitivity = msg.motion_level;  /* level of sensitivity about motion detect at day 0-100 */
+        night_sensitivity = msg.motion_level_night;    /* level of sensitivity about motion detect at night */
+        motion_track_switch = msg.motion_track_switch;
+        face_detect_switch = msg.face_detect_switch;
         // human_detect_switch =msg.human_detect_switch;
-        audio_level = msg.AudioLevel;
+        audio_level = msg.audio_level;
       }
       returnItem = {
         result: result,
@@ -1151,7 +1158,7 @@ const set = {
     let returnItem
     let req_data = {
       sess: {
-        nid: create_nid(),
+        nid: login.create_nid(),
         sn: params.sn
       },
       enable: params.enable,
@@ -1379,7 +1386,7 @@ const set = {
         await axios.get('/ccm/ccm_ntp_set', {
           params: {
             sess: {
-              nid: create_nid(),
+              nid: login.create_nid(),
               sn: params.sn
             },
             auto_sync: params.auto_sync, manual: { ip: params.ntp_addr }
@@ -1394,6 +1401,13 @@ const set = {
         returnItem = { result: result }
       }
     })
+    if (returnItem && returnItem.result == "") {
+      returnItem = { msg: mcs_set_successfully, type: "success" };
+    } else if (returnItem.result == "permission.denied") {
+      returnItem = { msg: mcs_permission_denied, type: "error" };
+    } else {
+      returnItem = { msg: mcs_failed_to_set_the, type: "error" }
+    }
     return returnItem
   },
   /*
@@ -1470,10 +1484,7 @@ const set = {
       returnItem = { result: login.get_ret(res) }
     })
     if (returnItem.result === "") {
-      setTimeout(function () {
-        // createPage("devlist", { parent: $("#page") });
-        _this.$router.push({ name: 'devlist' })
-      }, 3000)
+      return returnItem;
     }
     return null
   },
@@ -1487,11 +1498,11 @@ const set = {
           nid: login.create_nid(),
           sn: params.sn
         },
-        backup: params.keep_extends_cofig
+        backup: params.keep_cofig
       }
-    }).then(res => {
+    }).then(async res => {
       if (login.get_ret(res) === '') {
-        set.reboot_device(params)
+        await set.reboot_device(params)
       }
     })
   },
@@ -1544,7 +1555,7 @@ const set = {
     await axios.get('/ccm/ccm_upgrade', {
       params: {
         sess: {
-          nid: create_nid(),
+          nid: login.create_nid(),
           sn: params.sn
         },
         img_src: "download"
@@ -1609,7 +1620,7 @@ const set = {
     return await axios.get('/ccm/ccm_mic_set', {
       params: {
         sess: {
-          nid: create_nid(),
+          nid: login.create_nid(),
           sn: params.sn
         },
         conf: {
@@ -1625,26 +1636,26 @@ const set = {
   /*
   ** 音频设置
   */
-  audio_set (params) {
+  async audio_set (params) {
     let returnItem
-    set.speaker_set({
+    await set.speaker_set({
       sn: params.sn,
       speaker_level: params.speaker_level
-    }).then(res_speaker_set => {
+    }).then(async res_speaker_set => {
       if (login.get_ret(res_speaker_set) === '') {
-        set.mic_get({ sn: params.sn }).then(res_mic_get => {
+        await set.mic_get({ sn: params.sn }).then(async res_mic_get => {
           var msg, entity, silent, token
           if (login.get_ret(res_mic_get) === '') {
             msg = res_mic_get.data ? res_mic_get.data.conf[0] : ""
             entity = msg.entity
             silent = msg.silent
             token = msg.token
-            set.mic_set({
-              sn: obj.sn,
+            await set.mic_set({
+              sn: params.sn,
               entity: entity,
               token: token,
               silent: silent,
-              level: params.mic_level
+              mic_level: params.mic_level
             }).then(res_mic_set => {
               returnItem = { result: login.get_ret(res_mic_set) }
             })
@@ -1656,6 +1667,13 @@ const set = {
         returnItem = { result: login.get_ret(res_speaker_set) }
       }
     })
+    if (returnItem && returnItem.result == "") {
+      returnItem = { msg: mcs_set_successfully, type: "success" };
+    } else if (returnItem.result == "permission.denied") {
+      returnItem = { msg: mcs_permission_denied, type: "error" };
+    } else {
+      returnItem = { msg: mcs_failed_to_set_the, type: "error" }
+    }
     return returnItem
   },
   /*
@@ -1677,6 +1695,23 @@ const set = {
       }
     })
     return await returnItem
+  },
+  /*
+  ** 画面翻转设置
+  */
+  async cam_set (params) {
+    let returnItem;
+    let l_cam_info = {};
+    await play.adjust_get({sn: params.sn}).then(async res => {
+      l_cam_info = res;
+      l_cam_info.sn = params.sn;
+      l_cam_info.flip = params.flip;
+      l_cam_info.flicker_freq = params.flicker_freq;
+      await play.adjust_set(l_cam_info).then(res_cam_set => {
+        returnItem = res_cam_set;
+      })
+    })
+    return returnItem;
   },
   /*
   ** 白光设置

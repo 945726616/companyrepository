@@ -170,7 +170,7 @@ const playback = {
           // if(store.state.jumpPageData.projectName=="vimtag"){
             obj.panel.innerHTML = "<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>"
             + "<div id='plugin_install_tips'>" + mcs_download_client + "</div>"
-            + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.downloadManualUrl+ "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>"
+            + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.playDownloadUrl+ "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>"
             + "<div style='margin-top: 85px;'><a name='flash' href='javascript:;'><div id='use_ordinary_video'>" + mcs_temporarily_installed_use_ordinary_video + "</div></a></div>"
             + "</div>"
           let plugin_install_page_width = $("#plugin_install_page").outerWidth() / 2;
@@ -304,7 +304,12 @@ const playback = {
   ** 播放封面图
   */
   play_preview_img (data){
-		var url = (data.addr?"http://"+data.addr:window.location.protocol+"//"+window.location.host)+"/api/ccm/ccm_pic_get.js?dsess=1&dsess_nid="+login.create_nid()+"&dsess_sn="+data.sn+"&dtoken="+data.pic_token+"&dflag=2";
+    let url;
+    if(process.env.NODE_ENV === 'production'){
+      url = (data.addr?"http://"+data.addr:window.location.protocol+"//"+window.location.host)+"/ccm/ccm_pic_get.js?dsess=1&dsess_nid="+login.create_nid()+"&dsess_sn="+data.sn+"&dtoken="+data.pic_token+"&dflag=2";
+    }else{
+      url = (data.addr?"http://"+data.addr:window.location.protocol+"//"+window.location.host)+"/api/ccm/ccm_pic_get.js?dsess=1&dsess_nid="+login.create_nid()+"&dsess_sn="+data.sn+"&dtoken="+data.pic_token+"&dflag=2";
+    }
     data.dom[0].style.background = 'url('+url+') no-repeat';
     data.dom[0].style.backgroundSize = '100% 100%';
     // data.dom[0].attr('style', 'background: url('+url+') no-repeat')

@@ -275,12 +275,12 @@ export default {
 
         $('.select_lang').click(function () {
           let val = $(this).attr('value')
-          sessionStorage.setItem('userLanguage', val)
+          localStorage.setItem('language_choice_info', val)
           location.reload()
         })
       }
 
-      let pc_is_offline = GetQueryString('pc_is_offline')
+      // let pc_is_offline = GetQueryString('pc_is_offline')
       function GetQueryString (name) {
         // 截取url参数函数
         let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
@@ -289,10 +289,10 @@ export default {
         return null
       }
 
-      if (pc_is_offline == 1) {
-        // createPage('devlist', { parent: $('#page') })
-        _this.$router.push({name:'devlist',params:{parent: $('#page')}})
-      }
+      // if (pc_is_offline == 1) {
+      //   // createPage('devlist', { parent: $('#page') })
+      //   _this.$router.push({name:'devlist',params:{parent: $('#page')}})
+      // }
       // 截取url登录相关参数
       let exp_username = _this.publicFunc.urlParam().user ? _this.publicFunc.urlParam().user : '' // 用户名
       let exp_password = _this.publicFunc.urlParam().pw ? _this.publicFunc.urlParam().pw : '' // 密码

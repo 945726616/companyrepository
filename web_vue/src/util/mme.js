@@ -90,12 +90,16 @@ mme.prototype =
   /* chls:[], type:"publish"|"play", url:"xxx", running:true|false, timer:inerval, times:time-out-check-counts, refer:user-data */
   get_default_skin: function () { return { dev_panel: { width: 360, height: 180 } }; },
   create_plug: function (parent, enable_flash_plug, enable_native_plug, plug_params) {
+    console.log(parent, enable_flash_plug, enable_native_plug, plug_params, 'enter_create_plug')
     if (this.parent && !this.parent.appendChild) {
       this.parent = this.parent[0]
     }
     var test, info, plug = null, id = this.id ? this.id : (++this.id_allocer.value), type = null,
       ie = (!!window.ActiveXObject || "ActiveXObject" in window);
-
+      console.log((null != navigator.mimeTypes)
+      && (0 < navigator.mimeTypes.length)
+      && (null != navigator.mimeTypes[this.types.xpcom.mime])
+      && navigator.mimeTypes[this.types.xpcom.mime].enabledPlugin, 'xpcom_if')
     if (enable_native_plug && ((null == this.ver_cur) || (this.ver_cur >= this.ver_min))) {/* plugin just support win32 now */
       if (ie && (navigator.platform == "Win32")) { try { test = new ActiveXObject(this.types.activex.xname); type = this.types.activex; } catch (e) { } }
       else if ((null != navigator.mimeTypes)
@@ -110,6 +114,7 @@ mme.prototype =
         && (null != navigator.mimeTypes[this.types.flash.mime])
         && navigator.mimeTypes[this.types.flash.mime].enabledPlugin) { type = this.types.flash; }
     }
+    console.log(type, 'create_plug_type')
     if (type) {
       if (this.type != mme.prototype) { this.type = type; }
       plug_params = plug_params.replace(/'/g, "\"");
@@ -117,11 +122,13 @@ mme.prototype =
 
       /* for chrome video color error bug hack */
       if ((navigator.platform == "Win32") && navigator.userAgent.toLowerCase().match(/chrome\/([\d.]+)/)) {
+        if(parent.style)
         parent.style.background = "black";
-        // parent.css("background","black")
+        else 
+        parent.css("background","black")
       }
 
-      parent.innerHTML = "<object id='plug_" + id + "' width='100%' height='100%'"
+      parent.html("<object id='plug_" + id + "' width='100%' height='100%'"
         + (ie ? (" classid='clsid:" + type.clsid + "'") : (" type='" + type.mime + "'"))
         + " codebase='" + type.codebase + "'"
         + ((type == this.types.flash) ? (" data='" + type.src + "'" + (this.windowless ? (" wmode='transparent'") : "")) : "")
@@ -138,7 +145,7 @@ mme.prototype =
           : (" <param name='mme_on_event' value='plug_" + this.id + "_on_event'/>"
             + (this.windowless ? (" <param name='windowless' value='" + this.windowless + "'/>") : "")
             + "<param name='mme_params' value='" + plug_params + "'/>"))
-        + "</object>";
+        + "</object>")
       plug = ie ? window["plug_" + id] : document.getElementById("plug_" + id);
       if (plug) {
         try {
@@ -146,14 +153,14 @@ mme.prototype =
             && (info = meval(plug.ctrl(0, "query", "{flag:65535}")))) {
             mme.prototype.ver_cur = info.version;
             if (info.version < this.ver_min) {/* version to small */
-              parent.innerHTML = "";
+              parent.html('')
               return null;
             }
           }
         } catch (x) { }
       }
       else {
-        parent.innerHTML = "";
+        parent.html('');
       }
       return plug;
     }
@@ -220,8 +227,9 @@ mme.prototype =
       description_flag = 'block', button_width = 210, font_size = 18, flash_float_type = 'left', plug_float_type = 'right',
       plug_magin_top = 0, description_div, title_flag = 'block', install_div, flash_a, plug_a, title_center;
     this.clear_install();
-    this.parent.append(this.install_panel = document.createElement("div"));
+    this.install_panel = document.createElement("div")
     install_div = this.install_panel;
+    this.parent.appendChild(install_div);
     function setFloatStyle (obj, style) {
       var sty = obj.style;
       if ('cssFloat' in sty) {
@@ -355,7 +363,7 @@ mme.prototype =
 
     switch (e.type) {
       case "is_ready": { return (null != this.plug_obj); break; }
-      case "ready": { this.status = this.plug_status.running; break; }
+      case "ready": {console.log('enter this if check'); this.status = this.plug_status.running; break; }
       case "close":
         {
           if (e.chl) { e.chl.status = this.chl_status.closed; e.chl.id = 0; }
@@ -411,13 +419,17 @@ mme.prototype =
       if (this.enable_native_plug
         && (!obj.plug_install_mute)
         && ((navigator.platform == "Win32") || (navigator.platform == "MacIntel"))) {/* try install */
+          console.log(this.ver_cur, this.ver_min, 'enter ver')
         if (this.ver_cur >= this.ver_min) {/* old plugin with lower version */
           me.status = me.plug_status.initting;
+          console.log(me, 'me_mme')
           if (null == (me.plug_obj = me.create_plug(parent, true, true, me.create_params))) {
             me.status = me.plug_status.closed;
+            console.log('enter this missing')
             if (me.on_event) { me.on_event({ type: "missing" }); }
           }
           else {
+            console.log('enter this create')
             if (me.on_event) { me.on_event({ type: "create" }); }
           }
         }
@@ -441,6 +453,7 @@ mme.prototype =
       }
     }
     else if ((this.status == this.plug_status.running) && me.on_event) {
+      console.log('play enter this')
       setTimeout(function () { if (me.on_event) { me.on_event({ type: "ready" }); } }, 0);
     }
     this.is_created = true;
@@ -609,7 +622,7 @@ mme.prototype =
 }
 var userLanguage = sessionStorage.getItem('userLanguage')
 if (userLanguage === 'cn' || userLanguage === 'en') {
-  mme.prototype.lang = mme.prototype.langs.userLanguage
+  mme.prototype.lang = mme.prototype.langs[userLanguage]
 } else {
   mme.prototype.lang = mme.prototype.langs.cn
 }

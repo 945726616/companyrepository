@@ -93,33 +93,33 @@ mme.prototype =
         var test, info, plug = null, id = this.id?this.id:(++this.id_allocer.value), type = null,
             ie = (!!window.ActiveXObject || "ActiveXObject" in window);
 
-        if(enable_native_plug && ((null == this.ver_cur) || (this.ver_cur >= this.ver_min)))
-        {/* plugin just support win32 now */
-            if(ie && (navigator.platform == "Win32")){ try{test = new ActiveXObject(this.types.activex.xname); type = this.types.activex;}catch(e){}; }
-            else if((null != navigator.mimeTypes)
-                    && (0 < navigator.mimeTypes.length)
-                    && (null != navigator.mimeTypes[this.types.xpcom.mime])
-                    && navigator.mimeTypes[this.types.xpcom.mime].enabledPlugin){ type = this.types.xpcom; };
-        }
+        // if(enable_native_plug && ((null == this.ver_cur) || (this.ver_cur >= this.ver_min)))
+        // {/* plugin just support win32 now */
+        //     if(ie && (navigator.platform == "Win32")){ try{test = new ActiveXObject(this.types.activex.xname); type = this.types.activex;}catch(e){}; }
+        //     else if((null != navigator.mimeTypes)
+        //             && (0 < navigator.mimeTypes.length)
+        //             && (null != navigator.mimeTypes[this.types.xpcom.mime])
+        //             && navigator.mimeTypes[this.types.xpcom.mime].enabledPlugin){ type = this.types.xpcom; };
+        // }
         if(!type && enable_flash_plug)
         {/* check flash */
-            if(ie){ try{test = new ActiveXObject(this.types.flash.xname); type = this.types.flash; }catch(e){}; }
+            if(ie){ try{test = new ActiveXObject(this.types.flash.xname); type = this.types.flash; }catch(e){} }
             else if((null != navigator.mimeTypes)
                     && (0 < navigator.mimeTypes.length)
                     && (null != navigator.mimeTypes[this.types.flash.mime])
-                    && navigator.mimeTypes[this.types.flash.mime].enabledPlugin){ type = this.types.flash; };
+                    && navigator.mimeTypes[this.types.flash.mime].enabledPlugin){ type = this.types.flash; }
         }
         if(type)
         {
-            if(this.type != mme.prototype){ this.type = type; };
+            if(this.type != mme.prototype){ this.type = type; }
             plug_params = plug_params.replace(/'/g, "\"");
             //plug_params = codec.str_2_uri_param((plug_params)?plug_params.replace(/'/g, "\""):plug_params);
             
             /* for chrome video color error bug hack */
-            if((navigator.platform == "Win32") && navigator.userAgent.toLowerCase().match(/chrome\/([\d.]+)/))
-            {
-                parent.style.background="black";
-            }
+            // if((navigator.platform == "Win32") && navigator.userAgent.toLowerCase().match(/chrome\/([\d.]+)/))
+            // {
+            //     parent.style.background="black";
+            // }
             
             parent.innerHTML = "<object id='plug_" + id +  "' width='100%' height='100%'"
                 + (ie?(" classid='clsid:" + type.clsid + "'"):(" type='" + type.mime + "'"))
@@ -154,7 +154,7 @@ mme.prototype =
                             return null;
                         }
                     }
-                }catch(x){};
+                }catch(x){}
             }
             else
             {
@@ -190,7 +190,7 @@ mme.prototype =
                                 ret = (info.version >= mme.prototype.ver_min);
                                 mme.prototype.plug_valid = ret;
                             }
-                        }catch(x){};
+                        }catch(x){}
                     }
                     clearInterval(timer);
                     cont.innerHTML = "";
@@ -225,9 +225,9 @@ mme.prototype =
     },
     clear_install:function()
     {
-        if(this.install_timer){ clearInterval(this.install_timer); delete this.install_timer; };
-        if(this.install_panel){ if(this.install_panel){ this.install_panel.innerHTML = ""; this.install_panel.parentNode.removeChild(this.install_panel);}; delete this.install_panel;};
-        if(this.install_test_panel){ if(this.install_test_panel.parentNode){ this.install_test_panel.innerHTML = ""; this.install_test_panel.parentNode.removeChild(this.install_test_panel);}; delete this.install_test_panel; };
+        if(this.install_timer){ clearInterval(this.install_timer); delete this.install_timer; }
+        if(this.install_panel){ if(this.install_panel){ this.install_panel.innerHTML = ""; this.install_panel.parentNode.removeChild(this.install_panel);} delete this.install_panel;}
+        if(this.install_test_panel){ if(this.install_test_panel.parentNode){ this.install_test_panel.innerHTML = ""; this.install_test_panel.parentNode.removeChild(this.install_test_panel);} delete this.install_test_panel; }
     },
 
     install:function()
@@ -351,11 +351,11 @@ mme.prototype =
                      if(null == (me.plug_obj = me.create_plug(me.parent, true, true, me.create_params)))
                      {
                          me.status = me.plug_status.closed;
-                         if(me.on_event){me.on_event({type:"missing"});};
+                         if(me.on_event){me.on_event({type:"missing"});}
                      }
                      else
                      {
-                         if(me.on_event){me.on_event({type:"create"});};
+                         if(me.on_event){me.on_event({type:"create"});}
                      }
                      return false;
                  });
@@ -388,11 +388,11 @@ mme.prototype =
                                     if(null == (me.plug_obj = me.create_plug(me.parent, true, true, me.create_params)))
                                     {
                                         me.status = me.plug_status.closed;
-                                        if(me.on_event){me.on_event({type:"missing"});};
+                                        if(me.on_event){me.on_event({type:"missing"});}
                                     }
                                     else
                                     {
-                                        if(me.on_event){me.on_event({type:"create"});};
+                                        if(me.on_event){me.on_event({type:"create"});}
                                     }
                                 }
                         }, 1000);
@@ -420,7 +420,7 @@ mme.prototype =
             case "ready": { this.status = this.plug_status.running; break; }
             case "close":
             {
-                if(e.chl){ e.chl.status = this.chl_status.closed; e.chl.id = 0; };
+                if(e.chl){ e.chl.status = this.chl_status.closed; e.chl.id = 0; }
                 break;
             }
             case "active": { break; }
@@ -475,51 +475,51 @@ mme.prototype =
                                                      this.enable_flash_plug && ((!obj.plug_install_mute) || ((navigator.platform != "Win32") && (navigator.platform != "MacIntel"))),  //(!!obj.plug_install_mute)
                                                      this.enable_native_plug,
                                                      this.create_params)))
-        {/* create native plug in failed */
-            if(this.enable_native_plug
-               && (!obj.plug_install_mute)
-               && ((navigator.platform == "Win32") || (navigator.platform == "MacIntel")))
-            {/* try install */
-                if(this.ver_cur >= this.ver_min)
-                {/* old plugin with lower version */
-                    me.status = me.plug_status.initting;
-                    if(null == (me.plug_obj = me.create_plug(parent, true, true, me.create_params)))
-                    {
-                        me.status = me.plug_status.closed;
-                        if(me.on_event){me.on_event({type:"missing"});};
-                    }
-                    else
-                    {
-                        if(me.on_event){me.on_event({type:"create"});};
-                    }
-                }
-                else
-                {
-                    this.status = this.plug_status.installing;
-                    this.install(function()
-                        {
-                            me.status = me.plug_status.initting;
-                            if(null == (me.plug_obj = me.create_plug(parent, true, true, me.create_params)))
-                            {
-                                me.status = me.plug_status.closed;
-                                if(me.on_event){me.on_event({type:"missing"});};
-                            }
-                            else
-                            {
-                                if(me.on_event){me.on_event({type:"create"});};
-                            }
-                        });
-                }
-            }
-            else
-            {/* can not install */
-                me.status = me.plug_status.closed;
-                if(me.on_event){me.on_event({type:"missing"});};
-            }
-        }
+        // {/* create native plug in failed */
+        //     if(this.enable_native_plug
+        //        && (!obj.plug_install_mute)
+        //        && ((navigator.platform == "Win32") || (navigator.platform == "MacIntel")))
+        //     {/* try install */
+        //         if(this.ver_cur >= this.ver_min)
+        //         {/* old plugin with lower version */
+        //             me.status = me.plug_status.initting;
+        //             if(null == (me.plug_obj = me.create_plug(parent, true, true, me.create_params)))
+        //             {
+        //                 me.status = me.plug_status.closed;
+        //                 if(me.on_event){me.on_event({type:"missing"});}
+        //             }
+        //             else
+        //             {
+        //                 if(me.on_event){me.on_event({type:"create"});}
+        //             }
+        //         }
+        //         else
+        //         {
+        //             this.status = this.plug_status.installing;
+        //             this.install(function()
+        //                 {
+        //                     me.status = me.plug_status.initting;
+        //                     if(null == (me.plug_obj = me.create_plug(parent, true, true, me.create_params)))
+        //                     {
+        //                         me.status = me.plug_status.closed;
+        //                         if(me.on_event){me.on_event({type:"missing"});}
+        //                     }
+        //                     else
+        //                     {
+        //                         if(me.on_event){me.on_event({type:"create"});}
+        //                     }
+        //                 });
+        //         }
+        //     }
+        //     else
+        //     {/* can not install */
+        //         me.status = me.plug_status.closed;
+        //         if(me.on_event){me.on_event({type:"missing"});}
+        //     }
+        // }
         else if((this.status == this.plug_status.running) && me.on_event)
         {
-            setTimeout(function(){if(me.on_event){ me.on_event({type:"ready"});};}, 0);
+            setTimeout(function(){if(me.on_event){ me.on_event({type:"ready"});}}, 0);
         }
         this.is_created = true;
     },
@@ -529,7 +529,7 @@ mme.prototype =
         window["plug_" + this.id + "_on_event"] = null;
         for(var chl, i = this.chls.length - 1; 0 <= i; --i)
         {
-            if(chl = this.chls[i]){ this.chl_destroy(chl); };
+            if(chl = this.chls[i]){ this.chl_destroy(chl); }
         }
 
         if(this.dev_form)
@@ -540,15 +540,15 @@ mme.prototype =
             delete this.dev_form;
         }
 
-        if(this.plug_obj){ delete this.plug_obj; };
+        if(this.plug_obj){ delete this.plug_obj; }
         if(this.parent)
         {
             this.parent.innerTHML = "";
             delete this.parent;
         }
-        if(this.id){ delete this.id; };
-        if(this.status){ delete this.status; };
-        if(this.on_event){ delete this.on_event; };
+        if(this.id){ delete this.id; }
+        if(this.status){ delete this.status; }
+        if(this.on_event){ delete this.on_event; }
     },
     update:function()
     {
@@ -629,7 +629,7 @@ mme.prototype =
         var me = this;
         function on_init_device_done()
         {
-            if(obj.on_done){ obj.on_done(); };
+            if(obj.on_done){ obj.on_done(); }
         }
         if (null == this.plug_info)
         {
@@ -668,7 +668,7 @@ mme.prototype =
     {
         for(var chls = this.chls, i = chls.length - 1; i >= 0; --i)
         {
-            if((chl = chls[i]) && (chl.type == type) && (url == chl.url)){ return chl; };
+            if((chl = chls[i]) && (chl.type == type) && (url == chl.url)){ return chl; }
         }
         return null;
     },
@@ -678,12 +678,12 @@ mme.prototype =
         {
             if(chl == chls[i])
             {
-                if(chl.timer){ clearTimeout(chl.timer); chl.timer = null; };
-                if(this.chl_status.initting_device == chl.status){ this.dev_from.style.display = "none"; };
+                if(chl.timer){ clearTimeout(chl.timer); chl.timer = null; }
+                if(this.chl_status.initting_device == chl.status){ this.dev_from.style.display = "none"; }
                 chl.status = this.chl_status.stopped;
                 if(0 < chl.id)
                 {
-                    if(this.is_ready("chl_destroy")){ this.plug_obj.chl_destroy(chl.id); };
+                    if(this.is_ready("chl_destroy")){ this.plug_obj.chl_destroy(chl.id); }
                     chl.id = 0;
                 }
                 chl.refer = null;

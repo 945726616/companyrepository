@@ -107,6 +107,17 @@ export default {
       $('#register_btn').hide()
       $('#sign_account').hide()
       let bt, aaa, username
+
+      if(window.location.href.indexOf('vimtag')>-1){
+        _this.name = 'vimtag';
+      }else if(window.location.href.indexOf('ebitcam')>-1){
+        _this.name = 'ebit';
+      }else if(window.location.href.indexOf('mipcm')>-1){
+        _this.name = 'mipc';
+      }else{
+        _this.name = 'vsmahome';
+      }
+
       if (localStorage.getItem('remember_msg_info')) {
         // mlocal_storage参见\web\lib\mlib.core.localstorage.js
         bt = localStorage.getItem('remember_msg_info')
@@ -163,7 +174,7 @@ export default {
           "<input class='standard_inputs_normal' id='binding_account' type='text' style='display:none; color:#404040; width:230px; float:none;'>" +
           '</div>' +
           "<div style='width:235px; margin:auto;'>" + // 下一步按钮
-          "<input id='binding_account_next_btn' style='width:100%; line-height:34px; height:34px; background-color:#00a6ba;' type='button' class='vimtag_button_right' value='" +
+          "<input id='binding_account_next_btn' style='width:100%; line-height:34px; height:34px;' type='button' class='vimtag_button_right' value='" +
           mcs_action_next +
           "'>" +
           '</div>' +
@@ -319,7 +330,7 @@ export default {
             username: $('#binding_account').val(),
             email: $('#recovery_pass_email').val(),
             appid: _this.appid,
-            name: name,
+            name: _this.name,
             lang: sessionStorage.getItem('userLanguage')
           }).then(res => {
             //console.log(res.data, 'recovery_binding_email_res')
@@ -579,10 +590,10 @@ export default {
           })
           return
         }
-        //Judgment is ipc login or user login 记录用户是ipc登录还是账户登录(目前暂未发现该参数有实际用途暂且注释)
-        // let reg = /^\d/
-        // if (reg.exec(username_value)) g_login_status = 'ipc'
-        // else g_login_status = 'register_user'
+        //Judgment is ipc login or user login 记录用户是ipc登录还是账户登录
+        let reg = /^\d/
+        if (reg.exec(username_value)) _this.$store.dispatch('setLoginStatus', 'ipc')
+        else _this.$store.dispatch('setLoginStatus', 'register_user')
         if (!loginWaitFlag) {
           // 用户登录
           _this.$store.dispatch('setLoginWaitFlag', 1)
@@ -602,9 +613,9 @@ export default {
                 _this.$store.dispatch('setSeq', msg.seq)
                 let version_type = ''
                 if (navigator.userAgent.indexOf('Intel Mac') > -1) {
-                  version_type = 'mac_' + name
+                  version_type = 'mac_' + _this.name
                 } else if (navigator.userAgent.indexOf('Windows') > -1) {
-                  version_type = 'windows_' + name
+                  version_type = 'windows_' + _this.name
                 }
                 if ($('#top_menu_my')) {
                   $('#top_menu_my').html(username_value)
@@ -614,7 +625,8 @@ export default {
                   // srv: window.location.host, // 暂时注释由于有代理添加该参数会导致调用地址异常
                   ver_type: version_type,
                   ver_from: 'v3.9.1.1607051739',
-                  lang: sessionStorage.getItem('userLanguage')
+                  lang: sessionStorage.getItem('userLanguage'),
+                  p: [{ n: "status", v: "main" }]
                 }).then(res => {
                   get_version_ack(res.data)
                   function get_version_ack (msg) {

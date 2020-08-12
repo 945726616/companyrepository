@@ -160,19 +160,20 @@ const devlist = {
         },
         user: {
           username: params.sn,
-          old_pwd: pwd_encrypt(old_pass),
-          pwd: pwd_encrypt(new_pass),
+          old_pwd: login.pwd_encrypt(old_pass),
+          pwd: login.pwd_encrypt(new_pass),
           level: "",
           guest: params.is_guest ? 1 : 0
         }
       }
     }).then(res => {
-      let result = login.get_ret(res)
-      if (result === '') {
-        returnItem = 1
-      } else {
-        returnItem = 0
-      }
+      returnItem = {result:login.get_ret(res)}
+      // let result = login.get_ret(res)
+      // if (result === '') {
+      //   returnItem = 1
+      // } else {
+      //   returnItem = 0
+      // }
     })
     return returnItem
   },
@@ -180,13 +181,14 @@ const devlist = {
   ** 设备网络设置
   */
   async net_set (params) {
+    let info = {dns:params.dns,ifs:params.networks}
     return await axios.get('/ccm/ccm_net_set', {
       params: {
         sess: {
           nid: login.create_nid(),
           sn: params.sn
         },
-        info: params.info
+        info: info
       }
     })
   },
@@ -212,38 +214,38 @@ const devlist = {
   */
   async wifi_get (params) {
     let returnItem
-    devlist.net_get(params).then(res => { // 调用net_get接口
+    await devlist.net_get(params).then(res => { // 调用net_get接口
       let result = login.get_ret(res)
-      if (result && result === '') {
-        if (res.data.ifs[1].wifi_client.info.stat === "ok") {
-          returnItem = res.data.ifs[1].wifi_client.ap_list
+      if (res && result === '') {
+        if (res.data.info.ifs[1].wifi_client.info.stat === "ok") {
+          returnItem = res.data.info.ifs[1].wifi_client.ap_list
         } else {
-          returnItem = res.data.ifs[1].wifi_client.ap_list
+          returnItem = res.data.info.ifs[1].wifi_client.ap_list
         }
       }
     })
-    return await returnItem
+    return returnItem
   },
   /*
   ** 设备wifi设置
   */
-  wifi_set (params) {
+  async wifi_set (params) {
     let now_net_info = {}
     now_net_info["ifs"] = { token: "ra0", enabled: 1 }
     now_net_info.ifs["phy"] = { conf: { mode: "wificlient" } }
     now_net_info.ifs["wifi_client"] = { conf: { enabled: 1, ssid: params.ssid, key: params.key } }
     let returnItem
-    devlist.net_get(params).then(res => { // 调用网络获取
+    await devlist.net_get(params).then(async res => { // 调用网络获取
       let result = login.get_ret(res)
-      if (result && result === '') {
+      if (res && result === '') {
         now_net_info.dns = res.dns
         let info = { ifs: now_net_info.ifs, dns: now_net_info.dns }
-        devlist.net_set({
+        await devlist.net_set({
           ...params,
           info: info
-        }).then(res => { // 调用设置wifi网络方法
+        }).then(async res => { // 调用设置wifi网络方法
           if (login.get_ret(res) === '') {
-            wifi_info_request(0)
+            await wifi_info_request(0)
           } else {
             returnItem = { msg: mcs_permission_denied, type: "error" }
           }
@@ -254,17 +256,15 @@ const devlist = {
         returnItem = { msg: mcs_failed_to_set_the, type: "error" }
       }
     })
-    function wifi_info_request (num) {
+    async function wifi_info_request (num) {
       if (num > 10) {
-        returnItem = { msg: mcs_failed_to_set_the, type: "error" }
-        return
+        return returnItem = { msg: mcs_failed_to_set_the, type: "error" }
       }
-      devlist.net_get(params).then(res => { // 循环调用获取wifi信息接口,查看是否设置成功
-        if (res.ifs[1].wifi_client.info.stat === "ok") {
-          returnItem = { msg: mcs_set_successfully, type: 'success' }
-          return
+      await devlist.net_get(params).then(async res => { // 循环调用获取wifi信息接口,查看是否设置成功
+        if (res.data.info.ifs[1].wifi_client.info.stat === "ok") {
+          return returnItem = { msg: mcs_set_successfully, type: 'success' }
         } else {
-          wifi_info_request(++num)
+          await wifi_info_request(++num)
         }
       })
     }
@@ -281,7 +281,7 @@ const devlist = {
           nid: login.create_nid(),
           sn: params.sn
         },
-        nick: params.name
+        nick: params.nick
       }
     }).then(res => {
       returnItem = {
@@ -343,25 +343,27 @@ const devlist = {
   ** 获取设备时间
   ** 此处原方法中存储了一个全局时区本方法中暂未填写
   */
-  time_get (params) {
+  async time_get (params) {
     let returnItem
-    devlist.ntp_get(params).then(res => { // 调用获取设备ntp
+    await devlist.ntp_get(params).then(async res => { // 调用获取设备ntp
       let result = login.get_ret(res)
       if (result === '') {
-        devlist.date_get(params).then(res_date => { // 调用获取设备日期
+        let msg = res.data ? res.data.info : "";
+        await devlist.date_get(params).then(res_date => { // 调用获取设备日期
           let result_date = login.get_ret(res_date)
           if (result_date === '') {
+            let msg2 = res_date.data ? res_date.data.utc_date : "";
             returnItem = {
               result: result_date,
-              timezone: res.timezone, // ccm_ntp_get获取
-              auto_sync: res.auto_sync_enable, // ccm_ntp_get获取
-              ntp_addr: res.manual[0].ip, // ccm_ntp_get获取
-              hour: res_date.time.hour,
-              min: res_date.time.min,
-              sec: res_date.time.sec,
-              year: res_date.date.year,
-              mon: res_date.date.mon,
-              day: res_date.date.day
+              timezone: msg.timezone, // ccm_ntp_get获取
+              auto_sync: msg.auto_sync_enable, // ccm_ntp_get获取
+              ntp_addr: msg.manual[0].ip, // ccm_ntp_get获取
+              hour: msg2.time.hour,
+              min: msg2.time.min,
+              sec: msg2.time.sec,
+              year: msg2.date.year,
+              mon: msg2.date.mon,
+              day: msg2.date.day
             }
           }
         })
@@ -417,7 +419,7 @@ const devlist = {
   /*
   ** 设置设备详细时间
   */
-  time_set (params) {
+  async time_set (params) {
     let returnItem
     let oDate = new Date()
     let req_obj = {}
@@ -431,15 +433,15 @@ const devlist = {
     req_obj.auto_sync = 1
     req_obj.sn = params.sn
     req_obj.timezone = params.timezone
-    devlist.time_get(params).then(res => {
+    await devlist.time_get(params).then(async res => {
       req_obj.ntp_addr = res.ntp_addr
-      devlist.date_set({ // 调用设置设备日期
+      await devlist.date_set({ // 调用设置设备日期
         ...req_obj,
         sn: params.sn
-      }).then(res_date_set => {
+      }).then(async res_date_set => {
         let result_date_set = login.get_ret(res_date_set)
         if (result_date_set === '') {
-          devlist.ntp_set({ // 调用设置设备ntp
+          await devlist.ntp_set({ // 调用设置设备ntp
             ...req_obj,
             sn: params.sn
           }).then(res_ntp_set => {
@@ -450,7 +452,7 @@ const devlist = {
         }
       })
     })
-    return returnItem === '' ? null : 1
+    return returnItem.result === '' ? null : 1
   },
   /*
   ** 获取服务记录

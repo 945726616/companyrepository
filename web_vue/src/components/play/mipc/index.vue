@@ -434,7 +434,7 @@ export default {
                 }
                 if (_this.$store.state.jumpPageData.selectDeviceIpc) {
                     if (!_this.publicFunc.mx("#snapshot_buffer")) {
-                        $("#ptz_control_bottom_center").append("<div id='snapshot_buffer'><img src='imgs/device/snapshot.gif' style='margin-top:30%;'></div>");
+                        $("#ptz_control_bottom_center").append("<div id='snapshot_buffer'><img src="+require('@/assets/device/snapshot.gif')+" style='margin-top:30%;'></div>");
                     }
                     _this.$api.play.play_snapshot({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => { // 调用截图接口
                         get_snapshot_ack(res)
@@ -1125,6 +1125,7 @@ export default {
       $('#login_box').append("<div id='is_mipc_div'></div>")
     }
     this.publicFunc.projectReload.call(this);
+    window.mipcPlay = this.mipcPlay;
   }
 }
 </script>

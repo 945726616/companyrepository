@@ -41,69 +41,20 @@ export default {
 
       $("#mipcBack").on("click", function () {
         // createPage("top", { parent: $("#top") });
-        _this.$router.push({ name: 'top', params: { parent: $("#top") } });
+        // _this.$router.push({ name: 'top', params: { parent: $("#top") } });
         // createPage("devlist", { parent: $("#page") })
         _this.$router.push({ name: 'devlist', params: { parent: $("#page") } });
       })
       _this.$api.set.set_list_get({ flag: obj.type, sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
         _this.create_set_list(res)
       })
-      function create_set_list (data) { // 创建设置列表
-        for (let i = 0; i < data.length; i++) {
-          if (_this.$store.state.jumpPageData.projectFlag) { // 渲染设置列表时mipc系列不添加图标
-            _this.publicFunc.mx("#create_setting_page_left").innerHTML +=
-              "<div class='list_idle_div list_idle_div_active' type='" + data[i].type + "' " + (data[i].type == "lighting" ? "id='lighting'" : "") + " " + (data[i].type == "delete_device" ? "id='set_delete_device'" : "") + " " + (data[i].type == "accessory" ? "id='accessory'" : "") + ">"
-              + "<span class='list_left_text'>" + data[i].name + "</span>"
-              + "<div class='list_img'></div>"
-              + (data[i].type == "system" ? "<div id='system_new_version' class='system_new_version'>new</div>" : "")
-              + "</div>"
-          } else {
-            if (_this.publicFunc.mx("#create_setting_page_left")) {
-              _this.publicFunc.mx("#create_setting_page_left").innerHTML +=
-                "<div class='list_idle_div list_idle_div_active' type='" + data[i].type + "' " + (data[i].type == "lighting" ? "id='lighting'" : "") + " " + (data[i].type == "delete_device" ? "id='set_delete_device'" : "") + " " + (data[i].type == "accessory" ? "id='accessory'" : "") + ">"
-                + "<div " + (data[i].type == "delete_device" ? "" : "style='background:url(" + require("@/assets/device/set_" + data[i].type + ".png") + ") no-repeat 0 13px;width:19px;height:40px;background-size:100%;float:left'") + "></div>"
-                + "<span class='list_left_text'>" + data[i].name + "</span>"
-                + "<div class='list_img'></div>"
-                + (data[i].type == "system" ? "<div id='system_new_version' class='system_new_version'>new</div>" : "")
-                + "</div>"
-            }
-          }
 
-        }
-        $("#lighting").hide();
-        $("#accessory").hide();
-        $("#set_delete_device").children('span').css('margin-left', "0"); //解决删除设备不居中
-        //console.log("get_dev_info_this")
-        _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
-          if (res.result === "") {
-            if (res.white_light) {
-              $("#lighting").show();
-            }
-            if ($("#lighting").css('display') === "none") { //优化删除设备上面显示横线
-              $("#set_delete_device").prev().prev().css("border-bottom", "none")
-            } else {
-              $("#set_delete_device").prev().css("border-bottom", "none")
-            }
-            if (res.rffreq === "868") {
-              $("#accessory").show();
-            }
-            //console.log(res, 'sound_detect_test')
-            if (res.face_detect === 1 || res.sound_detect === 1) { //人型检测||msg.human_detect==1
-              $("#accessory").show();
-            }
-            if (res.new_ealf === "1") {
-              _this.new_ealf = 1
-            }
-          }
-        })
-        _this.set_list_event();
-      }
       // 点击展示风格切换
       _this.publicFunc.mx('#toggle_set_page').onclick = function () {
         _this.$api.set.set_new_list_get({ flag: obj.type, sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
           create_new_set_list(res)
+          toggle_setnewpage_click()
         })
-        // toggle_setnewpage_click()
       }
 
       function toggle_setnewpage_click () {
@@ -113,20 +64,20 @@ export default {
             _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
               if (res.result == "") {
                 if (res && res.fisheye) {
-                  jumpData = { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: obj.web_name }
+                  jumpData = { parent: $("#set"), back_page: "play", type: 5, addr: obj.addr, web_name: obj.web_name }
                   // createPage("set", { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: obj.web_name });
                   _this.create_set_page(jumpData);
-                } else if (msg.oscene) {
-                  jumpData = { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: obj.web_name }
+                } else if (res.oscene) {
+                  jumpData = { parent: $("#set"), back_page: "play", type: 1, addr: obj.addr, web_name: obj.web_name }
                   // createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: obj.web_name });
                   _this.create_set_page(jumpData);
                 } else {
-                  jumpData = { parent: $("#page"), back_page: "play", type: 3, addr: obj.addr, web_name: obj.web_name };
+                  jumpData = { parent: $("#set"), back_page: "play", type: 3, addr: obj.addr, web_name: obj.web_name };
                   // createPage("set", { parent: $("#page"), back_page: "play", type: 3, addr: obj.addr, web_name: obj.web_name });
                   _this.create_set_page(jumpData);
                 }
               } else {
-                jumpData = { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: obj.web_name }
+                jumpData = { parent: $("#set"), back_page: "play", type: 1, addr: obj.addr, web_name: obj.web_name }
                 // createPage("set", { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: obj.web_name });
                 _this.create_set_page(jumpData);
               }
@@ -134,285 +85,269 @@ export default {
           }
         }
       }
-        function create_new_set_list (data) {
-          let menu_content = "<div id='set_new_back'><div id='new_back' style='float:left'><div id='main_title_box_return_img'></div>" + mcs_back + "</div><div id='toggle_set_new_page'></div></div>";
-          for (let i = 0; i < data.length; i++) {
-            menu_content += "<div class='category_title'>" + data[i].category + "</div>";
-            menu_content += "<div class='new_menu_list_box'>"
-            let content = data[i].content;
-            for (let j = 0; j < content.length; j++) {
-              menu_content +=
-                "<div class='new_menu_list' stype='" + content[j].type + "' " + (content[j].type == "lighting" ? "id='lighting'" : "") + " " + (content[j].type == "resolute" ? "id='resolute'" : "") + " " + (content[j].type == "accessory" ? "id='accessory'" : "") + " >"
-                + "<div class='new_menu_list_img' style='background:url(" + require("@/assets/device/set_" + content[j].type + ".png") + ") no-repeat;width:34px;height:34px;background-size:100% 100%'></div>"
-                + "<div class='new_menu_list_name' style='font-size:15px;margin-top:15px'>" + content[j].name + "</div>"
-                + "</div>"
-            }
-            menu_content += "</div>";
+      function create_new_set_list (data) {
+        let menu_content = "<div id='set_new_back'><div id='new_back' style='float:left'><div id='main_title_box_return_img'></div>" + mcs_back + "</div><div id='toggle_set_new_page'></div></div>";
+        for (let i = 0; i < data.length; i++) {
+          menu_content += "<div class='category_title'>" + data[i].category + "</div>";
+          menu_content += "<div class='new_menu_list_box'>"
+          let content = data[i].content;
+          for (let j = 0; j < content.length; j++) {
+            menu_content +=
+              "<div class='new_menu_list' stype='" + content[j].type + "' " + (content[j].type == "lighting" ? "id='lighting'" : "") + " " + (content[j].type == "resolute" ? "id='resolute'" : "") + " " + (content[j].type == "accessory" ? "id='accessory'" : "") + " >"
+              + "<div class='new_menu_list_img' style='background:url(" + require("@/assets/device/set_" + content[j].type + ".png") + ") no-repeat;width:34px;height:34px;background-size:100% 100%'></div>"
+              + "<div class='new_menu_list_name' style='font-size:15px;margin-top:15px'>" + content[j].name + "</div>"
+              + "</div>"
           }
-          obj.parent.html("<div id='set_new_main_page' style='margin:0 auto;width:90%;'>"
-            + menu_content
-            + "<div id='delete_dev_btn' class='menu_list_delete' stype='delete_device' style='background:#f1474f;margin:50px auto;border-radius:2px;width:174px;color:#fff;padding:5px;text-align:center;'><div style='cursor:pointer'>" + mcs_delete_device + "</div></div>"
-            + "</div>")
-          $("[stype='cloud-storage']").css('display', 'none');   //隐藏掉云存储
-          set_new_list_event();
+          menu_content += "</div>";
         }
+        obj.parent.html("<div id='set_new_main_page' style='margin:0 auto;width:90%;'>"
+          + menu_content
+          + "<div id='delete_dev_btn' class='menu_list_delete' stype='delete_device' style='background:#f1474f;margin:50px auto;border-radius:2px;width:174px;color:#fff;padding:5px;text-align:center;'><div style='cursor:pointer'>" + mcs_delete_device + "</div></div>"
+          + "</div>")
+        $("[stype='cloud-storage']").css('display', 'none');   //隐藏掉云存储
+        set_new_list_event();
+      }
 
-        function set_new_list_event () {
-          _this.publicFunc.mx("#new_back").onclick = function () {
-            if (obj.back_page == "play") {
-              // createPage("play", obj);
-              _this.$router.push({ name: 'play', params: obj });
-            } else if (obj.back_page == "boxlist") {
-              // createPage("boxlist", obj);
-              _this.$router.push({ name: 'boxlist', params: obj });
-            }
+      function set_new_list_event () {
+        _this.publicFunc.mx("#new_back").onclick = function () {
+          if (obj.back_page == "play") {
+            // createPage("play", obj);
+            _this.$router.push({ name: 'play', params: obj });
+          } else if (obj.back_page == "boxlist") {
+            // createPage("boxlist", obj);
+            _this.$router.push({ name: 'boxlist', params: obj });
           }
-          let l_dom_new_menu_list = _this.publicFunc.mx(".new_menu_list");
-          for (let j = 0; j < l_dom_new_menu_list.length; j++) {
-            l_dom_new_menu_list[j].index = j;
-            l_dom_new_menu_list[j].onclick = function () {
-              obj.parent.html("<div id='new_page_back'><div id='main_title_box_return_img'></div>" + mcs_back + "</div>"
-                + "<div id='create_setting_page_new'></div>")
-              let __this = this;
-              // let index = _this.index;
-              // alarm_device_tips
-              let list_name = $(__this)[0].innerText;  //后加云盒子硬盘显示文字与sd卡区分
-              let info_data = { type: __this.getAttribute('stype'), list_name: list_name, dom: _this.publicFunc.mx("#create_setting_page_new") };
-              _this.create_right_page(info_data);
-              $('#create_setting_page_new').find('#ntp').css({ 'height': '50px', 'border-bottom': '1px solid #d6d7dc', 'border-top': '1px solid #d6d7dc' });
-              let system_update_content = $('#create_setting_page_new').find("#system_upgrade_div");
-              system_update_content.css('color', "#00a6ba");
+        }
+        let l_dom_new_menu_list = _this.publicFunc.mx(".new_menu_list");
+        for (let j = 0; j < l_dom_new_menu_list.length; j++) {
+          l_dom_new_menu_list[j].index = j;
+          l_dom_new_menu_list[j].onclick = function () {
+            obj.parent.html("<div id='new_page_back'><div id='main_title_box_return_img'></div>" + mcs_back + "</div>"
+              + "<div id='create_setting_page_new'></div>")
+            let __this = this;
+            // let index = _this.index;
+            // alarm_device_tips
+            let list_name = $(__this)[0].innerText;  //后加云盒子硬盘显示文字与sd卡区分
+            let info_data = { type: __this.getAttribute('stype'), list_name: list_name, dom: _this.publicFunc.mx("#create_setting_page_new") };
+            _this.create_right_page(info_data);
+            $('#create_setting_page_new').find('#ntp').css({ 'height': '50px', 'border-bottom': '1px solid #d6d7dc', 'border-top': '1px solid #d6d7dc' });
+            let system_update_content = $('#create_setting_page_new').find("#system_upgrade_div");
+            system_update_content.css('color', "#00a6ba");
 
-              _this.publicFunc.mx('#new_page_back').onclick = function () {
-                _this.$api.set.set_new_list_get({ flag: obj.type, sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
-                  create_new_set_list(res)
-                })
+            _this.publicFunc.mx('#new_page_back').onclick = function () {
+              _this.$api.set.set_new_list_get({ flag: obj.type, sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
+                create_new_set_list(res)
                 toggle_setnewpage_click()
-              }
-              $(".list_right_box").css("margin", "0 auto");
-            }
-          }
-          $("#lighting").hide();
-          $("#accessory").hide();
-          //console.log("get_dev_info_this")
-          _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
-            if (res.result === "") {
-              if (res.white_light) {
-                $("#lighting").show();
-              }
-              if (res.rffreq === "868") {
-                $("#accessory").show();
-              }
-              //console.log(res, 'sound_detect_test')
-              if (res.face_detect === 1 || res.sound_detect === 1) { //人型检测||msg.human_detect==1
-                $("#accessory").show();
-              }
-            }
-          })
-          _this.publicFunc.mx('#delete_dev_btn').onclick = function () {
-            _this.publicFunc.delete_tips({ content: mcs_delete_device + "?", func: delete_device })
-            function delete_device () {
-              _this.$api.devlist.dev_del({
-                sn: _this_sn,
-                dom: _this_parent
-              }).then(res => {
-                _this.set_result(res)
               })
             }
+            $(".list_right_box").css("margin", "0 auto");
           }
         }
-        // ********************* //
-
-        // ******************************************** 设置switch结束 ********************************************************* //
-
-
-        function set_time_func (type) {
-          repeat = false;
-          let index = -1;
-          let time_select = [];
-          let start_time = parseInt(mx("#start_time").innerHTML);
-          let end_time = parseInt(mx("#end_time").innerHTML);
-          let new_time_select = [];
-          let tmp_data;
-          if (start_time >= end_time) {
-            repeat = true;
-            flag = false;
-            _this.publicFunc.msg_tips({ msg: mcs_start_time_is_greater, type: "error", timeout: 3000 })
-            return;
-          }
-          flag = true;
-          for (let i = 0; i < week_select.length; i++) {
-            if (week_select[i]) {
-              for (let j = 0; j < 24; j++) {
-                if (j % 8 == 0) {
-                  tmp_data = "";
-                  index++;
-                }
-                if (j >= start_time && j < end_time) {
-                  tmp_data += "0"
-                } else {
-                  tmp_data += "1"
-                }
-                time_select[index] = tmp_data.split("").reverse().join("");
-              }
-            } else {
-              for (let j = 0; j < 24; j++) {
-                if (j % 8 == 0) {
-                  tmp_data = "";
-                  index++;
-                }
-                tmp_data += "1"
-                time_select[index] = tmp_data;
-              }
+        $("#lighting").hide();
+        $("#accessory").hide();
+        //console.log("get_dev_info_this")
+        _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
+          if (res.result === "") {
+            if (res.white_light) {
+              $("#lighting").show();
+            }
+            if (res.rffreq === "868") {
+              $("#accessory").show();
+            }
+            //console.log(res, 'sound_detect_test')
+            if (res.face_detect === "1" || res.sound_detect === "1") { //人型检测||msg.human_detect==1
+              $("#accessory").show();
             }
           }
-          function get_select_time (g_total_data) {
-            if (g_total_data != "") {
-              let l_data_2 = mcodec.b64_2_binary(g_total_data, 1), str = "", arr = [], arr2 = [], arr_tmp = [];
-              if (!l_data_2) return;
-              for (let k = 0; k < l_data_2.length; k++) {
-                str = "";
-                arr[k] = l_data_2[k].toString(2);
-              }
-              for (let i = 0; i < arr.length; i++) {
-                for (let j = 0; j < 8; j++) {
-                  if (arr[i].length < 8) {
-                    let addStr = "";
-                    for (let k = 0; k < (8 - arr[i].length); k++) {
-                      addStr += "0";
-                    }
-                    arr[i] = addStr + arr[i];
-                  }
-                }
-              }
-              if (type == "submit") {
-                if (g_is_add == "false") {
-                  for (let i = 0; i < old_week.length; i++) {
-                    let arr_all = "";
-                    let arr_all_arr = [];
-                    let arr1 = "", arr2 = "", arr3 = "";
-                    for (let j = 0; j < 3; j++) {
-                      arr_all += arr[old_week[i] * 3 + j].split("").reverse().join("");
-                    }
-                    arr_all_arr = arr_all.split("");
-                    for (let m = parseInt(old_start_time); m < parseInt(old_end_time); m++) {
-                      arr_all_arr[m] = "1";
-                    }
-                    for (let k = 0; k <= 7; k++) {
-                      arr1 += arr_all_arr[k];
-                    }
-                    for (k = 8; k <= 15; k++) {
-                      arr2 += arr_all_arr[k]
-                    }
-                    for (k = 16; k <= 23; k++) {
-                      arr3 += arr_all_arr[k]
-                    }
-                    arr[old_week[i] * 3] = arr1.split("").reverse().join("");
-                    arr[old_week[i] * 3 + 1] = arr2.split("").reverse().join("");
-                    arr[old_week[i] * 3 + 2] = arr3.split("").reverse().join("");
-                  }
-                }
-                let select = [];
-                if (g_is_add == "false") {
-                  for (let i = 0; i < week_select.length; i++) {
-                    if (week_select[i] == 1) {
-                      for (let j = 0; j < 3; j++) {
-                        select.push(i * 3 + j);
-                      }
-                    }
-                  }
-                }
-                for (let n = 0; n < arr.length; n++) {
-                  let tmp_arr = arr[n].split("");
-                  let tmp_time_arr = time_select[n].split("");
-                  let arr_old = "";
-                  let arr_new = "";
-                  let tmp = "";
-                  for (let num = 0; num < tmp_arr.length; num++) {
-                    if (tmp_arr[num] == "1" && tmp_time_arr[num] == "0") {
-                      tmp += "0"
-                    } else if (tmp_arr[num] == "0" || tmp_time_arr[num] == "0") {
-                      tmp += "0"
-                    } else if (tmp_arr[num] == "0" && tmp_time_arr[num] == "0") {
-                      tmp += "0"
-                    } else if (tmp_arr[num] == "1" && tmp_time_arr[num] == "1") {
-                      tmp += "1"
-                    } else if (tmp_arr[num] == "0" && tmp_time_arr[num] == "1") {
-                      tmp += "0"
-                    }
-                  }
-                  new_time_select[n] = tmp;
-                }
-                new_time_select = stringToHex(new_time_select);
-                let l_data_64 = mcodec.binary_2_b64(new_time_select, 1);
-                g_total_data = l_data_64
-                g_aa_data = l_data_64;
-              } else {
-                for (let n = 0; n < arr.length; n++) {
-                  let tmp_arr = arr[n].split("");
-                  let tmp_time_arr = time_select[n].split("");
-                  let tmp = "";
-                  for (let num = 0; num < tmp_arr.length; num++) {
-                    if (tmp_time_arr[num] == "1") {
-                      tmp_time_arr[num] = "0"
-                    } else {
-                      tmp_time_arr[num] = "1"
-                    }
-                    if (tmp_arr[num] == "1" || tmp_time_arr[num] == "1") {
-                      tmp += "1"
-                    } else {
-                      tmp += "0"
-                    }
-                  }
-                  new_time_select[n] = tmp;
-                }
-                new_time_select = stringToHex(new_time_select);
-                let l_data_64 = mcodec.binary_2_b64(new_time_select, 1);
-                g_total_data = l_data_64
-                g_aa_data = l_data_64;
-              }
-            }
-          }//get_select_time
-          get_select_time(g_total_data)
-        }//set_time_func
-
-        let g_system_stop_wait = function (str) {
-          let wait_div = _this.publicFunc.mx("#system_wait_div"),
-            wait_display_div = _this.publicFunc.mx("#system_wait_display_div");
-          document.documentElement.onkeydown = null;
-          if (wait_div) {
-            wait_div["innerHTML"] = "";
-            wait_div.parentNode[s_removeChild](wait_div);
-            wait_div = null;
-          }
-          if (wait_display_div) {
-            wait_display_div["innerHTML"] = "";
-            wait_display_div.parentNode[s_removeChild](wait_display_div);
-            wait_display_div = null;
-          }
-        }
-        _this.$store.dispatch('setSystemStopWait', g_system_stop_wait)
-        function scene_set_ack (msg) {
-          // $("#buffer_page").hide();
-          _this.publicFunc.closeBufferPage()
-          _this.set_result(msg);
-        }
-
-        function set_result_del_device (data) { // 设置删除设备回调函数
-          // console.log('进入删除设备回调', data)
-          _this.publicFunc.msg_tips({ msg: data.msg, type: data.type, timeout: 3000 })
-          if (data.type === "success") {
-            window.location.reload()
-          } else {
-            // 删除失败重载当前设置页面
-            _this.publicFunc.mx("#create_setting_page_left").innerHTML = null // 清空左侧选项列表 防止重复
-            _this.$api.set.set_list_get({ flag: obj.type, sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
-              _this.create_set_list(res)
+        })
+        _this.publicFunc.mx('#delete_dev_btn').onclick = function () {
+          _this.publicFunc.delete_tips({ content: mcs_delete_device + "?", func: delete_device })
+          function delete_device () {
+            _this.$api.devlist.dev_del({
+              sn: _this_sn,
+              dom: _this_parent
+            }).then(res => {
+              _this.set_result(res)
             })
           }
         }
+      }
+      // ********************* //
+
+      // ******************************************** 设置switch结束 ********************************************************* //
 
 
+      function set_time_func (type) {
+        repeat = false;
+        let index = -1;
+        let time_select = [];
+        let start_time = parseInt(mx("#start_time").innerHTML);
+        let end_time = parseInt(mx("#end_time").innerHTML);
+        let new_time_select = [];
+        let tmp_data;
+        if (start_time >= end_time) {
+          repeat = true;
+          flag = false;
+          _this.publicFunc.msg_tips({ msg: mcs_start_time_is_greater, type: "error", timeout: 3000 })
+          return;
+        }
+        flag = true;
+        for (let i = 0; i < week_select.length; i++) {
+          if (week_select[i]) {
+            for (let j = 0; j < 24; j++) {
+              if (j % 8 == 0) {
+                tmp_data = "";
+                index++;
+              }
+              if (j >= start_time && j < end_time) {
+                tmp_data += "0"
+              } else {
+                tmp_data += "1"
+              }
+              time_select[index] = tmp_data.split("").reverse().join("");
+            }
+          } else {
+            for (let j = 0; j < 24; j++) {
+              if (j % 8 == 0) {
+                tmp_data = "";
+                index++;
+              }
+              tmp_data += "1"
+              time_select[index] = tmp_data;
+            }
+          }
+        }
+        function get_select_time (g_total_data) {
+          if (g_total_data != "") {
+            let l_data_2 = mcodec.b64_2_binary(g_total_data, 1), str = "", arr = [], arr2 = [], arr_tmp = [];
+            if (!l_data_2) return;
+            for (let k = 0; k < l_data_2.length; k++) {
+              str = "";
+              arr[k] = l_data_2[k].toString(2);
+            }
+            for (let i = 0; i < arr.length; i++) {
+              for (let j = 0; j < 8; j++) {
+                if (arr[i].length < 8) {
+                  let addStr = "";
+                  for (let k = 0; k < (8 - arr[i].length); k++) {
+                    addStr += "0";
+                  }
+                  arr[i] = addStr + arr[i];
+                }
+              }
+            }
+            if (type == "submit") {
+              if (g_is_add == "false") {
+                for (let i = 0; i < old_week.length; i++) {
+                  let arr_all = "";
+                  let arr_all_arr = [];
+                  let arr1 = "", arr2 = "", arr3 = "";
+                  for (let j = 0; j < 3; j++) {
+                    arr_all += arr[old_week[i] * 3 + j].split("").reverse().join("");
+                  }
+                  arr_all_arr = arr_all.split("");
+                  for (let m = parseInt(old_start_time); m < parseInt(old_end_time); m++) {
+                    arr_all_arr[m] = "1";
+                  }
+                  for (let k = 0; k <= 7; k++) {
+                    arr1 += arr_all_arr[k];
+                  }
+                  for (k = 8; k <= 15; k++) {
+                    arr2 += arr_all_arr[k]
+                  }
+                  for (k = 16; k <= 23; k++) {
+                    arr3 += arr_all_arr[k]
+                  }
+                  arr[old_week[i] * 3] = arr1.split("").reverse().join("");
+                  arr[old_week[i] * 3 + 1] = arr2.split("").reverse().join("");
+                  arr[old_week[i] * 3 + 2] = arr3.split("").reverse().join("");
+                }
+              }
+              let select = [];
+              if (g_is_add == "false") {
+                for (let i = 0; i < week_select.length; i++) {
+                  if (week_select[i] == 1) {
+                    for (let j = 0; j < 3; j++) {
+                      select.push(i * 3 + j);
+                    }
+                  }
+                }
+              }
+              for (let n = 0; n < arr.length; n++) {
+                let tmp_arr = arr[n].split("");
+                let tmp_time_arr = time_select[n].split("");
+                let arr_old = "";
+                let arr_new = "";
+                let tmp = "";
+                for (let num = 0; num < tmp_arr.length; num++) {
+                  if (tmp_arr[num] == "1" && tmp_time_arr[num] == "0") {
+                    tmp += "0"
+                  } else if (tmp_arr[num] == "0" || tmp_time_arr[num] == "0") {
+                    tmp += "0"
+                  } else if (tmp_arr[num] == "0" && tmp_time_arr[num] == "0") {
+                    tmp += "0"
+                  } else if (tmp_arr[num] == "1" && tmp_time_arr[num] == "1") {
+                    tmp += "1"
+                  } else if (tmp_arr[num] == "0" && tmp_time_arr[num] == "1") {
+                    tmp += "0"
+                  }
+                }
+                new_time_select[n] = tmp;
+              }
+              new_time_select = stringToHex(new_time_select);
+              let l_data_64 = mcodec.binary_2_b64(new_time_select, 1);
+              g_total_data = l_data_64
+              g_aa_data = l_data_64;
+            } else {
+              for (let n = 0; n < arr.length; n++) {
+                let tmp_arr = arr[n].split("");
+                let tmp_time_arr = time_select[n].split("");
+                let tmp = "";
+                for (let num = 0; num < tmp_arr.length; num++) {
+                  if (tmp_time_arr[num] == "1") {
+                    tmp_time_arr[num] = "0"
+                  } else {
+                    tmp_time_arr[num] = "1"
+                  }
+                  if (tmp_arr[num] == "1" || tmp_time_arr[num] == "1") {
+                    tmp += "1"
+                  } else {
+                    tmp += "0"
+                  }
+                }
+                new_time_select[n] = tmp;
+              }
+              new_time_select = stringToHex(new_time_select);
+              let l_data_64 = mcodec.binary_2_b64(new_time_select, 1);
+              g_total_data = l_data_64
+              g_aa_data = l_data_64;
+            }
+          }
+        }//get_select_time
+        get_select_time(g_total_data)
+      }//set_time_func
+
+      let g_system_stop_wait = function (str) {
+        let wait_div = _this.publicFunc.mx("#system_wait_div"),
+          wait_display_div = _this.publicFunc.mx("#system_wait_display_div");
+        document.documentElement.onkeydown = null;
+        if (wait_div) {
+          wait_div["innerHTML"] = "";
+          wait_div.parentNode[s_removeChild](wait_div);
+          wait_div = null;
+        }
+        if (wait_display_div) {
+          wait_display_div["innerHTML"] = "";
+          wait_display_div.parentNode[s_removeChild](wait_display_div);
+          wait_display_div = null;
+        }
+      }
+      _this.$store.dispatch('setSystemStopWait', g_system_stop_wait)
+      function scene_set_ack (msg) {
+        // $("#buffer_page").hide();
+        _this.publicFunc.closeBufferPage()
+        _this.set_result(msg);
+      }
       
     },
     async create_set_list (data) { // 创建设置列表
@@ -436,14 +371,13 @@ export default {
               + "</div>"
           }
         }
-
       }
       $("#lighting").hide();
       $("#accessory").hide();
       $("#set_delete_device").children('span').css('margin-left', "0"); //解决删除设备不居中
       //console.log("get_dev_info_this")
       await _this.$api.set.dev_info({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
-        if (res.result === "") {
+        if (res && res.result === "") {
           if (res.white_light) {
             $("#lighting").show();
           }
@@ -456,7 +390,7 @@ export default {
             $("#accessory").show();
           }
           //console.log(res, 'sound_detect_test')
-          if (res.face_detect === 1 || res.sound_detect === 1) { //人型检测||msg.human_detect==1
+          if (res.face_detect === "1" || res.sound_detect === "1") { //人型检测||msg.human_detect==1
             $("#accessory").show();
           }
           if (res.new_ealf === "1") {
@@ -491,7 +425,7 @@ export default {
       for (let j = 0; j < l_dom_list_idle_div.length; j++) {
         l_dom_list_idle_div[j].index = j;
         l_dom_list_idle_div[j].onclick = function () {
-          let index = _this.index;
+          let index = this.index;
           $(".list_idle_div").removeClass("list_idle_div_active");
           $(".list_idle_div").eq(index).addClass("list_idle_div_active");
           let list_name = $(this).children("span")[0].innerHTML;  //后加云盒子硬盘显示文字与sd卡区分
@@ -543,7 +477,6 @@ export default {
             + "</div>"
             + "</div>";
           await _this.$api.set.about({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
-            // console.log(res, 'about_res')
             if (res.check_ver) {
               $("#system_new_version").show();
             }
@@ -682,7 +615,7 @@ export default {
                 _this.publicFunc.msg_tips({ msg: mcs_two_password_input_inconsistent + ".", type: "error", timeout: 3000 });
                 return;
               } else {
-                reg = /^\S{6,20}$/;
+                let reg = /^\S{6,20}$/;
                 if (!reg.exec(l_dom_input_new_password.value)) {
                   _this.publicFunc.msg_tips({ msg: mcs_password_demand + ".", type: "error", timeout: 3000 });
                   return;
@@ -781,7 +714,7 @@ export default {
                 return;
               }
               else {
-                reg = /^\S{6,20}$/;
+                let reg = /^\S{6,20}$/;
                 if (!reg.exec(l_dom_input_new_password.value)) {
                   _this.publicFunc.msg_tips({ msg: mcs_password_demand + ".", type: "error", timeout: 3000 });
                   return;
@@ -1084,7 +1017,6 @@ export default {
           });
           //Back to the list wifi Refresh
           function wifi_list (msg) { // wifi列表最终显示 包含信号强度 ccm_net_get
-
             l_dom_button_refresh.style.color = "#ffffff";
             l_dom_button_refresh.style.cursor = "pointer";
             let i, length, inner_html = "";
@@ -1136,10 +1068,10 @@ export default {
             };
             //wifi Refresh button
             l_dom_button_refresh.onclick = function () {
-              if (g_domain_oems_vimtag) {
-                this.style.color = "#ccc";
-                this.style.cursor = "wait";
-              }
+              // if (g_domain_oems_vimtag) {
+              //   this.style.color = "#ccc";
+              //   this.style.cursor = "wait";
+              // }
               _this.$api.devlist.wifi_get({ // 设备可连接wifi获取
                 sn: _this.$store.state.jumpPageData.selectDeviceIpc
               }).then(res => {
@@ -1518,12 +1450,12 @@ export default {
                 }
                 if (msg.dns) {
                   if (msg.dns.info.stat == "ok") {
-                    if (!g_domain_oems_vimtag) background_img_set(_this.publicFunc.mx("#dns_status"), sub_img_status0);
+                    // if (!g_domain_oems_vimtag) background_img_set(_this.publicFunc.mx("#dns_status"), sub_img_status0);
                     _this.publicFunc.mx("#dns_status").setAttribute("title", mcs_connnected);
                   }
-                  else if (msg.dns.info.stat == "err") {
-                    if (!g_domain_oems_vimtag) background_img_set(_this.publicFunc.mx("#dns_status"), sub_img_status1);
-                  }
+                  // else if (msg.dns.info.stat == "err") {
+                  //   if (!g_domain_oems_vimtag) background_img_set(_this.publicFunc.mx("#dns_status"), sub_img_status1);
+                  // }
                   if (msg.dns.conf.mode == "dhcp") {
                     //net_dns=msg.dns;
                     l_dom_input_auto_dns.value = msg.dns.info.dns[0] || "0.0.0.0";
@@ -2120,7 +2052,7 @@ export default {
             await _this.$api.set.get_network({
               sn: _this.$store.state.jumpPageData.selectDeviceIpc
             }).then(res => {
-              //console.log(res, 'net_get_res')
+              // console.log(res, 'net_get_res')
               get_network_ack(res[0], res[1])
             })
           }
@@ -2599,7 +2531,7 @@ export default {
                     _this.publicFunc.msg_tips({ msg: mcs_the_password_is_empty, type: "warning", timeout: 3000 })
                     return;
                   } else {
-                    reg = /^\S{6,20}$|admin/;
+                    let reg = /^\S{6,20}$|admin/;
                     if (!reg.exec(l_dom_input_password.value)) {
                       _this.publicFunc.msg_tips({ msg: mcs_password_demand, type: "warning", timeout: 3000 })
                       return;
@@ -2861,7 +2793,9 @@ export default {
                 else if (dev_type == 8) {
                   conf.face_detect_switch = face_detect_switch;
                 }
-                _this.$api.set.alarm_device_set(conf)
+                _this.$api.set.alarm_device_set(conf).then(res =>{
+                  _this.set_result(res)
+                })
               }
               else {
                 _this.$api.set.exdev_get({
@@ -2903,7 +2837,7 @@ export default {
             fdSliderController.create();
 
             function alarm_get_ack (msg) {
-              let l_conf = msg;
+              l_conf = msg;
               if (msg && msg.result == "") {
                 if (l_dom_input_thresholdLevelNight)
                   fdSliderController.increment("input_thresholdLevelNight", msg.night_sensitivity - l_dom_input_thresholdLevelNight.value);
@@ -2951,7 +2885,7 @@ export default {
 
           function scene_list_event () {
             let l_dom_option_scene_list = _this.publicFunc.mx(".option_scene_list");
-            l_dom_option_scene_list_add = _this.publicFunc.mx("#option_scene_list_add");
+            let l_dom_option_scene_list_add = _this.publicFunc.mx("#option_scene_list_add");
             for (let i = 0; i < l_dom_option_scene_list.length; i++) {
               l_dom_option_scene_list[i].index = i;
               l_dom_option_scene_list[i].onclick = function () {
@@ -3108,18 +3042,18 @@ export default {
             let temp = 1;//搜索点击
             let exdev_get_time;
             if (obj.type == "door") {
-              demo_img_url = 'imgs/device/door.gif';
+              demo_img_url = '@/assets/device/door.gif';
               type = 6;
               content_tips = mcs_search_magnetic_start + mcs_search_magnetic_end;
             } else if (obj.type == "sos") {
-              demo_img_url = 'imgs/device/sos.gif';
+              demo_img_url = '@/assets/device/sos.gif';
               type = 5;
               content_tips = mcs_search_sos_strat + mcs_search_sos_end;
             } else if (obj.type == "infra") {
-              demo_img_url = 'imgs/device/pir.gif';
+              demo_img_url = '@/assets/device/pir.gif';
               content_tips = "";
             } else if (obj.type == "smoke") {
-              demo_img_url = 'imgs/device/smoke.gif';
+              demo_img_url = '@/assets/device/smoke.gif';
               content_tips = "";
             }
             info.dom.innerHTML =
@@ -3129,10 +3063,10 @@ export default {
               + "<div id='option_attachmen_search_title_text'>" + mcs_add_accessory + "</div>"
               + "</div>"
               + "<div id='option_attachmen_search_content'>"
-              + "<img id='option_attachmen_search_content_img' src='" + demo_img_url + "'>"
+              + "<img id='option_attachmen_search_content_img' src='" +require( demo_img_url )+ "'>"
               + "<div id='option_attachmen_search_content_tips'>" + content_tips + "</div>"
               + "<div id='option_attachmen_search_content_btn'>"
-              + "<img id='option_attachmen_search_content_btn_ico' src='imgs/device/search.png'>"
+              + "<img id='option_attachmen_search_content_btn_ico' src="+require('@/assets/device/search.png')+">"
               + "<span id='option_attachmen_search_content_btn_txt'>" + mcs_search + "</span>"
               + "</div>"
               + "</div>"
@@ -3277,8 +3211,8 @@ export default {
             l_sence_data = msg.data.info.scene;
             let l_scene_devs = msg.data.info.scene[1] ? msg.data.info.scene[1].dev : "";
             for (let i = 0; i < l_scene_devs.length; i++) {
-              dev_id = l_scene_devs[i].id;
-              dev_nick = l_scene_devs[i].nick;
+              let dev_id = l_scene_devs[i].id;
+              let dev_nick = l_scene_devs[i].nick;
               let dev_type = l_scene_devs[i].type, scene_class, dev_type_name;
               // let dev_f;
               // let in_ico = "", out_ico = "";
@@ -3340,10 +3274,10 @@ export default {
               if (face_detect == 1 || sound_detect == 1) {
                 let l_dom_option_scene_list_btn = _this.publicFunc.mx(".option_scene_list_btn");
                 for (let i = 0; i < l_dom_option_scene_list_btn.length; i++) {
-                  if (l_dom_option_scene_list_btn[i].getAttribute("attachmen_type") === 8 && face_detect === 1) {
+                  if (l_dom_option_scene_list_btn[i].getAttribute("attachmen_type") === "8" && face_detect === "1") {
                     l_dom_option_scene_list_btn[i].style.display = "block";
                   }
-                  if (l_dom_option_scene_list_btn[i].getAttribute("attachmen_type") === 9 && sound_detect === 1) {
+                  if (l_dom_option_scene_list_btn[i].getAttribute("attachmen_type") === "9" && sound_detect === "1") {
                     l_dom_option_scene_list_btn[i].style.display = "block";
                   }
                 }
@@ -5452,7 +5386,9 @@ export default {
                   _this.publicFunc.msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 });
                 }
               }
-              _this.$api.set.alarm_device_set(conf)
+              _this.$api.set.alarm_device_set(conf).then(res =>{
+                _this.set_result(res)
+              })
             };
           }
           function alarm_device_get_ack (msg) {
@@ -6928,14 +6864,14 @@ export default {
 
           }
           add_date_time_event();
-          await _this.$api.set.time_get({
+          await _this.$api.devlist.time_zone_get({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res_time_zone_get => {
+            //console.log(res_time_zone_get, 'time_zone_get_res')
+            time_zone_get_ack(res_time_zone_get)
+          })
+          _this.$api.set.time_get({
             sn: _this.$store.state.jumpPageData.selectDeviceIpc
           }).then(res => {
             dev_time_get_ack(res)
-          })
-          _this.$api.devlist.time_zone_get({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res_time_zone_get => {
-            //console.log(res_time_zone_get, 'time_zone_get_res')
-            time_zone_get_ack(res_time_zone_get)
           })
           break
         }
@@ -6984,13 +6920,33 @@ export default {
           if (_this.$store.state.jumpPageData.selectDeviceIpc.substr(0, 3) != "166") _this.publicFunc.mx("#activation_div").style.display = "none";
           function add_system_event () {
             function device_reboot () {
-              _this.$api.set.reboot_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc })
+              if (_this.$store.state.jumpPageData.guest) {
+                _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
+              } else {
+                _this.$api.set.reboot_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res =>{
+                  setTimeout(function () {
+                    _this.$router.push({name:'devlist'})
+                  }, 3000)
+                })
+              }
             }
             function system_device_reset () {
-              if (_this.publicFunc.mx("#save_configuration").checked) {
-                _this.$api.set.reset_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc, keep_cofig: 1 })
+              if (_this.$store.state.jumpPageData.guest) {
+                _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
               } else {
-                _this.$api.set.reset_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc, keep_cofig: 0 })
+                if (_this.publicFunc.mx("#save_configuration").checked) {
+                  _this.$api.set.reset_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc, keep_cofig: 1 }).then(res =>{
+                    setTimeout(function () {
+                      _this.$router.push({name:'devlist'})
+                    }, 3000)
+                  })
+                } else {
+                  _this.$api.set.reset_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc, keep_cofig: 0 }).then(res =>{
+                    setTimeout(function () {
+                      _this.$router.push({name:'devlist'})
+                    }, 3000)
+                  })
+                }
               }
             }
             //Enter the activation code box event
@@ -7332,12 +7288,13 @@ export default {
                 mic_level: output_level,
                 speaker_level: speaker_level
               }).then(res => {
+
                 _this.set_result(res)
               })
             };
           }
           function cam_set () {
-            _this.$api.play.adjust_set({
+            _this.$api.set.cam_set({
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
               flip: Number(l_dom_ipc_turnover.checked),
               flicker_freq: l_dom_power_fr.selectedIndex
@@ -7408,7 +7365,7 @@ export default {
             l_dom_button_setup.onclick = function () {
               function delete_device () {
                 _this.$api.devlist.dev_del({
-                  sn: _this_sn
+                  sn: _this.$store.state.jumpPageData.selectDeviceIpc
                 }).then(res => {
                   set_result_del_device(res)
                 })
@@ -7418,6 +7375,19 @@ export default {
             };
           }
           add_delete_device_event();
+          function set_result_del_device (data) { // 设置删除设备回调函数
+            // console.log('进入删除设备回调', data)
+            _this.publicFunc.msg_tips({ msg: data.msg, type: data.type, timeout: 3000 })
+            if (data.type === "success") {
+              window.location.reload()
+            } else {
+              // 删除失败重载当前设置页面
+              _this.publicFunc.mx("#create_setting_page_left").innerHTML = null // 清空左侧选项列表 防止重复
+              _this.$api.set.set_list_get({ flag: obj.type, sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
+                _this.create_set_list(res)
+              })
+            }
+          }
           break;
         }
         case "lighting": {
@@ -7808,7 +7778,11 @@ export default {
           if (_this.$store.state.jumpPageData.selectDeviceIpc.substr(0, 3) != "166") _this.publicFunc.mx("#activation_div").style.display = "none";
           function add_system_reboot_event () {
             function device_reboot () {
-              _this.$api.set.reboot_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc })
+              _this.$api.set.reboot_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res =>{
+                setTimeout(function () {
+                  _this.$router.push({name:'devlist'})
+                }, 3000)
+              })
             }
             function reboot_device_reset () {
               if (_this.publicFunc.mx("#save_configuration").checked) {
@@ -8069,7 +8043,11 @@ export default {
           if (_this.$store.state.jumpPageData.selectDeviceIpc.substr(0, 3) != "166") _this.publicFunc.mx("#activation_div").style.display = "none";
           function add_system_reset_event () {
             function device_reboot () {
-              _this.$api.set.reboot_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc })
+              _this.$api.set.reboot_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res =>{
+                setTimeout(function () {
+                  _this.$router.push({name:'devlist'})
+                }, 3000)
+              })
             }
             function device_reset () {
               if (_this.publicFunc.mx("#save_configuration").checked) {
@@ -8852,7 +8830,7 @@ export default {
           function equipment_flip_cam_set () {
             _this.$api.play.adjust_set({
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-              flicker_freq: l_dom_power_fr.selectedIndex
+              flip: Number(l_dom_ipc_turnover.checked)
             }).then(res => {
               if (res.result !== "") {
                 _this.publicFunc.msg_tips({ msg: res.result, type: "error", timeout: 3000 });
@@ -9838,6 +9816,7 @@ export default {
           break;
         }
         case "motion_detect": { //将移动侦测从外设中取出
+          let l_conf;
           info.dom.innerHTML =
             "<div class='list_right_box'>"
             + "<div class='option_scene_list option_scene_list_btn' attachmen_class='scene_list_motion'>"
@@ -9963,13 +9942,15 @@ export default {
               conf.sensitivity = l_dom_input_threshold.value;
               conf.night_sensitivity = l_dom_input_thresholdLevelNight.value;
               conf.motion_track_switch = motion_track_switch;
-              _this.$api.set.alarm_device_set(conf)
+              _this.$api.set.alarm_device_set(conf).then(res =>{
+                _this.set_result(res)
+              })
             }
             //console.log(fdSliderController, 'fdSliderController')
             fdSliderController.create();
 
             function alarm_get_ack (msg) {
-              let l_conf = msg;
+              l_conf = msg;
               if (msg && msg.result == "") {
                 if (l_dom_input_thresholdLevelNight)
                   fdSliderController.increment("input_thresholdLevelNight", msg.night_sensitivity - l_dom_input_thresholdLevelNight.value);
@@ -10986,7 +10967,8 @@ export default {
               }
               //将所有外设的id改为io以方便计划表的设置
               record_all_dev = record_all_dev.sort(_this.dev_type_sort)
-              await record_all_dev.forEach(async function (item, index) {
+              for(let i = 0; i < record_all_dev.length; i++){
+                let item = record_all_dev[i];
                 let plan_eftiv_val = [] //计划表有效值（index==0）
                 await _this.$api.set.alarm_sche_get({
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -11003,7 +10985,7 @@ export default {
                     } else {
                       plan_tmp = res.data.sche.plan
                       item.sche_form = _this.sche_format(plan_tmp)
-                      let plan_filter = plan_tmp.filter(function (item, index) {
+                      let plan_filter = plan_tmp.filter(function (item, i) {
                         if (item.action_name) {
                           if (item.action_name.filter(function (s_item, s_index) {
                             return s_item.name == 'record'
@@ -11025,7 +11007,7 @@ export default {
                     // console.log(new_record_final_all_dev, "new_record_final_all_dev")
                     if (new_record_final_all_dev.length == record_all_dev.length) {
                       new_record_final_all_dev = new_record_final_all_dev.sort(_this.dev_type_sort)
-                      new_record_creat_div(item, index)   //开始动态打印div
+                      new_record_creat_div(item, i)   //开始动态打印div
                     }
                   } else {
                     _this.publicFunc.msg_tips({ msg: res.result, type: 'error', timeout: 3000 });
@@ -11034,7 +11016,7 @@ export default {
                     return;
                   }
                 })
-              })
+              }
             }
             else {
               _this.publicFunc.msg_tips({ msg: msg.result, type: 'error', timeout: 3000 });
@@ -11993,7 +11975,8 @@ export default {
                   }
                 }
               }
-              await alarm_all_dev.forEach(async function (item, index) {
+              for(let i = 0; i < alarm_all_dev.length; i++){
+                let item = alarm_all_dev[i];
                 await _this.$api.set.alarm_sche_get({
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                   exdev_id: item.id
@@ -12012,7 +11995,7 @@ export default {
                     } else {
                       plan_tmp = res.data.sche.plan
                       item.sche_form = _this.sche_format(plan_tmp)
-                      let plan_filter = plan_tmp.filter(function (item, index) {
+                      let plan_filter = plan_tmp.filter(function (item, i) {
                         if (item.action_name) {
                           if (item.action_name.filter(function (s_item, s_index) {
                             return s_item.name == 'alarm'
@@ -12045,7 +12028,7 @@ export default {
                     return;
                   }
                 })
-              })
+              }
             } else {
               _this.publicFunc.msg_tips({ msg: msg.result, type: 'error', timeout: 3000 });
               _this.publicFunc.closeBufferPage()
@@ -12190,7 +12173,7 @@ export default {
         // $("#buffer_page").hide();
         _this.publicFunc.closeBufferPage()
         if (msg && msg.result == "") {
-          data = msg;
+          // data = msg;
           if (msg.data.info.scene[0].flag == 0) {
             $("#is_show").text(mcs_turn_off)
           } else {

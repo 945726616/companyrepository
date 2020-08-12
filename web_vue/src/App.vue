@@ -29,7 +29,7 @@ export default {
   async mounted () {
     import(`@/lib/plugins/jquery.ibutton.js`)
     import(`@/lib/plugins/jquery.mousewheel.min.js`)
-    let userLanguage = sessionStorage.getItem('userLanguage')
+    let userLanguage = localStorage.getItem('language_choice_info') ? localStorage.getItem('language_choice_info') : sessionStorage.getItem('userLanguage')
     if (userLanguage) {
       await this.$chooseLanguage.lang(userLanguage)
     } else {

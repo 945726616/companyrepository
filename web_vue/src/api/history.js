@@ -450,7 +450,7 @@ const history = {
           let end_to_start_time = Math.abs(l_local_segs[j].pos_start - l_local_segs[j - 1].pos_end);
           if (l_local_segs[j].f != 2) {
             if (l_local_segs[j].pos_start == l_local_segs[j].pos_end) {
-              console.log(l_local_segs[j].pos_start == l_local_segs[j].pos_end)
+              // console.log(l_local_segs[j].pos_start == l_local_segs[j].pos_end)
             } else if ((end_to_start_time <= 7 * 1000) && (l_local_segs[j].pos_end - mark_video_segment_start_time < select_incise_time)) {
               cut_video_data[cut_video_data_index] = l_local_segs[j];
               cut_video_data_index++;

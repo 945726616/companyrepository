@@ -154,7 +154,7 @@ import publicFunc from '../../util/public'
             }
           }
           if (me.find("option").length > wifiConnection && isEdit == 1) {
-            addHight = me.find("option").length - wifiConnection;
+            let addHight = me.find("option").length - wifiConnection;
             $("#manager_page").mCustomScrollbar("update", 30 * addHight);
             if ($("#device_manager_content")) {
               var divHeight = $("#device_manager_content").height();

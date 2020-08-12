@@ -39,6 +39,7 @@ let languageSelect = {
     //根据参数来设置 dom的样式
     $('#select_language_mipc_new').on('change', function () {
       let lang_val = $('#select_language_mipc_new').val()
+      localStorage.setItem("language_choice_info",lang_val)
       chooseLanguage.lang(lang_val)
       location.reload()
     })

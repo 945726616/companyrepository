@@ -103,7 +103,7 @@ const play = {
    ** 播放总接口
    */
   async play(data) {
-    let returnItem;
+    let returnItem = "";
     let flash_isplay = store.state.jumpPageData.flashIsPlay
     let judge_enable_native_plug = true;
     let judge_enable_flash_plug = false;
@@ -130,7 +130,7 @@ const play = {
     };
     if (data.ipc_stat != 0) {
       // console.log('use mme_create')
-      ref_obj.inner_window_info.mme = new mme(mme_params);
+      ref_obj.inner_window_info.mme = await new mme(mme_params);
     }
     store.dispatch('setPlayInfo', ref_obj)
 
@@ -178,7 +178,7 @@ const play = {
             if (proto == "auto") proto = "rtdp";
           }
           if (playback) {
-            ms.send_msg("playback", {
+            data.agent.play({
               sn: ref_obj.sn,
               token: ref_obj.token,
               protocol: proto,
@@ -246,7 +246,7 @@ const play = {
           // if(store.state.jumpPageData.projectName=="vimtag"){
           obj.panel.innerHTML = "<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>" +
             "<div id='plugin_install_tips'>" + mcs_download_client + "</div>" +
-            "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.downloadManualUrl + "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>" +
+            "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.playDownloadUrl + "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>" +
             "<div style='margin-top: 85px;'><a name='flash' href='javascript:;'><div id='use_ordinary_video'>" + mcs_temporarily_installed_use_ordinary_video + "</div></a></div>" +
             "</div>"
           let plugin_install_page_width = $("#plugin_install_page").outerWidth() / 2;
@@ -260,9 +260,9 @@ const play = {
       }
     }
 
-    function play_ack(msg, ref) {
+    async function play_ack(msg, ref) {
       if (msg.result == "") {
-        chl_video_create({
+        return await chl_video_create({
           type: msg.type,
           uri: msg.url,
           inner_window_info: ref.inner_window_info,
@@ -292,7 +292,7 @@ const play = {
       }
     }
 
-    function chl_video_create(obj) {
+    async function chl_video_create(obj) {
       let uri = obj.uri,
         chl_params = (obj.type == "publish") ? "" : ",thread:\"istream\", jitter:{max:3000}" /* for old version's mme plugin */ ,
         trans_params = (obj.type == "play") ? ",trans:[{flow_ctrl:\"jitter\",thread:\"istream\"}]" :
@@ -371,6 +371,7 @@ const play = {
           play_ipc(obj)
         }, 1000)
       }
+      return returnItem;
     }
 
     function play_ipc(obj) {
@@ -420,7 +421,12 @@ const play = {
    ** 播放封面图
    */
   play_preview_img(params) {
-    let url = (params.addr ? "http://" + params.addr : window.location.protocol + "//" + window.location.host) + "/api/ccm/ccm_pic_get.js?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + params.pic_token + "&dflag=2";
+    let url;
+    if(process.env.NODE_ENV === 'production'){
+      url = (params.addr ? "http://" + params.addr : window.location.protocol + "//" + window.location.host) + "/ccm/ccm_pic_get.js?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + params.pic_token + "&dflag=2";
+    }else{
+      url = (params.addr ? "http://" + params.addr : window.location.protocol + "//" + window.location.host) + "/api/ccm/ccm_pic_get.js?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + params.pic_token + "&dflag=2";
+    }
     params.dom.css('background', 'url(' + url + ') 100% 100% no-repeat')
     params.dom.css('background-size', '100% 100%')
   },
@@ -815,10 +821,10 @@ const play = {
    ** 设置视频地址
    */
   async adjust_set(obj) {
-    obj = obj.conf;
+    if(obj.conf)obj = obj.conf;
     let returnItem
-    if (obj.is_white_light == 1 && obj.white_light) {
-      play.img_set({
+    if (obj.is_white_light && obj.white_light == 1) {
+      await play.img_set({
         sn: obj.sn,
         token: "vs0",
         conf: {
@@ -843,10 +849,10 @@ const play = {
           mode: obj.day_night,
           light_mode: obj.light_mode
         }
-      }).then(res => {
+      }).then(async res => {
         let result = login.get_ret(res);
         if (result === "") {
-          play.misc_set({
+          await play.misc_set({
             sn: obj.sn,
             info: {
               flip: obj.flip,
@@ -863,7 +869,7 @@ const play = {
         }
       })
     } else if (obj.day) {
-      play.img_set({
+      await play.img_set({
         sn: obj.sn,
         token: "vs0",
         conf: {
@@ -882,10 +888,10 @@ const play = {
           mode: obj.day_night,
           light_mode: obj.light_mode
         }
-      }).then(res => {
+      }).then(async res => {
         let result = login.get_ret(res);
         if (result == "") {
-          play.misc_set({
+          await play.misc_set({
             sn: obj.sn,
             info: {
               flip: obj.flip,
@@ -902,7 +908,7 @@ const play = {
         }
       })
     } else {
-      play.img_set({
+      await play.img_set({
         sn: obj.sn,
         token: "vs0",
         conf: {
@@ -912,10 +918,10 @@ const play = {
           sharpness: obj.sharpness,
           mode: obj.day_night
         }
-      }).then(res => {
+      }).then(async res => {
         let result = login.get_ret(res);
         if (result === "") {
-          play.misc_set({
+          await play.misc_set({
             sn: obj.sn,
             info: {
               flip: obj.flip,
@@ -988,8 +994,8 @@ const play = {
           sn: params.sn
         },
         info: {
-          flip: params.flip,
-          power_freq: params.flicker_freq
+          flip: params.info.flip,
+          power_freq: params.info.power_freq
         },
         resolute: params.resolute
       }

@@ -57,27 +57,29 @@ export default {
                 _this.publicFunc.mx("#dev_list").innerHTML = "";
                 _this.publicFunc.mx("#dev_list").innerHTML = "<div id='dev_list_box'></div>"
                 for(let i=0;i<msg.length;i++){
-                    let device_status_img="";
-                    if(msg[i].stat=="Offline"){
-                        device_status_img = "device_ipc_offline";
-                    }else if(msg[i].stat=="InvalidAuth"){
-                        device_status_img = "device_ipc_InvalidAuth";
-                    }else if(msg[i].stat=="Online"){
-                        if(!_this.$store.state.jumpPageData.selectDeviceIpc){
-                            _this.$store.dispatch('setSelectDeviceIpc', msg[i].sn)
+                    if(msg[i].type !== "socket"){
+                        let device_status_img="";
+                        if(msg[i].stat=="Offline"){
+                            device_status_img = "device_ipc_offline";
+                        }else if(msg[i].stat=="InvalidAuth"){
+                            device_status_img = "device_ipc_InvalidAuth";
+                        }else if(msg[i].stat=="Online"){
+                            if(!_this.$store.state.jumpPageData.selectDeviceIpc){
+                                _this.$store.dispatch('setSelectDeviceIpc', msg[i].sn)
+                            }
                         }
+                        _this.publicFunc.mx("#dev_list_box").innerHTML += 
+                        "<div class='dev_list' state='"+msg[i].stat+"' dtype='"+msg[i].type+"' sn='"+msg[i].sn+"'>"
+                            +"<div class='device_sidebar_nick'>"
+                                +"<div class='device_sidebar_point'></div>"
+                                +"<div class='device_list_nick'>"+(msg[i].nick.length<20?msg[i].nick:msg[i].nick.substr(0,20)+"...")+"</div>"
+                                +"<div class='device_list_del_ico'></div>"
+                            +"</div>"
+                            +"<div class='device_list_img "+device_status_img+"'>"
+                                +"<div><img class='img_class'></div>"
+                            +"</div>"
+                        +"</div>";
                     }
-                    _this.publicFunc.mx("#dev_list_box").innerHTML += 
-                    "<div class='dev_list' state='"+msg[i].stat+"' dtype='"+msg[i].type+"' sn='"+msg[i].sn+"'>"
-                        +"<div class='device_sidebar_nick'>"
-                            +"<div class='device_sidebar_point'></div>"
-                            +"<div class='device_list_nick'>"+(msg[i].nick.length<20?msg[i].nick:msg[i].nick.substr(0,20)+"...")+"</div>"
-                            +"<div class='device_list_del_ico'></div>"
-                        +"</div>"
-                        +"<div class='device_list_img "+device_status_img+"'>"
-                            +"<div><img class='img_class'></div>"
-                        +"</div>"
-                    +"</div>";
                 }
                 _this.publicFunc.mx("#dev_list_box").innerHTML +="<div id='active_dev_li'></div>"
                 create_dev_left_event();
@@ -116,14 +118,15 @@ export default {
                 let length = _this.publicFunc.mx(".dev_list").length;
                 let l_dom_device_list_del_ico = _this.publicFunc.mx(".device_list_del_ico");
                 for(let j=0;j<l_dom_device_list_del_ico.length;j++){
-                    l_dom_device_list_del_ico[j].onclick = function(){
+                    l_dom_device_list_del_ico[j].onclick = function(e){
+                        e.stopPropagation()
                         let _this_sn = this.parentNode.parentNode.getAttribute("sn");
                         let _this_parent = this.parentNode.parentNode;
                         _this.publicFunc.delete_tips({content:mcs_delete_device + "?",func:function(){
                             _this.$api.devlist.dev_del({
                                 sn: _this_sn,
                                 dom: _this_parent
-                                }).then(res => {
+                            }).then(res => {
                                 _this.publicFunc.msg_tips({
                                     msg: res.msg,
                                     type: res.type,
@@ -151,11 +154,14 @@ export default {
                         _this.publicFunc.mx(".dev_list")[i].className = "dev_list dev_list_active";
                         if(type == 'IPC'){
                             // createPage("play", {parent:$("#dev_main_right")})
+                            if(_this.$route.path != '/play'){
                             _this.$router.push({name:'play',params:{parent:$("#dev_main_right"),parentId:"dev_main_right"}})
+                            }else{
+                                mipcPlay({ parent: $('#dev_main_right') })
+                            }
                         }else if(type == "BOX"){
                             let jumpData = {parent:$("#dev_main_right"),parentId:"dev_main_right"}
                             // createPage("boxlist", {parent:$("#dev_main_right")})
-                            _this.$router.push({name:'boxlist',params:jumpData})
                             if(_this.$route.path != '/boxlist'){
                                 _this.$router.push({name:'boxlist',params:jumpData})
                             }else{
@@ -184,11 +190,15 @@ export default {
                             this.className = "dev_list dev_list_active";
                             if(type == 'IPC'){
                                 // createPage("play", {parent: $("#dev_main_right")})
-                                _this.$router.push({name:'play',params:{parent:$("#dev_main_right"),parentId:"dev_main_right"}})
+                                if(_this.$route.path != '/play'){
+                                    _this.$router.push({name:'play',params:{parent:$("#dev_main_right"),parentId:"dev_main_right"}})
+                                }else{
+                                    mipcPlay({ parent: $('#dev_main_right') })
+                                }
                             }else if(type == "BOX"){
                                 // createPage("boxlist", {parent: $("#dev_main_right")})
                                 if(_this.$route.path != '/boxlist'){
-                                    _this.$router.push({name:'boxlist',params:{parent:$("#dev_main_right")}})
+                                    _this.$router.push({name:'boxlist',params:{parent:$("#dev_main_right"),parentId:"dev_main_right"}})
                                 }else{
                                     create_boxlist_page({parent:$("#dev_main_right")})
                                 }
@@ -659,16 +669,16 @@ export default {
                             }else{
                                 _this.$api.devlist.dev_passwd_set({ // 设备密码设置
                                     sn: d_id,
-                                    old_password: old_password,
-                                    new_password: password
+                                    old_pass: old_password,
+                                    new_pass: password
                                     }).then(res => {
                                     if (res) {
                                         _this.$api.devlist.dev_add({ // 添加设备
                                         sn: d_id,
                                         password: password
-                                        }).then(res => {
+                                    }).then(res => {
                                         add_device_set_wifi(res)
-                                        })
+                                    })
                                     } else {
                                         _this.publicFunc.msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 })
                                     }
@@ -721,7 +731,7 @@ export default {
                             if (res) {
                             for (let i = 0; i < res.length; i++) {
                                 l_dom_add_device_set_wifi_list_box.innerHTML += "<div class='add_device_set_wifi_list'>" + res[i].ssid + "</div>"
-                                $("#add_device_set_wifi_list_box").html(wifi_Dom)
+                                // $("#add_device_set_wifi_list_box").html(wifi_Dom)
                             }
                                 add_device_set_wifi_event();
                             } else {
@@ -763,10 +773,10 @@ export default {
                                 sn:d_id,ssid:wifi_ssid,key:wifi_password
                             }).then(res => {
                             _this.publicFunc.closeBufferPage()
-                            if(msg.type=='error'){  //加上逻辑如果设置失败 不跳转页面 可以重新配置wifi或跳过
-                                    _this.publicFunc.msg_tips({msg:msg.msg, type:msg.type, timeout:3000});
-                                }else if(msg.type=='success'){ 
-                                    _this.publicFunc.msg_tips({msg:msg.msg, type:msg.type, timeout:3000});
+                            if(res.type=='error'){  //加上逻辑如果设置失败 不跳转页面 可以重新配置wifi或跳过
+                                    _this.publicFunc.msg_tips({msg:res.msg, type:res.type, timeout:3000});
+                                }else if(res.type=='success'){ 
+                                    _this.publicFunc.msg_tips({msg:res.msg, type:res.type, timeout:3000});
                                     add_device_set_nick();
                                 }else{ 
                                     add_device_set_nick();
@@ -901,7 +911,7 @@ export default {
                         _this.publicFunc.mx("#add_device_submit").onclick = function(){
                             // $("#buffer_page").show();
                             _this.publicFunc.showBufferPage()
-                            _thie.$api.devlist.time_set({ // 设置设备时区及时间
+                            _this.$api.devlist.time_set({ // 设置设备时区及时间
                                 sn: d_id,
                                 timezone: timezone
                             }).then(res => {

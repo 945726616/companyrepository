@@ -5,13 +5,15 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const login = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/login')
-const devlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/devlist/mipc')
-const boxlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/boxlist')
-const play = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/play/mipc')
-const history = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/history/mipc')
-const set = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/set')
-const playback = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/playback')
+const login = () => import(/* webpackChunkName: "group-Mipc" */'@/components/login')
+const devlist = () => import(/* webpackChunkName: "group-Mipc" */'@/components/devlist/mipc')
+const boxlist = () => import(/* webpackChunkName: "group-Mipc" */'@/components/boxlist')
+const play = () => import(/* webpackChunkName: "group-Mipc" */'@/components/play/mipc')
+const history = () => import(/* webpackChunkName: "group-Mipc" */'@/components/history/mipc')
+const set = () => import(/* webpackChunkName: "group-Mipc" */'@/components/set')
+const playback = () => import(/* webpackChunkName: "group-Mipc" */'@/components/playback')
+const my = () => import(/* webpackChunkName: "group-Mipc" */'@/components/my/mipc')
+const download = () => import(/* webpackChunkName: "group-Mipc" */'@/components/download')
 
 const mipcRouter = new Router({
   routes: [
@@ -51,6 +53,16 @@ const mipcRouter = new Router({
       path: '/playback',
       name: 'playback',
       component: playback
+    },
+    {
+      path: '/my',
+      name: 'my',
+      component: my
+    },
+    {
+      path: '/download',
+      name: 'download',
+      component: download
     }
   ]
 })

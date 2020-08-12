@@ -111,8 +111,8 @@ import store from '../../store'
           }
         }
         jQuery(_this).attr("type", true);
-        if (store.state.jumpPageData.projectName == 'vimtag.com') { jQuery(_this).css({ "background": "#00a6ba" }) }
-        else if (store.state.jumpPageData.projectName == 'ebitcam.com') { jQuery(_this).css({ "background": "#ff781f" }) }
+        if (store.state.jumpPageData.projectName == 'vimtag') { jQuery(_this).css({ "background": "#00a6ba" }) }
+        else if (store.state.jumpPageData.projectName == 'ebitcam') { jQuery(_this).css({ "background": "#ff781f" }) }
         else { jQuery(_this).css({ "background": "#2988cc" }); }
         jQuery(_this).children().animate({ "left": "37px" }, 100, "linear")
       }//g 5.7.1
@@ -131,8 +131,8 @@ import store from '../../store'
           dom.children().eq(i).children().eq(1).html(tmp)
         }
       }
-      if (store.state.jumpPageData.projectName == 'vimtag.com') { jQuery(_this).css({ "background": "#00a6ba" }) }
-      else if (store.state.jumpPageData.projectName == 'ebitcam.com') { jQuery(_this).css({ "background": "#ff781f" }) }
+      if (store.state.jumpPageData.projectName == 'vimtag') { jQuery(_this).css({ "background": "#00a6ba" }) }
+      else if (store.state.jumpPageData.projectName == 'ebitcam') { jQuery(_this).css({ "background": "#ff781f" }) }
       else { jQuery(_this).css({ "background": "#2988cc" }); }
 
       jQuery(_this).children().animate({ "left": "37px" }, 100, "linear")

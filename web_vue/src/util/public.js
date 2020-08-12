@@ -7,8 +7,10 @@ const publicFunc = {
       await require('../css/vimtag' + docPath)
     } else if (window.location.href.indexOf('ebit') > -1) {
       await require('../css/ebit' + docPath)
-    } else {
+    } else if (window.location.href.indexOf('mipc') > -1){
       await require('../css/mipc' + docPath)
+    }else{
+      await require('../css/vsmahome' + docPath)
     }
   },
   urlParam () { // 截取url参数
@@ -79,7 +81,11 @@ const publicFunc = {
       if (obj.flag && obj.flag === "my_page") {
         // createPage("my",{ parent: $("#page") }) // 进入我的页面
         // router.push({name:'my',params:{parent: $('#page')}})
-        vimtagMyPage({ parent: $('#my') })
+        if(window.location.href.indexOf('vimtag') == -1){
+          mipcMyPage({ parent: $('#my') })
+        }else{
+          vimtagMyPage({ parent: $('#my') })
+        }
       }
     })
     $("#delete_tips_ok").click(function () {
