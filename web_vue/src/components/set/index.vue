@@ -3063,7 +3063,7 @@ export default {
               + "<div id='option_attachmen_search_title_text'>" + mcs_add_accessory + "</div>"
               + "</div>"
               + "<div id='option_attachmen_search_content'>"
-              + "<img id='option_attachmen_search_content_img' src='" +require( demo_img_url )+ "'>"
+              + "<img id='option_attachmen_search_content_img' src='" + demo_img_url + "'>"
               + "<div id='option_attachmen_search_content_tips'>" + content_tips + "</div>"
               + "<div id='option_attachmen_search_content_btn'>"
               + "<img id='option_attachmen_search_content_btn_ico' src="+require('@/assets/device/search.png')+">"

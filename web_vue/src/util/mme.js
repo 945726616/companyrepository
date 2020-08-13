@@ -91,8 +91,9 @@ mme.prototype =
   get_default_skin: function () { return { dev_panel: { width: 360, height: 180 } }; },
   create_plug: function (parent, enable_flash_plug, enable_native_plug, plug_params) {
     console.log(parent, enable_flash_plug, enable_native_plug, plug_params, 'enter_create_plug')
-    if (this.parent && !this.parent.appendChild) {
+    if (this.parent && !this.parent.appendChild) { // 保证节点选择统一性去除JQuery节点
       this.parent = this.parent[0]
+      parent = parent[0]
     }
     var test, info, plug = null, id = this.id ? this.id : (++this.id_allocer.value), type = null,
       ie = (!!window.ActiveXObject || "ActiveXObject" in window);
@@ -128,7 +129,7 @@ mme.prototype =
         parent.css("background","black")
       }
 
-      parent.html("<object id='plug_" + id + "' width='100%' height='100%'"
+      parent.innerHTML = "<object id='plug_" + id + "' width='100%' height='100%'"
         + (ie ? (" classid='clsid:" + type.clsid + "'") : (" type='" + type.mime + "'"))
         + " codebase='" + type.codebase + "'"
         + ((type == this.types.flash) ? (" data='" + type.src + "'" + (this.windowless ? (" wmode='transparent'") : "")) : "")
@@ -145,7 +146,7 @@ mme.prototype =
           : (" <param name='mme_on_event' value='plug_" + this.id + "_on_event'/>"
             + (this.windowless ? (" <param name='windowless' value='" + this.windowless + "'/>") : "")
             + "<param name='mme_params' value='" + plug_params + "'/>"))
-        + "</object>")
+        + "</object>"
       plug = ie ? window["plug_" + id] : document.getElementById("plug_" + id);
       if (plug) {
         try {
@@ -324,6 +325,7 @@ mme.prototype =
       bind(a, "click", function (e) {
         me.clear_install();
         me.status = me.plug_status.initting;
+        console.log(me, 'a_click_me')
         if (null == (me.plug_obj = me.create_plug(me.parent, true, true, me.create_params))) {
           me.status = me.plug_status.closed;
           if (me.on_event) { me.on_event({ type: "missing" }); }
