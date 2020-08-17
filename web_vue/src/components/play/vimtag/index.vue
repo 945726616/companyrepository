@@ -810,7 +810,6 @@ export default {
               $("#play_view_control").show();
             }
           }
-          console.log('play_dev_info')
           _this.$api.set.dev_info({ //ms.send_msg("dev_info_get"
             sn: _this.$store.state.jumpPageData.selectDeviceIpc
           }).then(res => {

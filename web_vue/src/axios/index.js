@@ -8,7 +8,7 @@ import mcodec from '../util/mcodec'
 // const x2Js = new x2js()
 import store from '../store'
 // import router from '../router'
-
+import QS from 'qs';//引入qs模块，用来序列化post类型的数据
 /** 
  * 提示函数 
  * 禁止点击蒙层、显示一秒后关闭
@@ -69,7 +69,9 @@ const errorHandle = (status, other) => {
 let instance = axios.create({ timeout: 400000 })
 
 // 设置post请求头
-instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+instance.defaults.headers['Access-Control-Allow-Origin'] = '*'//解决cors头问题
+instance.defaults.headers['Access-Control-Allow-Credentials'] = 'true'//解决session问题
+instance.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'//将表单数据传递转化为form-data类型
 
 /**
  * 请求拦截器
@@ -77,29 +79,55 @@ instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlenco
  */
 instance.interceptors.request.use(
   config => {
-    let param = config.params // 取得当前get传递的对象
-    let newParams = {} // 新建对象用于存储变更后的对象
-    // console.log(param, 'config_param')
-    newParams = mcodec.obj_2_url(param, '&') // 采用原项目中对参数进行加密的方法进行封装
-    // for (let paramName in param) {
-    //   newParams['d' + paramName] = param[paramName] // 遍历对象键值对并重新命名属性名 后续此处需要添加两个额外的固定参数数据值通过vuex进行存取
-    // }
-    config.params = {
-      hfrom_handle: 27141,
-      hqid: store.state.user.qid,
-      ...newParams
-    } // 修改后的对象
-    if (process.env.NODE_ENV !== 'production') { // 如果是测试环境下接口添加/api采用代理地址进行访问,解决跨域等问题
-      let url = config.url
-      // console.log(config.params, 'srv', config.params.dsrv)
-      if (!config.params.dsrv) {
-        config.url = '/api' + url + '.js'
-      } else {
-        config.url = '/project' + url + '.js'
+    if(config.method == 'get'){
+      let param = config.params // 取得当前get传递的对象
+      let newParams = {} // 新建对象用于存储变更后的对象
+      // console.log(param, 'config_param')
+      newParams = mcodec.obj_2_url(param, '&') // 采用原项目中对参数进行加密的方法进行封装
+      // for (let paramName in param) {
+      //   newParams['d' + paramName] = param[paramName] // 遍历对象键值对并重新命名属性名 后续此处需要添加两个额外的固定参数数据值通过vuex进行存取
+      // }
+      config.params = {
+        hfrom_handle: 27141,
+        hqid: store.state.user.qid,
+        ...newParams
+      } // 修改后的对象
+      if (process.env.NODE_ENV !== 'production') { // 如果是测试环境下接口添加/api采用代理地址进行访问,解决跨域等问题
+        let url = config.url
+        // console.log(config.params, 'srv', config.params.dsrv)
+        if (!config.params.dsrv) {
+          config.url = '/api' + url + '.js'
+        } else {
+          config.url = '/project' + url + '.js'
+        }
+      }else{
+        config.url = config.url + '.js'
       }
-    }else{
-      config.url = config.url + '.js'
+    }else if(config.method == "post"){
+      let param = config.data // 取得当前get传递的对象
+      let newParams = {} // 新建对象用于存储变更后的对象
+      // console.log(param, 'config_param')
+      newParams = mcodec.obj_2_url(param, '&') // 采用原项目中对参数进行加密的方法进行封装
+      config.data = {
+        hfrom_handle: 27141,
+        hqid: store.state.user.qid,
+        ...newParams
+      } // 修改后的对象
+      config['withCredentials'] = true
+      config.data = QS.stringify(config.data)//要使用对提交从参数对象进行序列化的操作
+      if (process.env.NODE_ENV !== 'production') { // 如果是测试环境下接口添加/api采用代理地址进行访问,解决跨域等问题
+        let url = config.url
+        // console.log(config.params, 'srv', config.params.dsrv)
+        // if (!config.params.dsrv) {
+          config.url = '/api' + url + '.js'
+        // } else {
+        //   config.url = '/project' + url + '.js'
+        // }
+      }else{
+        config.url = config.url + '.js'
+      }
     }
+    
     // config.url = location.host + config.url
     // console.log(config, 'axiosConfig')
     return config

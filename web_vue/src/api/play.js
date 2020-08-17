@@ -177,7 +177,7 @@ const play = {
           } else {
             if (proto == "auto") proto = "rtdp";
           }
-          if (playback) {
+          if (playback) { // 不使用该模块播放
             data.agent.play({
               sn: ref_obj.sn,
               token: ref_obj.token,
@@ -449,7 +449,7 @@ const play = {
    ** 摄像头视角控制
    */
   play_ptz_turn(params) {
-    console.log(params, 'turn_params')
+    // console.log(params, 'turn_params')
     let l_mark = {
       flag: "ready"
     }
@@ -484,7 +484,7 @@ const play = {
    ** 摄像头视角控制接口
    */
   async ptz_ctrl(params) {
-    console.log(params, 'ptz_ctrl_params')
+    // console.log(params, 'ptz_ctrl_params')
     let returnItem
     await axios.get('/ccm/ccm_ptz_ctl', {
       params: {

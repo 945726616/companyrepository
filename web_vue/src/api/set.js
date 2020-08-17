@@ -528,8 +528,8 @@ const set = {
         res_dev_info.sn = params.sn
         mme.prototype.check_plug_install("", function (res, version) {
           res_dev_info.plugin_version = version
-          returnItem = res_dev_info
         });
+        returnItem = res_dev_info
       })
     })
     return await returnItem
@@ -1796,14 +1796,12 @@ const set = {
   */
   async plan_record_set (params) {
     let returnItem
-    await axios.get('/ccms/ccm_plan_record_set', {
-      params: {
-        sess: {
-          nid: login.create_nid(),
-          sn: params.sn
-        },
-        sche: params.sche
-      }
+    await axios.post('/ccms/ccm_plan_record_set', {
+      sess: {
+        nid: login.create_nid(),
+        sn: params.sn
+      },
+      sche: params.sche
     }).then(res => {
       returnItem = { result: login.get_ret(res), data: res.data }
     })
@@ -1818,18 +1816,17 @@ const set = {
   },
   /*
   ** 联动框架->设置动作时间表
+  ** 计划表长度太长所以用post方式提交
   */
   async alarm_sche_set (params) {
     let returnItem
-    await axios.get('/ccms/ccm_action_sche_set', {
-      params: {
-        sess: {
-          nid: login.create_nid(),
-          sn: params.sn
-        },
-        exdev_id: params.exdev_id,
-        sche: params.sche
-      }
+    await axios.post('/ccms/ccm_action_sche_set', {
+      sess: {
+        nid: login.create_nid(),
+        sn: params.sn
+      },
+      exdev_id: params.exdev_id,
+      sche: params.sche
     }).then(res => {
       if (res && login.get_ret(res) === "") {
         returnItem = { result: login.get_ret(res), data: res.data }

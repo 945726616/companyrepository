@@ -10,7 +10,7 @@ export default {
       let _this = this
       let videoSize = 0;
       let first = false;
-      let bo_type = false;
+      let bo_type = sessionStorage.getItem('bo_type') ? sessionStorage.getItem('bo_type') : false;
       let play_back_token;
       let play_progress;
       let b_start_time;
@@ -102,9 +102,9 @@ export default {
         }
         if (window.fujikam == "fujikam") { // 浏览器不显示进度条和下载功能
           $("#playback_download_img").css("background-size", "100% 100%");
-          $("#playback_progress_bar").show();
-          $("#playback_start_time").show();
-          $("#playback_end_time").show();
+          // $("#playback_progress_bar").show();
+          // $("#playback_start_time").show();
+          // $("#playback_end_time").show();
           $("#play_menu_right").show();
         }
         l_dom_video_play = _this.publicFunc.mx("#video_play");
@@ -150,7 +150,7 @@ export default {
             _this.$api.play.video_stop({
               dom: $("#playback_screen")
             }).then(() => { // 原函数中是存在返回值调用至函数的情况
-              _this.$api.play.play({ // 原playback接口
+              _this.$api.playback.play({ // 原playback接口
                 agent: obj.agent,
                 dom: $("#playback_screen"),
                 sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -158,6 +158,7 @@ export default {
                 token: play_back_token,
                 playback: 1 // 此处额外添加参数
               }).then(res => {
+                console.log(res, 'playBack_playSpeed')
                 playback_speed(res[0], res[1], res[2])
               })
             })
@@ -177,9 +178,10 @@ export default {
             } else {
               is_playing = 1;
               if (!first) {
+                sessionStorage.setItem('bo_type', true)
                 bo_type = true;
                 $("#playback_start_time").html(start_time)
-                _this.$api.play.play({ // 原playback接口
+                _this.$api.playback.play({ // 原playback接口
                   agent: obj.agent,
                   dom: $("#playback_screen"),
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -191,7 +193,7 @@ export default {
                 })
               } else {
                 // console.log('运行至此处')
-                _this.$api.play.play({ // 原playback接口
+                _this.$api.playback.play({ // 原playback接口
                   agent: obj.agent,
                   dom: $("#playback_screen"),
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -248,26 +250,12 @@ export default {
           _this.publicFunc.mx("#download_pause").onclick = function () {
             if (_this.publicFunc.mx("#download_pause").innerHTML == mcs_pause) {
               _this.$api.pause_ipc().then($("#download_pause").html(mcs_continue))
-              // msdk_ctrl({
-              //   type: "play_download_pause", data: {
-              //     func: function () {
-              //       _this.publicFunc.mx("#download_pause").innerHTML = mcs_continue;
-              //     }
-              //   }
-              // })
             } else {
               _this.$api.play_download_continue().then($("#download_pause").html(mcs_pause))
-              // msdk_ctrl({
-              //   type: "play_download_continue", data: {
-              //     func: function () {
-              //       _this.publicFunc.mx("#download_pause").innerHTML = mcs_pause;
-              //     }
-              //   }
-              // })
             }
           }
           _this.publicFunc.mx("#download_stop").onclick = function () {
-            _this.$api.play.video_stop({
+            _this.$api.playback.video_stop({
               dom: $("#playback_screen"),
               isDownload: 1 // 是否下载中特殊标记
             }).then(res => {
@@ -275,41 +263,40 @@ export default {
             })
             // msdk_ctrl({ type: "play_download_stop", data: { dom: l_dom_playback_screen, func: create_preview } })
           }
-          if (_this.$store.state.jumpPageData.projectName == "vimtag") {
-            _this.$api.play.play({ // 原play_back_download接口
+          if (_this.$store.state.jumpPageData.projectName === "vimtag") {
+            _this.$api.playback.replay_download({ // 原play_back_download接口
               agent: obj.agent,
               dom: $("#playback_screen"),
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
               videoSize: videoSize,
               token: obj.download_token,
+              download_path: download_path,
               playback: 1, // 此处额外添加参数
               isDownload: 1 // 此处额外添加参数
-            }).then(res => {
-              download_info(res)
             })
           } else {
-            _this.$api.play.play({ // 原play_back_download接口
+            _this.$api.playback.replay_download({ // 原play_back_download接口
               agent: obj.agent,
               dom: $("#playback_screen"),
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
               videoSize: videoSize,
               token: obj.token,
+              download_path: download_path,
               playback: 1, // 此处额外添加参数
               isDownload: 1 // 此处额外添加参数
-            }).then(res => {
-              download_info(res)
             })
           }
         }
       }
       function download_info (data) {
+        console.log(data, 'download_info_data')
         let data_num = data.substring(0, data.length - 1);
         if (_this.publicFunc.mx("#download_progress")) {
           _this.publicFunc.mx("#download_progress").innerHTML = data;
         }
         if (data_num == 100) {
           // create_preview({parent:l_dom_playback_screen});
-          _this.$api.play.video_stop({
+          _this.$api.playback.video_stop({
               dom: $("#playback_screen"),
               isDownload: 1 // 是否下载中特殊标记
             }).then(res => {
@@ -322,14 +309,18 @@ export default {
       //get start_time
       obj.start_time = parseInt(obj.start_time);
       let start_time = obj.start_time;
+      sessionStorage.setItem('play_back_startTime', start_time)
       //get end_time
       obj.end_time = parseInt(obj.end_time);
       let end_time = obj.end_time;
+      sessionStorage.setItem('play_back_endTime', end_time)
       function playback_speed (data, progress, record_played_duration) {
+        console.log('enter Play_speed')
         let progress2 = sessionStorage.getItem("aaa")
         sessionStorage.setItem("aaa", progress);
         if (bo_type) {
           start_time = b_start_time;
+          sessionStorage.setItem('bo_type', false)
           bo_type = false;
         } else {
           start_time = start_time + record_played_duration;
@@ -379,7 +370,7 @@ export default {
           + "<div id='play_pause_pic'></div>"
           + "</div>"
         let pic_token = obj.pic_token.replace("_p3_", "_p0_");
-        _this.$api.playback.play_preview_img({
+        _this.$api.play.play_preview_img({
           dom: $("#playback_screen"),
           sn: _this.$store.state.jumpPageData.selectDeviceIpc,
           pic_token: pic_token
@@ -394,6 +385,7 @@ export default {
           }
           is_playing = 1;
           if (!first) {
+            sessionStorage.setItem('bo_type', true)
             bo_type = true;
             let bof_start_time = new Date(b_start_time).format("hh:mm:ss");
             $("#playback_start_time").html(bof_start_time);

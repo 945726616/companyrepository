@@ -78,8 +78,8 @@ export default {
         )
         if (window.fujikam === 'fujikam') {
           let mipc_appparam_url = location.href
-          if (GetUrlParam_kb('kbwin', mipc_appparam_url)) {
-            _this.$store.dispatch('setKbwin', GetUrlParam_kb('kbwin', mipc_appparam_url) ? GetUrlParam_kb('kbwin', mipc_appparam_url) : 0)
+          if (_this.GetUrlParam_kb('kbwin', mipc_appparam_url)) {
+            _this.$store.dispatch('setKbwin', _this.GetUrlParam_kb('kbwin', mipc_appparam_url) ? _this.GetUrlParam_kb('kbwin', mipc_appparam_url) : 0)
           }
         }
         if (_this.$store.state.jumpPageData.kbwin === 1) {

@@ -21,7 +21,7 @@ export default {
         $("#set_back").hide();
         $("#menu_box_main").show();
         if(window.fujikam){
-            check_app_version()
+            // check_app_version()
         }
         // get_dev_list("refresh") // 刷新获取设备列表处理删除设备后回到列表页仍能对设备进行操作的问题
         let l_data;
@@ -962,7 +962,7 @@ export default {
         }
         create_dev_left_page();
         window.onresize = function(){    }
-        }
+    }
   },
   async mounted() {
     this.publicFunc.projectReload.call(this);

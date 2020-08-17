@@ -74,7 +74,7 @@ mme.prototype =
     flash: {
       name: "flash", xname: "ShockwaveFlash.ShockwaveFlash", mime: "application/x-shockwave-flash", clsid: "D27CDB6E-AE6D-11cf-96B8-444553540000",
       codebase: "", install_img: "",
-      install_url: "https://www.adobe.com/go/getflashplayer", src: (process.env.NODE_ENV !== 'production'?"http://45.113.201.4:7080/mme/mme.swf?0.130715.swf":"/mme/mme.swf?0.130715.swf"), install_hint: "" // 此处地址不能采用固定值的方式进行输入
+      install_url: "https://www.adobe.com/go/getflashplayer", src: (process.env.NODE_ENV !== 'production' ? "http://45.113.201.4:7080/mme/mme.swf?0.130715.swf" : "/mme/mme.swf?0.130715.swf"), install_hint: "" // 此处地址不能采用固定值的方式进行输入
     }
   },
   debug: true,
@@ -90,17 +90,17 @@ mme.prototype =
   /* chls:[], type:"publish"|"play", url:"xxx", running:true|false, timer:inerval, times:time-out-check-counts, refer:user-data */
   get_default_skin: function () { return { dev_panel: { width: 360, height: 180 } }; },
   create_plug: function (parent, enable_flash_plug, enable_native_plug, plug_params) {
-    console.log(parent, enable_flash_plug, enable_native_plug, plug_params, 'enter_create_plug')
+    // console.log(parent, enable_flash_plug, enable_native_plug, plug_params, 'enter_create_plug')
     if (this.parent && !this.parent.appendChild) { // 保证节点选择统一性去除JQuery节点
       this.parent = this.parent[0]
       parent = parent[0]
     }
     var test, info, plug = null, id = this.id ? this.id : (++this.id_allocer.value), type = null,
       ie = (!!window.ActiveXObject || "ActiveXObject" in window);
-      console.log((null != navigator.mimeTypes)
-      && (0 < navigator.mimeTypes.length)
-      && (null != navigator.mimeTypes[this.types.xpcom.mime])
-      && navigator.mimeTypes[this.types.xpcom.mime].enabledPlugin, 'xpcom_if')
+      // console.log((null != navigator.mimeTypes)
+      // && (0 < navigator.mimeTypes.length)
+      // && (null != navigator.mimeTypes[this.types.xpcom.mime])
+      // && navigator.mimeTypes[this.types.xpcom.mime].enabledPlugin, 'xpcom_if')
     if (enable_native_plug && ((null == this.ver_cur) || (this.ver_cur >= this.ver_min))) {/* plugin just support win32 now */
       if (ie && (navigator.platform == "Win32")) { try { test = new ActiveXObject(this.types.activex.xname); type = this.types.activex; } catch (e) { } }
       else if ((null != navigator.mimeTypes)
@@ -115,7 +115,7 @@ mme.prototype =
         && (null != navigator.mimeTypes[this.types.flash.mime])
         && navigator.mimeTypes[this.types.flash.mime].enabledPlugin) { type = this.types.flash; }
     }
-    console.log(type, 'create_plug_type')
+    // console.log(type, 'create_plug_type')
     if (type) {
       if (this.type != mme.prototype) { this.type = type; }
       plug_params = plug_params.replace(/'/g, "\"");
@@ -123,12 +123,12 @@ mme.prototype =
 
       /* for chrome video color error bug hack */
       if ((navigator.platform == "Win32") && navigator.userAgent.toLowerCase().match(/chrome\/([\d.]+)/)) {
-        if(parent.style)
-        parent.style.background = "black";
-        else 
-        parent.css("background","black")
+        if (parent.style)
+          parent.style.background = "black";
+        else
+          parent.css("background", "black")
       }
-
+      console.log('create object')
       parent.innerHTML = "<object id='plug_" + id + "' width='100%' height='100%'"
         + (ie ? (" classid='clsid:" + type.clsid + "'") : (" type='" + type.mime + "'"))
         + " codebase='" + type.codebase + "'"
@@ -325,7 +325,7 @@ mme.prototype =
       bind(a, "click", function (e) {
         me.clear_install();
         me.status = me.plug_status.initting;
-        console.log(me, 'a_click_me')
+        // console.log(me, 'a_click_me')
         if (null == (me.plug_obj = me.create_plug(me.parent, true, true, me.create_params))) {
           me.status = me.plug_status.closed;
           if (me.on_event) { me.on_event({ type: "missing" }); }
@@ -365,7 +365,7 @@ mme.prototype =
 
     switch (e.type) {
       case "is_ready": { return (null != this.plug_obj); break; }
-      case "ready": {console.log('enter this if check'); this.status = this.plug_status.running; break; }
+      case "ready": { this.status = this.plug_status.running; break; }
       case "close":
         {
           if (e.chl) { e.chl.status = this.chl_status.closed; e.chl.id = 0; }
@@ -378,7 +378,7 @@ mme.prototype =
     }
     return 0;
   },
-  create: function (obj) {
+  create: async function (obj) {
     var parent = obj.parent, me = this;
 
     /* init parent and skin */
@@ -421,17 +421,17 @@ mme.prototype =
       if (this.enable_native_plug
         && (!obj.plug_install_mute)
         && ((navigator.platform == "Win32") || (navigator.platform == "MacIntel"))) {/* try install */
-          console.log(this.ver_cur, this.ver_min, 'enter ver')
+          // console.log(this.ver_cur, this.ver_min, 'enter ver')
         if (this.ver_cur >= this.ver_min) {/* old plugin with lower version */
           me.status = me.plug_status.initting;
-          console.log(me, 'me_mme')
+          // console.log(me, 'me_mme')
           if (null == (me.plug_obj = me.create_plug(parent, true, true, me.create_params))) {
             me.status = me.plug_status.closed;
-            console.log('enter this missing')
+            // console.log('enter this missing')
             if (me.on_event) { me.on_event({ type: "missing" }); }
           }
           else {
-            console.log('enter this create')
+            // console.log('enter this create')
             if (me.on_event) { me.on_event({ type: "create" }); }
           }
         }
@@ -455,8 +455,12 @@ mme.prototype =
       }
     }
     else if ((this.status == this.plug_status.running) && me.on_event) {
-      console.log('play enter this')
-      setTimeout(function () { if (me.on_event) { me.on_event({ type: "ready" }); } }, 0);
+      // console.log('play enter this')
+      setTimeout(async function(){if(me.on_event){ await me.on_event({type:"ready"});console.log('执行完成');};}, 0)
+      // if (me.on_event) {
+      //   await me.on_event({ type: "ready" });
+      //   console.log('执行完成');
+      // }
     }
     this.is_created = true;
   },
@@ -645,7 +649,7 @@ function bind (element, type, handler) {
   element[s_attachEvent] ? element[s_attachEvent]('on' + type, handler) : (
     (element[s_addEventListener]) ? element[s_addEventListener](type, handler, 0) : (element['on' + type] = handler))
 }
-function meval(s){ try{return eval("(" + s + ")"); }catch(e){return null;} }
+function meval (s) { try { return eval("(" + s + ")"); } catch (e) { return null; } }
 // mme.prototype.lang = sessionStorage.getItem('userLanguage') ? lang_get(mme.prototype.langs) : mme.prototype.langs.cn;
 /*-----------------media_engine-------------------------------------------------*/
 export default mme // 创建mme对象

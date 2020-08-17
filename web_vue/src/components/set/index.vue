@@ -82,6 +82,10 @@ export default {
                 _this.create_set_page(jumpData);
               }
             })
+          }else if (obj.back_page == "boxlist") {
+            jumpData = { parent: $("#set"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: obj.web_name, box_live: obj.box_live }
+            // createPage("set", { parent: $("#page"), back_page: "boxlist", type: 2, addr: obj.addr, agent: obj.agent, web_name: obj.web_name, box_live: obj.box_live });
+            _this.create_set_page(jumpData);
           }
         }
       }
@@ -974,7 +978,7 @@ export default {
                     $("#nic_not_conn_content").fadeIn(450);
                     l_dom_input_status.value = mcs_connnected;
                     $("#nic_conn_content").fadeIn(450, function () {
-                      $("#manager_page").mCustomScrollbar("update");
+                      // $("#manager_page").mCustomScrollbar("update"); //未知用法，暂时注释，下同
                     });
                   }
                   else {
@@ -1091,11 +1095,11 @@ export default {
                 $(l_dom_use_following_ip_content).fadeOut("normal", function () {
                   if (l_ip_is_DHCP)
                     $(l_dom_auto_obtain_ip_content).slideDown("normal", function () {
-                      $("#manager_page").mCustomScrollbar("update");
+                      // $("#manager_page").mCustomScrollbar("update");
                     });
                   else
                     $(l_dom_auto_obtain_ip_content).slideUp("normal", function () {
-                      $("#manager_page").mCustomScrollbar("update");
+                      // $("#manager_page").mCustomScrollbar("update");
                     });
                 });
               }
@@ -1104,7 +1108,7 @@ export default {
               if (this.checked) {
                 $(l_dom_auto_obtain_ip_content).fadeOut("normal", function () {
                   $(l_dom_use_following_ip_content).slideDown("normal", function () {
-                    $("#manager_page").mCustomScrollbar("update");
+                    // $("#manager_page").mCustomScrollbar("update");
                   });
                 });
               }
@@ -1177,11 +1181,11 @@ export default {
                 $(l_dom_use_following_dns_content).slideUp("normal", function () {
                   if (l_dns_is_DHCP)
                     $(l_dom_auto_obtain_dns_content).slideDown("normal", function () {
-                      $("#manager_page").mCustomScrollbar("update");
+                      // $("#manager_page").mCustomScrollbar("update");
                     });
                   else
                     $(l_dom_auto_obtain_dns_content).slideUp("normal", function () {
-                      $("#manager_page").mCustomScrollbar("update");
+                      // $("#manager_page").mCustomScrollbar("update");
                     });
                 });
               }
@@ -1190,7 +1194,7 @@ export default {
               if (this.checked) {
                 $(l_dom_use_following_dns_content).slideDown("normal", function () {
                   $(l_dom_auto_obtain_dns_content).slideUp("normal", function () {
-                    $("#manager_page").mCustomScrollbar("update");
+                    // $("#manager_page").mCustomScrollbar("update");
                   });
                 });
               }
