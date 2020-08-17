@@ -7,6 +7,7 @@ import store from '../store'
 // import mcodec from '@/util/mcodec.js'
 import mme from '@/util/mme.js'
 import publicFunc from '@/util/public.js'
+import fdSliderController from '@/util/fdSliderController'
 const playback = {
   /*
   ** 停止视频播放
@@ -307,10 +308,12 @@ const playback = {
       let progress2 = sessionStorage.getItem("aaa")
       sessionStorage.setItem("aaa", progress);
       let bo_type = sessionStorage.getItem('bo_type')
-      let start_time = sessionStorage.getItem('play_back_startTime')
-      let end_time = sessionStorage.getItem('play_back_endTime')
+      let start_time = JSON.parse(sessionStorage.getItem('play_back_startTime'))
+      let end_time = JSON.parse(sessionStorage.getItem('play_back_endTime'))
+      let b_start_time = JSON.parse(sessionStorage.getItem('b_start_time'))
+      let first = sessionStorage.getItem('play_first')
       if (bo_type) {
-        // start_time = b_start_time;
+        start_time = b_start_time;
         bo_type = false;
       } else {
         start_time = start_time + record_played_duration;

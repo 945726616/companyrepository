@@ -9,7 +9,7 @@ export default {
     create_playback_page (obj) {
       let _this = this
       let videoSize = 0;
-      let first = false;
+      let first = sessionStorage.getItem('play_first') ? sessionStorage.getItem('play_first') :false;
       let bo_type = sessionStorage.getItem('bo_type') ? sessionStorage.getItem('bo_type') : false;
       let play_back_token;
       let play_progress;
@@ -19,7 +19,7 @@ export default {
       let vedio_flag_arr = [];//移动侦测标记集合
 
       if (_this.$store.state.jumpPageData.projectFlag){
-        obj.parent[0].innerHTML = 
+        obj.parent[0].innerHTML =
         "<div id='playback_box'>"
         + "<div id='playback_view'>"
         + "<div id='playback_buffer_ret'></div>"
@@ -137,6 +137,7 @@ export default {
         function playback_event_mouseup () {
           // console.log('play_back_event_mouseup')
           first = true;
+          sessionStorage.setItem('play_first', true)
           play_progress = _this.publicFunc.mx("#playback_progressbar").value / 100;
           let new_token = parseInt(data_length * play_progress);
           play_back_token = obj.data[new_token].token;
@@ -309,11 +310,11 @@ export default {
       //get start_time
       obj.start_time = parseInt(obj.start_time);
       let start_time = obj.start_time;
-      sessionStorage.setItem('play_back_startTime', start_time)
+      sessionStorage.setItem('play_back_startTime', JSON.stringify(start_time))
       //get end_time
       obj.end_time = parseInt(obj.end_time);
       let end_time = obj.end_time;
-      sessionStorage.setItem('play_back_endTime', end_time)
+      sessionStorage.setItem('play_back_endTime', JSON.stringify(end_time))
       function playback_speed (data, progress, record_played_duration) {
         console.log('enter Play_speed')
         let progress2 = sessionStorage.getItem("aaa")
@@ -358,11 +359,12 @@ export default {
             })
           }
         }
-        if(!data)data = null
+        if(!data) data = null
         _this.publicFunc.mx("#playback_buffer_ret").innerHTML = data;
         fdSliderController.increment("playback_progressbar", progress - _this.publicFunc.mx("#playback_progressbar").value);
       }
       b_start_time = obj.start_time;
+      sessionStorage.setItem('b_start_time', JSON.stringify(b_start_time))
       function create_preview (data) {
         sessionStorage.setItem("pause_start_time", start_time)
         data.parent.innerHTML =
@@ -414,9 +416,7 @@ export default {
           $("#video_play").attr("class", "video_play_start");
         }
       }
-      window.onresize = function () {
-
-      }
+      window.onresize = function () {}
     }
   },
   async mounted () {
@@ -443,7 +443,6 @@ export default {
       languageSelect.mipc($('#login_box'))
       $('#login_box').append("<div id='is_mipc_div'></div>")
     }
-    
   }
 }
 </script>
