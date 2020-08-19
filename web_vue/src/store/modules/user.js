@@ -12,7 +12,8 @@ const user = {
     mmqFlag: 0, // mmq是否创建标志
     mmqPickTimeFlag1: null, // mmq轮询回调计时器1标识
     mmqPickTimeFlag2: null, // mmq轮询回调计时器2标识
-    qid: '' // 存储qid用于请求中
+    qid: '', // 存储qid用于请求中
+    userLanguage: sessionStorage.getItem('userLanguage') ? sessionStorage.getItem('userLanguage') : 'en'
   },
 
   mutations: {
@@ -51,6 +52,9 @@ const user = {
     },
     SET_MMQ_PICK_TIME_FLAG_2: (state, mmqPickTimeFlag2) => {
       state.mmqPickTimeFlag2 = mmqPickTimeFlag2
+    },
+    SET_USER_LANGUAGE: (state, userLanguage) => {
+      state.userLanguage = userLanguage
     }
   },
 
@@ -66,7 +70,8 @@ const user = {
     setMmqFlag: ({commit}, mmqFlag) => commit('SET_MMQ_FLAG', mmqFlag),
     setQid: ({commit}, qid) => commit('SET_QID', qid),
     setMmqPickTimeFlag1: ({commit}, mmqPickTimeFlag1) => commit('SET_MMQ_PICK_TIME_FLAG_1', mmqPickTimeFlag1),
-    setMmqPickTimeFlag2: ({commit}, mmqPickTimeFlag2) => commit('SET_MMQ_PICK_TIME_FLAG_2', mmqPickTimeFlag2)
+    setMmqPickTimeFlag2: ({commit}, mmqPickTimeFlag2) => commit('SET_MMQ_PICK_TIME_FLAG_2', mmqPickTimeFlag2),
+    setUserLanguage: ({commit}, userLanguage) => commit('SET_USER_LANGUAGE', userLanguage)
   }
 }
 

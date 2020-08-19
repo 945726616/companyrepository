@@ -4990,7 +4990,7 @@ border-bottom:1px solid #ccc;
 	background: url(../assets/device/up.png) no-repeat;
 }
 .online_btn_down{
-	background: url(../assets/device/down.png) no-repeat;
+	background: url('../assets/device/down.png') no-repeat;
 }
 #online_btn_box{
 	width: 100px;
@@ -5172,7 +5172,7 @@ border-bottom:1px solid #ccc;
 #device_add_btn{
 	position:relative;
 }
-#device_add_btn_down{
+/*#device_add_btn_down{
 	font-size:16px;
 	color:#333333;
 	text-align:center;
@@ -5184,8 +5184,8 @@ border-bottom:1px solid #ccc;
 	left:-47px;
 	top:32px;
 	z-index:1001;
-	display:none;
-}
+	// display:none;
+}*/
 #boxlist_search_btn_down{
 	/*6.1.2*/
 	font-size:16px;

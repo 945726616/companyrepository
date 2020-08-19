@@ -452,7 +452,7 @@ export default {
       }
       function boxlist_onvif_event () { // 点击搜索设备 搜索onvif
         if (!_this.$store.state.jumpPageData.projectFlag) { // vimtag 特殊添加搜索设备hover提示框
-          if (sessionStorage.getItem('userLanguage') == "zh") {
+          if (_this.$store.state.user.userLanguage === "zh") {
             _this.publicFunc.mx("#boxlist_search_btn").onmouseenter = function () {
               $('#boxlist_search_btn_down').show().delay(1500).hide(0);
             }
@@ -662,7 +662,7 @@ export default {
     }
   },
   async mounted () {
-    let userLanguage = sessionStorage.getItem('userLanguage')
+    let userLanguage = this.$store.state.user.userLanguage
     if (userLanguage) {
       await this.$chooseLanguage.lang(userLanguage)
     } else {

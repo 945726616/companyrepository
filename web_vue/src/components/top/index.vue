@@ -338,7 +338,7 @@ export default {
         $("#top_experience_div").css("display","none");
       }
       await this.create_top({ parent: $('#top') })
-      await this.publicFunc.importCss('Public.scss')
+      // await this.publicFunc.importCss('Public.scss')
     })
   }
 }

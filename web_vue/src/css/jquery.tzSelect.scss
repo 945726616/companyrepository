@@ -15,7 +15,7 @@
       padding-right: 3px;
       margin-top: 5px;
       background-color: #141517;
-      background-image: url("../assets/device/dropdown_out_ico.png");
+      background-image: url("/@/assets/device/dropdown_out_ico.png");
       background-repeat: no-repeat;
       background-position: 98% 40%;
       cursor: pointer;
@@ -24,7 +24,7 @@
       border-radius: 16px;
       z-index: 2;
       &:hover {
-        background-image: url("../assets/device/down.png");
+        background-image: url("/@/assets/device/down.png");
       }
     }
     #select_network_edit {
@@ -52,7 +52,7 @@
       left: 0;
       width: 100%;
       border: 1px solid #32333b;
-      background-image: url("../assets/device/select_bg.png");
+      background-image: url("/@/assets/device/select_bg.png");
       -moz-background-size: 100% 100%;
       -webkit-background-size: 100% 100%;
       -o-background-size: 100% 100%;

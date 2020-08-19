@@ -19,9 +19,10 @@ if (!sessionStorage.getItem('userLanguage')) {
     }
   }
   sessionStorage.setItem('userLanguage', chromeLang)
+  store.dispatch('setUserLanguage',chromeLang)
   chooseLanguage.lang(chromeLang)
 } else {
-  chooseLanguage.lang(sessionStorage.getItem('userLanguage'))
+  chooseLanguage.lang(store.state.user.userLanguage)
 }
 Date.prototype.format = function (format) {
 	let o = {
