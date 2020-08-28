@@ -18,7 +18,7 @@
         <input type='text' id='dev_search_input' :placeholder="placeholder" value=''>
         <div id='dev_search_btn'></div>
       </div>
-      <div id='dev_filter_box' v-if="!supportFilterFlag">
+      <div id='dev_filter_box' v-if="supportFilterFlag && !$store.state.jumpPageData.localFlag">
         <div id='online_btn'>
           <span id='online_btn_span'>{{mcs_all}}</span><!-- 全选 -->
           <div id='online_btn_direction' class='online_btn_down'></div>
@@ -29,29 +29,29 @@
           <div id='online_btn_select_offline'>{{mcs_offline_status}}</div><!-- 离线 -->
         </div>
       </div>
-      <div id='device_list_edit' class='device_list_menu' @click="editClick">{{mcs_edit}}</div><!-- 编辑 -->
-      <div id='device_add_btn' class='device_list_menu' @mouseenter="addHoverflag = true" @mouseleave="addHoverflag = false" @click="addDevClick">
+      <div id='device_list_edit' v-if="!$store.state.jumpPageData.experienceFlag && !$store.state.jumpPageData.localFlag" class='device_list_menu' @click="editClick">{{mcs_edit}}</div><!-- 编辑 -->
+      <div id='device_add_btn' v-if="!$store.state.jumpPageData.experienceFlag && !$store.state.jumpPageData.localFlag" class='device_list_menu' @mouseenter="addHoverflag = true" @mouseleave="addHoverflag = false" @click="addDevClick">
         {{mcs_add_device}}
-        <!-- 添加设备 $store.state.user.userLanguage === 'zh' ? addHoverflag = true : null-->
+        <!-- 添加设备 -->
         <div id='device_add_btn_down' v-show="addHoverflag">{{mcs_click_add_equipment}}</div><!-- 点击添加设备(hover提示框) -->
       </div>
     </div>
     <!-- 顶部设备列表菜单栏 结束 -->
     <!-- 设备列表展示部分 -->
     <div id='vimtag_device_list_box'>
-      <div style='overflow:hidden'>
+      <div v-if="!devlistEmptyFlag" style='overflow:hidden'>
         <!-- 摄像机展示 -->
         <div style='overflow:hidden;font-size:15px'>
           <div id='dev_camera' :style="ipc_num === 1 ? 'display:block' : 'display:none'">{{mcs_camera}}</div><!-- 摄像机 -->
           <!-- 实现拖拽功能 -->
-          <div class='device_list_img' v-for="IPCCamera in dev_list_dom" :key="IPCCamera.sn" play='0' img='0' :nick='IPCCamera.nick' :state='IPCCamera.stat' :sn="IPCCamera.sn" :dtype='IPCCamera.type' :addr='IPCCamera.addr' :sort="IPCCamera.sort ? IPCCamera.sort : ''" :tree="IPCCamera.tree ? IPCCamera.tree : ''" @ondrop='drop(event,this)' @ondragover='allowDrop(event)' draggable='true' @ondragstart='drag(event, this)'>
-            <div id='device_list_alert_box'>
+          <div :style='{width: autoImgWidth + "%", height: autoImgHeight + "px"}' class='device_list_img' v-for="IPCCamera in dev_list_dom" :key="IPCCamera.sn" :play='IPCCamera.play' :img='IPCCamera.img' :nick='IPCCamera.nick' :state='IPCCamera.stat' :sn="IPCCamera.sn" :dtype='IPCCamera.type' :addr='IPCCamera.addr' :sort="IPCCamera.sort ? IPCCamera.sort : ''" :tree="IPCCamera.tree ? IPCCamera.tree : ''" @ondrop='drop(event,this)' @ondragover='allowDrop(event)' draggable='true' @ondragstart='drag(event, this)'>
+            <div class='device_list_alert_box'>
               <img class='device_list_move_ico' :sn="IPCCamera.sn" :src="require('@/assets/device/move.png')" alt=''>
               <img class='device_list_door_ico' :sn="IPCCamera.sn" :src="require('@/assets/device/door.png')" alt=''>
               <img class='device_list_sos_ico' :sn="IPCCamera.sn" :src="require('@/assets/device/sos.png')" alt=''>
             </div>
-            <div class='device_list_img_child'>
-              <div class='camera_sign_picture_div'>
+            <div class='device_list_img_child' :style='{height: (autoImgHeight - 34) + "px"}'>
+              <div v-show="IPCCamera.imgFlag === undefined || IPCCamera.imgFlag" class='camera_sign_picture_div' @click="clickCameraSignPic(IPCCamera)">
                 <img :src='IPCCamera.def_img' class='img_class' alt=''><!-- 图片 -->
               </div>
               <div class='camera_sign_video'></div>
@@ -62,7 +62,7 @@
                 <input class='device_list_sort_num' :value='IPCCamera.sort || ""'>
                 <div class='device_list_sort_btn'>{{mcs_edit}}</div>
               </div>
-              <span class='device_nick_span'>{{IPCCamera.nick}}</span>
+              <span>{{IPCCamera.nick}}</span>
             </div>
           </div>
         </div>
@@ -70,12 +70,201 @@
         <!-- 云盒子展示 -->
         <div style='display:block;font-size:15px'>
           <div id='dev_cloudbox' :style="box_num == 1 ? 'display:block' : 'display:none'">{{mcs_cloud_box}}</div><!-- 云盒子 -->
-          dev_list_dom_box
+          <div :style='{width: autoImgWidth + "%", height: autoImgHeight + "px"}' class='device_list_img' v-for="BoxItem in dev_list_dom_box" :key="BoxItem.sn" :play='BoxItem.play' :img='BoxItem.img' :nick='BoxItem.nick' :state='BoxItem.stat' :box_live='BoxItem.box_live ? BoxItem.box_live : 0' :sn="BoxItem.sn" :dtype='BoxItem.type' :addr='BoxItem.addr' :sort="BoxItem.sort ? BoxItem.sort : ''" :tree="BoxItem.tree ? BoxItem.tree : ''" @ondrop='drop(event,this)' @ondragover='allowDrop(event)' draggable='true' @ondragstart='drag(event, this)'>
+            <div class='device_list_alert_box'>
+              <img class='device_list_move_ico' :sn="BoxItem.sn" :src="require('@/assets/device/move.png')" alt=''>
+              <img class='device_list_door_ico' :sn="BoxItem.sn" :src="require('@/assets/device/door.png')" alt=''>
+              <img class='device_list_sos_ico' :sn="BoxItem.sn" :src="require('@/assets/device/sos.png')" alt=''>
+            </div>
+            <div class='device_list_img_child' :style='{height: (autoImgHeight - 34) + "px"}'>
+              <div class='camera_sign_picture_div' @click="clickCameraSignPic(BoxItem)">
+                <img :src='BoxItem.def_img' class='img_class' alt=''>
+              </div>
+              <div class='camera_sign_video'></div>
+            </div>
+            <div class='device_nick'>
+              <div class='device_list_del_ico'></div>
+              <div class='device_list_sort_box'>
+                <input class='device_list_sort_num' :value='BoxItem.sort || ""'>
+                <div class='device_list_sort_btn'>{{mcs_edit}}</div>
+              </div>
+              <span v-html="(BoxItem.nick.length < 14) ? BoxItem.nick : (BoxItem.nick.substr(0, 14) + '...')"></span>
+            </div>
+          </div>
         </div>
         <!-- 云盒子展示结束 -->
       </div>
+      <!-- 没有设备时展示 -->
+      <div v-else style='overflow:hidden;font-size:15px'>
+        <div id='empty_div_img'></div>
+        <div class='empty_div_txt'>{{mcs_your_device_list_empty}}</div>
+      </div>
+      <!-- 没有设备时展示内容结束 -->
     </div>
-    <!-- 设备列表展示部分结束 -->
+    <!-- 设备列表展示部分 结束 -->
+    <!-- 添加设备弹窗 -->
+    <div id='add_device_model' v-if="addDeviceModel">
+      <div id='add_devices_box'>
+        <!-- 弹窗顶部标题导航栏 -->
+        <div id='add_devices_box_menu'>
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag !== 'chooseDevice'" @click="addDeviceModelBack" id='add_devices_box_back'>{{mcs_back}}</div> <!-- 返回上一层 除选择设备类型页外其他页面均展示 -->
+          <div id='add_devices_box_close' @click="closeModel"></div>
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'connectFail'" id='add_devices_help' @click="clickQuestion"></div> <!-- 仅配置失败时 展示问号 -->
+          <div id='add_devices_box_title'>{{addDeviceModelObj.menuTitle}}</div> <!-- 选择设备类型 -->
+        </div>
+        <!-- 弹窗顶部标题导航栏 结束 -->
+        <!-- 弹窗内部内容 -->
+        <div id='add_devices_box_body'>
+          <!-- 选择设备类型 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'chooseDevice'" class='add_devices_type'>
+            <div class='add_devices_type_name'>{{mcs_cloud_camera}}</div> <!-- 云摄像机 -->
+            <div class='add_devices_type_list' v-for="addItem in add_device_type_arr" :key="addItem.type" :d_type='addItem.type' @click="chooseDeviceType(addItem)">
+              <div class='add_devices_type_list_img' :style="{'background-image': 'url('+ addItem.url +')'}"></div> <!-- 摄像机图片 -->
+              <div class='add_devices_type_list_name'>{{addItem.type === 's1' ? mcs_cloud_box : (addItem.name + mcs_intelligent_cloud_camera)}}</div> <!-- 智能云摄像机 -->
+            </div>
+          </div>
+          <!-- 选择设备类型 结束 -->
+          <!-- 填写设备id -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'inputDeviceId'" id="input_device_id">
+            <div id='add_device_sample_img' :style="{'background-image': 'url('+ addDeviceModelObj.typeUrl +')', 'background-repeat': 'no-repeat', 'background-position': 'center'}"></div>
+            <div class='add_device_input_id_box'>
+              <div class='add_device_input_id_box_ico'></div>
+              <div id='add_device_input_id_box_del' class='add_device_input_id_box_del' @click="add_device_input_id = null"></div> <!-- 删除图标点击情况输入框中内容 -->
+              <input id='add_device_input_id_box_input' class='add_device_input_id_box_input' type='text' :placeholder='mcs_input_device_id' v-model="add_device_input_id"> <!-- v-model绑定input输入框内容值 -->
+            </div>
+            <div id='add_device_submit' @click="inputDeviceIdNext">{{mcs_action_next}}</div>
+          </div>
+          <!-- 填写设备id 结束 -->
+          <!-- 离线设备添加 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'addOfflineDevice'" id="add_offline_device">
+            <!-- d_type == "cm1" || d_type == "m1" || d_type == "fisheye" -->
+            <div v-if="addDeviceModelObj.deviceType === 'cm1' || addDeviceModelObj.deviceType === 'm1' || addDeviceModelObj.deviceType === 'fisheye'" class='dev_offline_tips'>
+              <img class='dev_offline_tips_img' :src="addDeviceModelObj.typeUrl" alt=''>
+              <div class='dev_offline_tips_text'>{{mcs_device_offline_use_iphone}}</div>
+            </div>
+            <!-- d_type else -->
+            <div v-else>
+              <div id='add_device_sample_img' :style="{'background-image': 'url('+ addDeviceModelObj.typeUrl +')', 'background-repeat': 'no-repeat', 'background-position': 'center', 'background-size': '100% 100%'}"></div>
+              <div class='add_devices_box_info'>{{addDeviceModelObj.devicesBoxInfo}}
+                <div v-if="addDeviceModelObj.offlineOtherflag" id='add_devices_img'></div><!-- 设备类型为除b1,b2,b3,s1(云盒子)以为的设备类型展示 -->
+              </div>
+              <div id='add_device_submit' @click="addOfflineDevice">{{mcs_action_next}}</div>
+            </div>
+          </div>
+          <!-- 离线设备添加 结束 -->
+          <!-- 连接网线等待设备上线 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'connectNet'" id="connect_net">
+            <div id='add_device_sample_img' :style="{'background-image': 'url('+ addDeviceModelObj.typeUrl +')', 'background-repeat': 'no-repeat', 'background-position': 'center'}"></div>
+            <div class='add_devices_box_info'>{{msc_use_ethernet_cable_connect}}</div> <!-- 请用网线连接路由器和设备的网口，连接成功后设备会自动上线 -->
+            <div class='add_devices_wait_online'>{{mcs_state_wait_device_online}}</div><!-- 等待设备上线 -->
+            <div id='add_devices_timenum'>{{addDeviceModelObj.connectNetTime}}</div>
+          </div>
+          <!-- 连接网线等待设备上线 结束 -->
+          <!-- 配置失败 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'connectFail'" id="connect_fail">
+            <div id='add_device_fail_img' @click="addOfflineDevice"></div>
+            <div id='add_devices_unconnect_info' class='add_devices_box_info'>{{mcs_wifi_config_failure_reconnect}}</div>
+          </div>
+          <!-- 配置失败 结束 -->
+          <!-- 配置失败原因 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'connectFailReason'" id="connect_fail_reason">
+            <div class='device_offline_reason'>{{mcs_connect_ethernet_page_title}}</div> <!-- 网线连接 -->
+            <div class='device_offline_reason_public'>{{mcs_always_cannot_online}}</div> <!-- 设备一直无法上线 -->
+            <div class='device_offline_reason_public'>{{mcs_always_cannot_online_reason}}</div>
+            <div class='device_offline_reason_public'>{{mcs_other_problem_with_feedback}}</div>
+          </div>
+          <!-- 配置失败原因 结束 -->
+          <!-- 设备在线输入密码 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'inputDevicePassword'" id="input_device_password">
+            <div id='add_device_info'>{{mcs_device_id + ":" + add_device_input_id.toUpperCase() + " &nbsp;&nbsp;" + mcs_status + ":" + mcs_state_device_online}}</div>
+            <div class='add_device_input_id_box'>
+              <div class='add_device_input_pass_box_ico'></div>
+              <div id='add_device_input_pass_box_del' class='add_device_input_id_box_del' @click="add_device_password = null"></div> <!-- 清空输入的设备密码 -->
+              <input id='add_device_input_pass' class='add_device_input_id_box_input' type='password' v-model="add_device_password" :placeholder='mcs_input_password'>
+            </div>
+            <div id='add_device_submit' @click="inputDevicePasswordNext">{{mcs_action_next}}</div>
+            <div id='add_device_forget_pass' @click="forgetDevicePassword">{{mcs_forgot_your_password}}</div>
+          </div>
+          <!-- 设备在线输入密码 结束 -->
+          <!-- 修改密码 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'editDevicePassword'" id="edit_device_password">
+            <div id='add_device_success'>
+              <div id='add_device_success_ico'></div>
+              <div id='add_device_success_txt'>{{mcs_device_id + ":" + add_device_input_id.toUpperCase() + " " + mcs_add_successfully + "!"}}</div>
+            </div>
+            <div id='add_device_edit_pass_tips'>{{mcs_device_password_too_simple}}</div> <!-- 密码8到32位 -->
+            <div class='add_device_input_id_box'>
+              <div class='add_device_input_pass_box_ico'></div>
+              <input id='add_device_edit_pass' class='add_device_input_id_box_input' type='password' v-model="edit_password_1st" :placeholder='mcs_input_password'>
+            </div>
+            <div class='add_device_input_id_box'>
+              <div class='add_device_input_pass_box_ico'></div>
+              <input id='add_device_edit_confirm_pass' class='add_device_input_id_box_input' type='password' v-model="edit_password_2nd" :placeholder='mcs_input_confirm_password'>
+            </div>
+            <div id='add_device_submit' @click="editDevicePasswordNext">{{mcs_change}}</div> <!-- 修改 -->
+          </div>
+          <!-- 修改密码 结束 -->
+          <!-- 设置wifi -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'setDeviceWifi'" id="set_device_wifi">
+            <div id='add_device_success'>
+              <div id='add_device_success_ico'></div>
+              <div id='add_device_success_txt'>{{mcs_device_id + ":" + add_device_input_id.toUpperCase() + " " + mcs_add_successfully + "!"}}</div>
+            </div>
+            <div id='add_device_edit_pass_tips'>{{mcs_prompt_config_wifi}}</div>
+            <div id='add_device_set_wifi_refresh' @click="getDropdownDom"></div>
+            <div id='add_device_set_wifi_box'>
+              <div class='add_device_set_wifi_box_ico'></div>
+              <div id='add_device_set_wifi_btn' :class="[addDeviceModelObj.wifiListFlag ? 'add_device_set_wifi_down' :'add_device_set_wifi_up']"></div>
+              <div id='add_device_set_wifi_input' @click="$set(addDeviceModelObj, 'wifiListFlag', true)" class='add_device_set_wifi_input' v-text="addDeviceModelObj.wifiName ? addDeviceModelObj.wifiName : (mcs_select_wifi_wizard.length < 14) ? mcs_select_wifi_wizard : (mcs_select_wifi_wizard.substr(0, 14) + '...' )"></div>
+              <div id='add_device_set_wifi_list_box' v-if="addDeviceModelObj.wifiListFlag">
+                <div class='add_device_set_wifi_list' v-for="wifiNameItem in addDeviceModelObj.wifiListArr" :key="wifiNameItem.ssid" @click="chooseWifi(wifiNameItem.ssid)">{{wifiNameItem.ssid}}</div> <!-- 循环渲染wifi设备列表 -->
+              </div>
+            </div>
+            <div class='add_device_input_id_box'>
+              <div class='add_device_input_pass_box_ico'></div>
+              <input id='add_device_wifi_password' class='add_device_input_id_box_input' type='password' v-model="input_wifi_password" :placeholder='mcs_input_password'>
+            </div>
+            <div id='add_device_submit' @click="setDeviceWifiNext">{{mcs_action_next}}</div>
+            <div id='add_device_skip' @click="skipToNick">{{mcs_action_skip}}</div>
+          </div>
+          <!-- 设置wifi 结束 -->
+          <!-- 设置设备昵称 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'setDeviceNick'" id="set_device_nick">
+            <div id='add_device_edit_name_tips'>{{mcs_device_id + ":" + add_device_input_id.toUpperCase()}}</div>
+            <div class='add_device_input_id_box'>
+              <div class='add_device_input_name_box_ico'></div>
+              <input id='add_device_nick' class='add_device_input_id_box_input' type='text' v-model="input_device_nick" :placeholder='mcs_input_nick'>
+            </div>
+            <div id='add_device_submit' @click="setDeviceNickNext">{{mcs_action_next}}</div>
+            <div id='add_device_skip' @click="skipToZone">{{mcs_action_skip}}</div>
+          </div>
+          <!-- 设置设备昵称 结束 -->
+          <!-- 设置设备时区 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'setDeviceZone'" id="set_device_zone">
+            <div id='add_device_set_zone_box'>
+              <div class='add_device_set_zone_box_ico'></div>
+              <div id='add_device_set_wifi_btn' :class="[addDeviceModelObj.timeZoneListFlag ? 'add_device_set_wifi_down' :'add_device_set_wifi_up']"></div>
+              <div id='add_device_set_zone_input' @click="$set(addDeviceModelObj, 'timeZoneListFlag', true)" class='add_device_set_wifi_input'>{{addDeviceModelObj.timeZoneName}}</div>
+              <div id='add_device_set_wifi_list_box' v-if="addDeviceModelObj.timeZoneListFlag">
+                <div class='add_device_set_wifi_list' v-for="timeItem in addDeviceModelObj.timeZoneArr" :key="timeItem.zone_name" @click="chooseTimeZone(timeItem)" :utc='timeItem.utc' :city='timeItem.city' :name='timeItem.file'>{{timeItem.zone_name}}</div>
+              </div>
+            </div>
+            <div id='add_device_submit' @click="setDeviceZoneFinish">{{mcs_ok}}</div>
+            <div id='add_device_skip' @click="closeModel">{{mcs_action_skip}}</div>
+          </div>
+          <!-- 设置设备时区 结束 -->
+          <!-- 忘记密码 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'forgetDevicePassword'" id="forget_device_password">
+            <div id='add_device_sample_img' :style="{'background-image': 'url('+ addDeviceModelObj.typeUrl +')', 'background-repeat': 'no-repeat', 'background-position': 'center'}"></div>
+            <div class='add_devices_box_info'>{{addDeviceModelObj.forgetInfo}}</div>
+            <div id='add_device_submit' @click="closeModel">{{mcs_close}}</div>
+          </div>
+          <!-- 忘记密码 结束 -->
+        </div>
+        <!-- 弹窗内部内容 结束 -->
+      </div>
+    </div>
+    <!-- 添加设备弹窗 结束 -->
   </div>
 </template>
 <style lang="scss">
@@ -93,6 +282,14 @@ export default {
     },
     supportFilterFlag: function () { // 支持在线/离线设备筛选标识
       return this.$store.state.jumpPageData.supportFilterFlag
+    },
+    autoImgWidth: function () { // 动态计算图片宽度
+      let device_list_num = sessionStorage.getItem("device_list_num") ? sessionStorage.getItem("device_list_num") : 4
+      return 100 / device_list_num
+    },
+    autoImgHeight: function () { // 动态计算图片高度
+      let singalImage = document.body.clientWidth * (this.autoImgWidth / 100)
+      return (singalImage / 16 * 9) + 34
     }
   },
   data () {
@@ -106,13 +303,75 @@ export default {
       mcs_click_add_equipment: mcs_click_add_equipment,
       mcs_camera: mcs_camera,
       mcs_cloud_box: mcs_cloud_box,
+      mcs_your_device_list_empty: mcs_your_device_list_empty,
+      mcs_choose_device_type: mcs_choose_device_type,
+      mcs_cloud_camera: mcs_cloud_camera,
+      mcs_intelligent_cloud_camera: mcs_intelligent_cloud_camera,
+      mcs_back: mcs_back,
+      mcs_action_next: mcs_action_next,
+      mcs_input_device_id: mcs_input_device_id,
+      mcs_device_offline_use_iphone: mcs_device_offline_use_iphone,
+      mcs_device_outdoor_camera_connect_power: mcs_device_outdoor_camera_connect_power,
+      mcs_device_box_connect_power: mcs_device_box_connect_power,
+      mcs_normal_device_connect_power: mcs_normal_device_connect_power,
+      mcs_camera_turn_on_voice: mcs_camera_turn_on_voice,
+      msc_use_ethernet_cable_connect: msc_use_ethernet_cable_connect,
+      mcs_state_wait_device_online: mcs_state_wait_device_online,
+      mcs_wifi_config_failure_reconnect: mcs_wifi_config_failure_reconnect,
+      mcs_connect_ethernet_page_title: mcs_connect_ethernet_page_title,
+      mcs_always_cannot_online: mcs_always_cannot_online,
+      mcs_always_cannot_online_reason: mcs_always_cannot_online_reason,
+      mcs_other_problem_with_feedback: mcs_other_problem_with_feedback,
+      mcs_device_id: mcs_device_id,
+      mcs_status: mcs_status,
+      mcs_input_password: mcs_input_password,
+      mcs_forgot_your_password: mcs_forgot_your_password,
+      mcs_change: mcs_change,
+      mcs_input_confirm_password: mcs_input_confirm_password,
+      mcs_device_password_too_simple: mcs_device_password_too_simple,
+      mcs_add_successfully: mcs_add_successfully,
+      mcs_prompt_config_wifi: mcs_prompt_config_wifi,
+      mcs_action_skip: mcs_action_skip,
+      mcs_input_nick: mcs_input_nick,
+      mcs_ok: mcs_ok,
+      mcs_close: mcs_close,
+      mcs_bseries_forget_password: mcs_bseries_forget_password,
+      mcs_press_hole_restore_to_reset_password: mcs_press_hole_restore_to_reset_password,
+      mcs_press_button_restore_to_reset_password: mcs_press_button_restore_to_reset_password,
+      mcs_ethernet_configuration: mcs_ethernet_configuration,
+      mcs_connect_power: mcs_connect_power,
+      mcs_select_wifi_wizard: mcs_select_wifi_wizard,
       // 多国语言结束
+      // 添加设备弹窗展示数组
+      add_device_type_arr: [
+        { type: 'p1', url: require('@/assets/device/add_p1.png'), name: 'P1' },
+        { type: 'cp1', url: require('@/assets/device/add_cp1.png'), name: 'CP1' },
+        { type: 'm1', url: require('@/assets/device/add_m1.png'), name: 'M1' },
+        { type: '361', url: require('@/assets/device/add_361.png'), name: '361' },
+        { type: 'cm1', url: require('@/assets/device/add_cm1.png'), name: 'CM1' },
+        { type: 'b1', url: require('@/assets/device/add_b1.png'), name: 'B1' },
+        { type: 's1', url: require('@/assets/device/add_s1.png'), name: '' },
+        { type: 'fisheye', url: require('@/assets/device/add_fisheye.png'), name: 'fisheye' },
+        { type: 'b2', url: require('@/assets/device/b2.png'), name: 'B2' },
+        { type: 'b3', url: require('@/assets/device/b3.png'), name: 'B3' }],
+      addDeviceBodyFlag: '',
       placeholder: this.$store.state.user.userLanguage === 'zh' ? '请输入关键词' : '', // 搜索input提示内容
       pageObj: null, // 页面数据
       addHoverflag: false, // 添加设备提示框展示标识
+      addDeviceModel: false, // 添加设备弹窗控制标识
+      addDeviceModelObj: {}, // 添加设备弹窗展示数组
+      add_device_input_id: null, // 添加设备输入设备Id Input框value
+      add_device_password: null, // 添加设备输入密码 Input框value
+      edit_password_1st: null, // 修改密码第一次输入 Input框value
+      edit_password_2nd: null, // 修改密码第二次输入 Input框value
+      input_wifi_password: null, // 设置wifi密码输入
+      input_device_nick: null, // 设置设备昵称输入
       dev_list_dom: [], // 摄像头设备数组
+      dev_list_dom_box: [], // 云盒子设备数组
+      connectNetTimeArr: [], // 等待网络链接定时器数组
       ipc_num: 0, // 是否存在摄像头设备标识
       box_num: 0, // 是否存在云盒子设备标识
+      devlistEmptyFlag: false, // 设备列表为空标识
       srcdiv: null,
       devlistData: null,
       searchData: [],
@@ -519,144 +778,87 @@ export default {
       }
     },
     device_list (data, searchId) { // 设备列表渲染
+      this.dev_list_dom = [] // 清空设备列表数组
+      this.dev_list_dom_box = [] // 清空云盒子设备列表数组
       this.publicFunc.closeBufferPage()
-      // $("#buffer_page").hide();
       let search_id = searchId ? searchId : ""
-      // console.log(search_id, '检查search_id')
-      // console.log(data, 'device_list_data')
-      let dev_list_dom = "";
-      let dev_list_dom_box = "";
       if (data && data.length > 0) {
         for (let i = 0; i < data.length; i++) {
           if (data[i].type === 'IPC') {
             this.ipc_num = 1
+            data[i].play = 0
+            data[i].img = 0
             this.dev_list_dom.push(data[i])
           }
           if (data[i].type === 'BOX') {
             this.box_num = 1
-            dev_list_dom_box +=
-              "<div class='device_list_img' play='0' img='0' nick='" + data[i].nick + "' state='" + data[i].stat + "' box_live='" + (data[i].box_live ? data[i].box_live : 0) + "' sn=" + data[i].sn + " dtype='" + data[i].type + "' addr='" + data[i].addr + "' sort='" + (data[i].sort ? data[i].sort : '') + "' tree='" + (data[i].tree ? data[i].tree : '') + "' ondrop='drop(event,this)' ondragover='allowDrop(event)' draggable='true' ondragstart='drag(event, this)'>"
-              + "<div id='device_list_alert_box'>"
-              + "<img class='device_list_move_ico' sn=" + data[i].sn + " src='" + require('@/assets/device/move.png') + "' alt=''>"
-              + "<img class='device_list_door_ico' sn=" + data[i].sn + " src='" + require('@/assets/device/door.png') + "' alt=''>"
-              + "<img class='device_list_sos_ico' sn=" + data[i].sn + " src='" + require('@/assets/device/sos.png') + "' alt=''>"
-              + "</div>"
-              + "<div class='box_sign_picture device_list_img_child'>"
-              + "<div class='camera_sign_picture_div'>"
-              + "<img src='" + data[i].def_img + "' class='img_class' alt=''>"
-              + "</div>"
-              + "<div class='camera_sign_video'></div>"
-              + "</div>"
-              + "<div class='device_nick'>"
-              + "<div class='device_list_del_ico'></div>"
-              + "<div class='device_list_sort_box'>"
-              + "<input class='device_list_sort_num' value='" + (data[i].sort || "") + "'>"
-              + "<div class='device_list_sort_btn'>" + mcs_edit + "</div>"
-              + "</div>"
-              + "<span class='device_nick_span'>" + (data[i].nick.length < 14 ? data[i].nick : data[i].nick.substr(0, 14) + "...") + "</span>"
-              + "</div>"
-              + "</div>";
+            data[i].play = 0
+            data[i].img = 0
+            this.dev_list_dom_box.push(data[i])
           }
         }
       } else {
-        dev_list_dom =
-          "<div id='empty_div_img'></div>"
-          + "<div class='empty_div_txt'>" + mcs_your_device_list_empty + "</div>" // 您的设备列表还是空空的...
-        // +"<a href='javascript:;'><div id='storage_buy'>"+mcs_storage_buying+"</div></a>" 
-      }
-      // $("#vimtag_device_list_box").html(
-      //   "<div style='overflow:hidden'>"
-      //   + "<div style='overflow:hidden;font-size:15px'>" + "<div id='dev_camera' style='" + (ipc_num == 1 ? 'display:block' : 'display:none') + "'>" + mcs_camera + "</div>" + dev_list_dom + "</div>"
-      //   + "<div style='display:block;font-size:15px'><div id='dev_cloudbox' style='" + (box_num == 1 ? 'display:block' : 'display:none') + "'>" + mcs_cloud_box + "</div>"
-      //   + dev_list_dom_box
-      //   + "</div>"
-      // )
-      let device_list_num = sessionStorage.getItem("device_list_num") ? sessionStorage.getItem("device_list_num") : 4;
-      this.devImgWidth = 100 / device_list_num + "%";
-      $(".device_list_img").css({ "width": this.devImgWidth })
-      let dev_img_height = $(".device_list_img").width() / 16 * 9;
-      $(".device_list_img").css({ "width": this.devImgWidth, "height": dev_img_height + 34 })
-      $(".device_list_img_child").css({ "width": "100%", "height": dev_img_height, "position": "relative" });
-      if (this.$store.state.jumpPageData.experienceFlag) { // 体验标识检测
-        $(".device_list_menu").hide();
-        $("#dev_search").hide();
-      } else {
-        $(".device_list_menu").show();
-        $("#dev_search").show();
+        this.devlistEmptyFlag = true
       }
       if (this.$store.state.jumpPageData.localFlag) {
-        $(".device_list_menu").hide();
-        $("#dev_search").hide();
-        $("#dev_filter_box").hide();
-        this.device_event();
+        this.device_event()
       } else {
-        this.device_list_load();
-        $(".device_list_menu").show();
-        $("#dev_search").show();
-        $("#dev_filter_box").show();
+        this.device_list_load()
       }
     },
     device_list_load () { // 设备块大小设置
-      if (this.devImgWidth[this.devImgWidth.length - 1] === "%") { //将百分数转换成小数
-        this.devImgWidth = parseFloat(this.devImgWidth) / 100;
-      }
-      let dev_list_dom_width = ($("#vimtag_device_list_box").outerWidth()) * this.devImgWidth;
-      let dev_list_dom_height = dev_list_dom_width / 16 * 9 + 34;
-      let client_width = $("#vimtag_device_list_box").outerWidth();
-      let client_height = window.innerHeight;
-      let x_num = parseInt(client_width / dev_list_dom_width);
-      let y_num = parseInt(client_height / dev_list_dom_height);
-      let num = x_num * y_num;
-      let stop_scroll = null;
-      let asnyc_time = this.$store.state.jumpPageData.autoPlayFlag ? 2000 : 100;
-      function device_show (n) {
-        for (let i = 0; i < num; i++) {
-          $(".device_list_img").eq(n + i).show();
-        }
-      }
-      device_show(0);
+      let _this = this
+      let imgWidth = this.autoImgWidth
+      imgWidth = parseFloat(imgWidth) / 100
+      let client_width = document.getElementById("vimtag_device_list_box") ? document.getElementById("vimtag_device_list_box").offsetWidth : null
+      let dev_list_dom_width = client_width * imgWidth
+      let dev_list_dom_height = dev_list_dom_width / 16 * 9 + 34
+      let client_height = window.innerHeight
+      let x_num = parseInt(client_width / dev_list_dom_width)
+      let y_num = parseInt(client_height / dev_list_dom_height)
+      let num = x_num * y_num
+      let stop_scroll = null
+      let asnyc_time = this.$store.state.jumpPageData.autoPlayFlag ? 2000 : 100
       stop_scroll = setInterval(() => {
-        clearInterval(stop_scroll);
-        this.device_event(0, num);
+        clearInterval(stop_scroll)
+        this.device_event(0, num)
       }, asnyc_time)
-      $(window).scroll(function () {
+      window.onscroll = () => {
         if (stop_scroll) {
-          clearInterval(stop_scroll);
+          clearInterval(stop_scroll)
         }
-        if ($("#vimtag_device_list_box").length > 0) {
-          let scrollTop = $(this).scrollTop();
-          // let windowHeight = $(this).height();
-          // let scrollHeight = $(document).height();
-          // if (scrollTop + windowHeight === scrollHeight) { j++; }
+        if (document.getElementById("vimtag_device_list_box")) {
+          let scrollTop = document.documentElement.scrollTop
           if (this.$store.state.jumpPageData.autoPlayFlag) {
-            stop_scroll = setInterval(function () {
-              clearInterval(stop_scroll);
-              let top = scrollTop - 111;
-              let show_height = Math.ceil(top / dev_list_dom_height); //从第几行开始显示
-              this.device_event((show_height * x_num), num);
+            stop_scroll = setInterval(() => {
+              clearInterval(stop_scroll)
+              let top = scrollTop - 111
+              let show_height = Math.ceil(top / dev_list_dom_height) // 从第几行开始显示
+              this.device_event((show_height * x_num), num)
             }, asnyc_time)
           } else {
-            clearInterval(stop_scroll);
-            let top = scrollTop - 111;
-            let show_height = Math.ceil(top / dev_list_dom_height); //从第几行开始显示
-            this.device_event((show_height * x_num), num);
+            clearInterval(stop_scroll)
+            let top = scrollTop - 111
+            let show_height = Math.ceil(top / dev_list_dom_height) // 从第几行开始显示
+            this.device_event((show_height * x_num), num)
           }
         }
-      });
+      }
     },
     device_event (n, num) { //n为第几个开始，num为显示的个数 每行显示设备数量以及设备列表数据中第几个开始展示
+      console.log(n, num, 'n_num')
       let length
       let _this = this
+      let camera_sign_picture_length = document.getElementsByClassName("camera_sign_picture_div").length
       if (this.$store.state.jumpPageData.localFlag) {
-        $(".device_list_img").show();
-        n = 0;
-        length = $(".camera_sign_picture_div").length;
+        n = 0
+        length = camera_sign_picture_length
       } else {
-        length = n + num > $(".camera_sign_picture_div").length ? $(".camera_sign_picture_div").length : n + num;
+        length = n + num > camera_sign_picture_length ? camera_sign_picture_length : n + num;
       }
       //add list click event
-      for (let i = 0; i < $(".camera_sign_picture_div").length; i++) {
-        let l_dom_device_list_img = $(".camera_sign_picture_div")[i].parentNode.parentNode;
+      for (let i = 0; i < camera_sign_picture_length; i++) {
+        let l_dom_device_list_img = document.getElementsByClassName("camera_sign_picture_div")[i].parentNode.parentNode;
         let device_sn = l_dom_device_list_img.getAttribute("sn")
         // let device_info = mcloud_agent.devs
         if (i >= n && i < length) {
@@ -797,961 +999,60 @@ export default {
         }
       }
     },
-    create_add_devices_box (data) { // 创建添加设备弹窗(可以抽出来做devlist页面的公共组件,暂时搁置,mipc的devlist重构完成后再进行决策)
-      let d_type = "cp1", d_id = "";
-      if (data.type && data.type == 'IPC') {
-        d_type = "cp1"
-      } else if (data.type && data.type == 'BOX') {
-        d_type = "s1"
-      }
-      function add_device_select_type () {
-        let text = "<div id='add_devices_box'>"
-          + "<div id='add_devices_box_menu'>"
-          + "<div id='add_devices_box_close'></div>"
-          + "<div id='add_devices_box_title'>" + mcs_choose_device_type + "</div>"
-          + "</div>"
-          + "<div id='add_devices_box_body'>"
-          + "<div class='add_devices_type'>"
-          + "<div class='add_devices_type_name'>" + mcs_cloud_camera + "</div>"
-          + "<div class='add_devices_type_list' d_type='p1'>"
-          + "<div class='add_devices_type_list_img' style='background:url(" + require('@/assets/device/add_p1.png') + ")no-repeat;'></div>"
-          + "<div class='add_devices_type_list_name'>P1" + mcs_intelligent_cloud_camera + "</div>"
-          + "</div>"
-          + "<div class='add_devices_type_list' d_type='cp1'>"
-          + "<div class='add_devices_type_list_img' style='background:url(" + require('@/assets/device/add_cp1.png') + ")no-repeat;'></div>"
-          + "<div class='add_devices_type_list_name'>CP1" + mcs_intelligent_cloud_camera + "</div>"
-          + "</div>"
-          + "<div class='add_devices_type_list' d_type='m1'>"
-          + "<div class='add_devices_type_list_img' style='background:url(" + require('@/assets/device/add_m1.png') + ")no-repeat;'></div>"
-          + "<div class='add_devices_type_list_name'>M1" + mcs_intelligent_cloud_camera + "</div>"
-          + "</div>"
-          + "<div class='add_devices_type_list' d_type='361'>"
-          + "<div class='add_devices_type_list_img' style='background:url(" + require('@/assets/device/add_361.png') + ")no-repeat;'></div>"
-          + "<div class='add_devices_type_list_name'>361" + mcs_intelligent_cloud_camera + "</div>"
-          + "</div>"
-          + "<div class='add_devices_type_list' d_type='cm1'>"
-          + "<div class='add_devices_type_list_img' style='background:url(" + require('@/assets/device/add_cm1.png') + ")no-repeat;'></div>"
-          + "<div class='add_devices_type_list_name'>CM1" + mcs_intelligent_cloud_camera + "</div>"
-          + "</div>"
-          + "<div class='add_devices_type_list' d_type='b1'>"
-          + "<div class='add_devices_type_list_img' style='background:url(" + require('@/assets/device/add_b1.png') + ")no-repeat;'></div>"
-          + "<div class='add_devices_type_list_name'>B1" + mcs_intelligent_cloud_camera + "</div>"
-          + "</div>"
-          + "<div class='add_devices_type_list' d_type='s1'>"
-          + "<div class='add_devices_type_list_img' style='background:url(" + require('@/assets/device/add_s1.png') + ")no-repeat;'></div>"
-          + "<div class='add_devices_type_list_name'>" + mcs_cloud_box + "</div>"
-          + "</div>"
-
-          + "<div class='add_devices_type_list' d_type='fisheye'>"
-          + "<div class='add_devices_type_list_img' style='background:url(" + require('@/assets/device/add_fisheye.png') + ")no-repeat;'></div>"
-          + "<div class='add_devices_type_list_name'>fisheye" + mcs_intelligent_cloud_camera + "</div>"
-          + "</div>"
-          + "<div class='add_devices_type_list' d_type='b2'>"
-          + "<div class='add_devices_type_list_img' style='background:url(" + require('@/assets/device/b2.png') + ")no-repeat;'></div>"
-          + "<div class='add_devices_type_list_name'>B2" + mcs_intelligent_cloud_camera + "</div>"
-          + "</div>"
-          + "<div class='add_devices_type_list' d_type='b3'>"
-          + "<div class='add_devices_type_list_img' style='background:url(" + require('@/assets/device/b3.png') + ")no-repeat;'></div>"
-          + "<div class='add_devices_type_list_name'>B3" + mcs_intelligent_cloud_camera + "</div>"
-          + "</div>"
-          + "</div>"
-          + "</div>"
-          + "</div>"
-        if (data.parent.innerHTML) {
-          data.parent.innerHTML = text;
+    getDropdownDom () { // 获取wifi下拉列表dom结构
+      this.publicFunc.showBufferPage()
+      this.$api.devlist.wifi_get({ // 设备可连接wifi获取
+        sn: this.add_device_input_id
+      }).then(res => {
+        this.publicFunc.closeBufferPage()
+        if (res) {
+          this.$set(this.addDeviceModelObj, 'wifiListArr', res)
         } else {
-          data.parent.html(text);
+          this.publicFunc.msg_tips({ msg: res.result, type: "error", timeout: 3000 })
         }
-
-        function add_device_select_type_event () {
-          let add_device_step_time = new Date().getTime(); //进入类型选择页面的时间
-          for (let i = 0; i < $(".add_devices_type_list").length; i++) {
-            $(".add_devices_type_list").eq(i).click(function () {
-              d_type = this.getAttribute("d_type");
-              let add_device_type = d_type //日志
-              let add_dev_info = {}; //add_device_list数组中的值 类型为{}type title desc time
-              add_dev_info.type = 'click';
-              add_dev_info.title = 'choose device type';
-              add_dev_info.desc = 'chosse ' + d_type + ' to add';
-              add_dev_info.time = new Date().getTime() - add_device_step_time;
-              // console.log(add_dev_info)
-              _this.addDeviceList.push(add_dev_info)
-              add_device_input_id();
-            })
+      })
+    },
+    skipToNick () { // 跳转至设置昵称页面
+      this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'setDeviceNick') // 展示设置设备昵称页面
+      this.$set(this.addDeviceModelObj, 'menuTitle', mcs_nick_modify) // 设置设备昵称页面顶部菜单标题
+    },
+    skipToZone () { // 跳转至设置时区页面
+      let _this = this
+      this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'setDeviceZone') // 展示设置设备时区页面
+      this.$set(this.addDeviceModelObj, 'menuTitle', mcs_settings + mcs_time_zone) // 设置设备时区页面顶部菜单标题
+      this.publicFunc.showBufferPage() // 展示遮罩层
+      this.$api.devlist.time_zone_get({ // 设备时区获取
+        sn: this.add_device_input_id
+      }).then(res => {
+        let wifi_Dom
+        if (res) {
+          this.$api.devlist.time_get({ // 设备详细时间获取
+            sn: this.add_device_input_id
+          }).then(res_time_get => {
+            time_get_ack(res_time_get)
+            this.publicFunc.closeBufferPage()
+          })
+          for (let i = 0; i < res.length; i++) {
+            let zone_name_tmp = res[i].city.replace(/\(|&|\)|_/g, "")
+            let zone_name = eval("mcs_timezone_" + zone_name_tmp)
+            res[i].zone_name = zone_name
           }
-          $("#add_devices_box_close").click(function () {
-            close_add_page('add_dev')
-          })
+          this.$set(this.addDeviceModelObj, 'timeZoneArr', res)
         }
-        add_device_select_type_event();
+      })
+      function time_get_ack (msg) {
+        let timezone_name = msg.timezone
+        let timezone_tmp = msg.timezone.replace(/\(|&|\)|_/g, "")
+        timezone_tmp = meval("mcs_timezone_" + timezone_tmp) || timezone_tmp
+        timezone_tmp = timezone_tmp.length < 10 ? timezone_tmp : (timezone_tmp.substr(0, 10) + "...")
+        _this.$set(_this.addDeviceModelObj, 'timeZoneName', timezone_tmp)
       }
-
-      function add_device_input_id (existed) {
-        let text = "<div id='add_devices_box'>"
-          + "<div id='add_devices_box_menu'>"
-          + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-          + "<div id='add_devices_box_close'></div>"
-          + "<div id='add_devices_box_title'>" + mcs_action_add_device + "</div>"
-          + "</div>"
-          + "<div id='add_devices_box_body'>"
-          + "<div id='add_device_sample_img' style='background:url(" + require("@/assets/device/id_" + d_type + ".png") + ") no-repeat center center;'></div>"
-          + "<div class='add_device_input_id_box'>"
-          + "<div class='add_device_input_id_box_ico'></div>"
-          + "<div id='add_device_input_id_box_del' class='add_device_input_id_box_del'></div>"
-          + "<input id='add_device_input_id_box_input' class='add_device_input_id_box_input' type='text' placeholder='" + mcs_input_device_id + "'>"
-          + "</div>"
-          + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
-          + "</div>"
-          + "</div>"
-        if (data.parent.innerHTML) {
-          data.parent.innerHTML = text;
-        } else {
-          data.parent.html(text)
+      function meval (s) {
+        try {
+          return eval("(" + s + ")")
+        } catch (e) {
+          return null
         }
-        function add_device_input_id_event () {
-          let add_device_step_time = new Date().getTime();//每步开始时间
-          let add_dev_info = {};//每步操作信息
-          if (data.sn) {
-            add_dev_info.type = 'hint';//日志
-            d_id = data.sn;
-            $("#add_device_input_id_box_input").val(data.sn)
-          }
-          add_dev_info.type = 'input';//日志
-          add_dev_info.title = 'input id';
-          add_dev_info.desc = '';
-          add_dev_info.time = 0;
-          $('#add_device_input_id_box_input').keyup(function () {//日志 输入id后时间
-            add_dev_info.desc = 'add_sn_' + this.value + '';
-            add_dev_info.time = new Date().getTime() - add_device_step_time;
-          })
-          $("#add_devices_box_back").click(function () {
-            add_device_select_type()
-          })
-          $("#add_device_input_id_box_del").click(function () {
-            $("#add_device_input_id_box_input").val('')
-          })
-          $("#add_device_submit").click(function () { //输入完id 点击下一步
-            let reg = new RegExp(/1jfie(.){8}$/i) // 正则判断匹配输入的设备号
-            let device_existed;
-            let add_device_stat;
-            if ($("#add_device_input_id_box_input").val().match(reg)) {
-              // console.log('匹配成功')
-            } else {
-              // console.log('匹配失败')
-              _this.publicFunc.msg_tips({ msg: mrs_device_ID_input_error, type: "error", timeout: 3000 });
-              return
-            }
-
-            if (existed) {
-              device_existed = 0;
-            } else {
-              device_existed = 0;
-              d_id = $("#add_device_input_id_box_input").val()
-              let add_device_id = d_id;//日志
-              for (let i = 0; i < _this.$store.state.jumpPageData.deviceData.length; i++) {
-                if (_this.$store.state.jumpPageData.deviceData[i].sn == d_id) {
-                  device_existed = 1;
-                }
-              }
-            }
-            if (!d_id) {
-              _this.publicFunc.msg_tips({ msg: mcs_the_user_name_is_empty, type: "error", timeout: 3000 })
-              return
-            } else if (device_existed) {
-              add_device_stat = 'lan' // 日志 本地设备
-              _this.publicFunc.msg_tips({ msg: mcs_device_existed, type: "warning", timeout: 3000 })
-            } else {
-              // 展示遮罩层
-              _this.publicFunc.showBufferPage()
-              _this.$api.devlist.devlist_check_online({ // 检测设备是否在线(密码为默认固定值)
-                sn: d_id,
-                pass: "1pl%*.1"
-              }).then(res => {
-                _this.publicFunc.closeBufferPage()
-                if (res === mcs_device_not_exist) { // 设备不存在
-                  _this.publicFunc.msg_tips({ msg: res, type: "error", timeout: 3000 })
-                } else if (res === "user.offline") { // 设备不在线时
-                  add_device_stat = 'offline' // 日志 设备状态
-                  add_device_connect_power()
-                } else if (res === "") {
-                  add_device_stat = 'online' // 日志
-                  add_device_input_pass()
-                }
-              })
-            }
-          })
-          $("#add_devices_box_close").click(function () {
-            close_add_page('add_dev')
-          })
-          _this.addDeviceList.push(add_dev_info)
-        }
-        add_device_input_id_event();
-      }
-
-      function add_device_connect_power () {  //添加设备
-        if (d_type == "cm1" || d_type == "m1" || d_type == "fisheye") {
-          let text = "<div id='add_devices_box'>"
-            + "<div id='add_devices_box_menu'>"
-            + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-            + "<div id='add_devices_box_close'></div>"
-            + "<div id='add_devices_box_title'>" + mcs_action_add_device + "</div>"
-            + "</div>"
-            + "<div class='dev_offline_tips'>"
-            + "<img class='dev_offline_tips_img' src=" + require("@/assets/device/" + d_type + ".png") + ") alt=''>"
-            + "<div class='dev_offline_tips_text'>" + mcs_device_offline_use_iphone + "</div>"
-            + "</div>"
-            + "</div>"
-          if (data.parent.innerHTML) {
-            data.parent.innerHTML = text;
-          } else {
-            data.parent.html(text)
-          }
-          $("#add_devices_box_close").click(close_add_page)
-          $("#add_devices_box_back").click(function () {
-            add_device_input_id()
-          })
-        } else {
-          if (d_type === "b1" || d_type === "b2" || d_type === "b3") {
-            let text = "<div id='add_devices_box'>"
-              + "<div id='add_devices_box_menu'>"
-              + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-              + "<div id='add_devices_box_close'></div>"
-              + "<div id='add_devices_box_title'>" + mcs_connect_power + "</div>"
-              + "</div>"
-              + "<div id='add_devices_box_body'>"
-              + "<div id='add_device_sample_img' style='background:url(" + require("@/assets/device/" + d_type + ".gif") + ") no-repeat center center;background-size:100% 100%'></div>"
-              + "<div class='add_devices_box_info'>" + mcs_device_outdoor_camera_connect_power + "</div>" //接通电源后，请耐心等待30秒，直到摄像机数据线上的绿色指示灯开始闪烁，摄像机启动完成
-              + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
-              + "</div>"
-              + "</div>"
-            if (data.parent.innerHTML) {
-              data.parent.innerHTML = text;
-            } else {
-              data.parent.html(text)
-            }
-            add_device_connect_power_event()
-          } else if (d_type === "s1") {
-            let text = "<div id='add_devices_box'>"
-              + "<div id='add_devices_box_menu'>"
-              + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-              + "<div id='add_devices_box_close'></div>"
-              + "<div id='add_devices_box_title'>" + mcs_connect_power + "</div>"
-              + "</div>"
-              + "<div id='add_devices_box_body'>"
-              + "<div id='add_device_sample_img' style='background:url(" + require("@/assets/device/" + d_type + ".gif") + ") no-repeat center center;background-size:100% 100%'></div>"
-              + "<div class='add_devices_box_info'>" + mcs_device_box_connect_power + "</div>" //接通电源后，请耐心等待30秒，直到设备面板上的绿色指示灯开始闪烁，设备启动完成
-              + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
-              + "</div>"
-              + "</div>"
-            if (data.parent.innerHTML) {
-              data.parent.innerHTML = text;
-            } else {
-              data.parent.html(text)
-            }
-            add_device_connect_power_event();
-          } else {
-            let text = "<div id='add_devices_box'>"
-              + "<div id='add_devices_box_menu'>"
-              + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-              + "<div id='add_devices_box_close'></div>"
-              + "<div id='add_devices_box_title'>" + mcs_connect_power + "</div>"
-              + "</div>"
-              + "<div id='add_devices_box_body'>"
-              + "<div id='add_device_sample_img' style='background:url(" + require("@/assets/device/" + d_type + ".gif") + ") no-repeat center center;background-size:100% 100%'></div>"
-              + "<div class='add_devices_box_info'>" + mcs_normal_device_connect_power + mcs_camera_turn_on_voice + "<div id='add_devices_img'></div></div>"
-
-              + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
-              + "</div>"
-              + "</div>"
-            if (data.parent.innerHTML) {
-              data.parent.innerHTML = text;
-            } else {
-              data.parent.html(text)
-            }
-            add_device_connect_power_event();
-          }
-          function add_device_connect_power_event () {
-            $("#add_devices_box_back").click(function () {
-              add_device_input_id();
-            })
-            $("#add_devices_img").click(function () { //缺少删除步骤
-              $('body').append('<embed src="./theme/device/startSound.mp3" autostart="true" hidden="true" loop="false">');
-            });
-            $("#add_devices_box_close").click(function () {
-              close_add_page('add_dev');
-            });
-            $("#add_device_submit").click(function () {
-              add_device_connect_ethernet();
-            })
-          }
-        }
-      }
-
-      function add_device_connect_ethernet () { //连接网线
-        data.parent.html("<div id='add_devices_box'>"
-          + "<div id='add_devices_box_menu'>"
-          + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-          + "<div id='add_devices_box_close'></div>"
-          + "<div id='add_devices_box_title'>" + mcs_ethernet_configuration + "</div>"
-          + "</div>"
-          + "<div id='add_devices_box_body'>"
-          + "<div id='add_device_sample_img' style='background:url(" + require("@/assets/device/net_" + d_type + ".png") + ") no-repeat center center;'></div>"
-          // +"<div class='add_devices_box_note'>"+mcs_device_connect_ethernet+"</div>" //去掉网口、网线
-          + "<div class='add_devices_box_info'>" + msc_use_ethernet_cable_connect + "</div>" // 请用网线连接路由器和设备的网口，连接成功后设备会自动上线
-          // +"<div id='no_light_twinkle'>"+ mcs_not_see_light +"</div>" // 去掉没看到灯闪
-          // +"<div id='add_device_submit'>"+mcs_see_light_on +"</div>"  //去掉已看到灯闪
-          + "<div class='add_devices_wait_online'>" + mcs_state_wait_device_online + "</div>" //等待设备上线
-          + "<div id='add_devices_timenum'>60</div>"
-          + "</div>"
-          + "</div>")
-        function add_device_connect_ethernet_event () {
-          $("#add_devices_box_back").click(function () {
-            add_device_input_id()
-          })
-          let div = document.getElementById("add_devices_timenum");
-          // let setIntervalTime = 0
-          let timer1 = setInterval(function () { // 倒计时出现负数(360浏览器出现) 修改方法两种 1.将定时器清除判断放入timer1中 2.在判断时提前-4秒防止360浏览器定时不准的问题
-            --div.innerHTML;
-            if (div.innerHTML <= 0) {
-              //  console.log('进入小于等于0的判断123')
-              clearInterval(timer1);
-              clearInterval(timer2)
-              add_device_unconnect_ethernet(); //等于0还没配置上，跳转到配置失败页面
-            }
-          }, 1000);
-          let timer2 = setInterval(function () {
-            _this.$api.devlist.devlist_check_online({
-              sn: d_id,
-              pass: "1pl%*.1"
-            }).then(res => {
-              if (res === "") {
-                clearInterval(timer1);
-                clearInterval(timer2);
-                add_device_input_pass();
-              }
-            })
-          }, 5000)
-          $("#add_devices_box_close").click(function () {
-            close_add_page('add_dev')
-            clearInterval(timer1)
-            clearInterval(timer2)
-          })
-        }
-        add_device_connect_ethernet_event();
-      }
-
-      function add_device_unconnect_ethernet () { //配置失败
-        data.parent.html(
-          "<div id='add_devices_box'>"
-          + "<div id='add_devices_box_menu'>"
-          + "<div id='add_device_unconnect_box'>"
-          + "<div id='add_devices_help'></div>" //问号
-          + "<div id='add_devices_box_close'></div>"
-          + "</div>"
-          + "<div id='add_devices_box_title' class='add_devices_unconnect_title'>" + mcs_finish + "</div>" //完成
-          + "</div>"
-          + "<div id='add_devices_box_body'>"
-          + "<div id='add_device_fail_img'></div>"
-          + "<div id='add_devices_unconnect_info' class='add_devices_box_info'>" + mcs_wifi_config_failure_reconnect + "</div>" // 配置失败，请点击重试
-          + "</div>"
-          + "</div>")
-
-        function add_device_unconnect_ethernet_event () {
-          $("#add_devices_box_close").click(function () {
-            close_add_page('add_dev')
-          })
-          $("#add_device_fail_img").click(function () {
-            add_device_connect_ethernet()
-          })
-          $("#add_devices_help").click(function () {
-            add_devices_help_page()
-          })
-        }
-        add_device_unconnect_ethernet_event()
-      }
-
-      function add_devices_help_page () { //配置失败时的帮助页面
-        data.parent.innerHTML =
-          "<div id='add_devices_box'>"
-          + "<div id='add_devices_box_menu'>"
-          + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-          + "<div id='add_devices_box_close'></div>"
-          + "<div id='add_devices_box_title'>" + mcs_help + "</div>" //帮助
-          + "</div>"
-          + "<div id='add_devices_box_body'>"
-          + "<div class='device_offline_reason'>" + mcs_connect_ethernet_page_title + "</div>" //网线连接
-          + "<div class='device_offline_reason_public'>" + mcs_always_cannot_online + "</div>" //设备一直无法上线
-          + "<div class='device_offline_reason_public'>" + mcs_always_cannot_online_reason + "</div>"
-          + "<div class='device_offline_reason_public'>" + mcs_other_problem_with_feedback + "</div>"
-          + "</div>"
-          + "</div>"
-          + "</div>";
-        function add_devices_help_page_event () {
-          $("#add_devices_box_back").click(function () {
-            add_device_unconnect_ethernet();
-          })
-          $("#add_devices_box_close").click(function () {
-            close_add_page('add_dev')
-          })
-        }
-        add_devices_help_page_event();
-      }
-
-      function add_device_input_pass () { //在线 输入密码
-        let add_device_step_time = new Date().getTime();//每步开始时间  
-        let add_dev_info = {};//每步操作信息  
-        add_dev_info.type = 'input';//日志
-        add_dev_info.title = 'input password';
-        add_dev_info.desc = '';
-        add_dev_info.time = 0;
-        let b_id = d_id.toUpperCase();
-        data.parent = data.parent.innerHTML ? data.parent : data.parent[0];
-        data.parent.innerHTML =
-          "<div id='add_devices_box'>"
-          + "<div id='add_devices_box_menu'>"
-          + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-          + "<div id='add_devices_box_close'></div>"
-          + "<div id='add_devices_box_title'>" + mcs_action_add_device + "</div>"
-          + "</div>"
-          + "<div id='add_devices_box_body'>"
-          + "<div id='add_device_info'>" + mcs_device_id + ":" + b_id + " &nbsp;&nbsp;" + mcs_status + ":" + mcs_state_device_online + "</div>"
-          + "<div class='add_device_input_id_box'>"
-          + "<div class='add_device_input_pass_box_ico'></div>"
-          + "<div id='add_device_input_pass_box_del' class='add_device_input_id_box_del'></div>"
-          + "<input id='add_device_input_pass' class='add_device_input_id_box_input' type='password' placeholder='" + mcs_input_password + "'>"
-          + "</div>"
-          + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
-          + "<div id='add_device_forget_pass'>" + mcs_forgot_your_password + "</div>"
-          + "</div>"
-          + "</div>";
-        function add_device_input_pass_event () {
-          if (obj.sn) {
-            $("#add_devices_box_back").hide();
-          }
-          $("#add_devices_box_back").click(function () {
-            add_device_input_id();
-          })
-          $('#add_device_input_pass').keyup(function () {//日志 输入密码后时间
-            add_dev_info.desc = 'add_password_' + this.value + '';
-            add_dev_info.time = new Date().getTime() - add_device_step_time;
-          })
-          $("#add_device_input_pass_box_del").click(function () {
-            $("#add_device_input_pass").val('')
-          })
-          $("#add_device_submit").click(function () {
-            let password = $("#add_device_input_pass").val();
-            if (!password) {
-              add_dev_info.desc = 'input password is empty';
-              _this.publicFunc.msg_tips({ msg: mcs_the_password_is_empty, type: "error", timeout: 3000 });
-            } else {
-              // 展示遮罩层
-              _this.publicFunc.showBufferPage()
-              // $("#buffer_page").show();
-              _this.$api.devlist.dev_add({ // 调用添加设备接口
-                sn: d_id,
-                password: password
-              }).then(res => {
-                _this.publicFunc.closeBufferPage()
-                if (res && res.result == "") {
-                  let add_device_result = 'success' //日志 添加设备结果
-                  add_dev_info.desc = 'add device success';
-                  if (password.length > 5) {
-                    if (res.info && res.info.p) {
-                      // 暂时不清楚判断参数的含义,但如果设备在线并且密码不为admin则不去设置任何关于摄像头的参数直接添加成功
-                      for (let k = 0, length = res.info.p.length; k < length; k++) {
-                        if (res.info.p[k].n == "s.wifs" && (res.info.p[k].v == "srvok")) {
-                          // add_device_set_nick();
-                          close_add_page('add_dev');
-                          break;
-                        } else if (res.info.p[k].v == "none") {
-                          // add_device_set_nick();
-                          close_add_page('add_dev');
-                          break;
-                        } else if (res.info.p[k].n == "s.wifs") {
-                          // add_device_set_wifi();
-                          close_add_page('add_dev');
-                          break;
-                        } else if (res.info.p[k].n == "s.eye") {//鱼眼
-                          close_add_page('add_dev');
-                          break;
-                        }
-                      }
-                      close_add_page('add_dev');
-                      _this.publicFunc.msg_tips({ msg: mcs_add_successfully, type: "success", timeout: 3000 }); // 添加成功
-                    } else {
-                      close_add_page('add_dev');
-                    }
-                  }
-                  else { //如果密码是admin时，修改密码
-                    add_device_edit_pass(password);
-                  }
-                } else if (res.result == "accounts.pass.invalid") {
-                  add_dev_info.desc = 'add device fail' + mcs_invalid_password;
-                  _this.publicFunc.msg_tips({ msg: mcs_invalid_password + ".", type: "error", timeout: 3000 });
-                } else if (res.result == "subdev.exceed.device") {
-                  add_dev_info.desc = 'add device fail' + mcs_devices_in_the_account_overrun;
-                  _this.publicFunc.msg_tips({ msg: mcs_devices_in_the_account_overrun + ".", type: "error", timeout: 3000 });
-                } else if (res.result == "server.app.invalid") { // app限制   
-                  add_dev_info.desc = 'add device fail' + mcs_device_add_app_invalid;
-                  _this.publicFunc.msg_tips({ msg: mcs_device_add_app_invalid, type: "error", timeout: 3000 });
-                } else if (res.result == "server.loc.invalid") { // 地区限制 
-                  add_dev_info.desc = 'add device fail' + mcs_device_add_loc_invalid;
-                  _this.publicFunc.msg_tips({ msg: mcs_device_add_loc_invalid, type: "error", timeout: 3000 });
-                }
-              })
-            }
-          })
-          $("#add_device_forget_pass").click(function () {
-            add_device_forget_pass()
-          })
-          _this.addDeviceList.push(add_dev_info);
-          $("#add_devices_box_close").click(function () {
-            close_add_page('add_dev')
-          })
-        }
-        add_device_input_pass_event();
-      }
-
-      function add_device_edit_pass (old_password) {
-        let b_id = d_id.toUpperCase();
-        data.parent.innerHTML =
-          "<div id='add_devices_box'>"
-          + "<div id='add_devices_box_menu'>"
-          + "<div id='add_devices_box_back' style='display:none;'>" + mcs_back + "</div>"
-          + "<div id='add_devices_box_close' style='display:none;'></div>"
-          + "<div id='add_devices_box_title'>" + mcs_action_add_device + "</div>"
-          + "</div>"
-          + "<div id='add_devices_box_body'>"
-          + "<div id='add_device_success'>"
-          + "<div id='add_device_success_ico'></div>"
-          + "<div id='add_device_success_txt'>" + mcs_device_id + ":" + b_id + " " + mcs_add_successfully + "!</div>"
-          + "</div>"
-          + "<div id='add_device_edit_pass_tips'>" + mcs_device_password_too_simple + "</div>" //密码8到32位
-          + "<div class='add_device_input_id_box'>"
-          + "<div class='add_device_input_pass_box_ico'></div>"
-          + "<input id='add_device_edit_pass' class='add_device_input_id_box_input' type='password' placeholder='" + mcs_input_password + "'>"
-          + "</div>"
-          + "<div class='add_device_input_id_box'>"
-          + "<div class='add_device_input_pass_box_ico'></div>"
-          + "<input id='add_device_edit_confirm_pass' class='add_device_input_id_box_input' type='password' placeholder='" + mcs_input_confirm_password + "'>"
-          + "</div>"
-          + "<div id='add_device_submit'>" + mcs_change + "</div>" //修改
-          + "</div>"
-          + "</div>";
-        function add_device_edit_pass_event () {
-          let add_device_step_time = new Date().getTime();//每步开始时间  
-          let add_dev_info = {};//每步操作信息  
-          add_dev_info.type = 'input';//日志
-          add_dev_info.title = 'edit password';
-          add_dev_info.desc = 'edit password';
-          add_dev_info.time = 0;
-          // $("#add_devices_box_back").click(add_device_input_pass()) //修改密码处无返回键，暂时隐藏
-          $('#add_device_edit_confirm_pass').keyup(function () {//日志 修改密码再次确认后时间   
-            add_dev_info.time = new Date().getTime() - add_device_step_time;
-          })
-          _this.addDeviceList.push(add_dev_info);//日志
-          $("#add_device_submit").click(function () {
-            let password = $("#add_device_edit_pass").val();
-            let re_password = $("#add_device_edit_confirm_pass").val();
-            let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,32}$/;
-            if (!password || !re_password) {
-              _this.publicFunc.msg_tips({ msg: mcs_the_password_is_empty, type: "error", timeout: 3000 });
-            } else if (!reg.exec(password)) { //密码为8到32位的数字和字母
-              _this.publicFunc.msg_tips({ msg: mcs_password_range_hint, type: "error", timeout: 3000 });
-            } else if (password != re_password) { //密码不一致
-              _this.publicFunc.msg_tips({ msg: mcs_two_password_input_inconsistent, type: "error", timeout: 3000 });
-            } else {
-              _this.$api.devlist.dev_passwd_set({ // 设备密码设置
-                sn: d_id,
-                old_pass: old_password,
-                new_pass: password
-              }).then(res => {
-                if (res) {
-                  _this.$api.devlist.dev_add({ // 添加设备
-                    sn: d_id,
-                    password: password
-                  }).then(res => {
-                    add_device_set_wifi(res)
-                  })
-                } else {
-                  _this.publicFunc.msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 })
-                }
-              })
-            }
-          })
-          $("#add_devices_box_close").click(function () {
-            close_add_page('add_dev')
-          })
-        }
-        add_device_edit_pass_event();
-      }
-
-      function add_device_set_wifi () {
-        let b_id = d_id.toUpperCase();
-        data.parent.innerHTML =
-          "<div id='add_devices_box'>"
-          + "<div id='add_devices_box_menu'>"
-          + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-          + "<div id='add_devices_box_close'></div>"
-          + "<div id='add_devices_box_title'>" + mcs_action_add_device + "</div>"
-          + "</div>"
-          + "<div id='add_devices_box_body'>"
-          + "<div id='add_device_success'>"
-          + "<div id='add_device_success_ico'></div>"
-          + "<div id='add_device_success_txt'>" + mcs_device_id + ":" + b_id + " " + mcs_add_successfully + "!</div>"
-          + "</div>"
-          + "<div id='add_device_edit_pass_tips'>" + mcs_prompt_config_wifi + "</div>"
-          + "<div id='add_device_set_wifi_refresh'></div>"
-          + "<div id='add_device_set_wifi_box'>"
-          + "<div class='add_device_set_wifi_box_ico'></div>"
-          + "<div id='add_device_set_wifi_btn' class='add_device_set_wifi_up'></div>"
-          + "<div id='add_device_set_wifi_input' class='add_device_set_wifi_input'>" + (mcs_select_wifi_wizard.length < 14 ? mcs_select_wifi_wizard : (mcs_select_wifi_wizard.substr(0, 14) + "...")) + "</div>"
-          + "<div id='add_device_set_wifi_list_box'></div>"
-          + "</div>"
-          + "<div class='add_device_input_id_box'>"
-          + "<div class='add_device_input_pass_box_ico'></div>"
-          + "<input id='add_device_wifi_password' class='add_device_input_id_box_input' type='password' placeholder='" + mcs_input_password + "'>"
-          + "</div>"
-          + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
-          + "<div id='add_device_skip'>" + mcs_action_skip + "</div>"
-          + "</div>"
-          + "</div>";
-        $("#add_device_set_wifi_refresh").click(function () {
-          let wifi_Dom = ''
-          $("#add_device_set_wifi_list_box").html('')
-          _this.$api.devlist.wifi_get({ // 设备可连接wifi获取
-            sn: d_id
-          }).then(res => {
-            _this.publicFunc.closeBufferPage()
-            if (res) {
-              for (let i = 0; i < res.length; i++) {
-                wifi_Dom += "<div class='add_device_set_wifi_list'>" + res[i].ssid + "</div>"
-                $("#add_device_set_wifi_list_box").html(wifi_Dom)
-              }
-              add_device_set_wifi_event();
-            } else {
-              add_device_set_wifi_event();
-            }
-          })
-        })
-        function add_device_set_wifi_event () {
-          let select_wifi = '';
-          let add_device_step_time = new Date().getTime();//每步开始时间
-          let add_dev_info = {};//每步操作信息
-          add_dev_info.type = 'click';//日志
-          add_dev_info.title = 'connect wifi';
-          add_dev_info.desc = 'skip set wifi';
-          add_dev_info.time = 0;
-          $("#add_devices_box_back").click(add_device_input_id)
-          for (let i = 0; i < $(".add_device_set_wifi_list").length; i++) {
-            $(".add_device_set_wifi_list").eq(i).click(function () {
-              select_wifi = this.innerHTML;
-              add_dev_info.desc = 'select wifiname_' + select_wifi + '';//日志
-              select_wifi = select_wifi.length < 20 ? select_wifi : (select_wifi.substr(0, 20) + "...");
-              $("#add_device_set_wifi_input").html(select_wifi)
-              $("#add_device_set_wifi_list_box").hide();
-              $("#add_device_set_wifi_btn").attr('class', 'add_device_set_wifi_up')
-            })
-          }
-          $('#add_device_wifi_password').keyup(function () {//日志 输入完wifi密码后时间
-            add_dev_info.time = new Date().getTime() - add_device_step_time;
-          })
-          $("#add_device_set_wifi_btn").click(function () {
-            if (this.className == "add_device_set_wifi_down") {
-              $("#add_device_set_wifi_list_box").slideUp();
-              this.className = "add_device_set_wifi_up";
-            } else if (this.className == "add_device_set_wifi_up") {
-              $("#add_device_set_wifi_list_box").slideDown();
-              this.className = "add_device_set_wifi_down";
-            }
-          })
-          $("#add_device_submit").click(function () {
-            // console.log("点击添加wifi下一步")
-            let add_set_wifi_startime = new Date().getTime(); //日志 wifi配置开始时间
-            let wifi_password = $("#add_device_wifi_password").val();
-            let wifi_ssid = $("#add_device_set_wifi_input").html();
-            // 展示遮罩层
-            _this.publicFunc.showBufferPage()
-            _this.$api.devlist.wifi_set({
-              sn: d_id,
-              ssid: wifi_ssid,
-              key: wifi_password
-            }).then(res => {
-              _this.publicFunc.closeBufferPage()
-              if (res.type === 'error') {
-                add_dev_info.desc = 'set wifi_' + select_wifi + 'error';//日志
-                let add_set_wifi_endtime = new Date().getTime(); //日志 wifi配置结束时间
-                let add_set_wifi_totaltime = add_set_wifi_endtime - add_set_wifi_startime;//日志 wifi配置耗时
-                _this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 });
-              } else if (res.type === 'success') {
-                add_dev_info.desc = 'set wifi_' + select_wifi + 'success';//日志
-                let add_set_wifi_endtime = new Date().getTime(); //日志 wifi配置结束时间
-                let add_set_wifi_totaltime = add_set_wifi_endtime - add_set_wifi_startime;//日志 wifi配置耗时
-                _this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 });
-                add_device_set_nick();
-              } else {
-                add_device_set_nick();
-              }
-            })
-          })
-          $("#add_device_skip").click(function () {
-            // console.log('点击跳过')
-            add_device_set_nick();
-          })
-          _this.addDeviceList.push(add_dev_info);//日志
-          $("#add_devices_box_close").click(function () {
-            close_add_page('add_dev')
-          })
-        }
-        $("#add_device_set_wifi_refresh").click();
-      }
-
-      function add_device_set_nick () {
-        let b_id = d_id.toUpperCase();
-        data.parent.innerHTML = "<div id='add_devices_box'>"
-          + "<div id='add_devices_box_menu'>"
-          + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-          + "<div id='add_devices_box_close'></div>"
-          + "<div id='add_devices_box_title'>" + mcs_nick_modify + "</div>"
-          + "</div>"
-          + "<div id='add_devices_box_body'>"
-          + "<div id='add_device_edit_name_tips'>" + mcs_device_id + ":" + b_id + "</div>"
-          + "<div class='add_device_input_id_box'>"
-          + "<div class='add_device_input_name_box_ico'></div>"
-          + "<input id='add_device_nick' class='add_device_input_id_box_input' type='text' placeholder='" + mcs_input_nick + "'>"
-          + "</div>"
-          + "<div id='add_device_submit'>" + mcs_action_next + "</div>"
-          + "<div id='add_device_skip'>" + mcs_action_skip + "</div>"
-          + "</div>"
-          + "</div>";
-        function add_device_set_nick_event () {
-          let add_device_step_time = new Date().getTime();//每步开始时间
-          let add_dev_info = {};//每步操作信息
-          add_dev_info.type = 'input'//日志
-          add_dev_info.title = 'nickname modify'
-          add_dev_info.desc = 'skip set nickname'
-          add_dev_info.time = 0;
-          $("#add_devices_box_back").click(function () {
-            add_device_set_wifi();
-          })
-          $('#add_device_nick').keyup(function () {//日志 输入完昵称后时间
-            add_dev_info.desc = 'set device nickname_' + this.value + '';
-            add_dev_info.time = new Date().getTime() - add_device_step_time;
-          })
-          _this.addDeviceList.push(add_dev_info);//日志
-          $("#add_device_submit").click(function () {
-            let nick = $("#add_device_nick").val();
-            if (!nick) {
-              _this.publicFunc.msg_tips({ msg: mcs_nick_not_empty, type: "error", timeout: 3000 });
-            } else {
-              _this.$api.devlist.nick_set({ // 设置设备昵称
-                sn: d_id,
-                nick: nick
-              }).then(res => {
-                add_device_set_zone(res)
-              })
-            }
-          })
-          $("#add_device_skip").click(function () {
-            add_device_set_zone()
-          })
-          $("#add_devices_box_close").click(function () {
-            close_add_page('add_dev')
-          })
-        }
-        add_device_set_nick_event()
-      }
-
-      function add_device_set_zone () {
-        let timezone = "";
-        data.parent.innerHTML = "<div id='add_devices_box'>"
-          + "<div id='add_devices_box_menu'>"
-          + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-          + "<div id='add_devices_box_close'></div>"
-          + "<div id='add_devices_box_title'>" + mcs_settings + mcs_time_zone + "</div>"
-          + "</div>"
-          + "<div id='add_devices_box_body'>"
-          + "<div id='add_device_set_zone_box'>"
-          + "<div class='add_device_set_zone_box_ico'></div>"
-          + "<div id='add_device_set_wifi_btn' class='add_device_set_wifi_up'></div>"
-          + "<div id='add_device_set_zone_input' class='add_device_set_wifi_input'></div>"
-          + "<div id='add_device_set_wifi_list_box'></div>"
-          + "</div>"
-          + "<div id='add_device_submit'>" + mcs_ok + "</div>"
-          + "<div id='add_device_skip'>" + mcs_action_skip + "</div>"
-          + "</div>"
-          + "</div>";
-        // 展示遮罩层
-        _this.publicFunc.showBufferPage()
-        _this.$api.devlist.time_zone_get({ // 设备时区获取
-          sn: d_id
-        }).then(res => {
-          let wifi_Dom
-          $("#add_device_set_wifi_list_box").html('')
-          if (res) {
-            _this.$api.devlist.time_get({ // 设备详细时间获取
-              sn: d_id
-            }).then(res => {
-              time_get_ack(res)
-            })
-            for (let i = 0; i < res.length; i++) {
-              let zone_name_tmp = res[i].city.replace(/\(|&|\)|_/g, "")
-              let zone_name = eval("mcs_timezone_" + zone_name_tmp)
-              wifi_Dom += "<div class='add_device_set_wifi_list' utc='" + res[i].utc + "' city='" + res[i].city + "' name='" + res[i].file + "'>" + zone_name + "</div>"
-              $("#add_device_set_wifi_list_box").html(wifi_Dom)
-            }
-          }
-        })
-        function time_get_ack (msg) {
-          // $("#buffer_page").hide();
-          _this.publicFunc.closeBufferPage()
-          let timezone_name = msg.timezone;
-          let timezone_tmp = msg.timezone.replace(/\(|&|\)|_/g, "");
-          timezone_tmp = meval("mcs_timezone_" + timezone_tmp) || timezone_tmp;
-          timezone_tmp = timezone_tmp.length < 10 ? timezone_tmp : (timezone_tmp.substr(0, 10) + "...");
-          $("#add_device_set_zone_input").html(timezone_tmp)
-          timezone = timezone_name;
-          add_device_set_zone_event();
-        }
-        function add_device_set_zone_event () {
-          let add_device_step_time = new Date().getTime();//每步开始时间
-          let add_dev_info = {};//每步操作信息
-          add_dev_info.type = 'click';//日志
-          add_dev_info.title = 'add device set timezone';
-          add_dev_info.desc = 'skip set timezone';
-          add_dev_info.time = 0;
-          $("#add_devices_box_back").click(function () {
-            add_device_set_nick();
-          })
-          for (let i = 0; i < $(".add_device_set_wifi_list").length; i++) {
-            $(".add_device_set_wifi_list").eq(i).click(function () {
-              let timezone_tmp = this.html()
-              add_dev_info.desc = 'set timezone_' + timezone_tmp + '';//日志
-              add_dev_info.time = new Date().getTime() - add_device_step_time;//日志
-              timezone_tmp = timezone_tmp.length < 10 ? timezone_tmp : (timezone_tmp.substr(0, 10) + "...");
-              $("#add_device_set_zone_input").html(timezone_tmp)
-              timezone = this.attr("city")
-              $("#add_device_set_wifi_list_box").hide()
-              $("#add_device_set_wifi_btn").attr('class', 'add_device_set_wifi_up')
-            })
-          }
-          $("#add_device_set_wifi_btn").click(function () {
-            if (this.attr('class') === "add_device_set_wifi_down") {
-              $("#add_device_set_wifi_list_box").slideUp()
-              this.attr('class', 'add_device_set_wifi_up')
-            } else if (this.attr('class') == "add_device_set_wifi_up") {
-              $("#add_device_set_wifi_list_box").slideDown()
-              this.attr('class', 'add_device_set_wifi_down')
-            }
-          })
-          _this.addDeviceList.push(add_dev_info);
-          $("#add_device_submit").click(function () {
-            // 展示遮罩层
-            _this.publicFunc.showBufferPage()
-            _this.$api.devlist.time_set({ // 设置设备时区及时间
-              sn: d_id,
-              timezone: timezone
-            }).then(res => {
-              if (res == 1) {
-                _this.publicFunc.msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 });
-              } else {
-                // $("#buffer_page").hide();
-                _this.publicFunc.closeBufferPage()
-                _this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 }); //设置完时区提示
-                close_add_page('add_dev')
-              }
-            })
-          })
-          $("#add_devices_box_close").click(function () {
-            close_add_page('add_dev');
-          })
-          $("#add_device_skip").click(function () {
-            close_add_page('add_dev');
-          })
-        }
-        function meval (s) { try { return eval("(" + s + ")"); } catch (e) { return null; } }
-      }
-
-      function add_device_forget_pass () {
-        if (d_type == 'b1' || d_type == 'b2' || d_type == 'b3') {
-          data.parent.innerHTML =
-            "<div id='add_devices_box'>"
-            + "<div id='add_devices_box_menu'>"
-            + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-            + "<div id='add_devices_box_close'></div>"
-            + "<div id='add_devices_box_title'>" + mcs_forgot_your_password + "</div>"
-            + "</div>"
-            + "<div id='add_devices_box_body'>"
-            + "<div id='add_device_sample_img' style='background:url(" + require("@/assets/device/reset_" + d_type + ".png") + ") no-repeat center center;'></div>"
-            + "<div class='add_devices_box_info'>" + mcs_bseries_forget_password + "</div>"
-            // +"<div id='failed_to_restore'>"+ mcs_failed_to_restore+"</div>" // 未恢复出厂设置
-            + "<div id='add_device_submit'>" + mcs_close + "</div>"
-            + "</div>"
-            + "</div>";
-        } else if (d_type == 's1') {
-          data.parent.innerHTML =
-            "<div id='add_devices_box'>"
-            + "<div id='add_devices_box_menu'>"
-            + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-            + "<div id='add_devices_box_close'></div>"
-            + "<div id='add_devices_box_title'>" + mcs_forgot_your_password + "</div>"
-            + "</div>"
-            + "<div id='add_devices_box_body'>"
-            + "<div id='add_device_sample_img' style='background:url(" + require("@/assets/device/reset_" + d_type + ".png") + ") no-repeat center center;'></div>"
-            + "<div class='add_devices_box_info'>测试用</div>"
-            // +"<div class='add_devices_box_info'>"+mcs_reset_s1+"</div>" 
-            // +"<div id='failed_to_restore'>"+ mcs_failed_to_restore  +"</div>" //未恢复出厂设置
-            + "<div id='add_device_submit'>" + mcs_close + "</div>"
-            + "</div>"
-            + "</div>";
-        } else if (d_type == 'p1' || d_type == '361') {
-          data.parent.innerHTML =
-            "<div id='add_devices_box'>"
-            + "<div id='add_devices_box_menu'>"
-            + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-            + "<div id='add_devices_box_close'></div>"
-            + "<div id='add_devices_box_title'>" + mcs_forgot_your_password + "</div>"
-            + "</div>"
-            + "<div id='add_devices_box_body'>"
-            + "<div id='add_device_sample_img' style='background:url(@/assets/device/reset_" + d_type + ".png) no-repeat center center;'></div>"
-            + "<div class='add_devices_box_info'>" + mcs_press_hole_restore_to_reset_password + "</div>"
-            // +"<div id='failed_to_restore'>"+ mcs_failed_to_restore  +"</div>" //未恢复出厂设置
-            + "<div id='add_device_submit'>" + mcs_close + "</div>"
-            + "</div>"
-            + "</div>";
-        } else {
-          data.parent.innerHTML =
-            "<div id='add_devices_box'>"
-            + "<div id='add_devices_box_menu'>"
-            + "<div id='add_devices_box_back'>" + mcs_back + "</div>"
-            + "<div id='add_devices_box_close'></div>"
-            + "<div id='add_devices_box_title'>" + mcs_forgot_your_password + "</div>"
-            + "</div>"
-            + "<div id='add_devices_box_body'>"
-            + "<div id='add_device_sample_img' style='background:url(" + require("@/assets/device/reset_" + d_type + ".png") + ") no-repeat center center;'></div>"
-            + "<div class='add_devices_box_info'>" + mcs_press_button_restore_to_reset_password + "</div>"
-            // +"<div id='heared_sound'>"+mcs_hear_voice +"?</div>" //没听到语音
-            + "<div id='add_device_submit'>" + mcs_close + "</div>"
-            + "</div>"
-            + "</div>";
-        }
-        function add_device_forget_pass_event () {
-          $("#add_devices_box_back").click(function () {
-            add_device_input_pass();
-          })
-          $("#add_devices_box_close").click(function () {
-            close_add_page();
-          })
-          $("#add_device_submit").click(function () {
-            add_device_input_pass()
-          })
-        }
-        add_device_forget_pass_event();
-      }
-      if (data.sn) {
-        add_device_input_id(1);
-      } else {
-        add_device_select_type();
       }
     },
     // 点击事件处理函数
@@ -1770,12 +1071,304 @@ export default {
       }
     },
     addDevClick () { // 添加设备点击事件
-      console.log(this.$store.state.user.userLanguage === 'zh')
-      this.addDeviceTime = new Date().getTime();//日志 点击添加设备时间
-      $('#device_add_btn_down').hide();
-      $("#add_device_page").show();
-      $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
-      create_add_devices_box({ parent: $("#add_device_page") });
+      // this.addDeviceTime = new Date().getTime();//日志 点击添加设备时间 暂时注释后续添加日志记录
+      this.addHoverflag = false // 关闭添加设备hover下拉提示框
+      this.addDeviceModel = true // 展示添加设备弹窗
+      this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'chooseDevice') // 展示产品选择页面
+      this.$set(this.addDeviceModelObj, 'menuTitle', mcs_choose_device_type) // 设置产品选择页面顶部菜单标题
+    },
+    chooseDeviceType (item) { // 添加设备时选择设备类型,跳转至填写设备Id页面
+      this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'inputDeviceId') // 切换至填写设备Id页面
+      this.$set(this.addDeviceModelObj, 'deviceType', item.type) // 存储选择的设备类型 item.type
+      this.$set(this.addDeviceModelObj, 'typeUrl', require("@/assets/device/id_" + item.type + ".png")) // 设置动态切换的图片地址
+      this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device) // 设置填写设备Id页面顶部菜单标题
+    },
+    inputDeviceIdNext () { // 输入设备Id点击确定事件
+      console.log(this.add_device_input_id, 'input_value')
+      let reg = new RegExp(/1jfie(.){8}$/i) // 正则判断匹配输入的设备号
+      let device_existed = 0
+      // let add_device_stat 日志用暂时注释
+      let deviceType = this.addDeviceModelObj.deviceType
+      if (!this.add_device_input_id.match(reg)) { // 设备号正则校验
+        // console.log('匹配失败')
+        this.publicFunc.msg_tips({ msg: mrs_device_ID_input_error, type: "error", timeout: 3000 })
+        return
+      }
+      for (let i = 0; i < this.$store.state.jumpPageData.deviceData.length; i++) { // 在vuex中存储的设备列表中对比是否存在该设备
+        if (this.$store.state.jumpPageData.deviceData[i].sn === this.add_device_input_id) {
+          device_existed = 1
+        }
+      }
+      if (device_existed) { // 设备列表中存在该设备
+        // add_device_stat = 'lan' // 日志 本地设备
+        this.publicFunc.msg_tips({ msg: mcs_device_existed, type: "warning", timeout: 3000 })
+      } else { // 其他情况校验该设备是否在线
+        this.publicFunc.showBufferPage() // 展示遮罩层
+        this.$api.devlist.devlist_check_online({ // 检测设备是否在线(密码为默认固定值)
+          sn: this.add_device_input_id,
+          pass: "1pl%*.1"
+        }).then(res => {
+          this.publicFunc.closeBufferPage() // 关闭遮罩层
+          if (res === mcs_device_not_exist) { // 设备不存在
+            this.publicFunc.msg_tips({ msg: res, type: "error", timeout: 3000 })
+          } else if (res === "user.offline") { // 设备不在线时 进入引导页面
+            // add_device_stat = 'offline' // 日志 设备状态
+            this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'addOfflineDevice') // 切换至添加离线设备页面
+            if (deviceType === 'cm1' || deviceType === 'm1' || deviceType === 'fisheye') { // 这三种类型的设备不能在网页和客户端进行添加
+              this.$set(this.addDeviceModelObj, 'typeUrl', require("@/assets/device/" + deviceType + ".png")) // 设置动态切换的图片地址
+              this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device) // 设置添加离线设备页面顶部菜单标题
+            } else { // 其余种类的设备加载动图地址
+              this.$set(this.addDeviceModelObj, 'typeUrl', require("@/assets/device/" + deviceType + ".gif")) // 设置动态切换的图片地址
+              if (deviceType === "b1" || deviceType === "b2" || deviceType === "b3") { // 摄像头类型为b1,b2,b3时
+                this.$set(this.addDeviceModelObj, 'devicesBoxInfo', mcs_device_outdoor_camera_connect_power) // 添加b1,b2,b3提示文字内容
+              } else if (deviceType === "s1") {
+                this.$set(this.addDeviceModelObj, 'devicesBoxInfo', mcs_device_box_connect_power) // 添加s1云盒子提示文字内容
+              } else { // 其他类型设备
+                this.$set(this.addDeviceModelObj, 'offlineOtherflag', true) // 添加单独喇叭图标标识
+                this.$set(this.addDeviceModelObj, 'devicesBoxInfo', mcs_normal_device_connect_power + mcs_camera_turn_on_voice) // 添加其他类型设备提示文字内容
+              }
+              this.$set(this.addDeviceModelObj, 'menuTitle', mcs_connect_power) // 设置添加离线设备页面顶部菜单标题
+            }
+          } else if (res === "") { // 设备在线 进入输入设备密码页面
+            // add_device_stat = 'online' // 日志
+            this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'inputDevicePassword') // 切换至输入设备密码页面
+            this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device) // 设置输入设备密码页面顶部菜单标题
+          } else { // 其他情况预留 直接输入返回信息方便报错判断
+            this.publicFunc.msg_tips({ msg: res, type: "error", timeout: 3000 })
+          }
+        })
+      }
+    },
+    addOfflineDevice () { // 输入链接电源页面点击下一步 进入连接网络页面
+      this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'connectNet') // 切换至链接网络提示页面
+      this.$set(this.addDeviceModelObj, 'menuTitle', mcs_ethernet_configuration) // 设置连接以太网页面顶部菜单标题
+      this.$set(this.addDeviceModelObj, 'typeUrl', require("@/assets/device/net_" + this.addDeviceModelObj.deviceType + ".png")) // 设置动态切换的图片地址
+      this.$set(this.addDeviceModelObj, 'connectNetTime', 60) // 设置链接设备倒计时
+      let showTime = this.addDeviceModelObj.connectNetTime
+      let timer1 = setInterval(() => { // 倒计时出现负数(360浏览器出现) 修改方法两种 1.将定时器清除判断放入timer1中 2.在判断时提前-4秒防止360浏览器定时不准的问题
+        this.$set(this.addDeviceModelObj, 'connectNetTime', --showTime) // 倒计时实时刷新显示
+        if (this.addDeviceModelObj.connectNetTime <= 0) { // 倒计时为0 终止定时器并跳转至配置失败页面
+          clearInterval(timer1)
+          clearInterval(timer2)
+          this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'connectFail') // 等于0还没配置上，跳转到配置失败页面
+          this.$set(this.addDeviceModelObj, 'menuTitle', mcs_finish) // 设置配置失败页面顶部菜单标题
+        }
+      }, 1000);
+      let timer2 = setInterval(() => { // 每5秒重新调用查询设备是否上线接口
+        this.$api.devlist.devlist_check_online({ // 验证设备是否在线
+          sn: this.add_device_input_id,
+          pass: "1pl%*.1"
+        }).then(res => {
+          if (res === "") {
+            clearInterval(timer1)
+            clearInterval(timer2)
+            // 配置成功跳转至密码输入页面
+            this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'inputDevicePassword') // 切换至输入设备密码页面
+            this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device) // 设置输入设备密码页面顶部菜单标题
+          }
+        })
+      }, 5000)
+      this.connectNetTimeArr = [timer1, timer2] // 全局存储定时器标识
+    },
+    inputDevicePasswordNext () { // 输入设备密码页面点击下一步
+      let password = this.add_device_password
+      if (!password) { // 未输入密码
+        this.publicFunc.msg_tips({ msg: mcs_the_password_is_empty, type: "error", timeout: 3000 })
+      } else {
+        // 展示遮罩层
+        this.publicFunc.showBufferPage()
+        this.$api.devlist.dev_add({ // 调用添加设备接口
+          sn: this.add_device_input_id,
+          password: password
+        }).then(res => {
+          this.publicFunc.closeBufferPage()
+          if (res && res.result === "") {
+            if (password.length > 5) {
+              if (res.info && res.info.p) {
+                // 暂时不清楚判断参数的含义,但如果设备在线并且密码不为admin则不去设置任何关于摄像头的参数直接添加成功
+                for (let k = 0, length = res.info.p.length; k < length; k++) {
+                  if (res.info.p[k].n === "s.wifs" && (res.info.p[k].v === "srvok")) {
+                    this.closeModel() // 关闭弹窗
+                    break
+                  } else if (res.info.p[k].v === "none") {
+                    this.closeModel() // 关闭弹窗
+                    break
+                  } else if (res.info.p[k].n === "s.wifs") {
+                    this.closeModel() // 关闭弹窗
+                    break
+                  } else if (res.info.p[k].n === "s.eye") {//鱼眼
+                    this.closeModel() // 关闭弹窗
+                    break
+                  }
+                }
+                this.closeModel() // 关闭弹窗
+                this.publicFunc.msg_tips({ msg: mcs_add_successfully, type: "success", timeout: 3000 }) // 添加成功
+              } else {
+                this.closeModel() // 关闭弹窗
+              }
+            }
+            else { //如果密码是admin时，修改密码
+              this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'editDevicePassword') // 切换至修改密码页面
+              this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device) // 设置修改密码页面顶部菜单标题
+            }
+          } else if (res.result == "accounts.pass.invalid") {
+            this.publicFunc.msg_tips({ msg: mcs_invalid_password + ".", type: "error", timeout: 3000 })
+          } else if (res.result == "subdev.exceed.device") {
+            this.publicFunc.msg_tips({ msg: mcs_devices_in_the_account_overrun + ".", type: "error", timeout: 3000 })
+          } else if (res.result == "server.app.invalid") { // app限制
+            this.publicFunc.msg_tips({ msg: mcs_device_add_app_invalid, type: "error", timeout: 3000 })
+          } else if (res.result == "server.loc.invalid") { // 地区限制
+            this.publicFunc.msg_tips({ msg: mcs_device_add_loc_invalid, type: "error", timeout: 3000 })
+          } else { // 其他情况直接打印报错信息
+            this.publicFunc.msg_tips({ msg: res.result, type: "error", timeout: 3000 })
+          }
+        })
+      }
+    },
+    editDevicePasswordNext () { // 修改设备密码点击下一步
+      let password = this.edit_password_1st
+      let re_password = this.edit_password_2nd
+      let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,32}$/
+      if (!password || !re_password) {
+        this.publicFunc.msg_tips({ msg: mcs_the_password_is_empty, type: "error", timeout: 3000 })
+      } else if (!reg.exec(password)) { //密码为8到32位的数字和字母
+        this.publicFunc.msg_tips({ msg: mcs_password_range_hint, type: "error", timeout: 3000 })
+      } else if (password != re_password) { //密码不一致
+        this.publicFunc.msg_tips({ msg: mcs_two_password_input_inconsistent, type: "error", timeout: 3000 })
+      } else {
+        this.$api.devlist.dev_passwd_set({ // 设备密码设置
+          sn: this.add_device_input_id,
+          old_pass: this.add_device_password, // 登录设备页面中输入的密码(旧密码)
+          new_pass: password
+        }).then(res => {
+          if (res) {
+            this.$api.devlist.dev_add({ // 添加设备
+              sn: this.add_device_input_id,
+              password: password
+            }).then(res => { // 跳转至设置wifi页面
+              this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'setDeviceWifi') // 切换至设置wifi页面
+              this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device) // 设置修改密码页面顶部菜单标题
+              this.getDropdownDom() // 调用获取下拉列表内容函数
+              // add_device_set_wifi(res)
+            })
+          } else {
+            this.publicFunc.msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 })
+          }
+        })
+      }
+    },
+    chooseWifi (wifiId) { // 选择wifi下拉框点击事件
+      this.$set(this.addDeviceModelObj, 'wifiListFlag', false) // 关闭下拉列表弹窗
+      let select_wifi = wifiId.length < 20 ? wifiId : (wifiId.substr(0, 20) + "...")
+      this.$set(this.addDeviceModelObj, 'wifiName', select_wifi) // 关闭下拉列表弹窗
+    },
+    setDeviceWifiNext () { // 选择wifi点击下一步
+      let wifi_password = this.input_wifi_password
+      let wifi_ssid = this.addDeviceModelObj.wifiName
+      // 展示遮罩层
+      this.publicFunc.showBufferPage()
+      this.$api.devlist.wifi_set({
+        sn: this.add_device_input_id,
+        ssid: wifi_ssid,
+        key: wifi_password
+      }).then(res => {
+        console.log(res, 'setWifiRes')
+        this.publicFunc.closeBufferPage()
+        if (res.type === 'error') {
+          this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
+        } else if (res.type === 'success') {
+          this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
+          this.skipToNick() // 跳转至设置昵称页面
+        } else {
+          this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
+          this.skipToNick() // 跳转至设置昵称页面
+        }
+      })
+    },
+    chooseTimeZone (item) { // 选择时区下拉框点击事件
+      this.$set(this.addDeviceModelObj, 'timeZoneListFlag', false) // 关闭下拉列表弹窗
+      let timezone_tmp = item.zone_name.length < 10 ? item.zone_name : (item.zone_name.substr(0, 10) + "...")
+      this.$set(this.addDeviceModelObj, 'timeZoneName', timezone_tmp) // 时区选择内容
+      this.$set(this.addDeviceModelObj, 'chooseZoneCity', item.city) // 设置时区用到的值
+    },
+    setDeviceNickNext () { // 填写设备昵称点击下一步
+      let nick = this.input_device_nick
+      if (!nick) {
+        this.publicFunc.msg_tips({ msg: mcs_nick_not_empty, type: "error", timeout: 3000 })
+      } else {
+        this.$api.devlist.nick_set({ // 设置设备昵称
+          sn: this.add_device_input_id,
+          nick: nick
+        }).then(res => {
+          this.skipToZone() // 跳转至时区设置页面
+          // add_device_set_zone(res)
+        })
+      }
+    },
+    setDeviceZoneFinish () { // 设置设备时区完成
+      this.publicFunc.showBufferPage()
+      this.$api.devlist.time_set({ // 设置设备时区及时间
+        sn: this.add_device_input_id,
+        timezone: this.addDeviceModelObj.chooseZoneCity
+      }).then(res => {
+        if (res === 1) {
+          this.publicFunc.msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 })
+        } else {
+          this.publicFunc.closeBufferPage()
+          this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 }) //设置完时区提示
+          this.closeModel() // 关闭弹窗
+          this.get_dev_list('refresh') // 刷新设备列表
+        }
+      })
+    },
+    forgetDevicePassword () { // 点击忘记设备密码
+      this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'forgetDevicePassword') // 展示设备忘记密码页面
+      this.$set(this.addDeviceModelObj, 'menuTitle', mcs_forgot_your_password) // 设置设备忘记密码页面顶部菜单标题
+      this.$set(this.addDeviceModelObj, 'typeUrl', require("@/assets/device/reset_" + this.addDeviceModelObj.deviceType + ".png")) // 设置动态切换的图片地址
+      let deviceType = this.addDeviceModelObj.deviceType
+      if (deviceType === 'b1' || deviceType === 'b2' || deviceType === 'b3') {
+        this.$set(this.addDeviceModelObj, 'forgetInfo', mcs_bseries_forget_password) // 设置设备忘记密码页面info提示语
+      } else if (deviceType === 'p1' || deviceType === '361') {
+        this.$set(this.addDeviceModelObj, 'forgetInfo', mcs_press_hole_restore_to_reset_password) // 设置设备忘记密码页面info提示语
+      } else {
+        this.$set(this.addDeviceModelObj, 'forgetInfo', mcs_press_button_restore_to_reset_password) // 设置设备忘记密码页面info提示语
+      }
+    },
+    clickQuestion () { // 配置失败点击问号图标
+      this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'connectFailReason')
+      this.$set(this.addDeviceModelObj, 'menuTitle', mcs_help) // 设置帮助页面顶部菜单标题
+    },
+    closeModel () { // 关闭弹窗
+      this.addDeviceModelObj = {} // 清空弹窗所需对象 解决再次打开后的污染
+      this.addDeviceModel = false // 关闭弹窗
+      this.add_device_input_id = null // 重置输入的设备Id
+      this.add_device_password = null // 重置设备输入密码 Input框value
+      this.edit_password_1st = null // 重置修改密码第一次输入 Input框value
+      this.edit_password_2nd = null // 重置修改密码第二次输入 Input框value
+      this.input_wifi_password = null // 重置wifi密码输入
+      this.input_device_nick = null // 重置设备昵称输入
+      for (let item of this.connectNetTimeArr) { // 终止等待网络链接的定时器
+        clearInterval(item)
+      }
+    },
+    addDeviceModelBack () { // 添加设备弹窗返回
+      let backListObj = {
+        'inputDeviceId': 'chooseDevice',
+        'addOfflineDevice': 'inputDeviceId',
+        'connectNet': 'addOfflineDevice',
+        'connectFail': 'connectNet',
+        'connectFailReason': 'connectFail',
+        'inputDevicePassword': 'inputDeviceId',
+        'editDevicePassword': 'inputDevicePassword',
+        'setDeviceWifi': 'inputDevicePassword',
+        'setDeviceNick': 'setDeviceWifi',
+        'setDeviceZone': 'setDeviceNick',
+        'forgetDevicePassword': 'inputDevicePassword'
+      }
+      let modelObj = this.addDeviceModelObj
+      let backPageFlag = backListObj[this.addDeviceModelObj.addDeviceBodyFlag]
+      this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', backPageFlag) // 点击返回跳转的页面
+      console.log(modelObj)
     },
     delDevClick () { // 点击设备的删除图标(未对接)
       $(".device_list_del_ico").on('click', function () {
@@ -1800,8 +1393,139 @@ export default {
         })
       })
     },
+    clickCameraSignPic (item) { // 点击设备标记图片
+      console.log(item, 'item')
+      if (item.stat === "Online") { // 设备在线
+        //State Normal equipment click event
+        this.$store.dispatch('setSelectDeviceIpc', item.sn) // 点击时获取sn
+        this.$store.dispatch('setSelectNick', item.nick) // 点击时获取nick
+        let type = item.type
+        let state = item.stat
+        let addr = item.addr
+        if (state === "Online" && type === "IPC") {
+          this.pageObj.addr = addr
+          this.$router.push({ name: 'play', params: this.pageObj })
+        } else if (state === "Online" && type === "BOX") {
+          let box_live = item.box_live // 获取云盒子是否支持实时播放
+          this.pageObj.addr = addr
+          this.pageObj.box_live = box_live
+          this.$router.push({ name: 'boxlist', params: this.pageObj })
+        }
+        if (this.$store.state.jumpPageData.localFlag === 1) { // 本地化接口暂缓
+          if (item.type === "IPC") {
+            let local_play_data = {}
+            local_play_data.addr = item.addr
+            local_play_data.sn = item.sn
+            local_play_data.password = sessionStorage.getItem("pass_" + local_play_data.sn)
+            local_play_data.dom = $(".camera_sign_picture_div")[i].parentNode.childNodes[1]
+            local_play_data.profile_token = "p3"
+            local_play_data.func = function (msg) {
+              if (msg.result) {
+                this.publicFunc.msg_tips({ msg: mcs_invalid_password, type: "error", timeout: 3000 })
+              }
+            }
+            msdk_ctrl({ type: "local_device_play", data: local_play_data });
+          } else if (item.type === "BOX") { // 本地化接口暂缓
+            let local_play_data = {}
+            local_play_data.addr = l_dom_device_list_img.getAttribute("addr")
+            local_play_data.sn = l_dom_device_list_img.getAttribute("sn")
+            local_play_data.password = sessionStorage.getItem("pass_" + local_play_data.sn)
+            local_play_data.dom = $(".camera_sign_picture_div")[i].parentNode.childNodes[1]
+            local_play_data.profile_token = "p3"
+            local_play_data.func = function (msg) {
+              if (msg.result) {
+                this.publicFunc.msg_tips({ msg: mcs_invalid_password, type: "error", timeout: 3000 })
+              }
+            }
+            msdk_ctrl({ type: "local_box", data: local_play_data })
+          }
+        } else {
+          if (item.type === "IPC") { // IPC摄像头设备
+            if (this.$store.state.jumpPageData.autoPlayFlag) { // 自动播放
+              let is_play = item.play
+              if (is_play === 0) {
+                for (i = 0; i < this.dev_list_dom.length; i++) {
+                  if (item.sn === dev_list_dom[i].sn) {
+                    this.$set(this.dev_list_dom[i], 'imgFlag', false)
+                    this.$set(this.dev_list_dom[i], 'play', 1)
+                    this.$api.devlist.play({
+                      dom: document.getElementsByClassName("camera_sign_video")[i],
+                      sn: item.sn,
+                      profile_token: "p2"
+                    }).then(res => {
+                      console.log(res, '播放res')
+                    })
+                  }
+                }
+              }
+            } else { // 自动播放标识不存在时加载设备图片
+              let is_img = item.img
+              for (i = 0; i < this.dev_list_dom.length; i++) {
+                if (item.sn === dev_list_dom[i].sn) {
+                  this.$set(this.dev_list_dom[i], 'imgFlag', true)
+                  this.$set(this.dev_list_dom[i], 'img', 1)
+                  console.log(this.dev_list_dom[i], 'this.dev_list_dom[i]')
+                  if (is_img === 0) {   //6.5.2
+                    this.$api.devlist.load_noid_img({
+                      refresh: this.pageObj.refresh ? 1 : 0,
+                      sn: device_sn,
+                      num: i,
+                      dom: document.getElementsByClassName('device_list_img')
+                    })
+                  }
+                }
+              }
+            }
+          } else { // Box设备加载图片
+            let is_img = item.img
+            for (i = 0; i < this.dev_list_dom.length; i++) {
+              if (item.sn === dev_list_dom[i].sn) {
+                this.$set(this.dev_list_dom[i], 'img', 1)
+                if (is_img === 0) {   //6.5.2
+                  this.$api.devlist.load_noid_img({
+                    refresh: this.pageObj.refresh ? 1 : 0,
+                    sn: device_sn,
+                    num: i,
+                    dom: document.getElementsByClassName('device_list_img')
+                  })
+                }
+              }
+            }
+          }
+        }
+      } else if (item.stat === "InvalidAuth") { // 身份无效
+        this.$store.dispatch('setSelectDeviceIpc', item.sn) // 点击时存储sn
+        let type = item.type
+        let addr = item.addr
+        let domParentChild
+        for (i = 0; i < this.dev_list_dom.length; i++) {
+          if (item.sn === dev_list_dom[i].sn) {
+            domParentChild = document.getElementsByClassName('camera_sign_picture_div')[i].parentNode.childNodes[1]
+          }
+        }
+        if (this.$store.state.jumpPageData.localFlag) {
+          if (type === "IPC") {
+            create_input_passwrod_box({ sn: this.$store.state.jumpPageData.selectDeviceIpc, addr: addr, dom: domParentChild, type: "IPC" })
+          } else if (type === "BOX") {
+            create_input_passwrod_box({ sn: this.$store.state.jumpPageData.selectDeviceIpc, addr: addr, dom: domParentChild, type: "BOX" })
+          }
+        } else { // 此处暂留 还未加入添加设备Dom
+          $("#add_device_page").show();
+          $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
+          create_add_devices_box({ parent: $("#add_device_page"), sn: this.$store.state.jumpPageData.selectDeviceIpc });
+        }
+      } else if (item.stat === "Offline") { // 此处暂留 还未加入添加设备Dom
+        this.$store.dispatch('setSelectDeviceIpc', item.sn) // 点击时存储sn
+        let type = item.type
+        let state = item.stat
+        let addr = item.addr
+        let nick = item.nick
+        $("#add_device_page").show();
+        $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
+        create_devices_offline({ parent: $("#add_device_page"), sn: this.$store.state.jumpPageData.selectDeviceIpc, type: type, state: state, addr: addr, nick: nick });
+      }
+    },
     // 点击事件处理函数结束
-
     add_device_connect_power_event () {
       $("#add_devices_box_back").click(function () {
         add_device_input_id();
@@ -1814,7 +1538,6 @@ export default {
       })
       $("#add_device_submit").click(add_device_connect_ethernet())
     },
-
     get_service_record_list (n) {
       let s_length = this.search_sort.length;
       let tmp_search_sort = [];

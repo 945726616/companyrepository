@@ -5,7 +5,6 @@
 // scss 宏颜色定义 后续会将该功能整合成JavaScript控制,根据项目名称不同自动切换
 $projectColor: #00a6ba;
 
-
 #device_list_menu { // 设备列表顶部菜单
   width:90%;
 	margin:22px auto;
@@ -164,95 +163,503 @@ $projectColor: #00a6ba;
     width:90%;
     margin:0 auto;
     padding-bottom:100px;
-    .device_list_img{ // 设备图片
-      width: 25%;
-      height: 169px;
-      float: left;
-      text-align: center;
-      cursor: pointer;
-      padding-right:10px;
-      box-sizing: border-box;
-      margin-top:10px;
-      position: relative;
-      #device_list_alert_box{
-        float:left;
-        position:absolute;
-        top: 5px;
-        right: 14px;
+  }
+}
+.device_list_img{ // 设备图片
+  width: 25%;
+  height: 169px;
+  float: left;
+  text-align: center;
+  cursor: pointer;
+  padding-right:10px;
+  box-sizing: border-box;
+  margin-top:10px;
+  position: relative;
+}
+.device_list_alert_box{ // 设备列表警示图标展示部分
+  float:left;
+  position:absolute;
+  top: 5px;
+  right: 14px;
+  width:20px;
+  z-index:999;
+  .device_list_move_ico, .device_list_sos_ico, .device_list_door_ico{
+    display: none;
+  }
+}
+.device_list_img_child{ // 设备列表图片样式
+  cursor: pointer;
+  background-size: 100% 100%;
+  position: relative;
+  width: 100%;
+  .camera_sign_picture_div{
+    position: absolute;
+    z-index: 10;
+    width:100%;
+    height:100%;
+    .img_class {
+      width:100%;
+      height:100%;
+    }
+  }
+  .camera_sign_video{
+    width: 100%;
+    height:100%;
+    position: absolute;
+  }
+}
+.device_nick { // 设备列表昵称样式
+  width: 100%;
+  height: 34px;
+  color: #000000;
+  font-size: 14px;
+  z-index: 2;
+  background: #ffffff;
+  line-height: 34px;
+  bottom: 0;
+  border-left:1px solid #d6d7dc;
+  border-right:1px solid #d6d7dc;
+  border-bottom:1px solid #d6d7dc;
+  box-sizing:border-box; 
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  .device_list_del_ico{
+    width:16px;
+    height:16px;
+    float:right; 
+    /*position:absolute; 
+    right:0;*/
+    margin-top:10px;
+    margin-right:10px;
+    display: none;
+    background: url(~@/assets/device/device_delete.png) no-repeat;
+    &:hover{
+      background: url(~@/assets/device/device_delete2.png) no-repeat;
+    }
+  }
+  .device_list_sort_box{
+    float:right;
+    display: none;
+    .device_list_sort_num{
+      width:20px;
+    }
+    .device_list_sort_btn{
+      float:right;
+      background: $projectColor;
+      color:#fff;
+      font-size: 12px;
+      padding:0px 5px;
+      line-height: 20px;
+      margin-top:7px;
+      margin-left:5px;
+      border-radius:2px;
+    }
+  }
+}
+#empty_div_img{ // 设备列表无设备时展示图片
+  background:url(~@/assets/device/dev_no.png) no-repeat;
+  width:52px;
+  height:52px;
+  background-size: 100% 100%;
+  /*6.1.2 178+58 改为116*/
+  margin: 116px auto 20px;
+}
+.empty_div_txt{ // 设备列表无设备时展示的文字样式
+  text-align:center;
+  color:#333333;
+  font-size:14px;
+}
+
+// 添加设备弹窗样式
+#add_device_model{
+	width:100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+	background: rgba(0,0,0,0.5) none repeat scroll;
+  z-index: 1099;
+  #add_devices_box{ // 弹窗展示盒子
+    width:840px;
+    height:580px;
+    background: #fff;
+    border-radius: 10px;
+    position: fixed;
+    left:50%;
+    top:50%;
+    margin-left:-420px;
+    margin-top:-290px;
+    box-sizing: border-box;
+    #add_devices_box_menu{ // 顶部标题菜单栏样式
+      #add_devices_box_close{
         width:20px;
-        z-index:999;
-        .device_list_move_ico, .device_list_sos_ico, .device_list_door_ico{
-          display: none;
+        height:20px;
+        margin-right:20px;
+        margin-top:17px;
+        float:right;
+        cursor:pointer;
+        background: url(~@/assets/device/n-close.png) no-repeat;
+        &:hover {
+          background: url(~@/assets/device/c-close.png) no-repeat;
         }
       }
-      .device_list_img_child{
-        cursor: pointer;
-        background-size: 100% 100%;
-        .camera_sign_picture_div{
-          position: absolute;
-          z-index: 10;
-          width:100%;
-          height:100%;
-          .img_class {
-            width:100%;
-            height:100%;
+      #add_devices_help{
+        width:22px;
+          height:22px;
+          float:right;
+          cursor:pointer;
+          margin-right: 20px; 
+          margin-top: 17px;
+          background: url(~@/assets/device/help.png) no-repeat;
+          background-size:100% 100%;
+      }
+      #add_devices_box_back{
+        float:left;
+        cursor:pointer;
+        padding-left: 13px;
+        line-height: 60px;
+        margin-left:20px;
+        background: url(~@/assets/device/back.png) 0 24px no-repeat;
+        &:hover{
+          color:$projectColor;
+          background: url(~@/assets/device/choose-back.png) 0 24px no-repeat;
+        }
+      }
+      #add_devices_box_title{
+        text-align: center;
+        line-height: 60px;
+        border-bottom: 1px solid #d6d7dc;
+        color:#333333;
+        font-size: 16px;
+      }
+    }
+    #add_devices_box_body{ // 添加设备弹窗主体样式
+      width:772px;
+      margin:0 auto;
+      .add_devices_type{ // 选择设备类型
+        width:100%;
+        float:left;
+        .add_devices_type_name{
+          margin-top:20px;
+          margin-bottom: 15px;
+          margin-left: 5px;
+          font-size: 16px;
+          color:#333333;
+        }
+        .add_devices_type_list{
+          width:180px;
+          height:120px;
+          margin:5px 5px;
+          border:1px solid #d6d7dc;
+          border-radius: 5px;
+          float:left;
+          color:#333333;
+          cursor:pointer;
+          &:hover {
+            color: $projectColor;
+          }
+          .add_devices_type_list_img{
+            width:60px;
+            height:60px;
+            margin:15px auto;
+          }
+          .add_devices_type_list_name{
+            text-align: center;
+            font-size:14px;
           }
         }
-        .camera_sign_video{
-          width: 100%;
-          height:100%;
-          position: absolute;
-        }
       }
-      .device_nick {
-        width: 100%;
-        height: 34px;
-        color: #000000;
-        font-size: 14px;
-        z-index: 2;
-        background: #ffffff;
-        line-height: 34px;
-        bottom: 0;
-        border-left:1px solid #d6d7dc;
-        border-right:1px solid #d6d7dc;
-        border-bottom:1px solid #d6d7dc;
-        box-sizing:border-box; 
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        .device_list_del_ico{
+      #input_device_id{ // 填写设备id
+        .add_device_input_id_box_del{
           width:16px;
           height:16px;
-          float:right; 
-          /*position:absolute; 
-          right:0;*/
-          margin-top:10px;
-          margin-right:10px;
-          display: none;
-          background: url(~@/assets/device/device_delete.png) no-repeat;
-          &:hover{
-            background: url(~@/assets/device/device_delete2.png) no-repeat;
+          float: right;
+          margin: 10px;
+          cursor: pointer;
+          background: url(~@/assets/device/cause.png) no-repeat;
+        }
+      }
+      #add_offline_device{ // 离线设备添加
+        .dev_offline_tips{ // 设备类型为cm1,m1,fisheye 显示用手机添加
+          text-align: center;
+          .dev_offline_tips_img{
+            margin:70px 0;
+          }
+          .dev_offline_tips_text{
+            text-align: center;
+            font-size:16px;
+            color:#333;
           }
         }
-        .device_list_sort_box{
+        #add_devices_img{
+          width:20px;
+          height:20px;
+          display:inline-block;
+          background:url(~@/assets/device/sound.png) no-repeat;
+          background-size: 100% 100%;
+          margin-left: 12px;
+          vertical-align: middle;
+        }
+      }
+      #connect_net{ // 连接网线等待设备上线
+        .add_devices_wait_online{
+          text-align: center;
+          color:#333;
+        }
+        #add_devices_timenum{
+          width:30px;
+          height:30px;
+          background:$projectColor;
+          color:#fff;
+          margin:0 auto;
+          border-radius: 50%;
+          margin-top: 15px;
+          text-align: center;
+          line-height: 30px;
+        }
+      }
+      #connect_fail{ // 配置失败
+        #add_device_fail_img{
+          width:100px;
+          height:100px;
+          margin:55px auto;
+          cursor: pointer;
+          background: url(~@/assets/device/error.png) no-repeat;
+          background-size: 100% 100%;
+        }
+        #add_devices_unconnect_info{
+          margin-left:141px;
+        }
+      }
+      #connect_fail_reason{ // 配置失败帮助
+        .device_offline_reason{
+          margin-top:10px;
+          font-size: 15px;
+        }
+        .device_offline_reason_public{
+          margin-top: 15px;
+            font-size: 14px;
+            letter-spacing: 1px;
+            color:#646464;
+        }
+      }
+      #input_device_password{ // 设备在线输入密码
+        #add_device_info{
+          width:300px;
+          margin:0 auto;
+          text-align: center;
+          font-size: 16px;
+          margin-top:140px;
+          margin-bottom: 20px;
+          color:#333;
+        }
+        #add_device_forget_pass{
+          text-align: center;
+          margin-top:20px;
+          cursor:pointer;
+        }
+      }
+      #set_device_wifi{ // 设备设置wifi
+        #add_device_set_wifi_refresh{
+          width:22px;
+          height:22px;
           float:right;
-          display: none;
-          .device_list_sort_num{
-            width:20px;
-          }
-          .device_list_sort_btn{
-            float:right;
-            background: $projectColor;
-            color:#fff;
-            font-size: 12px;
-            padding:0px 5px;
-            line-height: 20px;
-            margin-top:7px;
-            margin-left:5px;
-            border-radius:2px;
+          margin-top:7px;
+          margin-right:230px;
+          cursor:pointer;
+          background: url(~@/assets/device/refresh.png) no-repeat;
+      }
+      #add_device_set_wifi_refresh:hover{
+          background: url(~@/assets/device/refresh2.png) no-repeat;
+      }
+        #add_device_set_wifi_box{
+          width:240px;
+          height: 35px;
+          margin:0 auto;
+          border:1px solid #999;
+          border-radius: 5px;
+          margin-bottom:30px;
+          .add_device_set_wifi_box_ico{
+            width:16px;
+            height:16px;
+            float: left;
+            margin: 10px;
+            background: url(~@/assets/device/wifi.png) no-repeat;
           }
         }
       }
+      #set_device_nick{ // 设置设备昵称
+        #add_device_edit_name_tips{
+          width:400px;
+          margin:0 auto;
+          text-align: center;
+          font-size: 16px;
+          margin-top:150px;
+          margin-bottom: 20px;
+          color:#333;
+        }
+        .add_device_input_name_box_ico{
+          width:14px;
+          height:16px;
+          float: left;
+          margin: 10px;
+          background: url(~@/assets/device/nickname.png) no-repeat;
+        }
+      }
+      #set_device_zone{ // 设置设备时区
+        #add_device_set_zone_box{
+          width:240px;
+          height: 35px;
+          margin:0 auto;
+          border:1px solid #999;
+          border-radius: 5px;
+          margin-bottom:30px;
+          margin-top:150px;
+          .add_device_set_zone_box_ico{
+            width:16px;
+            height:16px;
+            float: left;
+            margin: 10px;
+            background: url(~@/assets/device/place.png) no-repeat;
+          }
+        }
+      }
+
+      // 公共弹窗内样式
+      #add_device_sample_img{
+        width:320px;
+        height:200px;
+        margin:55px auto;
+      }
+      .add_device_input_id_box{
+        width:240px;
+        height: 35px;
+        margin:0 auto;
+        border:1px solid #999;
+        border-radius: 5px;
+        margin-bottom:30px;
+      }
+      .add_device_input_id_box_ico{
+        width:16px;
+        height:16px;
+        float: left;
+        margin: 10px;
+        background: url(~@/assets/device/camera.png) no-repeat;
+      }
+      #add_device_submit{
+        color:#fff;
+        width:240px;
+        text-align: center;
+        cursor: pointer;
+        line-height: 35px;
+        margin:0 auto;
+        border-radius: 5px;
+        background: $projectColor;
+      }
+      .add_device_input_id_box_input{
+        border:none;
+        height:35px;
+        width:160px;
+      }
+      .add_devices_box_info{
+        width:476px;
+        text-align: center;
+        color:#333;
+        font-size: 16px;
+        margin-top:20px;
+        margin-bottom: 30px;
+        margin-left: 159px;
+        letter-spacing: 1px;
+      }
+      #add_device_success_ico{
+        width:44px;
+        height:44px;
+        margin:0 auto;
+        margin-top:50px;
+        margin-bottom: 14px;
+        background: url(~@/assets/device/success2.png) no-repeat;
+      }
+      .add_device_input_pass_box_ico{
+        width:16px;
+        height:16px;
+        float: left;
+        margin: 10px;
+        background: url(~@/assets/device/key.png) no-repeat;
+      }
+      #add_device_success_txt{
+        text-align: center;
+        color:$projectColor;
+        font-size: 16px;
+      }
+      #add_device_edit_pass_tips{
+        width:400px;
+        margin:0 auto;
+        text-align: center;
+        font-size: 16px;
+        margin-top:50px;
+        margin-bottom: 20px;
+        color:#333;
+      }
+      .add_device_set_wifi_down{
+        width:14px;
+        height:6px;
+        float:right;
+        margin-top:15px;
+        margin-right:10px;
+        background: url(~@/assets/device/up.png) no-repeat;
+      }
+      .add_device_set_wifi_up{
+        width:14px;
+        height:6px;
+        float:right;
+        margin-top:15px;
+        margin-right:10px;
+        background: url(~@/assets/device/down.png) no-repeat;
+      }
+      .add_device_set_wifi_input{
+        line-height: 34px;
+      }
+      #add_device_set_wifi_list_box{
+        background: #fff;
+        position: absolute;
+        z-index: 1000;
+        width:240px;
+        max-height:220px;
+        overflow: auto !important;
+        border:1px solid #999;
+        border-top:none;
+        border-radius: 0 0 5px 5px;
+      }
+      #add_device_set_wifi_list_box::-webkit-scrollbar{
+          width:5px;
+      }
+      #add_device_set_wifi_list_box::-webkit-scrollbar-thumb:vertical{
+          background-color:#999;
+          border-radius: 6px;
+      }
+      .add_device_set_wifi_list{
+        line-height: 30px;
+        border-top:1px solid #999;
+        padding-left:33px;
+        cursor:pointer;
+      }
+      .add_device_set_wifi_list:hover{
+          color:$projectColor;
+      }
+      #add_device_skip{
+        color:#fff;
+        width:240px;
+        text-align: center;
+        cursor: pointer;
+        line-height: 35px;
+        margin:0 auto;
+        border-radius: 5px;
+        background: $projectColor;
+        margin-top:20px;
+      }
+      // 公共弹窗内样式 结束
     }
   }
 }
