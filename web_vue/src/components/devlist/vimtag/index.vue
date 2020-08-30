@@ -2,7 +2,7 @@
   <div id="devlist">
     <!-- 顶部设备列表菜单栏 -->
     <div id='device_list_menu' :style="fujikamFlag ? 'width:85%;height:40px;margin:0 auto;margin-top:20px' :''">
-      <div id='device_list_tree_box' style='display:none'>
+      <div id='device_list_tree_box' v-show="treeFlag" :style="treeBoxStyle">
         <div id='device_list_tree_div'>
           <div id='device_list_tree'>
             <div class='device_list_tree_level_box' id='device_list_tree_level_box'>
@@ -38,7 +38,7 @@
     </div>
     <!-- 顶部设备列表菜单栏 结束 -->
     <!-- 设备列表展示部分 -->
-    <div id='vimtag_device_list_box'>
+    <div id='vimtag_device_list_box' :class="{'device_tree_class': treeListFlag === 1 && treeClassFlag}">
       <div v-if="!devlistEmptyFlag" style='overflow:hidden'>
         <!-- 摄像机展示 -->
         <div style='overflow:hidden;font-size:15px'>
@@ -57,7 +57,7 @@
               <div class='camera_sign_video'></div>
             </div>
             <div class='device_nick'>
-              <div class='device_list_del_ico'></div>
+              <div class='device_list_del_ico' @click="delDevice(IPCCamera)"></div>
               <div class='device_list_sort_box'>
                 <input class='device_list_sort_num' :value='IPCCamera.sort || ""'>
                 <div class='device_list_sort_btn'>{{mcs_edit}}</div>
@@ -83,7 +83,7 @@
               <div class='camera_sign_video'></div>
             </div>
             <div class='device_nick'>
-              <div class='device_list_del_ico'></div>
+              <div class='device_list_del_ico' @click="delDevice(BoxItem)"></div>
               <div class='device_list_sort_box'>
                 <input class='device_list_sort_num' :value='BoxItem.sort || ""'>
                 <div class='device_list_sort_btn'>{{mcs_edit}}</div>
@@ -107,7 +107,7 @@
       <div id='add_devices_box'>
         <!-- 弹窗顶部标题导航栏 -->
         <div id='add_devices_box_menu'>
-          <div v-if="addDeviceModelObj.addDeviceBodyFlag !== 'chooseDevice'" @click="addDeviceModelBack" id='add_devices_box_back'>{{mcs_back}}</div> <!-- 返回上一层 除选择设备类型页外其他页面均展示 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag !== 'chooseDevice' && addDeviceModelObj.addDeviceBodyFlag !== 'offlineDeviceAlert'" @click="addDeviceModelBack" id='add_devices_box_back'>{{mcs_back}}</div> <!-- 返回上一层 除选择设备类型页外其他页面均展示 -->
           <div id='add_devices_box_close' @click="closeModel"></div>
           <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'connectFail'" id='add_devices_help' @click="clickQuestion"></div> <!-- 仅配置失败时 展示问号 -->
           <div id='add_devices_box_title'>{{addDeviceModelObj.menuTitle}}</div> <!-- 选择设备类型 -->
@@ -260,6 +260,27 @@
             <div id='add_device_submit' @click="closeModel">{{mcs_close}}</div>
           </div>
           <!-- 忘记密码 结束 -->
+          <!-- 离线设备点击提示 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'offlineDeviceAlert'" id="offline_device_alert">
+            <div id='video_play_offline'>
+              <div id='video_play_id'>{{mcs_device_id + ":  " + add_device_input_id.toUpperCase()}}</div>
+              <div id='video_play_offline_word'>{{mcs_video_play_offline}}</div>
+            </div>
+            <div id='search_help' @click="$set(addDeviceModelObj, 'addDeviceBodyFlag', 'offlineDeviceHelp'), $set(addDeviceModelObj, 'menuTitle', mcs_device_offline)">{{mcs_search_help}}</div>
+          </div>
+          <!-- 离线设备点击提示 结束 -->
+          <!-- 离线设备帮助 -->
+          <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'offlineDeviceHelp'" id="offline_device_help">
+            <div class='device_offline_reason_box'>
+              <div class='device_offline_reason'>{{mcs_device_offline_reson}}</div>
+              <div class='device_offline_reason_public'>{{'1、' + mcs_device_offline_first_reson}}</div>
+              <div class='device_offline_reason_public'>{{'2、' + mcs_device_offline_check}}
+                <span id='reconfig_wifi' @click="$set(addDeviceModelObj, 'addDeviceBodyFlag', 'chooseDevice'), $set(addDeviceModelObj, 'menuTitle', mcs_choose_device_type)">{{mcs_reconfigure}}</span>
+              </div>
+              <div class='device_offline_reason_public'>{{'3、' + mcs_device_offline_fourth_reson}}</div>
+            </div>
+          </div>
+          <!-- 离线设备帮助 结束 -->
         </div>
         <!-- 弹窗内部内容 结束 -->
       </div>
@@ -341,6 +362,14 @@ export default {
       mcs_ethernet_configuration: mcs_ethernet_configuration,
       mcs_connect_power: mcs_connect_power,
       mcs_select_wifi_wizard: mcs_select_wifi_wizard,
+      mcs_search_help: mcs_search_help,
+      mcs_video_play_offline: mcs_video_play_offline,
+      mcs_device_offline_reson: mcs_device_offline_reson,
+      mcs_device_offline_first_reson: mcs_device_offline_first_reson,
+      mcs_device_offline_check: mcs_device_offline_check,
+      mcs_reconfigure: mcs_reconfigure,
+      mcs_device_offline_fourth_reson: mcs_device_offline_fourth_reson,
+      mcs_device_offline: mcs_device_offline,
       // 多国语言结束
       // 添加设备弹窗展示数组
       add_device_type_arr: [
@@ -372,12 +401,17 @@ export default {
       ipc_num: 0, // 是否存在摄像头设备标识
       box_num: 0, // 是否存在云盒子设备标识
       devlistEmptyFlag: false, // 设备列表为空标识
+      treeFlag: false, // 树状结构标识
+      treeClassFlag: false, // 树状结构样式添加标识
+      treeListFlag: 1, // 默认树状列表标识
+      treeBoxStyle: null, // 树状展示区域绑定style
+      treeBoxBtnStyle: null, // 树状展示区域按钮绑定style
+      tree_back_data: null, // 树状返回数据
       srcdiv: null,
       devlistData: null,
       searchData: [],
       filterData: [],
       searchDevId: '',
-      treeListFlag: 1,
       devImgWidth: null,
       addDeviceList: [],
       addDeviceTime: '',
@@ -401,27 +435,6 @@ export default {
       obj.box_ipc = 0;
       // obj.parent[0].innerHTML = "";
       this.get_dev_list() //创建设备列表页面
-      $(".device_list_del_ico").on('click', function () { // 等待设备列表渲染完成后修改删除功能
-        let _this_sn = this.parentNode.parentNode.getAttribute("sn");
-        let _this_parent = this.parentNode.parentNode;
-        _this.publicFunc.delete_tips({
-          content: mcs_delete_device + "?", func: function () {
-            _this.$api.devlist.dev_del({
-              sn: _this_sn,
-              dom: _this_parent
-            }).then(res => {
-              _this.publicFunc.msg_tips({
-                msg: res.msg,
-                type: res.type,
-                timeout: 3000
-              })
-              if (res.type === 'success') {
-                _this.$api.devlist.devs_refresh().then($(res.dom).hide())
-              }
-            })
-          }
-        })
-      })
       $(".device_list_sort_btn").click(function () { // 向cfsf添加sort（设备排序用） tree（显示树状列表用，不和昵称绑定）数据
         let sn = this.parentNode.parentNode.parentNode.getAttribute("sn");
         let tree = this.parentNode.parentNode.parentNode.getAttribute("tree");
@@ -438,11 +451,11 @@ export default {
                 tmp_data.push(_this.filterData[i])
               }
               _this.searchData = tmp_data;
-              device_list(tmp_data, search_id)
+              _this.device_list(tmp_data, search_id)
             }
           } else {
             _this.searchData = _this.devlistData;
-            device_list(_this.filterData)
+            _this.device_list(_this.filterData)
           }
         })
         $("#dev_search_input").keyup(function () {
@@ -457,10 +470,10 @@ export default {
                 }
               }
               _this.searchData = tmp_data;
-              device_list(tmp_data, search_id)
+              _this.device_list(tmp_data, search_id)
             } else {
               _this.searchData = _this.devlistData;
-              device_list(_this.filterData)
+              _this.device_list(_this.filterData)
             }
           }
         })
@@ -479,7 +492,7 @@ export default {
           $("#online_btn_span").html(mcs_all)
           $("#online_btn").attr('class', 'online_btn')
           _this.filterData = _this.devlistData;
-          device_list(_this.searchData)
+          _this.device_list(_this.searchData)
         })
 
         $("#online_btn_select_online").click(function () {
@@ -500,7 +513,7 @@ export default {
             }
           }
           _this.filterData = tmp_filter_data;
-          device_list(tmp_data)
+          _this.device_list(tmp_data)
         })
         $("#online_btn_select_offline").click(function () {
           $("#online_btn_box").hide();
@@ -520,7 +533,7 @@ export default {
             }
           }
           _this.filterData = tmp_filter_data;
-          device_list(tmp_data)
+          _this.device_list(tmp_data)
         })
       }
 
@@ -645,59 +658,7 @@ export default {
           }
         })
       }
-      function create_devices_offline (data) {
-        // console.log(data, "data_create_offline")
-        data.parent.html("<div id='add_devices_box'>"
-          + "<div id='add_devices_box_menu'>"
-          + "<div id='add_devices_box_close'></div>"
-          + "<div id='add_devices_box_title'>" + data.nick + "</div>"
-          + "</div>"
-          + "<div id='add_devices_box_body'>"
 
-          + "<div id='video_play_offline'>"
-          + "<div id='video_play_id'></div>"
-          + "<div id='video_play_offline_word'>" + mcs_video_play_offline + "</div>"
-          + "</div>"
-          + "<div id='search_help'>" + mcs_search_help + "</div>"
-          + "</div>"
-          + "</div>")
-        $("#video_play_id").html(mcs_device_id + ":  " + data.sn)
-        $("#add_devices_box_close").click(function () { close_add_page() })
-        $('#search_help').click(function () {
-          create_search_help({ parent: $("#add_device_page"), sn: _this.$store.state.jumpPageData.selectDeviceIpc, state: data.state, type: data.type, addr: data.addr });
-        })
-      }
-
-      function create_search_help (data) {
-        data.parent.html(
-          "<div id='add_devices_box'>"
-          + "<div id='add_devices_box_menu'>"
-          + "<div id='add_devices_box_close'></div>"
-          + "<div id='add_devices_box_title'>" + mcs_device_offline + "</div>"
-          + "</div>"
-          + "<div class='device_offline_reason_box'>"
-          + "<div class='device_offline_reason'>" + mcs_device_offline_reson + "</div>"
-          + "<div class='device_offline_reason_public'>1、" + mcs_device_offline_first_reson + "</div>"
-          + "<div class='device_offline_reason_public'>2、" + mcs_device_offline_check + "<span id='reconfig_wifi'>" + mcs_reconfigure + "</span>" + "</div>"
-          + "<div class='device_offline_reason_public'>3、" + mcs_device_offline_fourth_reson + "</div>"
-          + "</div>"
-          + "</div>")
-        $("#add_devices_box_close").click(function () {
-          close_add_page()
-        })
-        $("#reconfig_wifi").click(function () {
-          this.create_add_devices_box({ parent: $("#add_device_page"), sn: _this.$store.state.jumpPageData.selectDeviceIpc, type: data.type });
-        })
-      }
-      function close_add_page (data) {
-        if (data == 'add_dev') { //如果在添加设备过程中时关闭
-          let add_device_endtime = new Date().getTime();//添加设备结束，点击关闭
-          let add_device_totaltime = add_device_endtime - _this.addDeviceTime;
-          // upload_log('log_app_add_dev');
-        }
-        $("#add_device_page").hide();
-        get_dev_list("refresh");
-      }
       window.onresize = function () { // 监听窗口改变事件
         if (!_this.$store.state.jumpPageData.localFlag && _this.$store.state.jumpPageData.autoPlayFlag) { // 判断是否为客户端且为本地模式的自动播放情况
           this.device_list_load();  // 重载设备列表
@@ -705,13 +666,8 @@ export default {
       }
     },
     get_dev_list (type) { // 获取设备列表
-      let g_block = $("#device_list_tree_box").css('display')
-      if (type === 'refresh' && g_block === 'block') {
-        if (this.treeListFlag == 1) {
-          $("#vimtag_device_list_box").addClass("device_tree_class");
-        } else {
-          $("#vimtag_device_list_box").removeClass("device_tree_class");
-        }
+      if (type === 'refresh' && this.treeFlag === true) { // 树状样式是否添加判断
+        this.treeClassFlag = true
       }
       if (this.$store.state.pcOfflineFlag === 1) { // 离线模式
         this.$store.dispatch('setLocalModel', 1)
@@ -735,46 +691,45 @@ export default {
       }
     },
     devlist_get_ack (data) { // 设备列表数据整理并存储
-      // console.log("进入devlist_get_ack回调", data)
-      let flag = 1; //从播放页面返回的标记，不发送cfsf请求
+      console.log("进入devlist_get_ack回调", data)
+      let flag = 1 //从播放页面返回的标记，不发送cfsf请求
       if (data) {
         this.$store.dispatch('setDeviceData', data)
       } else {
         data = this.$store.state.jumpPageData.deviceData;
-        flag = 0;
+        flag = 0
       }
       for (let key in data) {
-        this.search_sort[key] = this.$store.state.user.name + "_" + data[key].sn + "_sort";
-        this.search_tree[key] = this.$store.state.user.name + "_" + data[key].sn + "_tree";
+        this.search_sort[key] = this.$store.state.user.name + "_" + data[key].sn + "_sort"
+        this.search_tree[key] = this.$store.state.user.name + "_" + data[key].sn + "_tree"
       }
+      console.log(this.$store.state.jumpPageData.supportTreeFlag, 'supportTreeFlag')
       if (this.$store.state.jumpPageData.supportTreeFlag && flag === 1) { //是不是支持树状结构
         // console.log('是否为树形结构')
-        get_service_record_list(0);
+        this.get_service_record_list(0, data)
       } else if (this.$store.state.jumpPageData.supportTreeFlag && flag === 0) { // 从播放页面返回，不发cfsf请求
-        back_flag = sessionStorage.getItem("back_flag");
+        let back_flag = sessionStorage.getItem("back_flag")
         if (back_flag === null || !back_flag) {
-          this.filterData = data; // 解决返回后搜索设备功能无效问题
-          tree_list(tree_back_data);
-          this.device_list(tree_back_data);
+          this.filterData = data // 解决返回后搜索设备功能无效问题
+          this.tree_list(this.tree_back_data)
+          this.device_list(this.tree_back_data)
         } else {
-          let back_data = [];
-          getNickRecord = sessionStorage.getItem("saveNickRecord");
+          let back_data = []
+          let getNickRecord = sessionStorage.getItem("saveNickRecord")
           for (let m = 0; m < data.length; m++) {
             if (data[m].nick.indexOf(getNickRecord) > -1) {
               back_data.push(data[m])
             }
           }
           this.filterData = data; // 解决返回后搜索设备功能无效问题
-          tree_list(tree_back_data);
-          this.device_list(back_data);
+          this.tree_list(this.tree_back_data)
+          this.device_list(back_data)
         }
-        // tree_list(tree_back_data);
-        // device_list(tree_back_data);
       } else {
         this.devlistData = this.$store.state.jumpPageData.deviceData;
-        this.searchData = data;
-        this.filterData = data;
-        this.device_list(data);
+        this.searchData = data
+        this.filterData = data
+        this.device_list(data)
       }
     },
     device_list (data, searchId) { // 设备列表渲染
@@ -863,26 +818,6 @@ export default {
         // let device_info = mcloud_agent.devs
         if (i >= n && i < length) {
           if (l_dom_device_list_img.getAttribute("state") === "Online") {
-            //State Normal equipment click event
-            $(".camera_sign_picture_div").eq(i).click(function () {
-              _this.$store.dispatch('setSelectDeviceIpc', this.parentNode.parentNode.getAttribute("sn")) // 点击时获取sn
-              _this.$store.dispatch('setSelectNick', this.parentNode.parentNode.getAttribute("nick")) // 点击时获取nick
-              _this.$store.state.jumpPageData.selectNick = this.parentNode.parentNode.getAttribute("nick")
-              let type = this.parentNode.parentNode.getAttribute("dtype");
-              let state = this.parentNode.parentNode.getAttribute("state");
-              let addr = this.parentNode.parentNode.getAttribute("addr");
-              if (state === "Online" && type === "IPC") {
-                _this.pageObj.addr = addr;
-                // console.log(obj, '创建播放页面')
-                // createPage("play", obj);
-                _this.$router.push({ name: 'play', params: this.pageObj })
-              } else if (state === "Online" && type === "BOX") {
-                let box_live = this.parentNode.parentNode.getAttribute("box_live");//获取云盒子是否支持实时播放
-                _this.pageObj.addr = addr;
-                _this.pageObj.box_live = box_live;
-                _this.$router.push({ name: 'boxlist', params: this.pageObj })
-              }
-            })
             if (_this.$store.state.jumpPageData.localFlag === 1) {
               if (l_dom_device_list_img.getAttribute("dtype") === "IPC") {
                 let local_play_data = {};
@@ -952,34 +887,6 @@ export default {
                 }
               }
             }
-          } else if (l_dom_device_list_img.getAttribute("state") === "InvalidAuth") {
-            $(".camera_sign_picture_div").eq(i).click(function () {
-              this.$store.dispatch('setSelectDeviceIpc', this.parentNode.parentNode.getAttribute("sn")) // 点击时存储sn
-              let type = this.parentNode.parentNode.getAttribute("dtype");
-              let addr = this.parentNode.parentNode.getAttribute("addr");
-              if (this.$store.state.jumpPageData.localFlag) {
-                if (type == "IPC") {
-                  create_input_passwrod_box({ sn: this.$store.state.jumpPageData.selectDeviceIpc, addr: addr, dom: this.parentNode.childNodes[1], type: "IPC" })
-                } else if (type == "BOX") {
-                  create_input_passwrod_box({ sn: this.$store.state.jumpPageData.selectDeviceIpc, addr: addr, dom: this.parentNode.childNodes[1], type: "BOX" })
-                }
-              } else {
-                $("#add_device_page").show();
-                $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
-                create_add_devices_box({ parent: $("#add_device_page"), sn: this.$store.state.jumpPageData.selectDeviceIpc });
-              }
-            })
-          } else if (l_dom_device_list_img.getAttribute("state") === "Offline") {
-            $(".camera_sign_picture_div").eq(i).click(function () {
-              this.$store.dispatch('setSelectDeviceIpc', this.parentNode.parentNode.getAttribute("sn")) // 点击时存储sn
-              let type = this.parentNode.parentNode.getAttribute("dtype");
-              let state = this.parentNode.parentNode.getAttribute("state");
-              let addr = this.parentNode.parentNode.getAttribute("addr");
-              let nick = this.parentNode.parentNode.getAttribute("nick");
-              $("#add_device_page").show();
-              $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
-              create_devices_offline({ parent: $("#add_device_page"), sn: this.$store.state.jumpPageData.selectDeviceIpc, type: type, state: state, addr: addr, nick: nick });
-            })
           }
         } else {
           if (l_dom_device_list_img.getAttribute("dtype") === "IPC") {
@@ -1351,7 +1258,7 @@ export default {
         clearInterval(item)
       }
     },
-    addDeviceModelBack () { // 添加设备弹窗返回
+    addDeviceModelBack () { // 添加设备弹窗返回 (后续可以添加返回页标题内容)
       let backListObj = {
         'inputDeviceId': 'chooseDevice',
         'addOfflineDevice': 'inputDeviceId',
@@ -1363,7 +1270,8 @@ export default {
         'setDeviceWifi': 'inputDevicePassword',
         'setDeviceNick': 'setDeviceWifi',
         'setDeviceZone': 'setDeviceNick',
-        'forgetDevicePassword': 'inputDevicePassword'
+        'forgetDevicePassword': 'inputDevicePassword',
+        'offlineDeviceHelp': 'offlineDeviceAlert'
       }
       let modelObj = this.addDeviceModelObj
       let backPageFlag = backListObj[this.addDeviceModelObj.addDeviceBodyFlag]
@@ -1411,88 +1319,6 @@ export default {
           this.pageObj.box_live = box_live
           this.$router.push({ name: 'boxlist', params: this.pageObj })
         }
-        if (this.$store.state.jumpPageData.localFlag === 1) { // 本地化接口暂缓
-          if (item.type === "IPC") {
-            let local_play_data = {}
-            local_play_data.addr = item.addr
-            local_play_data.sn = item.sn
-            local_play_data.password = sessionStorage.getItem("pass_" + local_play_data.sn)
-            local_play_data.dom = $(".camera_sign_picture_div")[i].parentNode.childNodes[1]
-            local_play_data.profile_token = "p3"
-            local_play_data.func = function (msg) {
-              if (msg.result) {
-                this.publicFunc.msg_tips({ msg: mcs_invalid_password, type: "error", timeout: 3000 })
-              }
-            }
-            msdk_ctrl({ type: "local_device_play", data: local_play_data });
-          } else if (item.type === "BOX") { // 本地化接口暂缓
-            let local_play_data = {}
-            local_play_data.addr = l_dom_device_list_img.getAttribute("addr")
-            local_play_data.sn = l_dom_device_list_img.getAttribute("sn")
-            local_play_data.password = sessionStorage.getItem("pass_" + local_play_data.sn)
-            local_play_data.dom = $(".camera_sign_picture_div")[i].parentNode.childNodes[1]
-            local_play_data.profile_token = "p3"
-            local_play_data.func = function (msg) {
-              if (msg.result) {
-                this.publicFunc.msg_tips({ msg: mcs_invalid_password, type: "error", timeout: 3000 })
-              }
-            }
-            msdk_ctrl({ type: "local_box", data: local_play_data })
-          }
-        } else {
-          if (item.type === "IPC") { // IPC摄像头设备
-            if (this.$store.state.jumpPageData.autoPlayFlag) { // 自动播放
-              let is_play = item.play
-              if (is_play === 0) {
-                for (i = 0; i < this.dev_list_dom.length; i++) {
-                  if (item.sn === dev_list_dom[i].sn) {
-                    this.$set(this.dev_list_dom[i], 'imgFlag', false)
-                    this.$set(this.dev_list_dom[i], 'play', 1)
-                    this.$api.devlist.play({
-                      dom: document.getElementsByClassName("camera_sign_video")[i],
-                      sn: item.sn,
-                      profile_token: "p2"
-                    }).then(res => {
-                      console.log(res, '播放res')
-                    })
-                  }
-                }
-              }
-            } else { // 自动播放标识不存在时加载设备图片
-              let is_img = item.img
-              for (i = 0; i < this.dev_list_dom.length; i++) {
-                if (item.sn === dev_list_dom[i].sn) {
-                  this.$set(this.dev_list_dom[i], 'imgFlag', true)
-                  this.$set(this.dev_list_dom[i], 'img', 1)
-                  console.log(this.dev_list_dom[i], 'this.dev_list_dom[i]')
-                  if (is_img === 0) {   //6.5.2
-                    this.$api.devlist.load_noid_img({
-                      refresh: this.pageObj.refresh ? 1 : 0,
-                      sn: device_sn,
-                      num: i,
-                      dom: document.getElementsByClassName('device_list_img')
-                    })
-                  }
-                }
-              }
-            }
-          } else { // Box设备加载图片
-            let is_img = item.img
-            for (i = 0; i < this.dev_list_dom.length; i++) {
-              if (item.sn === dev_list_dom[i].sn) {
-                this.$set(this.dev_list_dom[i], 'img', 1)
-                if (is_img === 0) {   //6.5.2
-                  this.$api.devlist.load_noid_img({
-                    refresh: this.pageObj.refresh ? 1 : 0,
-                    sn: device_sn,
-                    num: i,
-                    dom: document.getElementsByClassName('device_list_img')
-                  })
-                }
-              }
-            }
-          }
-        }
       } else if (item.stat === "InvalidAuth") { // 身份无效
         this.$store.dispatch('setSelectDeviceIpc', item.sn) // 点击时存储sn
         let type = item.type
@@ -1503,16 +1329,19 @@ export default {
             domParentChild = document.getElementsByClassName('camera_sign_picture_div')[i].parentNode.childNodes[1]
           }
         }
-        if (this.$store.state.jumpPageData.localFlag) {
+        if (this.$store.state.jumpPageData.localFlag) { // 本地化内容暂缓
           if (type === "IPC") {
             create_input_passwrod_box({ sn: this.$store.state.jumpPageData.selectDeviceIpc, addr: addr, dom: domParentChild, type: "IPC" })
           } else if (type === "BOX") {
             create_input_passwrod_box({ sn: this.$store.state.jumpPageData.selectDeviceIpc, addr: addr, dom: domParentChild, type: "BOX" })
           }
-        } else { // 此处暂留 还未加入添加设备Dom
-          $("#add_device_page").show();
-          $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
-          create_add_devices_box({ parent: $("#add_device_page"), sn: this.$store.state.jumpPageData.selectDeviceIpc });
+        } else { // 展示输入密码弹框
+          this.addDeviceModel = true
+          this.add_device_input_id = this.$store.state.jumpPageData.selectDeviceIpc
+          this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'inputDevicePassword') // 切换至输入设备密码页面
+          this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device) // 设置输入设备密码页面顶部菜单标题
+          this.$set(this.addDeviceModelObj, 'deviceType', type) // 设置设备类型
+          // create_add_devices_box({ parent: $("#add_device_page"), sn: this.$store.state.jumpPageData.selectDeviceIpc });
         }
       } else if (item.stat === "Offline") { // 此处暂留 还未加入添加设备Dom
         this.$store.dispatch('setSelectDeviceIpc', item.sn) // 点击时存储sn
@@ -1520,10 +1349,31 @@ export default {
         let state = item.stat
         let addr = item.addr
         let nick = item.nick
-        $("#add_device_page").show();
-        $('#add_device_page').css({ 'position': 'fixed', 'height': '100%', 'min-height': '0' });//id为bg的div就是我页面中的遮罩层
-        create_devices_offline({ parent: $("#add_device_page"), sn: this.$store.state.jumpPageData.selectDeviceIpc, type: type, state: state, addr: addr, nick: nick });
+        this.addDeviceModel = true
+        this.add_device_input_id = this.$store.state.jumpPageData.selectDeviceIpc
+        this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'offlineDeviceAlert')
+        this.$set(this.addDeviceModelObj, 'deviceType', type) // 设置设备类型
+        this.$set(this.addDeviceModelObj, 'menuTitle', nick) // 设置设备昵称
       }
+    },
+    delDevice (item) { // 点击删除设备图标
+      let _this_sn = item.sn
+      this.publicFunc.delete_tips({
+        content: mcs_delete_device + "?", func: () => {
+          this.$api.devlist.dev_del({
+            sn: _this_sn,
+          }).then(res => {
+            this.publicFunc.msg_tips({
+              msg: res.msg,
+              type: res.type,
+              timeout: 3000
+            })
+            if (res.type === 'success') {
+              this.get_dev_list('refresh') // 刷新设备列表
+            }
+          })
+        }
+      })
     },
     // 点击事件处理函数结束
     add_device_connect_power_event () {
@@ -1538,63 +1388,257 @@ export default {
       })
       $("#add_device_submit").click(add_device_connect_ethernet())
     },
-    get_service_record_list (n) {
-      let s_length = this.search_sort.length;
-      let tmp_search_sort = [];
-      let tmp_search_tree = [];
+    // 树状列表
+    get_service_record_list (n, data) {
+      let s_length = this.search_sort.length
+      let tmp_search_sort = []
+      let tmp_search_tree = []
+      let back_flag
       if (s_length > n * 100) {
         let j = 0;
         for (let i = n * 100; i < s_length && i < (n + 1) * 100; i++) {
-          tmp_search_sort[j] = this.search_sort[i];
-          tmp_search_tree[j] = this.search_tree[i];
-          j++;
+          tmp_search_sort[j] = this.search_sort[i]
+          tmp_search_tree[j] = this.search_tree[i]
+          j++
         }
-        _this.$api.devlist.service_record_get({ // 获取服务记录接口
+        this.$api.devlist.service_record_get({ // 获取服务记录接口
           keys: tmp_search_sort
         }).then(res => {
-          if (res && res.ret == "") {
+          console.log(res, 'service_record_get_   sort')
+          if (res && res.ret === "") {
             for (let i = n * 100; i < res.datas.length + n * 100; i++) {
               data[i].sort = parseInt(res.datas[i]);
             }
           }
-          _this.$api.devlist.service_record_get({
+          this.$api.devlist.service_record_get({
             keys: tmp_search_tree
           }).then(res_tree => {
             if (res_tree && res_tree.ret === "") {
               for (let w = n * 100; w < res_tree.datas.length + n * 100; w++) {
                 if (n == 0) {
-                  data[w].tree = (res_tree.datas[w] !== "") ? res_tree.datas[w] : data[w].nick;
+                  data[w].tree = (res_tree.datas[w] !== "") ? res_tree.datas[w] : data[w].nick
                 } else {
-                  data[w].tree = (res_tree.datas[w - n * 100] !== "") ? res_tree.datas[w - n * 100] : data[w].nick;
+                  data[w].tree = (res_tree.datas[w - n * 100] !== "") ? res_tree.datas[w - n * 100] : data[w].nick
                 }
               }
             }
+            this.get_service_record_list(++n, data)
           })
         })
       } else {
-        data = data.sort(compare);
-        tree_back_data = data;
-        tree_list(data);
-        this.devlistData = this.$store.state.jumpPageData.deviceData;
-        this.searchData = data;
-        this.filterData = data;
-        back_flag = sessionStorage.getItem("back_flag");
+        data = data.sort(compare)
+        this.tree_back_data = data
+        this.tree_list(data)
+        this.devlistData = this.$store.state.jumpPageData.deviceData
+        this.searchData = data
+        this.filterData = data
+        back_flag = sessionStorage.getItem("back_flag")
         if (back_flag === null || !back_flag) {
           // console.log(data, 'data1')
-          device_list(data);
+          this.device_list(data)
         } else {
-          let back_data = [];
-          getNickRecord = sessionStorage.getItem("saveNickRecord");
+          let back_data = []
+          let getNickRecord = sessionStorage.getItem("saveNickRecord")
           for (let m = 0; m < data.length; m++) {
             if (data[m].nick.indexOf(getNickRecord) > -1) {
               back_data.push(data[m])
             }
             // console.log(data, 'data2')
-            device_list(back_data);
+            this.device_list(back_data)
           }
         }
       }
+      function compare (obj1, obj2) { // compare 工具函数
+        let val1 = obj1.sort;
+        let val2 = obj2.sort;
+        if (val1 < val2 || (!isNaN(val1)) && (isNaN(val2))) {
+          return -1;
+        } else if (val1 > val2 || (!isNaN(val2)) && (isNaN(val1))) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
     },
+    tree_list (data) {
+      let _this = this
+      console.log(data, 'tree_list_data')
+      this.treeFlag = true
+      let height = document.documentElement.clientHeight
+      this.treeBoxStyle = { "height": (height - 82) + "px" }
+      this.treeBoxBtnStyle = { "margin-top": ((height - 82) / 2) + "px" }
+      window.onscroll = () => {
+        if (document.getElementById("device_list_tree")) {
+          let scrollTop = document.documentElement.scrollTop
+          if (scrollTop > 82) {
+            this.treeBoxStyle = { "height": height + "px", "top": "0" }
+          } else {
+            this.treeBoxStyle = { "height": (height + scrollTop - 82) + "px", "top": (82 - scrollTop) + "px" }
+          }
+        }
+      }
+      let l_dom_device_list_tree_leaf = document.getElementById("device_list_tree_leaf")
+      let data_1 = [], data_2 = []
+      let req_data = []
+      let tree_level = 0
+      l_dom_device_list_tree_leaf.innerHTML = ""
+      document.getElementById("device_list_tree_level_box").innerHTML = ""
+      let tree_data_arr = []
+      for (let i = 0; i < data.length; i++) {
+        // tree_data_arr[i] = data[i].nick;
+        tree_data_arr[i] = data[i].tree !== "" ? data[i].tree : data[i].nick
+      }
+      let data_1_pre = tree_data_arr // 解决sn名字不统一 树状结构变乱问题
+      function change_data (arr) {
+        let newarr = []
+        for (let i = 0; i < arr.length; i++) {
+          let text = arr[i]
+          let re = /·|\s+/gi
+          newarr[i] = text.replace(re, '.')
+        }
+        return newarr
+      }
+      data_1 = change_data(data_1_pre)
+      console.log(data_1, "data_1")
+
+      for (let k = 0; k < data_1.length; k++) {
+        let tmp_tree_level = data_1[k].split('.').length - 2;
+        let index = data_1[k].lastIndexOf('.');
+        let parent_id = data_1[k].substring(index, 0);
+        let show_id = data_1[k].substring(index + 1, data_1[k].length);
+        console.log(tmp_tree_level, index, parent_id, show_id, 'show_id')
+
+        if (tmp_tree_level > tree_level) { tree_level = tmp_tree_level; }
+        let con = "";
+        if (index === -1) {
+          con = "<div class='tree_list_menu' child='" + data_1[k] + "'>" + show_id + "</div><div child='" + data_1[k] + "' id='" + data_1[k] + "_box' style='margin-left:20px;'></div>"
+        }
+
+        data_2[k] = {
+          id: data_1[k],
+          parent_id: parent_id,
+          con: con
+        }
+      }
+      console.log(data_2, tree_level, 'before_tree_recursion')
+      for (let j = 0; j < data_2.length; j++) {
+        this.tree_recursion(data_2[j], tree_level);
+      }
+      let l_dom_tree_list_menu = document.getElementsByClassName("tree_list_menu")
+      for (let l = 0; l < l_dom_tree_list_menu.length; l++) {
+        let child = l_dom_tree_list_menu[l].getAttribute("child")
+        jQuery(l_dom_tree_list_menu[l]).before("<div class='tree_list_display tree_list_display_active' child='" + child + "'></div>")
+        l_dom_tree_list_menu[l].onclick = function () {
+          jQuery(".tree_list_menu").removeClass("tree_list_menu_active");
+          jQuery("#device_list_tree_all").removeClass("tree_list_menu_active");
+          jQuery(this).addClass("tree_list_menu_active");
+          let nick = this.getAttribute("child");
+          let saveNickRecord = sessionStorage.setItem("saveNickRecord", nick);
+          let back_flag = sessionStorage.setItem("back_flag", true);
+          let tree_scroll_height = sessionStorage.setItem("tree_scroll_height", this.offsetTop);
+          req_data = [];
+          for (let m = 0; m < data_1.length; m++) {
+            if (data_1[m].indexOf(nick) > -1) {
+              req_data.push(data[m])
+            }
+          }
+          // console.log(req_data, "req_data")
+          _this.device_list(req_data);
+        }
+      }
+      //Open
+      let l_dom_tree_list_display = document.getElementsByClassName("tree_list_display");
+      for (let n = 0; n < l_dom_tree_list_display.length; n++) {
+        l_dom_tree_list_display[n].onclick = function () {
+          let is_display = jQuery(this).hasClass("tree_list_display_active")
+          let child = this.getAttribute("child")
+          if (is_display) {
+            jQuery(this).removeClass("tree_list_display_active")
+            // mlocal_storage.set("tree_"+child,1)
+            jQuery(mx("#" + child + "_box")).slideUp()
+          } else {
+            jQuery(this).addClass("tree_list_display_active")
+            // mlocal_storage.set("tree_"+child)
+            jQuery(mx("#" + child + "_box")).slideDown()
+          }
+        }
+        // let tree_step_type = l_dom_tree_list_display[n].getAttribute("child");
+        // let tree_step = mlocal_storage.get("tree_"+tree_step_type);
+        // if(tree_step){
+        //     jQuery(l_dom_tree_list_display[n]).removeClass("tree_list_display_active");
+        //     jQuery(mx("#"+tree_step_type+"_box")).hide();
+        // }
+      }
+      let back_flag = sessionStorage.getItem("back_flag");//set scroll position
+      if (back_flag && back_flag !== null) {
+        let l_dom_device_list_tree = document.getElementById("device_list_tree");
+        let scroll_height = sessionStorage.getItem("tree_scroll_height");
+        l_dom_device_list_tree.scrollTop = scroll_height - 300;
+      }//set scroll position
+
+      //display tree
+      mx("#device_list_tree_box_btn").onclick = function () {
+        let is_display = jQuery("#device_list_tree").css("display");
+        if (is_display == "none") {
+          g_treelist = 1;
+          jQuery(this).css({ "background": "url(imgs/device/tree_close.png) no-repeat", "background-size": "100%" });
+          jQuery("#device_list_tree").show()
+          jQuery("#device_list_tree").animate({ "width": "120px", "padding-left": "10px", "padding-right": "10px" })
+          jQuery("#vimtag_device_list_box").addClass("device_tree_class");
+        } else {
+          g_treelist = 2;
+          jQuery(this).css({ "background": "url(imgs/device/tree_open.png) no-repeat", "background-size": "100%" });
+          jQuery("#device_list_tree").animate({ "width": "0px", "padding-left": "0px", "padding-right": "0px" }, function () { jQuery("#device_list_tree").hide() });
+          jQuery("#vimtag_device_list_box").removeClass("device_tree_class");
+        }
+      }
+      //select all ipc
+      mx("#device_list_tree_all").onclick = function () { //点击设备列表全选
+        jQuery(".tree_list_menu").removeClass("tree_list_menu_active");
+        jQuery(this).addClass("tree_list_menu_active");
+        sessionStorage.clear();
+        _this.device_list(data);
+      }
+      for (let lv = 0; lv < tree_level; lv++) {
+        mx("#device_list_tree_level_box").innerHTML += "<div class='device_list_tree_level'>" + (lv + 1) + "</div>";
+      }
+      for (let lvl = 0; lvl < tree_level; lvl++) {
+        mx(".device_list_tree_level")[lvl].index = lvl;
+        mx(".device_list_tree_level")[lvl].onclick = function () {
+          jQuery(".tree_list_display_parent_" + this.index).children(".tree_list_display").click();
+        }
+      }
+    },
+    tree_recursion (obj, num) {
+      // console.log(obj, num, 'tree_recursion')
+      let getNickRecord = sessionStorage.getItem("saveNickRecord")
+      let l_dom_device_list_tree_leaf = document.getElementById("device_list_tree_leaf")
+      if (obj.parent_id === "") {
+          l_dom_device_list_tree_leaf.innerHTML += obj.con
+      } else if (document.getElementById(obj.parent_id + "_box")) {
+          document.getElementById(obj.parent_id + "_box").innerHTML += obj.con
+      } else {
+        let last_p_num = obj.parent_id.lastIndexOf(".");
+        let parent_id = obj.parent_id.substr(0, last_p_num);
+        let show_id = obj.parent_id.substring(last_p_num + 1, obj.parent_id.length);
+        if (document.getElementById(obj.parent_id + "_box")) {
+            document.getElementById(parent_id + "_box").innerHTML += obj.con
+        } else {
+          let con = "<div id='" + parent_id + "_box' class='tree_list_display_parent_" + num + "'><div class='tree_list_menu' child='" + obj.parent_id + "'>" + show_id + "</div><div child='" + obj.parent_id + "' id='" + obj.parent_id + "_box' style='margin-left:20px;'>" + obj.con + "</div></div>";
+          this.tree_recursion({ id: obj.parent_id, parent_id: parent_id, con: con }, --num);
+        }
+      }
+      if (obj.id == getNickRecord) {
+        let a = jQuery(".tree_list_menu");
+        a.each(function (i) {
+          if ($(this).attr("child") === obj.id) {
+            jQuery(this).addClass("tree_list_menu_active")
+            sessionStorage.setItem("back_flag", true)
+          }
+        })
+      }
+    },
+    // 树状列表 结束
     //实现拖拽功能
     allowDrop (ev) {
       ev.preventDefault();
@@ -1679,7 +1723,7 @@ export default {
     }
     // console.log(pageData,"pageData")
     await this.vimtagDevlist(pageData) // 进入页面后加载
-    // await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
+    await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {
       // mipc系列
       languageSelect.mipc($('#login_box'))

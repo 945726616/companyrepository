@@ -83,7 +83,7 @@ const devlist = {
   */
   async devlist_check_online (params) {
     let returnItem
-    await devlist.dev_add({sn: params.sn, password: params.password}).then(res => {
+    await devlist.dev_add({ sn: params.sn, password: params.password }).then(res => {
       // 根据格式化后的结果判断并赋值
       if (res && res.result === "accounts.user.invalid") {
         returnItem = mcs_device_not_exist;
@@ -91,7 +91,7 @@ const devlist = {
         returnItem = "user.offline";
       } else if (res && res.result == "accounts.pass.invalid") {
         returnItem = "";
-      }else if (res && res.result === "accounts.system") {
+      } else if (res && res.result === "accounts.system") {
         returnItem = "accounts.system";
       }
     })
@@ -106,7 +106,7 @@ const devlist = {
     let pwd_md5_hex = md5.hex(params.password || "")
     await axios.get('/ccm/ccm_dev_add', {
       params: {
-        sess: {nid: login.create_nid()},
+        sess: { nid: login.create_nid() },
         sn: params.sn,
         pwd: login.pwd_encrypt(pwd_md5_hex)
       }
@@ -138,9 +138,9 @@ const devlist = {
     }).then(res => {
       let msg = { result: login.get_ret(res) }
       if (msg && msg.result === "") {
-        returnItem = { msg: mcs_delete_success, type: "success", dom: params.dom }
+        returnItem = { msg: mcs_delete_success, type: "success" }
       } else {
-        returnItem = { msg: mcs_delete_fail, type: "error", dom: params.dom }
+        returnItem = { msg: mcs_delete_fail, type: "error" }
       }
     })
     return returnItem
@@ -167,7 +167,7 @@ const devlist = {
         }
       }
     }).then(res => {
-      returnItem = {result:login.get_ret(res)}
+      returnItem = { result: login.get_ret(res) }
       // let result = login.get_ret(res)
       // if (result === '') {
       //   returnItem = 1
@@ -181,7 +181,7 @@ const devlist = {
   ** 设备网络设置
   */
   async net_set (params) {
-    let info = {dns:params.dns,ifs:params.networks}
+    let info = { dns: params.dns, ifs: params.networks }
     return await axios.get('/ccm/ccm_net_set', {
       params: {
         sess: {
@@ -459,11 +459,9 @@ const devlist = {
   */
   async service_record_get (params) {
     let returnItem
-    await axios.get('/csfs/csfs_get', {
-      params: {
-        nid: login.create_nid(),
-        keys: params.keys
-      }
+    await axios.post('/ccm/csfs_get', {
+      nid: login.create_nid(),
+      keys: params.keys
     }).then(res => {
       returnItem = res.data
     })

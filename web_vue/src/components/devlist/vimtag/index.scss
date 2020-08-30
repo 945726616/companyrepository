@@ -526,6 +526,42 @@ $projectColor: #00a6ba;
           }
         }
       }
+      #offline_device_alert{ // 点击离线设备显示弹框
+        #video_play_offline{
+          margin: 195px auto 10px;
+          text-align: center;
+          font-size: 15px;
+          letter-spacing: 3px;
+        }
+        #video_play_id, #video_play_offline_word{
+          margin-bottom: 20px;
+        }
+        #search_help{
+          color: #fff;
+          background: $projectColor;
+          font-size: 14px;
+          margin: 0 auto;
+          width: 200px;
+          line-height: 24px;
+          height: 24px;
+          text-align: center;
+          border-radius: 2px;
+          padding: 5px;
+          letter-spacing: 1px;
+          cursor: pointer;
+        }
+      }
+      #offline_device_help{ // 点击离线设备
+        .device_offline_reason_box{
+          margin-top:100px;
+          margin-left:100px;
+        }
+        #reconfig_wifi{
+          color:$projectColor;
+          display:inline-block;
+          cursor: pointer;
+        }
+      }
 
       // 公共弹窗内样式
       #add_device_sample_img{
@@ -662,4 +698,12 @@ $projectColor: #00a6ba;
       // 公共弹窗内样式 结束
     }
   }
+}
+
+// 树状结构样式
+#device_list_tree_box{
+	position: fixed;
+	left: 0;
+	top:82px;
+	z-index: 100;
 }

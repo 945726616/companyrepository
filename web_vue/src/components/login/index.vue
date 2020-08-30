@@ -660,13 +660,14 @@ export default {
                   function get_req_ack (msg) {
                     if (msg && msg.data && msg.data.server && msg.data.server.param) {
                       let param = msg.data.server.param
+                      console.log(msg, param, 'get_req_ack')
                       for (let i = 0; i < param.length; i++) {
-                        if (param[i].name === 'f_multi_screen' && param[i].value === 1) {
+                        if (param[i].name === 'f_multi_screen' && param[i].value === '1') {
                           mme.prototype.check_plug_install('', function (ref, version) {
                             if (!version) {
                               _this.$store.dispatch('setAutoPlayFlag', 0)
                             } else {
-                              _this.$store.dispatch('setAutoPlayFlag', 1);
+                              _this.$store.dispatch('setAutoPlayFlag', 1)
                               let auto_play = localStorage.getItem('auto_play')
                               if (auto_play !== 0) {
                                 _this.$store.dispatch('setAutoPlayFlag', 1)
@@ -676,10 +677,10 @@ export default {
                             }
                           })
                         }
-                        if (param[i].name === 'f_filter' && param[i].value === 1) {
+                        if (param[i].name === 'f_filter' && param[i].value === '1') {
                           _this.$store.dispatch('setSupportFilterFlag', 1)
                         }
-                        if (param[i].name === 'f_grp' && param[i].value === 1) {
+                        if (param[i].name === 'f_grp' && param[i].value === '1') {
                           _this.$store.dispatch('setSupportTreeFlag', 1)
                         }
                         if (param[i].name === 'sc.logo') {
