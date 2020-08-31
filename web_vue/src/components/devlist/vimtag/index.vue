@@ -11,7 +11,7 @@
             <div id='device_list_tree_leaf'></div>
           </div>
         </div>
-        <div id='device_list_tree_box_btn'></div>
+        <div id='device_list_tree_box_btn' :style="treeBoxBtnStyle"></div>
       </div>
       <div id='device_refresh_btn' @click="get_dev_list('refresh')"></div>
       <div id='dev_search'>
@@ -733,6 +733,7 @@ export default {
       }
     },
     device_list (data, searchId) { // 设备列表渲染
+    console.log(data, 'device_list_data')
       this.dev_list_dom = [] // 清空设备列表数组
       this.dev_list_dom_box = [] // 清空云盒子设备列表数组
       this.publicFunc.closeBufferPage()
@@ -752,6 +753,7 @@ export default {
             this.dev_list_dom_box.push(data[i])
           }
         }
+        this.devlistEmptyFlag = false
       } else {
         this.devlistEmptyFlag = true
       }
@@ -1580,14 +1582,14 @@ export default {
       mx("#device_list_tree_box_btn").onclick = function () {
         let is_display = jQuery("#device_list_tree").css("display");
         if (is_display == "none") {
-          g_treelist = 1;
-          jQuery(this).css({ "background": "url(imgs/device/tree_close.png) no-repeat", "background-size": "100%" });
+          // g_treelist = 1;
+          jQuery(this).css({ "background": "url("+ require('@/assets/device/tree_close.png') +") no-repeat", "background-size": "100%" });
           jQuery("#device_list_tree").show()
           jQuery("#device_list_tree").animate({ "width": "120px", "padding-left": "10px", "padding-right": "10px" })
           jQuery("#vimtag_device_list_box").addClass("device_tree_class");
         } else {
-          g_treelist = 2;
-          jQuery(this).css({ "background": "url(imgs/device/tree_open.png) no-repeat", "background-size": "100%" });
+          // g_treelist = 2;
+          jQuery(this).css({ "background": "url("+ require('@/assets/device/tree_open.png') +") no-repeat", "background-size": "100%" });
           jQuery("#device_list_tree").animate({ "width": "0px", "padding-left": "0px", "padding-right": "0px" }, function () { jQuery("#device_list_tree").hide() });
           jQuery("#vimtag_device_list_box").removeClass("device_tree_class");
         }

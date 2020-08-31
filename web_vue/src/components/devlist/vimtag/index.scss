@@ -82,6 +82,9 @@ $projectColor: #00a6ba;
       .online_btn_down{
         background: url(~@/assets/device/down.png) no-repeat;
       }
+      .online_btn_up{
+        background: url(~@/assets/device/up.png) no-repeat;
+      }
     }
     #online_btn_box{
       width: 100px;
@@ -152,7 +155,7 @@ $projectColor: #00a6ba;
       line-height:52px;
       width:146px;
       height:52px;
-      background:url(/@/assets/device/prompt-box.png) no-repeat;
+      background:url(~@/assets/device/prompt-box.png) no-repeat;
       position:absolute;
       left:-47px;
       top:32px;
@@ -705,5 +708,67 @@ $projectColor: #00a6ba;
 	position: fixed;
 	left: 0;
 	top:82px;
-	z-index: 100;
+  z-index: 100;
+  #device_list_tree_div{
+    height:100%;
+    float:left;
+    #device_list_tree{
+      background: #f2f2f2;
+      /*g 5.5后改127*/
+      width:127px; 
+      height:100%;
+      padding-left:10px;
+      float:left;
+      overflow: auto;
+      .device_list_tree_level_box{
+        width:100%;
+        float:left;
+      }
+      #device_list_tree_all{
+        cursor:pointer;
+      }
+    }
+  }
+  .device_list_tree_level{
+    float:left;
+    margin-right:10px;
+    cursor:pointer;
+    padding: 3px 6px;
+    background: $projectColor;
+    color: #fff;
+    border-radius: 4px;
+    margin-top: 5px;
+  }
+  .tree_list_display{
+    float:left;
+    margin-top:5px;
+    cursor: pointer;
+    width:12px;
+    height:12px;
+    background: url(~@/assets/device/pack-up.png) no-repeat;
+  }
+  .tree_list_display_active{
+    background: url(~@/assets/device/spread.png) no-repeat;
+  }
+  .tree_list_menu_active{
+    color:$projectColor;
+  }
+  .tree_list_menu{
+    margin:10px 0px;
+    cursor:pointer;
+  }
+}
+#device_list_tree_box_btn{
+  width:40px;
+  height:40px;
+  background: $projectColor;
+  border:1px solid $projectColor;
+  cursor: pointer;
+  float:left;
+  color:#fff;
+  font-size: 12px;
+  text-align: center;
+  background: url(~@/assets/device/tree_close.png) no-repeat;
+  background-size: 100%;
+  // margin-top: 50%;
 }
