@@ -128,7 +128,6 @@ mme.prototype =
         else
           parent.css("background", "black")
       }
-      console.log('create object')
       parent.innerHTML = "<object id='plug_" + id + "' width='100%' height='100%'"
         + (ie ? (" classid='clsid:" + type.clsid + "'") : (" type='" + type.mime + "'"))
         + " codebase='" + type.codebase + "'"
@@ -456,7 +455,7 @@ mme.prototype =
     }
     else if ((this.status == this.plug_status.running) && me.on_event) {
       // console.log('play enter this')
-      setTimeout(async function(){if(me.on_event){ await me.on_event({type:"ready"});console.log('执行完成');};}, 0)
+      setTimeout(async function(){if(me.on_event){ await me.on_event({type:"ready"});};}, 0)
       // if (me.on_event) {
       //   await me.on_event({ type: "ready" });
       //   console.log('执行完成');

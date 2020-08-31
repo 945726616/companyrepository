@@ -6,6 +6,7 @@ import Api from './api'
 import $ from 'jquery'
 import Public from './util/public.js'
 import './util/msdk.min.js'
+import './css/public.scss'
 
 // 引入多国语言切换插件
 import chooseLanguage from './lib/exportModule/languageExport'
@@ -19,34 +20,54 @@ if (!sessionStorage.getItem('userLanguage')) {
     }
   }
   sessionStorage.setItem('userLanguage', chromeLang)
-  store.dispatch('setUserLanguage',chromeLang)
+  store.dispatch('setUserLanguage', chromeLang)
   chooseLanguage.lang(chromeLang)
 } else {
   chooseLanguage.lang(store.state.user.userLanguage)
 }
 Date.prototype.format = function (format) {
-	let o = {
-		"M+": this.getMonth() + 1, //month
-		"d+": this.getDate(),    //day
-		"h+": this.getHours(),   //hour
-		"m+": this.getMinutes(), //minute
-		"s+": this.getSeconds(), //second
-		"q+": Math.floor((this.getMonth() + 3) / 3),  //quarter
-		"S": this.getMilliseconds() //millisecond
-	}
-	if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
-		(this.getFullYear() + "").substr(4 - RegExp.$1.length));
-	for (let k in o) if (new RegExp("(" + k + ")").test(format))
-		format = format.replace(RegExp.$1,
-			RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
-	return format;
+  let o = {
+    "M+": this.getMonth() + 1, //month
+    "d+": this.getDate(),    //day
+    "h+": this.getHours(),   //hour
+    "m+": this.getMinutes(), //minute
+    "s+": this.getSeconds(), //second
+    "q+": Math.floor((this.getMonth() + 3) / 3),  //quarter
+    "S": this.getMilliseconds() //millisecond
+  }
+  if (/(y+)/.test(format)) {
+    format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length))
+  }
+  for (let k in o) {
+    if (new RegExp("(" + k + ")").test(format)) {
+      format = format.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length))
+    }
+  }
+  return format
 }
-
-// router.beforeEach((to, from, next) => {
-// 	console.log(to,"router to")
-// 	console.log(from,"router from")
-// 	next()
-// })
+if (store.state.jumpPageData.projectName === 'vimtag') {
+  document.getElementsByTagName('body')[0].style.setProperty('--projectBackgroundColor', '#00a6ba')
+} else if (store.state.jumpPageData.projectName === 'ebitcam') {
+  document.getElementsByTagName('body')[0].style.setProperty('--projectBackgroundColor', '#ff781f')
+} else if (store.state.jumpPageData.projectName === 'mipcm') {
+  document.getElementsByTagName('body')[0].style.setProperty('--projectBackgroundColor', '#2988cc')
+} else {
+  document.getElementsByTagName('body')[0].style.setProperty('--projectBackgroundColor', '#2988cc')
+}
+router.beforeEach((to, from, next) => {
+  if (sessionStorage.getItem('login_flag') == 1) { // 如果已经登录的话
+    next();
+  } else {
+    if (to.path === '/' || to.path === '/download' || to.path === '/my') { // 如果是login/my/download页面的话，直接next()
+      next()
+    } else { //否则 跳转到登录页面
+      next({ name: '/' })
+    }
+  }
+  // next()
+  // 	console.log(to,"router to")
+  // 	console.log(from,"router from")
+})
 
 Vue.prototype.$ = $
 Vue.prototype.$api = Api

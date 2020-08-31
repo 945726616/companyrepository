@@ -71,7 +71,7 @@ const play = {
    */
   async video_stop(params) {
     let flash_isplay = store.state.jumpPageData.flashIsPlay
-    console.log(flash_isplay, 'flash_isplay')
+    // console.log(flash_isplay, 'flash_isplay')
     let play_info = store.state.jumpPageData.playInfo
     if (flash_isplay) {
       clearInterval(flash_isplay)

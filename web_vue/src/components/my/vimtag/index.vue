@@ -505,7 +505,6 @@ export default {
             // alert(location.href)
           }
           if (id_name == "my_other") {
-            let dev_set_num;
             let l_dome_dev_set_input = _this.publicFunc.mx("#dev_set_input");
             let l_dom_button_setup = _this.publicFunc.mx("#button_setup");
             let dev_set_input_num = "";

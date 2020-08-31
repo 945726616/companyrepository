@@ -2372,7 +2372,7 @@ export default {
           }
 
           function sdcord_get_ack (msg) {
-            //console.log(msg, 'sdcord_get_ack_msg')
+            // console.log(msg, 'sdcord_get_ack_msg')
             $(l_dom_format_content).hide();
             $(l_dom_input_available_content).hide();
             $(l_dom_input_capacity_content).hide();
@@ -2440,7 +2440,7 @@ export default {
                     l_dom_input_status.value = mcs_unmounted;
                     break;
                   }
-                case "mouting":
+                case "mounting":
                   {
                     l_dom_input_status.value = mcs_loading;
                     break;

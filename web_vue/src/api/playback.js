@@ -101,7 +101,7 @@ const playback = {
       }
     }
     async function on_plug_event (obj) {
-      console.log(obj, 'on_plug_event_obj')
+      // console.log(obj, 'on_plug_event_obj')
       sessionStorage.setItem("type_tip", obj.type);
       sessionStorage.setItem("code_tip", obj.code);
       switch (obj.type) {
@@ -131,7 +131,6 @@ const playback = {
           } else {
             if (proto == "auto") proto = "rtdp";
           }
-          console.log('use axios ccm_replay')
           // ms.send_msg("playback", { sn: ref_obj.sn, token: ref_obj.token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "playback"; play_ack(msg, ref); });
           await axios.get('/ccm/ccm_replay', {
             params: {
@@ -148,7 +147,7 @@ const playback = {
               token: data.token
             }
           }).then(res => {
-            console.log(res, 'ccm_replay_res')
+            // console.log(res, 'ccm_replay_res')
             returnItem = {
               result: login.get_ret(res),
               url: (res.data.url ? res.data.url : ""),
@@ -188,7 +187,7 @@ const playback = {
       }
     }
     async function play_ack (msg, ref) {
-      console.log(msg, ref, 'play_ack_ref_msg')
+      // console.log(msg, ref, 'play_ack_ref_msg')
       if (msg.result == "") {
         await chl_video_create({ type: msg.type, uri: msg.url, inner_window_info: ref.inner_window_info, localPath: ref.localPath, isDownload: ref.isDownload });
       } else {
@@ -229,9 +228,8 @@ const playback = {
         }
         if (l_plug_type !== "flash") { // 该判断条件中需要添加!此为客户端逻辑(去掉!用于在浏览器中测试使用)
           l_ipc_speed_time = setInterval(function () {
-            console.log('download_enter_this')
             let string_speed = obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "query", "{}");
-            console.log(string_speed, 'download_string_speed', obj, 'download_obj')
+            // console.log(string_speed, 'download_string_speed', obj, 'download_obj')
             if (string_speed.length >= 150) {
               let json_speed = eval("(" + string_speed + ")");
               if (data.isDownload) {
@@ -270,7 +268,7 @@ const playback = {
                 returnItem = l_speed
               }
             }
-            console.log(returnItem, 'download_return')
+            // console.log(returnItem, 'download_return')
           }, 1000)
         } else {
           // 浏览器执行 l_plug_type = flash 由于不显示进度条所以直接传递null值
@@ -362,7 +360,7 @@ const playback = {
    ** 客户端回放下载功能
    */
   async replay_download (data) {
-    console.log(data, '进入回放下载')
+    // console.log(data, '进入回放下载')
     let ref_obj = create_play_ipc(data)
     let judge_enable_native_plug = true
     let judge_enable_flash_plug = false
@@ -387,7 +385,7 @@ const playback = {
     if (data.ipc_stat != 0) { // 实例化mme对象
       // console.log('use mme_create')
       ref_obj.inner_window_info.mme = await new mme(mme_params)
-      console.log(ref_obj.inner_window_info.mme, '初始化完成的mme')
+      // console.log(ref_obj.inner_window_info.mme, '初始化完成的mme')
       store.dispatch('setPlayInfo', ref_obj) // 全局存储播放对象
     }
     async function on_plug_event (obj) {
@@ -416,9 +414,8 @@ const playback = {
             url: (res.data.url ? res.data.url : ""),
             type: "playback"
           }
-          console.log(res, playback_res, '接口执行完成 play_ack函数参数拼接完成')
+          // console.log(res, playback_res, '接口执行完成 play_ack函数参数拼接完成')
           await play_ack(playback_res, store.state.jumpPageData.playInfo) // 等待播放回调完成
-          console.log('switch break')
           break
         }
         default: {
@@ -428,7 +425,7 @@ const playback = {
     }
     async function play_ack (msg, ref) {
       if (msg.result == "") {
-        console.log(msg, ref, '进入chl_video_create/play_ack')
+        // console.log(msg, ref, '进入chl_video_create/play_ack')
         let play_ack_res = await chl_video_create({
           type: msg.type,
           uri: msg.url,
@@ -436,7 +433,6 @@ const playback = {
           localPath: ref.localPath,
           isDownload: ref.isDownload
         })
-        console.log('进入chl_video_create')
         return play_ack_res
       } else { // 错误返回值判断
         if (msg.result == "accounts.user.offline") { //6.1.1
@@ -461,7 +457,7 @@ const playback = {
       }
     }
     async function chl_video_create (obj) {
-      console.log(obj, '进入chl_video_create')
+      // console.log(obj, '进入chl_video_create')
       let uri = obj.uri
       let chl_params = (obj.type == "publish") ? "" : ",thread:\"istream\", jitter:{max:3000}" /* for old version's mme plugin */
       let trans_params = (obj.type == "play") ? ",trans:[{flow_ctrl:\"jitter\",thread:\"istream\"}]" : ((obj.type == "playback") ? ",trans:[{flow_ctrl:\"delay\",thread:\"istream\"}]" : "")
@@ -482,15 +478,14 @@ const playback = {
         params: params_data
       })
       if (obj.inner_window_info.video_chls !== null) {
-        console.log('准备下载', obj.inner_window_info.mme)
+        // console.log('准备下载', obj.inner_window_info.mme)
         obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "speaker.mute", obj.type == "playback" ? "{value:0}" : "{value:1}") // 参考旧代码此处原本含有一处全局变量判断,但未发现该值有后赋值行为默认删减成单一属性
         if (l_ipc_speed_time) {
           clearInterval(l_ipc_speed_time);
         }
         l_ipc_speed_time = setInterval(function () {
-          console.log('下载定时器')
           let string_speed = obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "query", "{}");
-          console.log(string_speed, 'download_string_speed', obj, 'download_obj')
+          // console.log(string_speed, 'download_string_speed', obj, 'download_obj')
           if (string_speed.length >= 150) {
             let json_speed = eval("(" + string_speed + ")");
             if (json_speed.data.played_duration / data.videoSize > 1) {
@@ -503,7 +498,6 @@ const playback = {
                 timeout: 3000
               });
             } else {
-              console.log('enter per')
               record_played_duration_num = 0;
               record_played_duration = json_speed.data.played_duration;
               l_speed = parseInt((json_speed.data.played_duration / data.videoSize) * 100) + "%";
@@ -511,12 +505,10 @@ const playback = {
             // returnItem = l_speed
             download_info(l_speed)
             function download_info (data) {
-              console.log(data, 'download_info_data')
+              // console.log(data, 'download_info_data')
               let data_num = data.substring(0, data.length - 1);
-              console.log('t1231231')
               $("#download_progress").html(data)
               if (data_num == 100) {
-                console.log('use this 100 if')
                 // create_preview({parent:l_dom_playback_screen});
                 playback.video_stop({
                   dom: $("#playback_screen"),
@@ -528,7 +520,6 @@ const playback = {
               }
             }
             function create_preview (data) {
-              console.log('执行create_preview')
               sessionStorage.setItem("pause_start_time", start_time)
               data.parent.innerHTML =
                 "<div id='play_view_box'>"
@@ -550,7 +541,6 @@ const playback = {
         }, 1000)
       }
       function play_ipc (obj) {
-        console.log(obj, 'play_ipc2222222222222')
         obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "play", "");
         obj.inner_window_info.playback_state = "play";
         return 0;
@@ -583,7 +573,7 @@ const playback = {
     if (play_info.inner_window_info.mme) {
       play_info.inner_window_info.mme.ctrl(play_info.inner_window_info.video_chls, "pause", "")
     }
-    play_info.inner_window_info.playback_state = "pause"
+    play_info.inner_window_info.playback_state = "pause";
   },
   /*
   ** 继续下载

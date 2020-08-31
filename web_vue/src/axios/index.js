@@ -94,16 +94,19 @@ instance.interceptors.request.use(
       } // 修改后的对象
       if (process.env.NODE_ENV !== 'production') { // 如果是测试环境下接口添加/api采用代理地址进行访问,解决跨域等问题
         let url = config.url
-        // console.log(config.params, 'srv', config.params.dsrv)
-        if (!config.params.dsrv) {
+        if (!config.params.dsrv) { // 特殊请求地址判断 含有dsrv的为特殊请求地址需要用特殊地址进行访问
           config.url = '/api' + url + '.js'
         } else {
           config.url = '/project' + url + '.js'
         }
       }else{
-        config.url = config.url + '.js'
+        if (!config.params.dsrv) { // 特殊请求地址判断 含有dsrv的为特殊请求地址需要用特殊地址进行访问
+          config.url = config.url + '.js'
+        } else {
+          config.url = config.params.dsrv + url + '.js'
+        }
       }
-    }else if(config.method == "post"){
+    }else if(config.method === "post"){
       let param = config.data // 取得当前get传递的对象
       let newParams = {} // 新建对象用于存储变更后的对象
       // console.log(param, 'config_param')

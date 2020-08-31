@@ -5,7 +5,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const login = () => import(/* webpackChunkName: "group-Mipc" */'@/components/login')
+const login = () => import(/* webpackChunkName: "group-Mipc" */'@/components/login/login')
 const devlist = () => import(/* webpackChunkName: "group-Mipc" */'@/components/devlist/mipc')
 const boxlist = () => import(/* webpackChunkName: "group-Mipc" */'@/components/boxlist')
 const play = () => import(/* webpackChunkName: "group-Mipc" */'@/components/play/mipc')
@@ -13,7 +13,8 @@ const history = () => import(/* webpackChunkName: "group-Mipc" */'@/components/h
 const set = () => import(/* webpackChunkName: "group-Mipc" */'@/components/set')
 const playback = () => import(/* webpackChunkName: "group-Mipc" */'@/components/playback')
 const my = () => import(/* webpackChunkName: "group-Mipc" */'@/components/my/mipc')
-const download = () => import(/* webpackChunkName: "group-Mipc" */'@/components/download')
+// const my = () => import(/* webpackChunkName: "group-Mipc" */'@/components/my/mipc/my')
+const download = () => import(/* webpackChunkName: "group-Mipc" */'@/components/download/download')
 
 const mipcRouter = new Router({
   routes: [

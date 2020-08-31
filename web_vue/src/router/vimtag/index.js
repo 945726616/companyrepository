@@ -5,8 +5,9 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const login = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/login')
+const login = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/login/login.vue')
 const devlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/devlist/vimtag')
+// const my = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/my/vimtag/my')
 const my = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/my/vimtag')
 const play = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/play/vimtag')
 const playback = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/playback')

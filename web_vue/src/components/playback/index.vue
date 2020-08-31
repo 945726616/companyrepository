@@ -71,7 +71,7 @@ export default {
       l_dom_playback_download_path_box.style.left = l_download_path_box_left + "px";
       _this.publicFunc.mx("#playback_buffer_ret").style.left = (l_dom_playback_screen.offsetLeft + l_dom_playback_screen.offsetWidth - 50) + "px";
       play_menu_control({ parent: l_dom_playback_menu_box });
-      create_preview({ parent: l_dom_playback_screen });
+      create_preview({ parent: $("#playback_screen") });
       function play_menu_control (data) {
         obj.start_time = parseInt(obj.start_time);
         obj.end_time = parseInt(obj.end_time);
@@ -250,9 +250,9 @@ export default {
             + "</div>";
           _this.publicFunc.mx("#download_pause").onclick = function () {
             if (_this.publicFunc.mx("#download_pause").innerHTML == mcs_pause) {
-              _this.$api.pause_ipc().then($("#download_pause").html(mcs_continue))
+              _this.$api.playback.pause_ipc().then($("#download_pause").html(mcs_continue))
             } else {
-              _this.$api.play_download_continue().then($("#download_pause").html(mcs_pause))
+              _this.$api.playback.play_download_continue().then($("#download_pause").html(mcs_pause))
             }
           }
           _this.publicFunc.mx("#download_stop").onclick = function () {
@@ -290,7 +290,7 @@ export default {
         }
       }
       function download_info (data) {
-        console.log(data, 'download_info_data')
+        // console.log(data, 'download_info_data')
         let data_num = data.substring(0, data.length - 1);
         if (_this.publicFunc.mx("#download_progress")) {
           _this.publicFunc.mx("#download_progress").innerHTML = data;
@@ -367,10 +367,10 @@ export default {
       sessionStorage.setItem('b_start_time', JSON.stringify(b_start_time))
       function create_preview (data) {
         sessionStorage.setItem("pause_start_time", start_time)
-        data.parent.innerHTML =
+        data.parent.html(
           "<div id='play_view_box'>"
           + "<div id='play_pause_pic'></div>"
-          + "</div>"
+          + "</div>")
         let pic_token = obj.pic_token.replace("_p3_", "_p0_");
         _this.$api.play.play_preview_img({
           dom: $("#playback_screen"),
@@ -379,7 +379,6 @@ export default {
         })
         // msdk_ctrl({ type: "play_preview_img", data: { dom: l_dom_playback_screen, sn: _this.$store.state.jumpPageData.selectDeviceIpc, pic_token: pic_token } });
         let l_dom_play_view_box = _this.publicFunc.mx("#play_view_box");
-
         l_dom_play_view_box.onclick = function () {
           let pic_token = [];
           for(let i = 0; i < obj.data.length; i++){
