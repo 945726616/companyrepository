@@ -9,37 +9,17 @@
             <div id='menu_add_dev_btn'></div>
           </div>
           <div class='menu_nav'></div>
-          <div class='dev_main_list' id='device_list_edit' @click="clickEditDevice"> <!-- 点击编辑设备列表 -->
+          <div class='dev_main_list' id='device_list_edit'>
             <div id='menu_edit_dev_btn'></div>
           </div>
           <div class='menu_nav'></div>
-          <div class='dev_main_list' id='device_refresh_btn' @click="get_dev_list('refresh')"> <!-- 点击刷新设备列表 -->
+          <div class='dev_main_list' id='device_refresh_btn'>
             <div id='menu_refresh_dev_btn'></div>
           </div>
         </div>
         <!-- 设备列表菜单 结束 -->
         <!-- 设备列表详细 -->
-        <div id='dev_list'>
-          <!-- 设备列表渲染内容 -->
-          <div id='dev_list_box'>
-            <!-- 设备循环渲染单元 -->
-            <!-- {{deviceArr}} -->
-            <div class='dev_list' v-for="deviceItem in deviceArr" :key="deviceItem.sn" :state='deviceItem.stat' :dtype='deviceItem.type' :sn='deviceItem.sn'>
-              <div class='device_sidebar_nick'>
-                <div class='device_sidebar_point'></div>
-                <div class='device_list_nick'>{{deviceItem.nick}}</div>
-                <div class='device_list_del_ico' v-show="deviceDelIconFlag" @click="clickItemDel(deviceItem)"></div> <!-- 点击设备的删除图标 -->
-              </div>
-              <div :class="['device_list_img', deviceItem.imgClass]">
-                <div><img class='img_class'></div>
-              </div>
-            </div>
-            <!-- 设备循环渲染单元 结束 -->
-            <!-- 选中框样式 -->
-            <div id='active_dev_li'></div>
-          </div>
-          <!-- 设备列表渲染内容 结束 -->
-        </div>
+        <div id='dev_list'></div>
         <!-- 设备列表详细 结束 -->
       </div>
       <!-- 设备列表内容 结束-->
@@ -60,24 +40,214 @@ import languageSelect from '../../../lib/exportModule/languageSelect.js'
 import '../../../lib/exportModule/mCustomScrollbar'
 export default {
   data () {
-    return {
-      deviceArr: [], // 设备列表展示用数组
-      deviceDelIconFlag: false, // 设备删除图标展示标识
-    }
+    return {};
   },
   methods: {
     mipcDevlist (obj) {
       let _this = this;
-      if (window.fujikam) { // 客户端判断
+      $("#set_back").hide();
+      $("#menu_box_main").show();
+      if (window.fujikam) {
         // check_app_version()
       }
-      this.publicFunc.mx("#dev_main_right").style.width = document.body.clientWidth - _this.publicFunc.mx("#dev_main_left").offsetWidth - 60 + "px"
-      this.publicFunc.mx("#dev_main_left").style.height = (document.documentElement.clientHeight - 54) + "px"
-      this.publicFunc.mx("#dev_list").style.height = (_this.publicFunc.mx("#dev_main_left").offsetHeight - 43) + "px"
-      this.get_dev_list() // 获取设备列表
+      // get_dev_list("refresh") // 刷新获取设备列表处理删除设备后回到列表页仍能对设备进行操作的问题
+      let l_data;
+      // console.log('进入创建页面, 清空dom', obj)
+      obj.parent.innerHTML = null;
+      // alert(obj.parent.innerHTML)
+      // console.log('清空dom')
+      // console.log(obj.parent[0])
+      obj.parent[0].innerHTML =
+        "<div id='dev_main_page'>"
+        + "<div id='dev_main_left'></div>"
+        + "<div id='dev_main_right'></div>"
+        + "</div>";
+      // console.log('重新复制')
+      _this.publicFunc.mx("#dev_main_right").style.width = document.body.clientWidth - _this.publicFunc.mx("#dev_main_left").offsetWidth - 60 + "px";
+      _this.publicFunc.mx("#dev_main_left").style.height = (document.documentElement.clientHeight - 54) + "px";
       function create_dev_left_page () {
+        _this.publicFunc.mx("#dev_main_left").innerHTML =
+          "<div id='dev_left_top_menu'>"
+          + "<div class='dev_main_list' id='device_add_btn'><div id='menu_add_dev_btn'></div></div>"
+          + "<div class='menu_nav'></div>"
+          + "<div class='dev_main_list' id='device_list_edit'><div id='menu_edit_dev_btn'></div></div>"
+          + "<div class='menu_nav'></div>"
+          + "<div class='dev_main_list' id='device_refresh_btn'><div id='menu_refresh_dev_btn'></div></div>"
+          + "</div>"
+          + "<div id='dev_list'></div>";
+        _this.publicFunc.mx("#dev_list").style.height = (_this.publicFunc.mx("#dev_main_left").offsetHeight - 43) + "px";
         // get_dev_list("refresh") // 刷新获取设备列表处理删除设备后回到列表页仍能对设备进行操作的问题
         // _this.publicFunc.mx("#dev_main_right").innerHTML = null
+        function device_list (msg) {
+          _this.$store.dispatch('setDeviceData', msg)
+          l_data = msg;
+          _this.publicFunc.mx("#dev_list").innerHTML = "";
+          _this.publicFunc.mx("#dev_list").innerHTML = "<div id='dev_list_box'></div>"
+          for (let i = 0; i < msg.length; i++) {
+            if (msg[i].type !== "socket") {
+              let device_status_img = "";
+              if (msg[i].stat == "Offline") {
+                device_status_img = "device_ipc_offline";
+              } else if (msg[i].stat == "InvalidAuth") {
+                device_status_img = "device_ipc_InvalidAuth";
+              } else if (msg[i].stat == "Online") {
+                if (!_this.$store.state.jumpPageData.selectDeviceIpc) {
+                  _this.$store.dispatch('setSelectDeviceIpc', msg[i].sn)
+                }
+              }
+              _this.publicFunc.mx("#dev_list_box").innerHTML +=
+                "<div class='dev_list' state='" + msg[i].stat + "' dtype='" + msg[i].type + "' sn='" + msg[i].sn + "'>"
+                + "<div class='device_sidebar_nick'>"
+                + "<div class='device_sidebar_point'></div>"
+                + "<div class='device_list_nick'>" + (msg[i].nick.length < 20 ? msg[i].nick : msg[i].nick.substr(0, 20) + "...") + "</div>"
+                + "<div class='device_list_del_ico'></div>"
+                + "</div>"
+                + "<div class='device_list_img " + device_status_img + "'>"
+                + "<div><img class='img_class'></div>"
+                + "</div>"
+                + "</div>";
+            }
+          }
+          _this.publicFunc.mx("#dev_list_box").innerHTML += "<div id='active_dev_li'></div>"
+          create_dev_left_event();
+        }
+
+        async function get_dev_list (type) {
+          if (_this.$store.state.jumpPageData.deviceData.length == 0 || type === 'refresh') {
+            await _this.$api.devlist.devs_refresh().then(res => {
+              device_list(res)
+            })
+          } else {
+            await device_list(_this.$store.state.jumpPageData.deviceData);
+          }
+        }
+        get_dev_list()
+        function create_dev_left_event () {
+          _this.publicFunc.mx("#device_refresh_btn").onclick = function () {
+            get_dev_list('refresh')
+          }
+          _this.publicFunc.mx("#device_list_edit").onclick = function () {
+            if (_this.$store.state.jumpPageData.experienceFlag) {
+              return;
+            }
+            if ($(".device_list_del_ico").css("display") == "none") {
+              $(".device_list_del_ico").show();
+            } else {
+              $(".device_list_del_ico").hide();
+            }
+          }
+          _this.publicFunc.mx("#device_add_btn").onclick = function () {
+            $("#add_device_page").show();
+            create_add_devices_box({ parent: _this.publicFunc.mx("#add_device_page") });
+          }
+          _this.publicFunc.mx("#dev_list_box").style.height = "100%";
+          $("#dev_list_box").mCustomScrollbar();
+          let length = _this.publicFunc.mx(".dev_list").length;
+          let l_dom_device_list_del_ico = _this.publicFunc.mx(".device_list_del_ico");
+          for (let j = 0; j < l_dom_device_list_del_ico.length; j++) {
+            l_dom_device_list_del_ico[j].onclick = function (e) {
+              e.stopPropagation()
+              let _this_sn = this.parentNode.parentNode.getAttribute("sn");
+              let _this_parent = this.parentNode.parentNode;
+              _this.publicFunc.delete_tips({
+                content: mcs_delete_device + "?", func: function () {
+                  _this.$api.devlist.dev_del({
+                    sn: _this_sn,
+                    dom: _this_parent
+                  }).then(res => {
+                    _this.publicFunc.msg_tips({
+                      msg: res.msg,
+                      type: res.type,
+                      timeout: 3000
+                    })
+                    if (res.type === 'success') {
+                      _this.$api.devlist.devs_refresh().then($(res.dom).hide())
+                    }
+                  })
+                }
+              })
+            }
+          }
+          for (let i = 0; i < length; i++) {
+            let sn = _this.publicFunc.mx(".dev_list")[i].getAttribute("sn");
+            let type = _this.publicFunc.mx(".dev_list")[i].getAttribute("dtype");
+            let state = _this.publicFunc.mx(".dev_list")[i].getAttribute("state");
+            if (sn == _this.$store.state.jumpPageData.selectDeviceIpc) {
+              let active_top;
+              if (obj.refresh) {
+                active_top = _this.publicFunc.mx(".dev_list")[i].offsetTop;
+              } else {
+                active_top = _this.publicFunc.mx(".dev_list")[i].offsetTop;
+              }
+              _this.publicFunc.mx("#active_dev_li").style.top = active_top + "px";
+              _this.publicFunc.mx(".dev_list")[i].className = "dev_list dev_list_active";
+              if (type == 'IPC') {
+                // createPage("play", {parent:$("#dev_main_right")})
+                if (_this.$route.path != '/play') {
+                  _this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
+                } else {
+                  mipcPlay({ parent: $('#dev_main_right') })
+                }
+              } else if (type == "BOX") {
+                let jumpData = { parent: $("#dev_main_right"), parentId: "dev_main_right" }
+                // createPage("boxlist", {parent:$("#dev_main_right")})
+                if (_this.$route.path != '/boxlist') {
+                  _this.$router.push({ name: 'boxlist', params: jumpData })
+                } else {
+                  create_boxlist_page(jumpData)
+                }
+              }
+            }
+            if (state == "Online") {
+              $(".img_class").eq(i).show();
+            } else {
+              $(".img_class").eq(i).hide();
+            }
+            _this.publicFunc.mx(".dev_list")[i].onclick = function () {
+              let state = this.getAttribute("state");
+              _this.$store.dispatch('setSelectDeviceIpc', this.getAttribute("sn"))
+              if (state == "Online") {
+                let type = this.getAttribute("dtype");
+                let active_top;
+                if (obj.refresh) {
+                  active_top = this.offsetTop;
+                } else {
+                  active_top = this.offsetTop;
+                }
+                $("#active_dev_li").animate({ "top": active_top + "px" });
+                $(".dev_list").removeClass("dev_list_active");
+                this.className = "dev_list dev_list_active";
+                if (type == 'IPC') {
+                  // createPage("play", {parent: $("#dev_main_right")})
+                  if (_this.$route.path != '/play') {
+                    _this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
+                  } else {
+                    mipcPlay({ parent: $('#dev_main_right') })
+                  }
+                } else if (type == "BOX") {
+                  // createPage("boxlist", {parent: $("#dev_main_right")})
+                  if (_this.$route.path != '/boxlist') {
+                    _this.$router.push({ name: 'boxlist', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
+                  } else {
+                    create_boxlist_page({ parent: $("#dev_main_right") })
+                  }
+                }
+              } else if (state == "InvalidAuth") {
+                $("#add_device_page").show();
+                create_add_devices_box({ parent: _this.publicFunc.mx("#add_device_page"), sn: _this.$store.state.jumpPageData.selectDeviceIpc });
+              } else if (state == "Offline") {
+                // createPage("set", {parent:$("#dev_main_page"),back_page:"device",type:4});
+                _this.$router.push({ name: 'set', params: { parent: $("#dev_main_page"), back_page: "device", type: 4 } })
+              }
+            }
+            _this.$api.devlist.load_noid_img({
+              refresh: obj.refresh ? 1 : 0,
+              sn: sn,
+              num: i,
+              dom: document.getElementsByClassName('dev_list')
+            })
+          }
+        }
 
         function create_add_devices_box (data) {
           let d_type = "361", d_id = "";
@@ -821,167 +991,7 @@ export default {
       }
       create_dev_left_page();
       window.onresize = function () { }
-    },
-    get_dev_list (type) { // 获取设备列表
-      if (this.$store.state.jumpPageData.deviceData.length === 0 || type === 'refresh') { // 如果存储的设备列表数组中没有内容则调用接口获取
-        this.$api.devlist.devs_refresh().then(res => {
-          this.device_list(res)
-        })
-      } else { // 直接拿取存储的设备列表
-        this.device_list(this.$store.state.jumpPageData.deviceData)
-      }
-    },
-    device_list (msg) { // 设备列表数据整理, 用于渲染
-      for (let i = 0; i < msg.length; i++) {
-        if (msg[i].type !== "socket") {
-          let device_status_img = ""
-          if (msg[i].stat === "Offline") {
-            device_status_img = "device_ipc_offline"
-          } else if (msg[i].stat === "InvalidAuth") {
-            device_status_img = "device_ipc_InvalidAuth"
-          } else if (msg[i].stat === "Online") {
-            if (!this.$store.state.jumpPageData.selectDeviceIpc) {
-              this.$store.dispatch('setSelectDeviceIpc', msg[i].sn)
-            }
-          }
-          let itemNick = msg[i].nick.length < 20 ? msg[i].nick : msg[i].nick.substr(0, 20) + "..."
-          msg[i].nick = itemNick
-          msg[i].imgClass = device_status_img
-          // this.deviceArr.push(msg[i])
-          this.$set(this.deviceArr, i, msg[i])
-        }
-      }
-      console.log(this.deviceArr, 'deviceArr')
-      this.create_dev_left_event() // 调用添加点击事件
-    },
-    create_dev_left_event () { //添加点击事件
-    console.log('enter this')
-    let _this = this
-      // this.publicFunc.mx("#device_add_btn").onclick = function () { // 添加设备弹窗
-      //   $("#add_device_page").show();
-      //   create_add_devices_box({ parent: _this.publicFunc.mx("#add_device_page") });
-      // }
-      // $("#dev_list_box").mCustomScrollbar() // 添加滚动条
-      let length = _this.publicFunc.mx(".dev_list").length;
-      let l_dom_device_list_del_ico = _this.publicFunc.mx(".device_list_del_ico");
-      for (let j = 0; j < l_dom_device_list_del_ico.length; j++) {
-        l_dom_device_list_del_ico[j].onclick = function (e) {
-          console.log(e, 'deviceDel_E')
-          e.stopPropagation()
-          let _this_sn = this.parentNode.parentNode.getAttribute("sn");
-          let _this_parent = this.parentNode.parentNode;
-          _this.publicFunc.delete_tips({
-            content: mcs_delete_device + "?", func: function () {
-              _this.$api.devlist.dev_del({
-                sn: _this_sn,
-                dom: _this_parent
-              }).then(res => {
-                _this.publicFunc.msg_tips({
-                  msg: res.msg,
-                  type: res.type,
-                  timeout: 3000
-                })
-                if (res.type === 'success') {
-                  _this.$api.devlist.devs_refresh().then($(res.dom).hide())
-                }
-              })
-            }
-          })
-        }
-      }
-      for (let i = 0; i < length; i++) {
-        let sn = _this.publicFunc.mx(".dev_list")[i].getAttribute("sn");
-        let type = _this.publicFunc.mx(".dev_list")[i].getAttribute("dtype");
-        let state = _this.publicFunc.mx(".dev_list")[i].getAttribute("state");
-        if (sn == _this.$store.state.jumpPageData.selectDeviceIpc) {
-          let active_top;
-          if (obj.refresh) {
-            active_top = _this.publicFunc.mx(".dev_list")[i].offsetTop;
-          } else {
-            active_top = _this.publicFunc.mx(".dev_list")[i].offsetTop;
-          }
-          _this.publicFunc.mx("#active_dev_li").style.top = active_top + "px";
-          _this.publicFunc.mx(".dev_list")[i].className = "dev_list dev_list_active";
-          if (type == 'IPC') {
-            // createPage("play", {parent:$("#dev_main_right")})
-            if (_this.$route.path != '/play') {
-              _this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
-            } else {
-              mipcPlay({ parent: $('#dev_main_right') })
-            }
-          } else if (type == "BOX") {
-            let jumpData = { parent: $("#dev_main_right"), parentId: "dev_main_right" }
-            // createPage("boxlist", {parent:$("#dev_main_right")})
-            if (_this.$route.path != '/boxlist') {
-              _this.$router.push({ name: 'boxlist', params: jumpData })
-            } else {
-              create_boxlist_page(jumpData)
-            }
-          }
-        }
-        if (state == "Online") {
-          $(".img_class").eq(i).show();
-        } else {
-          $(".img_class").eq(i).hide();
-        }
-        _this.publicFunc.mx(".dev_list")[i].onclick = function () {
-          let state = this.getAttribute("state");
-          _this.$store.dispatch('setSelectDeviceIpc', this.getAttribute("sn"))
-          if (state == "Online") {
-            let type = this.getAttribute("dtype");
-            let active_top;
-            if (obj.refresh) {
-              active_top = this.offsetTop;
-            } else {
-              active_top = this.offsetTop;
-            }
-            $("#active_dev_li").animate({ "top": active_top + "px" });
-            $(".dev_list").removeClass("dev_list_active");
-            this.className = "dev_list dev_list_active";
-            if (type == 'IPC') {
-              // createPage("play", {parent: $("#dev_main_right")})
-              if (_this.$route.path != '/play') {
-                _this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
-              } else {
-                mipcPlay({ parent: $('#dev_main_right') })
-              }
-            } else if (type == "BOX") {
-              // createPage("boxlist", {parent: $("#dev_main_right")})
-              if (_this.$route.path != '/boxlist') {
-                _this.$router.push({ name: 'boxlist', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
-              } else {
-                create_boxlist_page({ parent: $("#dev_main_right") })
-              }
-            }
-          } else if (state == "InvalidAuth") {
-            $("#add_device_page").show();
-            create_add_devices_box({ parent: _this.publicFunc.mx("#add_device_page"), sn: _this.$store.state.jumpPageData.selectDeviceIpc });
-          } else if (state == "Offline") {
-            // createPage("set", {parent:$("#dev_main_page"),back_page:"device",type:4});
-            _this.$router.push({ name: 'set', params: { parent: $("#dev_main_page"), back_page: "device", type: 4 } })
-          }
-        }
-        _this.$api.devlist.load_noid_img({
-          refresh: obj.refresh ? 1 : 0,
-          sn: sn,
-          num: i,
-          dom: document.getElementsByClassName('dev_list')
-        })
-      }
-    },
-    // 点击事件
-    clickEditDevice () { // 点击编辑事件
-      if (this.$store.state.jumpPageData.experienceFlag) { // 体验帐号
-        // 提示操作无权限
-        this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 })
-        return
-      }
-      this.deviceDelIconFlag = !this.deviceDelIconFlag // 标识取反
-    },
-    clickItemDel (item) { // 点击具体设备的删除按钮
-
     }
-    // 点击事件 结束
   },
   async mounted () {
     this.publicFunc.projectReload.call(this);
@@ -1011,5 +1021,5 @@ export default {
     }
 
   }
-}
+};
 </script>

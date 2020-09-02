@@ -70,10 +70,6 @@ and dependencies (minified).
     pluginPfx = "mCS",
     defaultSelector = ".mCustomScrollbar",
 
-
-
-
-
     /* 
     ----------------------------------------
     DEFAULT OPTIONS 
@@ -2363,9 +2359,11 @@ and dependencies (minified).
 
   /* plugin constructor functions */
   $.fn[pluginNS] = function (method) { /* usage: $(selector).mCustomScrollbar(); */
+    // console.log(method, 'mCustomScrollbar enter this')
     if (methods[method]) {
       return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
     } else if (typeof method === "object" || !method) {
+      console.log(this, arguments, 'mCustomScrollbar enter this')
       return methods.init.apply(this, arguments);
     } else {
       $.error("Method " + method + " does not exist");

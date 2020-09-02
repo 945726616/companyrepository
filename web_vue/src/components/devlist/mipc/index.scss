@@ -1,0 +1,71 @@
+@import '@/css/public.scss';
+
+#dev_main_page{ // mipc系列devlist主架构
+  width:100%;
+  #dev_main_left{ // 左侧设备列表样式
+    width:234px;
+    float:left;
+    background: #f5f5f5;
+    border-right:1px solid #d6d6dc;
+    #dev_left_top_menu { // 设备列表顶部菜单
+      width: 100%;
+      height: 42px;
+      border-bottom: 1px solid #c0c3cc;
+      background: #fff;
+      .dev_main_list{
+        height: 28px;
+        width: 28px;
+        float: left;
+        margin-top: 7px;
+        padding-left: 25px;
+        padding-right: 24px;
+        cursor: pointer;
+      }
+      #menu_add_dev_btn{ // 添加设备按钮
+        width: 20px;
+        height: 20px;
+        margin: 0 auto;
+        margin-top: 4px;
+        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -246px -3px;
+      }
+      #menu_edit_dev_btn{ // 编辑设备列表按钮
+        width: 20px;
+        height: 20px;
+        margin: 0 auto;
+        margin-top: 4px;
+        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -285px -3px;
+      }
+      #menu_refresh_dev_btn{ // 刷新设备列表按钮
+        width: 20px;
+        height: 20px;
+        margin: 0 auto;
+        margin-top: 4px;
+        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -327px -3px;
+      }
+      .menu_nav{
+        width:1px;
+        height:20px;
+        float:left;
+        margin-top:10px;
+        background: #c0c3cc;
+      }
+    }
+  }
+  #dev_main_right { // 右侧对应详情内容
+    float: left;
+  }
+}
+
+#dev_list{ // 设备列表详细div样式
+	width:100%;
+  overflow-y: scroll;
+  #active_dev_li{
+    width: 0;
+    height: 150px;
+    border: 2px solid $projectColor;
+    position: relative;
+  }
+}
+#dev_list_box{
+  height: 100%;
+}

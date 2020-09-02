@@ -5,6 +5,8 @@
 @import "./slider.scss";
 @import "./jquery.tzSelect.scss";
 
+$projectColor:var(--projectBackgroundColor, #00a6ba);
+
 *{
 	margin:0;
 	padding:0;

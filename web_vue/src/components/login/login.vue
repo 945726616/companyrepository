@@ -216,12 +216,13 @@ export default {
       this.name = 'vsmahome';
     }
 
-    let bt, aaa, username;
+    let remember_msg_info
+    let username
     if (localStorage.getItem('remember_msg_info')) {
       // mlocal_storage参见\web\lib\mlib.core.localstorage.js
-      bt = localStorage.getItem('remember_msg_info')
-      aaa = eval('(' + bt + ')') // aaa为remember_msg_info字符串方法的结果
-      username = aaa.user
+      remember_msg_info = localStorage.getItem('remember_msg_info')
+      remember_msg_info = eval('(' + remember_msg_info + ')') // 为remember_msg_info字符串方法的结果
+      username = remember_msg_info.user
     }
     if (!localStorage.getItem('keep_pw')) { // 本地加密存储帐号密码 改变自动登录状态
       if (username) {
@@ -427,7 +428,7 @@ export default {
       let password_value = _this.password_val.trim();
       //storage the password use mmd5 format
       if (password_value === '••••••') {
-        _this.l_pwd_val = this.l_password_value;
+        _this.l_pwd_val = _this.l_password_value;
       } else {
         _this.l_pwd_val = md5.hex(password_value);
       }
@@ -541,13 +542,15 @@ export default {
               }).then(res => {
                 let host = res.data.server.signal[0].substring(res.data.server.signal[0].indexOf("//") + 2, res.data.server.signal[0].lastIndexOf("/"))
                 _this.$store.dispatch('setServerDevice', host)
+                // console.log(host, 'host')
                 get_req_ack(res)
 
                 function get_req_ack (msg) {
-                  if (msg && msg.data && msg.data.server && msg.data.server.param) {
-                    let param = msg.data.server.param
+                  console.log(msg, 'get_req_ack_msg')
+                  if (msg && msg.data && msg.data.items[0] && msg.data.items[0].p) {
+                    let param = msg.data.items[0].p
                     for (let i = 0; i < param.length; i++) {
-                      if (param[i].name === 'f_multi_screen' && param[i].value === '1') {
+                      if (param[i].n === 'f_multi_screen' && param[i].v === '1') {
                         mme.prototype.check_plug_install('',
                           function (ref, version) {
                             if (!version) {
@@ -563,25 +566,20 @@ export default {
                             }
                           })
                       }
-                      if (param[i].name === 'f_filter' && param[i].value === '1') { // 是否支持筛选功能
+                      if (param[i].n === 'f_filter' && param[i].v === '1') {
                         _this.$store.dispatch('setSupportFilterFlag', 1)
                       }
-                      if (param[i].name === 'f_grp' && param[i].value === '1') { // 是否支持树状结构
+                      // console.log(param[i], 'param')
+                      if (param[i].n === 'f_grp' && param[i].v === '1') {
                         _this.$store.dispatch('setSupportTreeFlag', 1)
                       }
-                      if (param[i].name === 'sc.logo') {
+                      if (param[i].n === 'sc.logo' && param[i].v === '1') {
                         //给江门xhjymclz修改设备列表页面图标
                         _this.$store.commit('SET_JM_LOGO_FLAG', 1)
-                        _this.$router.push({
-                          name: 'top',
-                          params: {
-                            parent: document.querySelector("#top")
-                          }
-                        })
                       }
                     }
                   }
-                  _this.$store.dispatch('setDownloadManualUrl', msg.data.server.signal[2])
+                  // _this.$store.dispatch('setDownloadManualUrl', msg.data.server.signal[2])
                   // upload_log("log_app_login")  //登录请求返回后发送日志
                   // createPage('devlist', { parent: obj.parent })
                   _this.$router.push({
@@ -598,7 +596,7 @@ export default {
                 }))
                 localStorage.setItem('auto_login', '1');
                 _this.$store.dispatch('setLoginFlag', 1) // 存储登录状态标识
-                sessionStorage.setItem('login_flag', 1);
+                sessionStorage.setItem('login_flag', 1)
               }
             } else {
               //登录结果失败
@@ -643,10 +641,10 @@ export default {
     },
     sign_up () { //注册页面点击注册按钮(注册验证提交)
       let _this = this;
-      let reg,
-        username_value = _this.register_name_val,
-        password_value = _this.register_pw_val,
-        pw_confirm_value = _this.register_pw_again_val;
+      let reg;
+      let username_value = _this.register_name_val;
+      let password_value = _this.register_pw_val;
+      let pw_confirm_value = _this.register_pw_again_val;
       if (!username_value) {
         _this.publicFunc.msg_tips({
           msg: mcs_the_user_name_is_empty,

@@ -1,4 +1,4 @@
-$project_background_color:var(--projectBackgroundColor, #00a6ba);
+@import "../../css/public.scss";
 
 #is_mipc_download {
     display: block;
@@ -39,7 +39,7 @@ $project_background_color:var(--projectBackgroundColor, #00a6ba);
     margin-top: 100px;
     height: 30px;
     font-size: 16px;
-    color: $project_background_color;
+    color: $projectColor;
     line-height: 30px;
 }
 
@@ -51,7 +51,7 @@ $project_background_color:var(--projectBackgroundColor, #00a6ba);
 
 .user_guide_download_text {
     font-size: 16px;
-    color: $project_background_color;
+    color: $projectColor;
 }
 
 .user_guide_device_img {
@@ -135,11 +135,11 @@ $project_background_color:var(--projectBackgroundColor, #00a6ba);
     width: 100%;
     height: 30px;
     font-size: 13px;
-    color: $project_background_color;
+    color: $projectColor;
     background-color: #FFF;
     margin-top: 11px;
     cursor: pointer;
-    border: 1px solid $project_background_color;
+    border: 1px solid $projectColor;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;

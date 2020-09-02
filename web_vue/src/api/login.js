@@ -168,8 +168,8 @@ const login = {
   ** ver_from: 'v3.9.1.1607051739'暂不清楚 目前传递为默认值
   ** lang: 当前语言
   */
-  async get_version (params) {
-    return await axios.get('/ccms/ccvs_get_version_req', {
+  get_version (params) {
+    return axios.get('/ccms/ccvs_get_version_req', {
       params: params
     })
   },
@@ -317,8 +317,15 @@ const login = {
   ** client: {mode: ''默认值, id: 用户名}
   */
   get_req (params) {
-    return axios.get('/cmipcgw/cmipcgw_get_req', {
-      params: params
+    // return axios.get('/cmipcgw/cmipcgw_get_req', {
+    //   params: params
+    // })
+    return axios.get('/cpms/cpms_get', {
+      params: {
+        nid: login.create_nid(),
+        users: [params.client.id],
+        ctx: 'user'
+      }
     })
   },
   /*

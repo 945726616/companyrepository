@@ -1,4 +1,4 @@
-$project_background_color:var(--projectBackgroundColor, #00a6ba);
+@import "../../css/public.scss";
 
 #top {
     height: 62px;
@@ -13,7 +13,7 @@ $project_background_color:var(--projectBackgroundColor, #00a6ba);
 }
 
 .menu_box {
-    background-color: $project_background_color;
+    background-color: $projectColor;
 }
 
 #top_box_main {
@@ -31,7 +31,7 @@ $project_background_color:var(--projectBackgroundColor, #00a6ba);
     float: left;
     margin-top: 9px;
     margin-right: 10px;
-    background: url(../../assets/device/logo.png) no-repeat;
+    // background: url(../../assets/device/logo.png) no-repeat;
     width: 145px;
     height: 36px;
 }
@@ -47,7 +47,7 @@ $project_background_color:var(--projectBackgroundColor, #00a6ba);
 
 .top_list_menu:hover {
     color: #fff;
-    background: $project_background_color;
+    background: $projectColor;
 }
 
 #top_box_right {
@@ -64,7 +64,7 @@ $project_background_color:var(--projectBackgroundColor, #00a6ba);
 }
 
 .top_right_menu:hover {
-    color: $project_background_color;
+    color: $projectColor;
 }
 
 #top_menu_my {
@@ -79,7 +79,7 @@ $project_background_color:var(--projectBackgroundColor, #00a6ba);
 
 #top_menu_my:hover {
     color: white;
-    background: $project_background_color;
+    background: $projectColor;
 }
 
 #top_login_div {
@@ -92,7 +92,7 @@ $project_background_color:var(--projectBackgroundColor, #00a6ba);
     border-radius: 3px;
     /*margin-top: 16px;*/
     font-size: 15px;
-    /*border: 1px solid $project_background_color;*/
+    /*border: 1px solid $projectColor;*/
     float: right;
     margin-left: 20px;
     cursor: pointer;
@@ -108,7 +108,7 @@ $project_background_color:var(--projectBackgroundColor, #00a6ba);
 
 #top_login_div:hover {
     color: #fff;
-    background: $project_background_color;
+    background: $projectColor;
 }
 
 #top_login_div:hover #top_login_div_ico {
@@ -117,7 +117,7 @@ $project_background_color:var(--projectBackgroundColor, #00a6ba);
 
 #top_login_span:hover {
     color: #fff;
-    background: $project_background_color;
+    background: $projectColor;
     height: 62px;
 }
 
@@ -135,7 +135,7 @@ $project_background_color:var(--projectBackgroundColor, #00a6ba);
 }
 
 #bottom_select_lang:hover {
-    color: $project_background_color;
+    color: $projectColor;
 }
 
 #select_lang_box {

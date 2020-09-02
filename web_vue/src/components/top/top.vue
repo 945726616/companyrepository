@@ -5,7 +5,8 @@
                 <div id='top_box_left' @click="top_left_click">
                     <a target='_top'>
                         <div id='top_logo'>
-                            <div v-if="jmLogo_sign" src="../../asset/device/m_logo.png" style="width:220px;height:36px"></div>
+                            <img v-if="jmLogo_sign" :src="require('@/assets/device/m_logo.png')" style="width:220px;height:36px" />
+                            <img v-else :src="require('@/assets/device/logo.png')" style="width:145px;height:36px" />
                         </div>
                     </a>
                 </div>
@@ -79,7 +80,7 @@
                 kbwin_sign: '', //查看app是否为定制kbwin  5.11.3
                 switch_download: false, //切换下载
                 switch_more: false, //切换更多
-                language_list: [{ val: "ar", lang: "العربية" }, { val: "en", lang: "English" }, { val: "es", lang: "española" }, { val: "fr", lang: "française" }, { val: "de", lang: "Deutsch" }, { val: "it", lang: "italiana" }, { val: "ja", lang: "日本語" }, { val: "ko", lang: "한국의" }, { val: "pt", lang: "português" }, { val: "ru", lang: "русский" }, { val: "zh", lang: "中文(简体)" }, { val: "tw", lang: "中文(繁体)" }, { val: "hu", lang: "magyar" }, { val: "nl", lang: "Nederlands" }, { val: "sk", lang: "slovenského jazyk" }, { val: "tr", lang: "Türk dili" }, { val: "cz", lang: "Česky" }, { val: "vi", lang: "Người việt nam" }, { val: "iw", lang: "עברית" }, { val: "pl", lang: "Polski" }, { val: "uk", lang: "Українська мова" }, { val: "th", lang: "ภาษาไทย" }]
+                language_list: [{ val: "ar", lang: "العربية" }, { val: "en", lang: "English" }, { val: "es", lang: "española" }, { val: "fr", lang: "française" }, { val: "de", lang: "Deutsch" }, { val: "it", lang: "italiana" }, { val: "ja", lang: "日本語" }, { val: "ko", lang: "한국의" }, { val: "pt", lang: "português" }, { val: "ru", lang: "русский" }, { val: "zh", lang: "中文(简体)" }, { val: "tw", lang: "中文(繁体)" }, { val: "hu", lang: "magyar" }, { val: "nl", lang: "Nederlands" }, { val: "sk", lang: "slovenského jazyk" }, { val: "tr", lang: "Türk dili" }, { val: "cz", lang: "Česky" }, { val: "vi", lang: "Người việt nam" }, { val: "iw", lang: "עברית" }, { val: "pl", lang: "Polski" }, { val: "uk", lang: "Українська мова" }, { val: "th", lang: "ภาษาไทย" }],
             }
         },
         async mounted() {
@@ -114,10 +115,7 @@
                     }
                 }
 
-                if (this.$store.state.jumpPageData.jmLogoFlag === 1) { // vimtag江门专属logo
-                    this.jmLogo_sign = true;
-                }
-                if(!this.$store.state.user.name) this.username_value = mcs_my;
+                if (!this.$store.state.user.name) this.username_value = mcs_my;
                 if (this.$store.state.jumpPageData.localModel) { // 判断是否为本地离线模式
                     this.$store.dispatch('setLoginFlag', this.publicFunc.urlParam() && this.publicFunc.urlParam().c == 1 ? 1 : 0)
                     let l_remember_data = sessionStorage.get('remember_msg_info')
@@ -133,7 +131,6 @@
                     // $('.top_list_menu').hide()
                 }
                 this.select_lang();
-
                 // 截取url登录相关参数
                 let exp_username = this.publicFunc.urlParam().user ? _this.publicFunc.urlParam().user : '' // 用户名
                 let exp_password = this.publicFunc.urlParam().pw ? _this.publicFunc.urlParam().pw : '' // 密码
@@ -314,7 +311,7 @@
                 } else if (this.$route.name == 'my') {
                     this.switch_more = true;
                     this.switch_download = false;
-                }else {
+                } else {
                     this.switch_more = false;
                     this.switch_download = false;
                 }
@@ -322,6 +319,13 @@
             "$store.state.user.name"(val) {
                 if (val) {
                     this.username_value = val;
+                }
+            },
+            "$store.state.jumpPageData.jmLogoFlag"(val) {
+                if (val === 1) { // vimtag江门专属logo
+                    this.jmLogo_sign = true;
+                } else {
+                    this.jmLogo_sign = false;
                 }
             }
         }

@@ -156,9 +156,9 @@ export default {
           data.parent.innerHTML = "<div id='vimtag_device_list'>"
           let selectNickArr
           let screen_token // 标记设备分辨率
-          if (_this.$store.state.jumpPageData.supportTreeFlag) { // 如果支持树状结构, 将选中设备的nick分割成数组用于比较使用
-            selectNickArr = g_Select_nick.split('.')
-          }
+          // if (_this.$store.state.jumpPageData.supportTreeFlag) { // 如果支持树状结构, 将选中设备的nick分割成数组用于比较使用
+          //   // selectNickArr = g_Select_nick.split('.')
+          // }
           for (let length = msg.length, i = 0; i < length; i++) {
             let dev_data = msg[i];
             if(dev_data.type !== "socket"){

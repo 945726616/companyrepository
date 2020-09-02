@@ -69,9 +69,9 @@ const errorHandle = (status, other) => {
 let instance = axios.create({ timeout: 400000 })
 
 // 设置post请求头
-instance.defaults.headers['Access-Control-Allow-Origin'] = '*'//解决cors头问题
-instance.defaults.headers['Access-Control-Allow-Credentials'] = 'true'//解决session问题
-instance.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'//将表单数据传递转化为form-data类型
+// instance.defaults.headers['Access-Control-Allow-Origin'] = '*'//解决cors头问题
+// instance.defaults.headers['Access-Control-Allow-Credentials'] = 'true'//解决session问题
+instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'//将表单数据传递转化为form-data类型 ; charset=UTF-8
 
 /**
  * 请求拦截器
@@ -79,7 +79,7 @@ instance.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded; 
  */
 instance.interceptors.request.use(
   config => {
-    if(config.method == 'get'){
+    if(config.method === 'get'){
       let param = config.params // 取得当前get传递的对象
       let newParams = {} // 新建对象用于存储变更后的对象
       // console.log(param, 'config_param')
@@ -92,6 +92,7 @@ instance.interceptors.request.use(
         hqid: store.state.user.qid,
         ...newParams
       } // 修改后的对象
+      // console.log(config, 'getConfig', location.host)
       if (process.env.NODE_ENV !== 'production') { // 如果是测试环境下接口添加/api采用代理地址进行访问,解决跨域等问题
         let url = config.url
         if (!config.params.dsrv) { // 特殊请求地址判断 含有dsrv的为特殊请求地址需要用特殊地址进行访问
@@ -100,11 +101,12 @@ instance.interceptors.request.use(
           config.url = '/project' + url + '.js'
         }
       }else{
-        if (!config.params.dsrv) { // 特殊请求地址判断 含有dsrv的为特殊请求地址需要用特殊地址进行访问
+        // if (!config.params.dsrv) { // 特殊请求地址判断 含有dsrv的为特殊请求地址需要用特殊地址进行访问
+          // console.log('enter get config url')
           config.url = config.url + '.js'
-        } else {
-          config.url = config.params.dsrv + url + '.js'
-        }
+        // } else { // 对cmipcgw/cmipcgw_get_req特殊处理
+        //   config.url = 'https://vimtag.com' + config.url + '.js'
+        // }
       }
     }else if(config.method === "post"){
       let param = config.data // 取得当前get传递的对象

@@ -556,7 +556,6 @@ const devlist = {
       let img = document.createElement('img')
       let imgCanvas = document.createElement('canvas')
       let imgContent = imgCanvas.getContext('2d')
-      // img.setAttribute("crossOrigin",'Anonymous') // 添加跨域标签防止本地调试报错
       img.src = src
       img.onload = async function () {
         imgCanvas.width = this.width

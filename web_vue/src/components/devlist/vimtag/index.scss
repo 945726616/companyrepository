@@ -2,9 +2,6 @@
 
 // css中url的相对路径需要使用~@进行定位否则会报错
 
-// scss 宏颜色定义 后续会将该功能整合成JavaScript控制,根据项目名称不同自动切换
-$projectColor: #00a6ba;
-
 #device_list_menu { // 设备列表顶部菜单
   width:90%;
 	margin:22px auto;

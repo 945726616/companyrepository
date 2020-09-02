@@ -1,4 +1,4 @@
-$project_background_color:var(--projectBackgroundColor, #00a6ba);
+@import "../../css/public.scss";
 
 #login {
     height: calc(100% - 62px);
@@ -218,7 +218,7 @@ input {
 #keep_sign_in {
     float: right;
     margin-bottom: 10px;
-    color: $project_background_color;
+    color: $projectColor;
 }
 
 #keep_sign_in_check {
@@ -231,7 +231,7 @@ input {
     color: #ffffff;
     margin-bottom: 16px;
     cursor: pointer;
-    background-color: $project_background_color;
+    background-color: $projectColor;
     border: 0px;
     font-size: 16px;
     width: 290px;
@@ -245,7 +245,7 @@ input {
     color: #ffffff;
     margin-bottom: 16px;
     cursor: pointer;
-    background-color: $project_background_color;
+    background-color: $projectColor;
     border: 0px;
     font-size: 14px;
     width: 230px;
@@ -256,21 +256,21 @@ input {
 }
 
 #register_account {
-    color: $project_background_color;
+    color: $projectColor;
     font-size: 14px;
     cursor: pointer;
     float: left;
 }
 
 #forget_pass {
-    color: $project_background_color;
+    color: $projectColor;
     font-size: 14px;
     cursor: pointer;
     float: right;
 }
 
 #sign_account {
-    color: $project_background_color;
+    color: $projectColor;
     font-size: 14px;
     cursor: pointer;
     text-align: center;
@@ -296,7 +296,7 @@ input {
 
 #binding_account_cancel_btn {
     float: right;
-    background-color: $project_background_color;
+    background-color: $projectColor;
     color: #fff;
     font-size: 24px;
     cursor: pointer;
@@ -319,7 +319,7 @@ input {
     height: 34px;
     color: #fff;
     border: none;
-    background-color: $project_background_color;
+    background-color: $projectColor;
 }
 
 #recovery_pass_ok_btn {
@@ -328,7 +328,7 @@ input {
     height: 34px;
     color: #fff;
     border: none;
-    background-color: $project_background_color;
+    background-color: $projectColor;
 }
 
 #forget_password_close_btn {
@@ -337,7 +337,7 @@ input {
     height: 34px;
     color: #fff;
     border: none;
-    background-color: $project_background_color;
+    background-color: $projectColor;
 }
 
 .vimtag_button_right {
@@ -357,14 +357,14 @@ input {
 #input_email_page {
     margin-top: 50px;
     display: none;
-    color: $project_background_color;
+    color: $projectColor;
     font-size: 14px;
 }
 
 #forget_password_page {
     margin-top: 50px;
     display: none;
-    color: $project_background_color;
+    color: $projectColor;
     font-size: 14px;
 }
 

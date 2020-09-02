@@ -679,6 +679,7 @@ export default {
         })
       } else {
         if (this.$store.state.jumpPageData.deviceData.length === 0 || type === 'refresh') {
+          console.log('进入设备请求判断')
           //发送设备列表请求
           this.$api.devlist.devs_refresh().then(res => {
             console.log(res, '获取设备列表数据')
@@ -733,7 +734,7 @@ export default {
       }
     },
     device_list (data, searchId) { // 设备列表渲染
-    console.log(data, 'device_list_data')
+      console.log(data, 'device_list_data')
       this.dev_list_dom = [] // 清空设备列表数组
       this.dev_list_dom_box = [] // 清空云盒子设备列表数组
       this.publicFunc.closeBufferPage()
@@ -1326,12 +1327,13 @@ export default {
         let type = item.type
         let addr = item.addr
         let domParentChild
-        for (i = 0; i < this.dev_list_dom.length; i++) {
-          if (item.sn === dev_list_dom[i].sn) {
-            domParentChild = document.getElementsByClassName('camera_sign_picture_div')[i].parentNode.childNodes[1]
-          }
-        }
+
         if (this.$store.state.jumpPageData.localFlag) { // 本地化内容暂缓
+          for (i = 0; i < this.dev_list_dom.length; i++) {
+            if (item.sn === dev_list_dom[i].sn) {
+              domParentChild = document.getElementsByClassName('camera_sign_picture_div')[i].parentNode.childNodes[1]
+            }
+          }
           if (type === "IPC") {
             create_input_passwrod_box({ sn: this.$store.state.jumpPageData.selectDeviceIpc, addr: addr, dom: domParentChild, type: "IPC" })
           } else if (type === "BOX") {
@@ -1584,13 +1586,13 @@ export default {
         let is_display = jQuery("#device_list_tree").css("display");
         if (is_display == "none") {
           // g_treelist = 1;
-          jQuery(this).css({ "background": "url("+ require('@/assets/device/tree_close.png') +") no-repeat", "background-size": "100%" });
+          jQuery(this).css({ "background": "url(" + require('@/assets/device/tree_close.png') + ") no-repeat", "background-size": "100%" });
           jQuery("#device_list_tree").show()
           jQuery("#device_list_tree").animate({ "width": "120px", "padding-left": "10px", "padding-right": "10px" })
           jQuery("#vimtag_device_list_box").addClass("device_tree_class");
         } else {
           // g_treelist = 2;
-          jQuery(this).css({ "background": "url("+ require('@/assets/device/tree_open.png') +") no-repeat", "background-size": "100%" });
+          jQuery(this).css({ "background": "url(" + require('@/assets/device/tree_open.png') + ") no-repeat", "background-size": "100%" });
           jQuery("#device_list_tree").animate({ "width": "0px", "padding-left": "0px", "padding-right": "0px" }, function () { jQuery("#device_list_tree").hide() });
           jQuery("#vimtag_device_list_box").removeClass("device_tree_class");
         }
@@ -1617,15 +1619,15 @@ export default {
       let getNickRecord = sessionStorage.getItem("saveNickRecord")
       let l_dom_device_list_tree_leaf = document.getElementById("device_list_tree_leaf")
       if (obj.parent_id === "") {
-          l_dom_device_list_tree_leaf.innerHTML += obj.con
+        l_dom_device_list_tree_leaf.innerHTML += obj.con
       } else if (document.getElementById(obj.parent_id + "_box")) {
-          document.getElementById(obj.parent_id + "_box").innerHTML += obj.con
+        document.getElementById(obj.parent_id + "_box").innerHTML += obj.con
       } else {
         let last_p_num = obj.parent_id.lastIndexOf(".");
         let parent_id = obj.parent_id.substr(0, last_p_num);
         let show_id = obj.parent_id.substring(last_p_num + 1, obj.parent_id.length);
         if (document.getElementById(obj.parent_id + "_box")) {
-            document.getElementById(parent_id + "_box").innerHTML += obj.con
+          document.getElementById(parent_id + "_box").innerHTML += obj.con
         } else {
           let con = "<div id='" + parent_id + "_box' class='tree_list_display_parent_" + num + "'><div class='tree_list_menu' child='" + obj.parent_id + "'>" + show_id + "</div><div child='" + obj.parent_id + "' id='" + obj.parent_id + "_box' style='margin-left:20px;'>" + obj.con + "</div></div>";
           this.tree_recursion({ id: obj.parent_id, parent_id: parent_id, con: con }, --num);
