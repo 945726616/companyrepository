@@ -92,7 +92,6 @@
                 } else {
                     await this.$chooseLanguage.lang('en')
                 }
-                await this.publicFunc.importCss('Public.scss')
                 this.mcs_my_device = mcs_my_device;
                 this.mcs_demo = mcs_demo;
                 this.mcs_more_options = mcs_more_options;

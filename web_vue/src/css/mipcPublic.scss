@@ -456,7 +456,9 @@ $projectColor: #2988cc;
 .device_sidebar_nick{
 	float:left;
 	margin-bottom: 6px;
-	width:100%;
+  width:100%;
+  margin-top:5px;
+	color:#909090;
 }
 .device_sidebar_point{
 	width: 5px;
@@ -569,10 +571,6 @@ $projectColor: #2988cc;
 	text-align: center;
 	line-height: 44px;
 	background-color: #2e87e6;
-}
-.device_sidebar_nick{
-	margin-top:5px;
-	color:#909090;
 }
 #active_dev{
 	width:208px;

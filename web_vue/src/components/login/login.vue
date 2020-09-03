@@ -264,7 +264,7 @@ export default {
       await this.$chooseLanguage.lang('en')
     }
 
-    await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
+    // await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
 
     // 获取网络环境
     await this.$api.login.svr_dev_get().then(res => {
@@ -538,10 +538,10 @@ export default {
                   mode: "",
                   id: username_value
                 },
-                srv: _this.appid
+                // srv: _this.appid
               }).then(res => {
-                let host = res.data.server.signal[0].substring(res.data.server.signal[0].indexOf("//") + 2, res.data.server.signal[0].lastIndexOf("/"))
-                _this.$store.dispatch('setServerDevice', host)
+                // let host = res.data.server.signal[0].substring(res.data.server.signal[0].indexOf("//") + 2, res.data.server.signal[0].lastIndexOf("/"))
+                // _this.$store.dispatch('setServerDevice', host)
                 // console.log(host, 'host')
                 get_req_ack(res)
 
