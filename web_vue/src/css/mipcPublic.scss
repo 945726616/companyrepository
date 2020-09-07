@@ -407,7 +407,7 @@ $projectColor: #2988cc;
 	height:20px;
 	float:right;
 	cursor:pointer;
-	display: none;
+	// display: none;
 	background: url(../assets/mipc/mipc_new_img.png) no-repeat -725px -3px;
 }
 #menu_add_dev_btn{
@@ -2623,17 +2623,7 @@ div.ibutton-label-on {
     color:#333333;
     font-size: 16px;
 }
-#add_devices_box_close{
-    width:20px;
-    height:20px;
-    margin-right:20px;
-    margin-top:20px;
-    float:right;
-    cursor:pointer;
-    font-size: 24px;
-    color:#c2c5cc;
-    background: url(../assets/device/n-close.png) no-repeat;
-}
+
 #add_devices_box_body{
     width:100%;
     margin:0 auto;
@@ -4542,9 +4532,6 @@ line-height: 30px;
 }
 .add_devices_unconnect_title{
 	padding-left:84px;
-}
-#add_devices_unconnect_info{
-	text-align: center;
 }
 #add_device_unconnect_box{
 	float:right;

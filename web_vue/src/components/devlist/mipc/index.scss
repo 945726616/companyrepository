@@ -126,3 +126,437 @@
 .dev_list_active .device_sidebar_point{
 	background: $projectColor;
 }
+
+
+// 添加设备弹窗样式
+#add_device_model{
+	width:100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+	background: rgba(0,0,0,0.5) none repeat scroll;
+  z-index: 1099;
+  #add_devices_box{ // 弹窗展示盒子
+    width:480px;
+    height:540px;
+    margin:0 auto;
+    margin-top:10px;
+    background: #fff;
+    border-radius: 10px;
+    margin-top:30px;
+    #add_devices_box_menu{ // 顶部标题菜单栏样式
+      #add_devices_box_close{
+        width:18px;
+        height:19px;
+        margin-right:15px;
+        margin-top:10px;
+        float:right;
+        cursor:pointer;
+        background: url(~@/assets/mipc/n-close.png) no-repeat;
+        &:hover {
+          background: url(~@/assets/mipc/c-close.png) no-repeat;
+        }
+      }
+      #add_devices_help{
+        width:22px;
+        height:22px;
+        float:left;
+        cursor:pointer;
+        margin-right: 20px; 
+        margin-top: 10px;
+        background: url(~@/assets/mipc/help.png) no-repeat;
+        background-size:100% 100%;
+      }
+      #add_devices_box_back{
+        float:left;
+        cursor:pointer;
+        margin-left:10px;
+        width: 28px;
+        height: 35px;
+        margin-top:10px;
+        background: url(~@/assets/mipc/mipc-add-back.png) no-repeat 0 10px;
+        padding-left: 16px;
+        line-height: 35px;
+      }
+      #add_devices_box_title{
+        text-align: center;
+        line-height: 60px;
+        border-bottom: 1px solid #d6d7dc;
+        color:#333333;
+        font-size: 16px;
+      }
+    }
+    #add_devices_box_body{ // 添加设备弹窗主体样式
+      width:100%;
+      margin:0 auto;
+      .add_device_sample_img_361{
+        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -195px -935px;
+      }
+      .add_device_sample_img_p1{
+        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -386px -936px;
+      }
+      .add_device_sample_img_m1{
+        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -5px -936px;
+      }
+      .add_device_sample_img_s1{
+        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -580px -936px;
+      }
+      .add_device_sample_img_fisheye{
+        background: url(~@/assets/mipc/fisheye_input.png) no-repeat 80% 100%;
+      }
+      .add_devices_type{ // 选择设备类型
+        width:100%;
+        float:left;
+        .add_devices_type_name{
+          display: none;
+        }
+        .add_devices_type_list{
+          width:120px;
+          height:120px;
+          margin: 30px 5px 0 75px;
+          border:1px solid #d6d7dc;
+          float:left;
+          .add_devices_type_list_img{
+            width:50px;
+            height:60px;
+            margin:10px auto;
+            background-repeat: no-repeat;
+          }
+          .add_devices_type_list_name{
+            text-align: center;
+            font-size:14px;
+          }
+        }
+      }
+      #input_device_id{ // 填写设备id
+        .add_device_input_id_box_del{
+          width:16px;
+          height:16px;
+          float: right;
+          margin: 10px;
+          background: url(~@/assets/mipc/cause.png) no-repeat;
+        }
+      }
+      #add_offline_device{ // 离线设备添加
+        .dev_offline_tips{ // 设备类型为cm1,m1,fisheye 显示用手机添加
+          text-align: center;
+          .dev_offline_tips_img{
+            margin:70px 0;
+          }
+          .dev_offline_tips_text{
+            text-align: center;
+            font-size:16px;
+            color:#333;
+          }
+        }
+        #add_devices_img{
+          width:20px;
+          height:20px;
+          display:inline-block;
+          background:url(~@/assets/device/sound.png) no-repeat;
+          background-size: 100% 100%;
+          margin-left: 12px;
+          vertical-align: middle;
+        }
+      }
+      #connect_net{ // 连接网线等待设备上线
+        .add_devices_wait_online{
+          text-align: center;
+          font-size:16px;
+          color:#333;
+        }
+        #add_devices_timenum{
+          width:30px;
+          height:30px;
+          background:$projectColor;
+          color:#fff;
+          margin:0 auto;
+          border-radius: 50%;
+          margin-top: 15px;
+          text-align: center;
+          line-height: 30px;
+        }
+      }
+      #connect_fail{ // 配置失败
+        #add_device_fail_img{
+          width:100px;
+          height:100px;
+          margin:55px auto;
+          background: url(~@/assets/mipc/mipc_fail.png) no-repeat;
+          background-size: 100% 100%;
+        }
+        #add_devices_unconnect_info{
+          text-align: center;
+        }
+      }
+      #connect_fail_reason{ // 配置失败帮助
+        .device_offline_reason{
+          padding-left:30px;
+          padding-right:30px;
+          margin-top:10px;
+          font-size: 15px;
+        }
+        .device_offline_reason_public{
+          padding-left:30px;
+          padding-right:30px;
+          margin-top: 15px;
+          font-size: 14px;
+          letter-spacing: 1px;
+          color:#646464;
+        }
+      }
+      #input_device_password{ // 设备在线输入密码
+        #add_device_info{
+          width:300px;
+          margin:0 auto;
+          text-align: center;
+          font-size: 16px;
+          margin-top:100px;
+          margin-bottom: 20px;
+          color:#333;
+        }
+        #add_device_forget_pass{
+          text-align: center;
+          margin-top:20px;
+          cursor:pointer;
+        }
+      }
+      #set_device_wifi{ // 设备设置wifi
+        #add_device_set_wifi_refresh{
+          width:20px;
+          height:20px;
+          float:right;
+          margin-top:7px;
+          margin-right:90px;
+          cursor:pointer;
+          background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -327px -3px;
+        }
+        #add_device_set_wifi_box{
+          width:240px;
+          height: 35px;
+          margin:0 auto;
+          border:1px solid #999;
+          border-radius: 5px;
+          margin-bottom:30px;
+          .add_device_set_wifi_box_ico{
+            width:16px;
+            height:16px;
+            float: left;
+            margin: 10px;
+            background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -1058px -3px;
+          }
+        }
+      }
+      #set_device_nick{ // 设置设备昵称
+        #add_device_edit_name_tips{
+          width:400px;
+          margin:0 auto;
+          text-align: center;
+          font-size: 16px;
+          margin-top:50px;
+          margin-bottom: 20px;
+          color:#333;
+        }
+        .add_device_input_name_box_ico{
+          width:24px;
+          height:16px;
+          float: left;
+          margin: 10px 3px;
+          background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -20px -3px;
+        }
+      }
+      #set_device_zone{ // 设置设备时区
+        #add_device_set_zone_box{
+          width:240px;
+          height: 35px;
+          margin:0 auto;
+          border:1px solid #999;
+          border-radius: 5px;
+          margin-bottom:30px;
+          margin-top:100px;
+          .add_device_set_zone_box_ico{
+            width:16px;
+            height:16px;
+            float: left;
+            margin: 10px;
+            background: url(~@/assets/mipc/place.png) no-repeat;
+          }
+        }
+      }
+      #offline_device_alert{ // 点击离线设备显示弹框
+        #video_play_offline{
+          margin: 195px auto 10px;
+          text-align: center;
+          font-size: 15px;
+          letter-spacing: 3px;
+        }
+        #video_play_id, #video_play_offline_word{
+          margin-bottom: 20px;
+        }
+        #search_help{
+          color: #fff;
+          background: $projectColor;
+          font-size: 14px;
+          margin: 0 auto;
+          width: 200px;
+          line-height: 24px;
+          height: 24px;
+          text-align: center;
+          border-radius: 2px;
+          padding: 5px;
+          letter-spacing: 1px;
+          cursor: pointer;
+        }
+      }
+      #offline_device_help{ // 点击离线设备
+        .device_offline_reason_box{
+          margin-top:100px;
+          margin-left:100px;
+        }
+        #reconfig_wifi{
+          color:$projectColor;
+          display:inline-block;
+          cursor: pointer;
+        }
+      }
+
+      // 公共弹窗内样式
+      #add_device_sample_img{
+        width: 190px;
+        height: 160px;
+        margin:0 auto;
+        margin-top: 20px;
+        margin-bottom: 30px;
+      }
+      .add_device_input_id_box{
+        width:240px;
+        height: 35px;
+        margin:0 auto;
+        border:1px solid #999;
+        border-radius: 5px;
+        margin-bottom:30px;
+      }
+      .add_device_input_id_box_ico{
+        width:16px;
+        height:16px;
+        float: left;
+        margin: 10px;
+        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -25px -4px;
+      }
+      #add_device_submit{
+        color:#fff;
+        width:240px;
+        text-align: center;
+        cursor: pointer;
+        line-height: 35px;
+        margin:0 auto;
+        border-radius: 5px;
+        background: $projectColor;
+      }
+      .add_device_input_id_box_input{
+        border:none;
+        height:35px;
+        width:160px;
+      }
+      .add_devices_box_info{
+        text-align: center;
+        color:#333;
+        font-size: 16px;
+        margin-top:20px;
+        margin-bottom: 30px;
+        width:80%;
+        margin: 0 auto;
+      }
+      #add_device_success_ico{
+        width:44px;
+        height:44px;
+        margin:0 auto;
+        margin-top:50px;
+        margin-bottom: 14px;
+        background: url(~@/assets/device/success2.png) no-repeat;
+      }
+      .add_device_input_pass_box_ico{
+        width:16px;
+        height:16px;
+        float: left;
+        margin: 10px;
+        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -58px -3px;
+      }
+      #add_device_success_txt{
+        text-align: center;
+        color:$projectColor;
+        font-size: 16px;
+        margin-top:30px;
+      }
+      #add_device_edit_pass_tips{
+        width:400px;
+        margin:0 auto;
+        text-align: center;
+        font-size: 16px;
+        margin-bottom: 20px;
+        color:#333;
+      }
+      .add_device_set_wifi_down{
+        width:14px;
+        height:6px;
+        float:right;
+        margin-top:15px;
+        margin-right:10px;
+        background: url(~@/assets/mipc/down.png) no-repeat;
+      }
+      .add_device_set_wifi_up{
+        width:14px;
+        height:6px;
+        float:right;
+        margin-top:15px;
+        margin-right:10px;
+        background: url(~@/assets/mipc/up.png) no-repeat;
+      }
+      .add_device_set_wifi_input{
+        line-height: 34px;
+      }
+      #add_device_set_wifi_list_box{
+        background: #fff;
+        position: absolute;
+        z-index: 1000;
+        width:240px;
+        max-height:220px;
+        overflow: auto;
+        border:1px solid #999;
+        border-top:none;
+        border-radius: 0 0 5px 5px;
+        display: none;
+      }
+      #add_device_set_wifi_list_box::-webkit-scrollbar{
+        width:5px;
+      }
+      #add_device_set_wifi_list_box::-webkit-scrollbar-thumb:vertical{
+        background-color:#999;
+        border-radius: 6px;
+      }
+      .add_device_set_wifi_list{
+        line-height: 30px;
+        border-top:1px solid #999;
+        padding-left:33px;
+        cursor:pointer;
+        &:hover{
+          color:$projectColor;
+        }
+      }
+      #add_device_skip{
+        color:#fff;
+        width:240px;
+        text-align: center;
+        cursor: pointer;
+        line-height: 35px;
+        margin:0 auto;
+        border-radius: 5px;
+        background: $projectColor;
+        margin-top:20px;
+      }
+      // 公共弹窗内样式 结束
+    }
+  }
+}

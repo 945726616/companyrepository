@@ -120,7 +120,7 @@
             <div class='add_devices_type_name'>{{mcs_cloud_camera}}</div> <!-- 云摄像机 -->
             <div class='add_devices_type_list' v-for="addItem in add_device_type_arr" :key="addItem.type" :d_type='addItem.type' @click="chooseDeviceType(addItem)">
               <div class='add_devices_type_list_img' :style="{'background-image': 'url('+ addItem.url +')'}"></div> <!-- 摄像机图片 -->
-              <div class='add_devices_type_list_name'>{{addItem.type === 's1' ? mcs_cloud_box : (addItem.name + mcs_intelligent_cloud_camera)}}</div> <!-- 智能云摄像机 -->
+              <div class='add_devices_type_list_name'>{{addItem.name}}</div> <!-- 智能云摄像机 -->
             </div>
           </div>
           <!-- 选择设备类型 结束 -->
@@ -373,16 +373,16 @@ export default {
       // 多国语言结束
       // 添加设备弹窗展示数组
       add_device_type_arr: [
-        { type: 'p1', url: require('@/assets/device/add_p1.png'), name: 'P1' },
-        { type: 'cp1', url: require('@/assets/device/add_cp1.png'), name: 'CP1' },
-        { type: 'm1', url: require('@/assets/device/add_m1.png'), name: 'M1' },
-        { type: '361', url: require('@/assets/device/add_361.png'), name: '361' },
-        { type: 'cm1', url: require('@/assets/device/add_cm1.png'), name: 'CM1' },
-        { type: 'b1', url: require('@/assets/device/add_b1.png'), name: 'B1' },
-        { type: 's1', url: require('@/assets/device/add_s1.png'), name: '' },
-        { type: 'fisheye', url: require('@/assets/device/add_fisheye.png'), name: 'fisheye' },
-        { type: 'b2', url: require('@/assets/device/b2.png'), name: 'B2' },
-        { type: 'b3', url: require('@/assets/device/b3.png'), name: 'B3' }],
+        { type: 'p1', url: require('@/assets/device/add_p1.png'), name: 'P1' + mcs_intelligent_cloud_camera },
+        { type: 'cp1', url: require('@/assets/device/add_cp1.png'), name: 'CP1' + mcs_intelligent_cloud_camera },
+        { type: 'm1', url: require('@/assets/device/add_m1.png'), name: 'M1' + mcs_intelligent_cloud_camera },
+        { type: '361', url: require('@/assets/device/add_361.png'), name: '361' + mcs_intelligent_cloud_camera },
+        { type: 'cm1', url: require('@/assets/device/add_cm1.png'), name: 'CM1' + mcs_intelligent_cloud_camera },
+        { type: 'b1', url: require('@/assets/device/add_b1.png'), name: 'B1' + mcs_intelligent_cloud_camera },
+        { type: 's1', url: require('@/assets/device/add_s1.png'), name: mcs_cloud_box },
+        { type: 'fisheye', url: require('@/assets/device/add_fisheye.png'), name: 'fisheye' + mcs_intelligent_cloud_camera },
+        { type: 'b2', url: require('@/assets/device/b2.png'), name: 'B2' + mcs_intelligent_cloud_camera },
+        { type: 'b3', url: require('@/assets/device/b3.png'), name: 'B3' + mcs_intelligent_cloud_camera }],
       addDeviceBodyFlag: '',
       placeholder: this.$store.state.user.userLanguage === 'zh' ? '请输入关键词' : '', // 搜索input提示内容
       pageObj: null, // 页面数据
