@@ -1066,11 +1066,11 @@ const set = {
       returnItem = { result: login.get_ret(res), data: res.data }
     })
     if (returnItem && returnItem.result === "") {
-      returnItem = { msg: mcs_set_successfully, type: "success", select: data.select }
+      returnItem = { msg: mcs_set_successfully, type: "success", select: params.select }
     } else if (returnItem.result === "permission.denied") {
-      returnItem = { msg: mcs_permission_denied, type: "error", select: data.select }
+      returnItem = { msg: mcs_permission_denied, type: "error", select: params.select }
     } else {
-      returnItem = { msg: mcs_failed_to_set_the, type: "error", select: data.select }
+      returnItem = { msg: mcs_failed_to_set_the, type: "error", select: params.select }
     }
     return returnItem
   },

@@ -106,9 +106,9 @@
     <device-Model :addDeviceModelObj='addDeviceModelObj' :addDeviceModel='addDeviceModel' :add_device_type_arr='add_device_type_arr' @closeModel='closeModel'></device-Model>
   </div>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 @import 'index.scss';
-</style>>
+</style>
 <script>
 import deviceModel from '../addDeviceModel'
 export default {
@@ -514,7 +514,7 @@ export default {
       }
     },
     devlist_get_ack (data) { // 设备列表数据整理并存储
-      console.log("进入devlist_get_ack回调", data)
+      // console.log("进入devlist_get_ack回调", data)
       let flag = 1 //从播放页面返回的标记，不发送cfsf请求
       if (data) {
         this.$store.dispatch('setDeviceData', data)
@@ -526,7 +526,7 @@ export default {
         this.search_sort[key] = this.$store.state.user.name + "_" + data[key].sn + "_sort"
         this.search_tree[key] = this.$store.state.user.name + "_" + data[key].sn + "_tree"
       }
-      console.log(this.$store.state.jumpPageData.supportTreeFlag, 'supportTreeFlag')
+      // console.log(this.$store.state.jumpPageData.supportTreeFlag, 'supportTreeFlag')
       if (this.$store.state.jumpPageData.supportTreeFlag && flag === 1) { //是不是支持树状结构
         console.log('是否为树形结构')
         this.get_service_record_list(0, data)
@@ -556,7 +556,7 @@ export default {
       }
     },
     device_list (data, searchId) { // 设备列表渲染
-      console.log(data, 'device_list_data')
+    // console.log(data, 'device_list_data')
       this.dev_list_dom = [] // 清空设备列表数组
       this.dev_list_dom_box = [] // 清空云盒子设备列表数组
       this.publicFunc.closeBufferPage()
@@ -626,7 +626,7 @@ export default {
       }
     },
     device_event (n, num) { //n为第几个开始，num为显示的个数 每行显示设备数量以及设备列表数据中第几个开始展示
-      console.log(n, num, 'n_num')
+      // console.log(n, num, 'n_num')
       let length
       let _this = this
       let camera_sign_picture_length = document.getElementsByClassName("camera_sign_picture_div").length
@@ -755,7 +755,7 @@ export default {
       })
     },
     clickCameraSignPic (item) { // 点击设备标记图片
-      console.log(item, 'item')
+      // console.log(item, 'item')
       if (item.stat === "Online") { // 设备在线
         //State Normal equipment click event
         this.$store.dispatch('setSelectDeviceIpc', item.sn) // 点击时获取sn
@@ -884,7 +884,7 @@ export default {
         this.$api.devlist.service_record_get({ // 获取服务记录接口
           keys: tmp_search_sort
         }).then(res => {
-          console.log(res, 'service_record_get_   sort')
+          // console.log(res, 'service_record_get_   sort')
           if (res && res.ret === "") {
             for (let i = n * 100; i < res.datas.length + n * 100; i++) {
               data[i].sort = parseInt(res.datas[i]);
@@ -943,7 +943,7 @@ export default {
     },
     tree_list (data) {
       let _this = this
-      console.log(data, 'tree_list_data')
+      // console.log(data, 'tree_list_data')
       this.treeFlag = true
       let height = document.documentElement.clientHeight
       this.treeBoxStyle = { "height": (height - 82) + "px" }
@@ -980,14 +980,14 @@ export default {
         return newarr
       }
       data_1 = change_data(data_1_pre)
-      console.log(data_1, "data_1")
+      // console.log(data_1, "data_1")
 
       for (let k = 0; k < data_1.length; k++) {
         let tmp_tree_level = data_1[k].split('.').length - 2;
         let index = data_1[k].lastIndexOf('.');
         let parent_id = data_1[k].substring(index, 0);
         let show_id = data_1[k].substring(index + 1, data_1[k].length);
-        console.log(tmp_tree_level, index, parent_id, show_id, 'show_id')
+        // console.log(tmp_tree_level, index, parent_id, show_id, 'show_id')
 
         if (tmp_tree_level > tree_level) { tree_level = tmp_tree_level; }
         let con = "";
@@ -1001,7 +1001,7 @@ export default {
           con: con
         }
       }
-      console.log(data_2, tree_level, 'before_tree_recursion')
+      // console.log(data_2, tree_level, 'before_tree_recursion')
       for (let j = 0; j < data_2.length; j++) {
         this.tree_recursion(data_2[j], tree_level);
       }
@@ -1213,7 +1213,7 @@ export default {
     if (!this.$store.state.jumpPageData.projectFlag) {
       $("#top_experience_div").css("display", "none")
     }
-    this.publicFunc.projectReload.call(this);
+    // this.publicFunc.projectReload.call(this);
   },
   created () {
     let userLanguage = sessionStorage.getItem('userLanguage')

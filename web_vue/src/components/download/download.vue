@@ -66,7 +66,6 @@
 </template>
 
 <script>
-    import './index.scss'
     export default {
         data() {
             return {
@@ -125,7 +124,6 @@
             } else {
                 this.$chooseLanguage.lang("en");
             }
-            this.publicFunc.importCss("Public.scss"); // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
         },
         methods: {
             async get_download_url(num) { //获取下载地址
@@ -151,6 +149,6 @@
     }
 </script>
 
-<style>
+<style src="./index.scss" lang='scss' scoped>
 
 </style>

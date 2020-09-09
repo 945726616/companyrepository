@@ -230,7 +230,6 @@ export default {
                     start_time = new Date(dateText).format("yyyy.MM.dd.00.00.00");
                     let show_time = new Date(dateText).format("MM/dd/yyyy");
                     _this.publicFunc.mx("#select_day").innerHTML = show_time;
-                    console.log(_this.$api.history)
                     start_time = _this.$api.history.getDateForStringDate(start_time).getTime();
                     end_time = start_time + 60 * 60 * 24 * 1000;
                     $("#calendar_input").hide();
@@ -372,6 +371,7 @@ export default {
                     let all_page_num = Math.ceil(data_length / all_num);//总页数
                     let start_num = ((now_page - 1) * all_num);
                     let end_num = (now_page * all_num) > data_length ? data_length : (now_page * all_num);
+                    
                     for (let i = start_num; i < end_num; i++) {
                         let start_time = new Date(data.time[i].time_start).format("yyyy-MM-dd hh:mm:ss");
                         if (data.video[i].is_photo) {

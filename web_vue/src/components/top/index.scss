@@ -288,5 +288,18 @@
     float: left;
     line-height: 54px;
     font-size: 16px;
-    display: none;
+}
+
+#mipcBack {
+    cursor: pointer;
+    float: left;
+}
+
+#main_title_box_return_img {
+    background: url(../../assets/mipc/new_mipc_back.png);
+    width: 20px;
+    height: 16px;
+    margin-top: 19px;
+    margin-right: 5px;
+    float: left;
 }

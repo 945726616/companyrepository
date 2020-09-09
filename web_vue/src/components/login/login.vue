@@ -20,7 +20,7 @@
             <div :class="name+'_password_img'"></div>
             <input id='signin_pw' :class="name == 'vimtag'?'vimtag_input_password':'mipc_input_password'" :type='password_eye_sign?"password":"text"' :style="l_remember_data_obj&&l_remember_data_obj.password?'color: #404040':''" v-model="password_val" :placeholder="mcs_password" @keyup.enter="sign_in">
             <!-- 登录时密码 -->
-            <div id='password_eye' :class='password_eye_sign?"password_eye_gray":"password_eye"' v-if="eye_sign" @click="password_eye_sign = !password_eye_sign">
+                        <div id='password_eye' :class='password_eye_sign?"password_eye_gray":"password_eye"' v-if="eye_sign && name == 'vimtag'" @click="password_eye_sign = !password_eye_sign">
             </div>
             <div :class="name+'_login_input'"></div>
           </div>
@@ -132,7 +132,6 @@
 import languageSelect from '../../lib/exportModule/languageSelect.js'
 import md5 from '@/util/mmd5.js'
 import mme from '@/util/mme.js'
-import styles from "./index.scss"
 export default {
   data () {
     return {
@@ -745,3 +744,6 @@ export default {
   }
 }
 </script>
+<style src="./index.scss" lang='scss' scoped>
+
+</style>

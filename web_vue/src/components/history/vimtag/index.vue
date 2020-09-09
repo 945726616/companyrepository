@@ -572,7 +572,6 @@ export default {
           }
           getPic() // 调用获取图片
           device_history_list_event(data);
-
           $(window).scroll(function () {
             if (photoDomArr.length > 0) {
               //let scrollHeight = document.body.scrollHeight - document.body.offsetHeight  // 全文可滚动高度

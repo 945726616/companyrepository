@@ -4,6 +4,7 @@
 <script>
 import fdSliderController from '../../util/fdSliderController'
 import languageSelect from '../../lib/exportModule/languageSelect.js'
+import mcodec from '../../util/mcodec.js'
 export default {
   data () {
     return {
@@ -13,7 +14,10 @@ export default {
       g_select_week: null,
       g_hide: null,
       record_flag_out: 'true',
-      g_motion_track: null
+      g_motion_track: null,
+      g_is_add:'',
+      g_set_out_time:'',
+      native_can_back: false,
     }
   },
   methods: {
@@ -241,7 +245,7 @@ export default {
               }
             }
             if (type == "submit") {
-              if (g_is_add == "false") {
+              if (_this.g_is_add == "false") {
                 for (let i = 0; i < old_week.length; i++) {
                   let arr_all = "";
                   let arr_all_arr = [];
@@ -268,7 +272,7 @@ export default {
                 }
               }
               let select = [];
-              if (g_is_add == "false") {
+              if (_this.g_is_add == "false") {
                 for (let i = 0; i < week_select.length; i++) {
                   if (week_select[i] == 1) {
                     for (let j = 0; j < 3; j++) {
@@ -3350,13 +3354,13 @@ export default {
           //原来function add_event()位置
 
           var day_list = [];
-          // let g_total_type = "";
+          var g_total_type = "";
           var g_aa_data = "";
           var g_set_old_out_time = "";
           var index = -1;
           var g_week_w = [];
           var g_total_data = "";
-          // let set_record_alarm_title, set_record_alarm_content;
+          var set_record_alarm_title, set_record_alarm_content;
 
           function create_set_record_page (repeat_page) { //允许录像设置开关时间页面
             // console.log("enter create_set_record_page")
@@ -3420,8 +3424,8 @@ export default {
             $("#at_home_btn").switchBtn();
 
             _this.publicFunc.mx("#set_time_add").onclick = function () {
-              g_set_out_time = "";
-              g_is_add = "true";
+              _this.g_set_out_time = "";
+              _this.g_is_add = "true";
               record_set_time();
             }
             function record_set_event () {
@@ -3653,7 +3657,7 @@ export default {
                 let l_dom_selsect_set_time_btn = _this.publicFunc.mx('.select_set_time_btn');
                 for (let n = 0; n < l_dom_selsect_set_time_btn.length; n++) {
                   l_dom_selsect_set_time_btn[n].onclick = function () {
-                    g_is_add = "false";
+                    _this.g_is_add = "false";
                     let time = this.getAttribute('time');
                     index = this.getAttribute('index');
                     let arr = "";
@@ -3679,7 +3683,7 @@ export default {
                       arr += "6."
                     }
                     arr = arr.substring(0, arr.length - 1);
-                    g_set_out_time = day_list[index].start + "_" + day_list[index].end + "_" + arr;
+                    _this.g_set_out_time = day_list[index].start + "_" + day_list[index].end + "_" + arr;
                     record_set_time();
                   }
                 }
@@ -3784,10 +3788,10 @@ export default {
               let l_dom_selsect_set_time_btn = _this.publicFunc.mx('.selsect_set_time_btn');
               for (let n = 0; n < l_dom_selsect_set_time_btn.length; n++) {
                 l_dom_selsect_set_time_btn[n].onclick = function () {
-                  g_is_add = "false";
+                  _this.g_is_add = "false";
                   let time = this.getAttribute('time');
                   index = this.getAttribute('index');
-                  g_set_out_time = time;
+                  _this.g_set_out_time = time;
                   // console.log("从此处进入set_time")
                   record_set_time();
                 }
@@ -3874,7 +3878,7 @@ export default {
                       return;
                     }
                   }
-                  native_can_back = false;
+                  _this.native_can_back= false;
                 }
               }
               for (i = 0; i < week_select.length; i++) {
@@ -3894,7 +3898,7 @@ export default {
 
             function record_set_time () {
               // console.log("进入set_time")
-              native_can_back = true;
+              _this.native_can_back= true;
               g_aa_data = g_total_data;
               let flag = true;
               let repeat = false;
@@ -3905,25 +3909,25 @@ export default {
               // let old_week = "";
               let week = '';
               let week_new = []; //保存选中哪些日期值
-              if (g_set_old_out_time == "" && g_is_add == "false") {
-                g_set_old_out_time = g_set_out_time;
+              if (g_set_old_out_time == "" && _this.g_is_add == "false") {
+                g_set_old_out_time = _this.g_set_out_time;
                 old_start_time = g_set_old_out_time.split("_")[0];
                 old_end_time = g_set_old_out_time.split("_")[1];
                 old_week = g_set_old_out_time.split("_")[2].split(".");
               }
-              if (g_set_old_out_time != "" && g_is_add == "false") {
+              if (g_set_old_out_time != "" && _this.g_is_add == "false") {
                 old_start_time = g_set_old_out_time.split("_")[0];
                 old_end_time = g_set_old_out_time.split("_")[1];
                 old_week = g_set_old_out_time.split("_")[2].split(".");
               }
-              if (g_set_out_time) {
-                let set_time_out_data = g_set_out_time.split("_");
+              if (_this.g_set_out_time) {
+                let set_time_out_data = _this.g_set_out_time.split("_");
                 start_time = set_time_out_data[0] >= 10 ? set_time_out_data[0] : "0" + set_time_out_data[0];
                 end_time = set_time_out_data[1] >= 10 ? set_time_out_data[1] : "0" + set_time_out_data[1];
                 week = set_time_out_data[2] ? set_time_out_data[2].split(".") : [];
               }
               //add default time
-              if (g_is_add == "true") {
+              if (_this.g_is_add == "true") {
                 week = [0, 1, 2, 3, 4, 5, 6]
               }
 
@@ -3986,7 +3990,7 @@ export default {
                   }
                 }
                 time.substring(0, time.length - 1)
-                g_set_out_time = time;
+                _this.g_set_out_time = time;
                 compile_week();
               }
 
@@ -4129,7 +4133,7 @@ export default {
                         }
                       }
                       if (type == "submit") {
-                        if (g_is_add == "false") {
+                        if (_this.g_is_add == "false") {
                           for (let i = 0; i < old_week.length; i++) {
                             let arr_all = "";
                             let arr_all_arr = [];
@@ -4156,7 +4160,7 @@ export default {
                           }
                         }
                         let select = [];
-                        if (g_is_add == "false") {
+                        if (_this.g_is_add == "false") {
                           for (let i = 0; i < week_select.length; i++) {
                             if (week_select[i] == 1) {
                               for (let j = 0; j < 3; j++) {
@@ -4248,7 +4252,7 @@ export default {
                   if (!flag) {
                     return;
                   }
-                  if (g_is_add == "false") {
+                  if (_this.g_is_add == "false") {
                     day_list[index].start = parseInt(_this.publicFunc.mx("#start_time").innerHTML);
                     day_list[index].end = parseInt(_this.publicFunc.mx("#end_time").innerHTML);
                     day_list[index].week = arr;
@@ -4257,7 +4261,7 @@ export default {
                   }
                   if (!repeat) {
                     g_set_old_out_time = "";
-                    g_set_out_time = "";
+                    _this.g_set_out_time = "";
                     g_week_w = [];
                     g_total_data = g_aa_data;
                     create_set_record_page(1);
@@ -4288,7 +4292,7 @@ export default {
                     arr += mcs_Saturday_and + "、";
                   }
                   arr = arr.substring(0, arr.length - 1);
-                  if (g_is_add == "false") {
+                  if (_this.g_is_add == "false") {
                     day_list.splice(index, 1);
                   } else {
                     create_set_record_page();
@@ -4339,23 +4343,24 @@ export default {
             + "<div class='menu_list_box_title3' style='height:2rem;margin-top:1rem'>" + mcs_allow_type + "</div>"
             + "<div class='menu_list2_box' id='record_event'></div>"
             + "</div>";
-          let l_dom_record_event = _this.publicFunc.mx("#record_event");
-          let data;
-          let l_scene_data_out, l_scene_data_active;
-          let l_select_scene_name;
-          let face_detect = ''
-          let sound_detect = "";
-          let g_accessory_sn = "";
-          let g_accessory_type = "";
+          l_dom_record_event = _this.publicFunc.mx("#record_event");
+          // let data;
+          // let l_scene_data_out, l_scene_data_active;
+          // let l_select_scene_name;
+          face_detect = '';
+          sound_detect = "";
+          g_accessory_sn = "";
+          g_accessory_type = "";
           _this.g_show = "false";
-          let time_format = [];
-          let day_list = [];
-          let g_total_type = "";
-          let g_aa_data = "";
-          let g_set_old_out_time = "";
-          let index = -1;
-          let g_week_w = [];
-          let g_total_data = "";
+          time_format = [];
+
+          day_list = [];
+          g_total_type = "";
+          g_aa_data = "";
+          g_set_old_out_time = "";
+          index = -1;
+          g_week_w = [];
+          g_total_data = "";
           // let set_record_alarm_title, set_record_alarm_content;
           function create_set_alarm_device_tips_page (repeat_page) { //允许报警设置开关时间页面
             //控制显示内容
@@ -4429,8 +4434,8 @@ export default {
             $("#at_home_btn").switchBtn();
 
             _this.publicFunc.mx("#set_time_add").onclick = function () {
-              g_set_out_time = "";
-              g_is_add = "true";
+              _this.g_set_out_time = "";
+              _this.g_is_add = "true";
               alarm_device_tips_set_time();
             }
 
@@ -4666,7 +4671,7 @@ export default {
                 let l_dom_selsect_set_time_btn = _this.publicFunc.mx('.select_set_time_btn');
                 for (let n = 0; n < l_dom_selsect_set_time_btn.length; n++) {
                   l_dom_selsect_set_time_btn[n].onclick = function () {
-                    g_is_add = "false";
+                    _this.g_is_add = "false";
                     let time = this.getAttribute('time');
                     index = this.getAttribute('index');
                     let arr = "";
@@ -4692,7 +4697,7 @@ export default {
                       arr += "6."
                     }
                     arr = arr.substring(0, arr.length - 1);
-                    g_set_out_time = day_list[index].start + "_" + day_list[index].end + "_" + arr;
+                    _this.g_set_out_time = day_list[index].start + "_" + day_list[index].end + "_" + arr;
                     alarm_device_tips_set_time();
                   }
                 }
@@ -4797,10 +4802,10 @@ export default {
               let l_dom_selsect_set_time_btn = _this.publicFunc.mx('.selsect_set_time_btn');
               for (let n = 0; n < l_dom_selsect_set_time_btn.length; n++) {
                 l_dom_selsect_set_time_btn[n].onclick = function () { //点击每一个设置时间按钮
-                  g_is_add = "false";
+                  _this.g_is_add = "false";
                   let time = this.getAttribute('time');
                   index = this.getAttribute('index');
-                  g_set_out_time = time;
+                  _this.g_set_out_time = time;
                   alarm_device_tips_set_time();
                 }
               }
@@ -4887,7 +4892,7 @@ export default {
                       return;
                     }
                   }
-                  native_can_back = false;
+                  _this.native_can_back= false;
                 }
               }
 
@@ -4907,7 +4912,7 @@ export default {
             }//compile_week
 
             function alarm_device_tips_set_time () {
-              native_can_back = true;
+              _this.native_can_back= true;
               g_aa_data = g_total_data;
               let flag = true;
               let repeat = false;
@@ -4918,25 +4923,25 @@ export default {
               let old_week = "";
               let week = '';
               let week_new = []; //保存选中哪些日期值
-              if (g_set_old_out_time == "" && g_is_add == "false") {
-                g_set_old_out_time = g_set_out_time;
+              if (g_set_old_out_time == "" && _this.g_is_add == "false") {
+                g_set_old_out_time = _this.g_set_out_time;
                 old_start_time = g_set_old_out_time.split("_")[0];
                 old_end_time = g_set_old_out_time.split("_")[1];
                 old_week = g_set_old_out_time.split("_")[2].split(".");
               }
-              if (g_set_old_out_time != "" && g_is_add == "false") {
+              if (g_set_old_out_time != "" && _this.g_is_add == "false") {
                 old_start_time = g_set_old_out_time.split("_")[0];
                 old_end_time = g_set_old_out_time.split("_")[1];
                 old_week = g_set_old_out_time.split("_")[2].split(".");
               }
-              if (g_set_out_time) {
-                let set_time_out_data = g_set_out_time.split("_");
+              if (_this.g_set_out_time) {
+                let set_time_out_data = _this.g_set_out_time.split("_");
                 start_time = set_time_out_data[0] >= 10 ? set_time_out_data[0] : "0" + set_time_out_data[0];
                 end_time = set_time_out_data[1] >= 10 ? set_time_out_data[1] : "0" + set_time_out_data[1];
                 week = set_time_out_data[2] ? set_time_out_data[2].split(".") : [];
               }
               //add default time
-              if (g_is_add == "true") {
+              if (_this.g_is_add == "true") {
                 week = [0, 1, 2, 3, 4, 5, 6]
               }
               let temp = eval(g_week_w);
@@ -4996,7 +5001,7 @@ export default {
                   }
                 }
                 time.substring(0, time.length - 1)
-                g_set_out_time = time;
+                _this.g_set_out_time = time;
                 compile_week();
               }
               let week_select = [0, 0, 0, 0, 0, 0, 0];
@@ -5139,7 +5144,7 @@ export default {
                         }
                       }
                       if (type == "submit") {
-                        if (g_is_add == "false") {
+                        if (_this.g_is_add == "false") {
                           for (let i = 0; i < old_week.length; i++) {
                             let arr_all = "";
                             let arr_all_arr = [];
@@ -5167,7 +5172,7 @@ export default {
                           }
                         }
                         let select = [];
-                        if (g_is_add == "false") {
+                        if (_this.g_is_add == "false") {
                           for (let i = 0; i < week_select.length; i++) {
                             if (week_select[i] == 1) {
                               for (let j = 0; j < 3; j++) {
@@ -5258,7 +5263,7 @@ export default {
                   if (!flag) {
                     return;
                   }
-                  if (g_is_add == "false") {
+                  if (_this.g_is_add == "false") {
                     day_list[index].start = parseInt(_this.publicFunc.mx("#start_time").innerHTML);
                     day_list[index].end = parseInt(_this.publicFunc.mx("#end_time").innerHTML);
                     day_list[index].week = arr;
@@ -5267,7 +5272,7 @@ export default {
                   }
                   if (!repeat) {
                     g_set_old_out_time = "";
-                    g_set_out_time = "";
+                    _this.g_set_out_time = "";
                     g_week_w = [];
                     g_total_data = g_aa_data;
                     create_set_alarm_device_tips_page(1);
@@ -5297,7 +5302,7 @@ export default {
                     arr += mcs_Saturday_and + "、";
                   }
                   arr = arr.substring(0, arr.length - 1);
-                  if (g_is_add == "false") {
+                  if (_this.g_is_add == "false") {
                     day_list.splice(index, 1);
                   } else {
                     create_set_alarm_device_tips_page();
@@ -8887,25 +8892,25 @@ export default {
 
             + "</div>";
 
-          let l_dom_record_event = _this.publicFunc.mx("#record_event");
-          let data;
-          let l_scene_data_out, l_scene_data_active;
-          let l_select_scene_name;
-          let face_detect = ''
-          let sound_detect = "";
-          let g_accessory_sn = "";
-          let g_accessory_type = "";
+          l_dom_record_event = _this.publicFunc.mx("#record_event");
+          // let data;
+          // let l_scene_data_out, l_scene_data_active;
+          // let l_select_scene_name;
+          face_detect = ''
+          sound_detect = "";
+          g_accessory_sn = "";
+          g_accessory_type = "";
           _this.g_show = "false";
-          let time_format = [];
+          time_format = [];
 
-          let day_list = [];
-          let g_total_type = "";
-          let g_aa_data = "";
-          let g_set_old_out_time = "";
-          let index = -1;
-          let g_week_w = [];
-          let g_total_data = "";
-          let set_record_alarm_title, set_record_alarm_content;
+          day_list = [];
+          g_total_type = "";
+          g_aa_data = "";
+          g_set_old_out_time = "";
+          index = -1;
+          g_week_w = [];
+          g_total_data = "";
+          // let set_record_alarm_title, set_record_alarm_content;
           function create_set_alarm_page (repeat_page) { //允许报警设置开关时间页面
             //控制显示内容
             let set_record_alarm_title, set_record_alarm_content;
@@ -8976,8 +8981,8 @@ export default {
             let req_data;
             $("#at_home_btn").switchBtn();
             _this.publicFunc.mx("#set_time_add").onclick = function () {
-              g_set_out_time = "";
-              g_is_add = "true";
+              _this.g_set_out_time = "";
+              _this.g_is_add = "true";
               set_time();
             }
             function alarm_set_event () {
@@ -9152,7 +9157,7 @@ export default {
                 let l_dom_selsect_set_time_btn = _this.publicFunc.mx('.select_set_time_btn');
                 for (let n = 0; n < l_dom_selsect_set_time_btn.length; n++) {
                   l_dom_selsect_set_time_btn[n].onclick = function () {
-                    g_is_add = "false";
+                    _this.g_is_add = "false";
                     let time = this.getAttribute('time');
                     index = this.getAttribute('index');
                     let arr = "";
@@ -9178,7 +9183,7 @@ export default {
                       arr += "6."
                     }
                     arr = arr.substring(0, arr.length - 1);
-                    g_set_out_time = day_list[index].start + "_" + day_list[index].end + "_" + arr;
+                    _this.g_set_out_time = day_list[index].start + "_" + day_list[index].end + "_" + arr;
                     set_time();
                   }
                 }
@@ -9283,10 +9288,10 @@ export default {
               let l_dom_selsect_set_time_btn = _this.publicFunc.mx('.selsect_set_time_btn');
               for (let n = 0; n < l_dom_selsect_set_time_btn.length; n++) {
                 l_dom_selsect_set_time_btn[n].onclick = function () {
-                  g_is_add = "false";
+                  _this.g_is_add = "false";
                   let time = this.getAttribute('time');
                   index = this.getAttribute('index');
-                  g_set_out_time = time;
+                  _this.g_set_out_time = time;
                   set_time();
                 }
               }
@@ -9374,7 +9379,7 @@ export default {
                       return;
                     }
                   }
-                  native_can_back = false;
+                  _this.native_can_back= false;
                 }
 
               }
@@ -9398,7 +9403,7 @@ export default {
             }//compile_week
 
             function set_time () {
-              native_can_back = true;
+              _this.native_can_back= true;
               g_aa_data = g_total_data;
               let flag = true;
               let repeat = false;
@@ -9409,26 +9414,26 @@ export default {
               let old_week = "";
               let week = '';
               let week_new = []; //保存选中哪些日期值
-              if (g_set_old_out_time == "" && g_is_add == "false") {
-                g_set_old_out_time = g_set_out_time;
+              if (g_set_old_out_time == "" && _this.g_is_add == "false") {
+                g_set_old_out_time = _this.g_set_out_time;
                 old_start_time = g_set_old_out_time.split("_")[0];
                 old_end_time = g_set_old_out_time.split("_")[1];
                 old_week = g_set_old_out_time.split("_")[2].split(".");
               }
-              if (g_set_old_out_time != "" && g_is_add == "false") {
+              if (g_set_old_out_time != "" && _this.g_is_add == "false") {
                 old_start_time = g_set_old_out_time.split("_")[0];
                 old_end_time = g_set_old_out_time.split("_")[1];
                 old_week = g_set_old_out_time.split("_")[2].split(".");
               }
-              if (g_set_out_time) {
-                let set_time_out_data = g_set_out_time.split("_");
+              if (_this.g_set_out_time) {
+                let set_time_out_data = _this.g_set_out_time.split("_");
                 start_time = set_time_out_data[0] >= 10 ? set_time_out_data[0] : "0" + set_time_out_data[0];
                 end_time = set_time_out_data[1] >= 10 ? set_time_out_data[1] : "0" + set_time_out_data[1];
                 week = set_time_out_data[2] ? set_time_out_data[2].split(".") : [];
               }
               //add default time
 
-              if (g_is_add == "true") {
+              if (_this.g_is_add == "true") {
                 week = [0, 1, 2, 3, 4, 5, 6]
               }
 
@@ -9489,7 +9494,7 @@ export default {
                   }
                 }
                 time.substring(0, time.length - 1)
-                g_set_out_time = time;
+                _this.g_set_out_time = time;
                 compile_week();
               }
 
@@ -9631,7 +9636,7 @@ export default {
                         }
                       }
                       if (type == "submit") {
-                        if (g_is_add == "false") {
+                        if (_this.g_is_add == "false") {
                           for (let i = 0; i < old_week.length; i++) {
                             let arr_all = "";
                             let arr_all_arr = [];
@@ -9659,7 +9664,7 @@ export default {
                           }
                         }
                         let select = [];
-                        if (g_is_add == "false") {
+                        if (_this.g_is_add == "false") {
                           for (let i = 0; i < week_select.length; i++) {
                             if (week_select[i] == 1) {
                               for (let j = 0; j < 3; j++) {
@@ -9752,7 +9757,7 @@ export default {
                   if (!flag) {
                     return;
                   }
-                  if (g_is_add == "false") {
+                  if (_this.g_is_add == "false") {
                     day_list[index].start = parseInt(_this.publicFunc.mx("#start_time").innerHTML);
                     day_list[index].end = parseInt(_this.publicFunc.mx("#end_time").innerHTML);
                     day_list[index].week = arr;
@@ -9761,7 +9766,7 @@ export default {
                   }
                   if (!repeat) {
                     g_set_old_out_time = "";
-                    g_set_out_time = "";
+                    _this.g_set_out_time = "";
                     g_week_w = [];
                     g_total_data = g_aa_data;
                     create_set_alarm_page(1);
@@ -9792,7 +9797,7 @@ export default {
                     arr += mcs_Saturday_and + "、";
                   }
                   arr = arr.substring(0, arr.length - 1);
-                  if (g_is_add == "false") {
+                  if (_this.g_is_add == "false") {
                     day_list.splice(index, 1);
                   } else {
                     create_set_alarm_page();
@@ -12245,7 +12250,7 @@ export default {
                 record_event_type = mcs_turn_off;
               } else if ((l_scene_data_out.dev[j].flag & 0x4)) {
                 record_event_type = mcs_turn_on;
-                open_alarm = 1;
+                let open_alarm = 1;
               }
             }
             if (j == l_scene_data_out.dev.length - 1) {
@@ -12283,12 +12288,915 @@ export default {
           })
         }
       }
+      async function create_set_alarm_page (repeat_page) { //允许报警设置开关时间页面
+            //控制显示内容
+            let set_record_alarm_title, set_record_alarm_content;
+            _this.record_flag_out = 'true';
+            set_record_alarm_title = mcs_Allow_alarm;
+            let set_record_alarm_allow_title = mcs_Allow_alarm_schedule;
+            if (g_accessory_type == 1) {
+
+              set_record_alarm_content = mcs_move_alarm_new_detail;
+            } else if (g_accessory_type == 5) {
+
+              set_record_alarm_content = mcs_sos_alarm_detail;
+            } else if (g_accessory_type == 6) {
+
+              set_record_alarm_content = mcs_send_alarm_notification;
+            } else if (g_accessory_type == 8) {
+
+              set_record_alarm_content = mcs_move_record_detail;
+            } else if (g_accessory_type == 9) {
+
+              set_record_alarm_content = mcs_move_record_detail;
+            }
+            else if (g_accessory_type == "") {
+              set_record_alarm_content = mcs_7x24_hours_prompt;
+            }
+
+            $("#add_device_page").show();
+            _this.publicFunc.mx("#add_device_page").innerHTML =
+              "<div id='attachmen_box'>"
+              + "<div id='attachmen_box_close'></div>"
+
+              + "<div class='set_main_page_alarm'>"
+              + "<div class='menu_list_box'>" //允许报警和开关
+              + "<div class='menu_list record_allow'>"
+              + "<div class='list_name record_padding'>" + set_record_alarm_title + "</div>"  //set_record_alarm_title
+              + "<div class='list_info record_padding'><div id='at_home_btn'></div></div>"
+              + "</div>"
+              + "</div>"
+              + "<div class='menu_list_box_title2 record_background'>" + set_record_alarm_content + "</div>" //set_record_alarm_content
+
+              + "<div class='margin'>" //设置时间
+              + "<div class='set_alarm_time_word' style='display:none;'>" + set_record_alarm_allow_title + "</div>" //set_record_alarm_allow_title
+              + "<div class='menu_list_box' id='hide_timebox' style='display:none'>"
+              + "<div id='set_out_time_box'></div>"
+              + "<div class='time_menu_list_add' id='set_time_add'><div class='set_time_add'></div></div>"
+              + "</div>"
+              + "</div>"
+              + "<div class='menu_list_apply' id='submit_apply'>" + mcs_apply + "</div>"
+
+              + "</div>"
+              + "</div>"
+            let l_dom_attachmen_box_close = _this.publicFunc.mx("#attachmen_box_close");
+            l_dom_attachmen_box_close.onclick = function () {
+              _this.record_flag(time_format, day_list)
+              if (_this.g_show == "true") {
+                _this.publicFunc.delete_tips({
+                  content: mcs_is_save_hint, func: function () {
+                    $("#add_device_page").css('display', 'none');
+                    _this.create_right_page({ type: 'alarm', dom: _this.publicFunc.mx("#create_setting_page_new") })
+                  }
+                })
+              } else {
+                _this.create_right_page({ type: 'alarm', dom: _this.publicFunc.mx("#create_setting_page_right") });
+                $("#add_device_page").css('display', 'none');
+              }
+            }
+            let data, l_scene_data_out, l_scene_data_active;
+            let req_data;
+            $("#at_home_btn").switchBtn();
+            _this.publicFunc.mx("#set_time_add").onclick = function () {
+              _this.g_set_out_time = "";
+              _this.g_is_add = "true";
+              set_time();
+            }
+            function alarm_set_event () {
+              let at_home_type = _this.publicFunc.mx("#at_home_btn").getAttribute("type");
+              for (let i = 0; i < l_scene_data_out.dev.length; i++) {
+                if (l_scene_data_out.dev[i].id == g_accessory_sn) {
+                  if (at_home_type == "true") {
+                    //away
+                    req_data.info.scene[1].dev[i].flag = l_scene_data_out.dev[i].flag | 0x4; //on voice
+                    req_data.info.scene[2].dev[i].flag = l_scene_data_active.dev[i].flag | 0x4; //on voice
+                    $(".set_alarm_time_word").show();
+                    $("#hide_timebox").show();
+                  } else {
+                    //away
+                    req_data.info.scene[1].dev[i].flag = l_scene_data_out.dev[i].flag & 0x3; //off voice
+                    req_data.info.scene[2].dev[i].flag = l_scene_data_active.dev[i].flag & 0x3; //off voice
+                    $("#hide_timebox").hide();
+                    $(".set_alarm_time_word").hide();
+                  }
+                }
+              }
+            }//alarm_set_event
+            function set_plan_record () {
+              let at_home_type = _this.publicFunc.mx("#at_home_btn").getAttribute("type");
+              if (at_home_type == "true") {
+                req_data.info.scene[2].flag = 0;
+                req_data.info.scene[1].flag = 1;
+                $("#hide_timebox").show();
+                $(".set_alarm_time_word").show();
+              } else {
+                req_data.info.scene[2].flag = 0;
+                req_data.info.scene[1].flag = 0;
+                $("#hide_timebox").hide();
+                $(".set_alarm_time_word").hide();
+
+              }
+            }//set_plan_record
+
+            function get_scene_ack (msg) {
+              let scene_data;
+              g_total_type = msg;
+              // $("#buffer_page").hide();
+              _this.publicFunc.closeBufferPage()
+              if (msg && msg.result == "") {
+                data = msg;
+                for (let i = 0; i < msg.data.info.scene.length; i++) {
+                  scene_data = msg.data.info.scene[i];
+                  if (scene_data.name == "out") {
+                    l_scene_data_out = msg.data.info.scene[i];
+                    if (g_accessory_sn) {
+                      for (let j = 0; j < scene_data.dev.length; j++) {
+                        if (scene_data.dev[j].id == g_accessory_sn) {
+                          if (repeat_page !== 1) {
+                            if (scene_data.dev[j].flag & 0x4) {
+                              $("#at_home_btn").switchBtn(true, "", "", alarm_set_event);
+                              $("#hide_timebox").show();
+                              $(".set_alarm_time_word").show();
+                            } else {
+                              $("#at_home_btn").switchBtn(false, "", "", alarm_set_event);
+                              $("#hide_timebox").hide();
+                              $(".set_alarm_time_word").hide();
+                            }
+                          } else {
+                            $("#at_home_btn").switchBtn(true, "", "", alarm_set_event);
+                            $("#hide_timebox").show();
+                            $(".set_alarm_time_word").show();
+                          }
+                        }
+                      }
+                    } else {
+                      if (repeat_page !== 1) {
+                        if (scene_data.flag) {
+                          $("#at_home_btn").switchBtn(true, "", "", set_plan_record);
+                          $("#hide_timebox").show();
+                          $(".set_alarm_time_word").show();
+                        } else {
+                          $("#at_home_btn").switchBtn(false, "", "", set_plan_record);
+                          $("#hide_timebox").hide();
+                        }
+                      } else {
+                        $("#at_home_btn").switchBtn(true, "", "", set_plan_record);
+                        $("#hide_timebox").show();
+                        $(".set_alarm_time_word").show();
+                      }
+
+                    }
+                  } else if (scene_data.name == "in") {
+                    l_scene_data_active = msg.data.info.scene[i];
+                  }
+                }
+                req_data = {
+                  sn: _this.$store.state.jumpPageData.selectDeviceIpc, all: 1, info: {
+                    select: data.data.info.select,
+                    scene: [{ name: "auto", flag: 0 },
+                    {
+                      name: "out",
+                      flag: l_scene_data_out.flag,
+                      dev: l_scene_data_out.dev
+                    },
+                    {
+                      name: "in",
+                      flag: l_scene_data_active.flag,
+                      dev: l_scene_data_active.dev
+                    }]
+                  },
+                  func: function (msg) {
+                    //                    _this.publicFunc.msg_tips({msg:msg.msg, type:msg.type, timeout:3000});
+                  }
+                }
+
+                if (repeat_page == 1) { //解决点击应用，开关值显示开，请求参数没改bug，最后开关还是关
+                  if (g_accessory_sn) {
+                    for (let i = 0; i < l_scene_data_out.dev.length; i++) {
+                      if (l_scene_data_out.dev[i].id == g_accessory_sn) {
+                        // req_data.info.scene[1].dev[i].flag = l_scene_data_out.dev[i].flag | 0x2; //on video
+                        // req_data.info.scene[2].dev[i].flag = l_scene_data_active.dev[i].flag | 0x2; //on video 
+                        req_data.info.scene[1].dev[i].flag = l_scene_data_out.dev[i].flag | 0x4; //on voice
+                        req_data.info.scene[2].dev[i].flag = l_scene_data_active.dev[i].flag | 0x4; //on voice        
+                      }
+                    }
+                  } else {
+                    // req_data.info.scene[2].flag=0;
+                    // req_data.info.scene[1].flag=1;
+                    req_data.info.scene[2].flag = 0;
+                    req_data.info.scene[1].flag = 1;
+                  }
+                }
+
+              }
+            }//get_scene_ack
+
+            // $("#buffer_page").show();
+            // 展示遮罩层
+            _this.publicFunc.showBufferPage()
+            await _this.$api.set.scene_get({
+              sn: _this.$store.state.jumpPageData.selectDeviceIpc
+            }).then(res => {
+              get_scene_ack(res)
+            })
+            let l_dom_set_out_time_box = _this.publicFunc.mx("#set_out_time_box");
+
+            if (g_total_data != "") {
+              schedule_get(g_total_data);
+            } else {
+              await _this.$api.set.schedule_get({
+                sn: _this.$store.state.jumpPageData.selectDeviceIpc
+              }).then(res => {
+                schedule_get_ack(res)
+              })
+            }
+
+            function schedule_get (g_data) {
+              if (day_list.length != 0) {
+                for (let i = 0; i < day_list.length; i++) {
+                  let classname = '';
+                  if (i == day_list.length - 1) {
+                    classname = 'time_menu_list_last';
+                  } else {
+                    classname = 'time_menu_list';
+                  }
+                  l_dom_set_out_time_box.innerHTML +=
+                    "<div class='" + classname + " select_set_time_btn' index='" + i + "' time='" + day_list[i].start + "_" + day_list[i].end + "_" + day_list[i].week + "'>"
+                    + "<div class='time_list_name'>"
+                    + "<div class='time_list_name_title record_padding'>" + day_list[i].start + ":00 - " + day_list[i].end + ":00</div>"
+                    + "<div class='time_list_name_tips'>" + day_list[i].week + "</div>"
+                    + "</div>"
+                    + "<div class='list_info'>"
+                    + "<div class='right_arrow'></div>"
+                    + "</div>"
+                    + "</div>";
+                }
+                let l_dom_selsect_set_time_btn = _this.publicFunc.mx('.select_set_time_btn');
+                for (let n = 0; n < l_dom_selsect_set_time_btn.length; n++) {
+                  l_dom_selsect_set_time_btn[n].onclick = function () {
+                    _this.g_is_add = "false";
+                    let time = this.getAttribute('time');
+                    index = this.getAttribute('index');
+                    let arr = "";
+                    if (time.split("_")[2].indexOf(mcs_Sunday_and) != -1) {
+                      arr += "0."
+                    }
+                    if (time.split("_")[2].indexOf(mcs_Monday_and) != -1) {
+                      arr += "1."
+                    }
+                    if (time.split("_")[2].indexOf(mcs_Tuesday_and) != -1) {
+                      arr += "2."
+                    }
+                    if (time.split("_")[2].indexOf(mcs_Wednesday_and) != -1) {
+                      arr += "3."
+                    }
+                    if (time.split("_")[2].indexOf(mcs_Thursday_and) != -1) {
+                      arr += "4."
+                    }
+                    if (time.split("_")[2].indexOf(mcs_Friday_and) != -1) {
+                      arr += "5."
+                    }
+                    if (time.split("_")[2].indexOf(mcs_Saturday_and) != -1) {
+                      arr += "6."
+                    }
+                    arr = arr.substring(0, arr.length - 1);
+                    _this.g_set_out_time = day_list[index].start + "_" + day_list[index].end + "_" + arr;
+                    set_time();
+                  }
+                }
+              }
+            }//schedule_get
+
+            function schedule_time_format (arr) {
+              let start_time = [], end_time = [];
+              for (let j = 0; j < arr.length; j++) {
+                let num = -1;
+                start_time[j] = [];
+                end_time[j] = [];
+                for (let i = -1; i < arr[j].length;) {
+                  if (arr[j].indexOf(0, i) == i && i != -1) {
+                    i++;
+                    end_time[j][num]++;
+                  } else if (arr[j].indexOf(0, i) < 0 && i > 0) {
+                    i = arr[j].length;
+                  } else if (arr[j].indexOf(0, i) < 0 && i <= 0) {
+                    i = arr[j].length;
+                    start_time[j][0] = 0;
+                    end_time[j][0] = 0;
+                  } else {
+                    num++;
+                    start_time[j][num] = arr[j].indexOf(0, i)
+                    end_time[j][num] = arr[j].indexOf(0, i)
+                    i = arr[j].indexOf(0, i);
+                  }
+                }
+              }
+              let length;
+              for (let time_i = 0; time_i < 7; time_i++) {
+                for (let time_j = 0; time_j < start_time[time_i].length; time_j++) {
+                  if (end_time[time_i][time_j]) {
+                    length = time_format.length;
+                    if (length > 0) {
+                      let is_exist = 0;
+                      for (let time_format_i = 0; time_format_i < length; time_format_i++) {
+                        if (start_time[time_i][time_j] == time_format[time_format_i].start_time && end_time[time_i][time_j] == time_format[time_format_i].end_time) {
+                          time_format[time_format_i].week.push(time_i);
+                          is_exist = 1;
+                        }
+                      }
+                      if (is_exist == 0) {
+                        time_format.push({ start_time: start_time[time_i][time_j], end_time: end_time[time_i][time_j], week: [time_i] })
+                      }
+                    } else {
+                      time_format.push({ start_time: start_time[time_i][time_j], end_time: end_time[time_i][time_j], week: [time_i] })
+                    }
+                  }
+                }
+              }
+              // l_dom_set_out_time_box.innerHTML = "<div id='set_time_box'></div>"
+              for (let k = 0; k < time_format.length; k++) {
+                let week = "";
+                let week_num = '';
+                for (let m = 0; m < time_format[k].week.length; m++) {
+                  if (time_format[k].week[m] == 0) {
+                    week += mcs_Sunday_and + "、";
+                    week_num += time_format[k].week[m] + ".";
+                  } else if (time_format[k].week[m] == 1) {
+                    week += mcs_Monday_and + "、";
+                    week_num += time_format[k].week[m] + ".";
+                  } else if (time_format[k].week[m] == 2) {
+                    week += mcs_Tuesday_and + "、";
+                    week_num += time_format[k].week[m] + ".";
+                  } else if (time_format[k].week[m] == 3) {
+                    week += mcs_Wednesday_and + "、";
+                    week_num += time_format[k].week[m] + ".";
+                  } else if (time_format[k].week[m] == 4) {
+                    week += mcs_Thursday_and + "、";
+                    week_num += time_format[k].week[m] + ".";
+                  } else if (time_format[k].week[m] == 5) {
+                    week += mcs_Friday_and + "、";
+                    week_num += time_format[k].week[m] + ".";
+                  } else if (time_format[k].week[m] == 6) {
+                    week += mcs_Saturday_and + "、";
+                    week_num += time_format[k].week[m] + ".";
+                  }
+                }
+                week = week.substring(0, week.length - 1)
+                week_num = week_num.substring(0, week_num.length - 1)
+
+                let classname = '';
+                // if (k == time_format.length - 1) {
+                //   classname = 'time_menu_list_last';
+                // } else {
+                //   classname = 'time_menu_list';
+                // }
+                l_dom_set_out_time_box.innerHTML +=
+                  "<div class='" + classname + " selsect_set_time_btn' index='" + k + "' time='" + time_format[k].start_time + "_" + time_format[k].end_time + "_" + week_num + "'>"
+                  + "<div class='time_list_name'>"
+                  + "<div class='time_list_name_title record_padding'>" + time_format[k].start_time + ":00 - " + time_format[k].end_time + ":00</div>"
+                  + "<div class='time_list_name_tips'>" + week + "</div>"
+                  + "</div>"
+                  + "<div class='list_info'>"
+                  + "<div class='right_arrow'></div>"
+                  + "</div>"
+                  + "</div>";
+                day_list.push({ start: time_format[k].start_time, end: time_format[k].end_time, week: week });
+              }
+              let l_dom_selsect_set_time_btn = _this.publicFunc.mx('.selsect_set_time_btn');
+              for (let n = 0; n < l_dom_selsect_set_time_btn.length; n++) {
+                l_dom_selsect_set_time_btn[n].onclick = function () {
+                  _this.g_is_add = "false";
+                  let time = this.getAttribute('time');
+                  index = this.getAttribute('index');
+                  _this.g_set_out_time = time;
+                  set_time();
+                }
+              }
+            }//schedule_time_format
+
+            _this.publicFunc.mx("#submit_apply").onclick = async function () {
+              _this.record_flag_out = "false";
+              _this.g_show = 'false';
+              // console.log(g_total_data, "报警g_total_data")
+              await _this.$api.set.schedule_set({
+                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                sch: {
+                  degree: 3600,
+                  schedule: g_total_data
+                }
+              }).then(res => {
+                if (res && res.result === "") {
+                  _this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 })
+                } else if (res.result === "permission.denied") {
+                  _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
+                } else {
+                  _this.publicFunc.msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 });
+                }
+              })
+              req_data.info.scene[2].flag = 0;
+              req_data.info.scene[2].dev[0].flag = 0;
+              await _this.$api.set.scene_set(req_data)
+            }
+
+            function compile_week () {
+              let week_select = _this.g_select_week.slice();
+              $("add_device_page").show();
+              _this.publicFunc.mx("#add_device_page").innerHTML =
+                "<div id='attachmen_box'>"
+                + "<div class='record_box_top'><div id='record_back_box' class='record_back'><div id='record_return_img'></div><div class='record_back'>" + mcs_back + "</div></div><div class='record_edit_time'>" + mcs_edit_time + "</div></div>"
+                + "<div id='set_time_main_page'>"
+                + "<div class='set_week'>"
+                + "<div class='week_every'>" + mcs_Sunday_and + "</div>"
+                + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+                + "</div>"
+                + "<div class='set_week'>"
+                + "<div class='week_every'>" + mcs_Monday_and + "</div>"
+                + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+                + "</div>"
+                + "<div class='set_week'>"
+                + "<div class='week_every'>" + mcs_Tuesday_and + "</div>"
+                + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+                + "</div>"
+                + "<div class='set_week'>"
+                + "<div class='week_every'>" + mcs_Wednesday_and + "</div>"
+                + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+                + "</div>"
+                + "<div class='set_week'>"
+                + "<div class='week_every'>" + mcs_Thursday_and + "</div>"
+                + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+                + "</div>"
+                + "<div class='set_week'>"
+                + "<div class='week_every'>" + mcs_Friday_and + "</div>"
+                + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+                + "</div>"
+                + "<div class='set_week'>"
+                + "<div class='week_every'>" + mcs_Saturday_and + "</div>"
+                + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+                + "</div>"
+                + "</div>"
+
+                + "</div>"
+
+              let l_dom_record_back_box = _this.publicFunc.mx("#record_back_box");
+              let l_dom_set_week_list = _this.publicFunc.mx(".set_week");
+              for (let i = 0; i < l_dom_set_week_list.length; i++) {
+                l_dom_set_week_list[i].index = i;
+                l_dom_set_week_list[i].onclick = function () {
+                  if ($(this).find(".list_info_select").hasClass("list_info_select_img")) {
+                    week_select[this.index] = 1;
+                    $(this).find(".list_info_select").removeClass('list_info_select_img').addClass('list_info_clickselect_img')
+
+                  } else {
+                    week_select[this.index] = 0;
+                    $(this).find(".list_info_select").removeClass('list_info_clickselect_img').addClass('list_info_select_img')
+                  }
+                  for (let i = 0; i < week_select.length; i++) {
+                    if (week_select[i] == 1) {
+                      g_week_w = "[" + week_select.join() + "]";
+                      return;
+                    }
+                  }
+                  _this.native_can_back= false;
+                }
+
+              }
+
+              for (i = 0; i < week_select.length; i++) {
+                if (week_select[i]) {
+                  l_dom_set_week_list[i].click();
+                }
+
+              }
+
+
+              l_dom_record_back_box.onclick = function () {
+                if (week_select.indexOf(1) == -1) {
+                  $(".time_select_tips").show();
+                  setTimeout("$('.time_select_tips').hide();", 3000)
+                } else {
+                  set_time();
+                }
+              }
+            }//compile_week
+
+            function set_time () {
+              _this.native_can_back= true;
+              g_aa_data = g_total_data;
+              let flag = true;
+              let repeat = false;
+              let start_time = '00';
+              let end_time = '24';
+              let old_start_time = '00';
+              let old_end_time = "00";
+              let old_week = "";
+              let week = '';
+              let week_new = []; //保存选中哪些日期值
+              if (g_set_old_out_time == "" && _this.g_is_add == "false") {
+                g_set_old_out_time = _this.g_set_out_time;
+                old_start_time = g_set_old_out_time.split("_")[0];
+                old_end_time = g_set_old_out_time.split("_")[1];
+                old_week = g_set_old_out_time.split("_")[2].split(".");
+              }
+              if (g_set_old_out_time != "" && _this.g_is_add == "false") {
+                old_start_time = g_set_old_out_time.split("_")[0];
+                old_end_time = g_set_old_out_time.split("_")[1];
+                old_week = g_set_old_out_time.split("_")[2].split(".");
+              }
+              if (_this.g_set_out_time) {
+                let set_time_out_data = _this.g_set_out_time.split("_");
+                start_time = set_time_out_data[0] >= 10 ? set_time_out_data[0] : "0" + set_time_out_data[0];
+                end_time = set_time_out_data[1] >= 10 ? set_time_out_data[1] : "0" + set_time_out_data[1];
+                week = set_time_out_data[2] ? set_time_out_data[2].split(".") : [];
+              }
+              //add default time
+
+              if (_this.g_is_add == "true") {
+                week = [0, 1, 2, 3, 4, 5, 6]
+              }
+
+              let temp = eval(g_week_w);
+              if (temp.length == 7) {
+                let j = 0;
+                for (i = 0; i < temp.length; i++) {
+                  if (temp[i]) {
+                    week_new[j] = i;
+                    j++;
+                  }
+                }
+              }
+              _this.publicFunc.mx("#add_device_page").innerHTML =
+                "<div id='attachmen_box'>"
+                + "<div class='record_box_top'><div id='record_back_box' class='record_back'><div id='record_return_img'></div><div class='record_back'>" + mcs_back + "</div></div><div class='record_edit_time'>" + mcs_edit_time + "</div><div id='delete_set_record'>" + mcs_delete + "</div></div>"
+                + "<div id='set_time_main_page'>"
+                + "<div class='set_time_list set_starttime_list'>"
+                + "<div class='set_time_list_left record_padding'>" + mcs_begin_time + "</div>"
+                + "<div class='set_time_list_right record_padding' id='start_time'>" + start_time + ":00</div>"
+                + "</div>"
+
+                + "<div style='height:2rem;background:#EFEFF4'></div>"
+                + "<div class='set_time_list set_endtime_list'>"
+                + "<div class='set_time_list_left record_padding'>" + mcs_end_time + "</div>"
+                + "<div class='set_time_list_right record_padding' id='end_time'>" + end_time + ":00</div>"
+                + "</div>"
+                + "<div class='select_time_box' id='datePlugin' style='visibility:hidden'>"
+                + "</div>"
+                + "<div class='select_week_box' id='click_arrow' style='overflow:hidden;width:660px;margin-top:30px;'>"
+                + "<div style='margin-left:1rem;float:left'>" + mcs_repeat + "</div>"
+                + "<div class='week_Box' style='float:right;width:400px;'>"
+                + "<div class='week_list' id='week0'>" + mcs_Sunday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+                + "<div class='week_list' id='week1'>" + mcs_Monday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+                + "<div class='week_list' id='week2'>" + mcs_Tuesday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+                + "<div class='week_list' id='week3'>" + mcs_Wednesday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+                + "<div class='week_list' id='week4'>" + mcs_Thursday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+                + "<div class='week_list' id='week5'>" + mcs_Friday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+                + "<div class='week_list' id='week6'>" + mcs_Saturday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+                + "<div id='click_arrow' class='right_arrow' style='margin-right:1.2rem;float:right'></div>"
+                + "</div>"
+                + "</div>"
+                + "</div>"
+                + "</div>"
+              //        +"<div id='set_time_submit_btn' class='set_submit_btn'>"+mcs_ok+"</div>"
+              //        +"<div id='set_time_del_btn' class='set_del_btn'>"+mcs_delete+"</div>";
+
+              _this.publicFunc.mx("#click_arrow").onclick = function () {
+                if (temp.length != 0) {
+                  _this.g_select_week = week_select;
+                } else {
+                  _this.g_select_week = old_week_select;
+                }
+                let time = parseInt(_this.publicFunc.mx("#start_time").innerHTML) + "_" + parseInt(_this.publicFunc.mx("#end_time").innerHTML) + "_";
+                for (let i = 0; i < _this.g_select_week.length; i++) {
+                  if (_this.g_select_week[i] == 1) {
+                    time += i + "."
+                  }
+                }
+                time.substring(0, time.length - 1)
+                _this.g_set_out_time = time;
+                compile_week();
+              }
+
+              let week_select = [0, 0, 0, 0, 0, 0, 0];
+              let old_week_select = [0, 0, 0, 0, 0, 0, 0];
+
+              if (temp.length !== 0) {
+                week_select = temp;
+              }
+
+              function stringToHex (data) {
+                let val = "", arr = [], arr0 = [];
+                for (let i = 0; i < data.length; i++) {
+                  val = parseInt(data[i], 2).toString(16);
+                  arr[i] = val;
+                }
+                for (let j = 0; j < data.length; j++) {
+                  arr0[j] = 0xff & ("0x" + arr[j]);
+                }
+                return arr0;
+              }
+
+              function set_time_event () {
+                $("#start_time").date({ theme: "datetime", h: start_time });
+                $("#end_time").date({ theme: "datetime", h: end_time });
+                $("#start_time").click(function () {
+                  $("#start_time").addClass('start_time_active');
+                  $("#datePlugin").css("visibility", "visible");
+                })
+
+                $("#end_time").click(function () {
+                  $("#start_time").addClass('start_time_active');
+                  $("#datePlugin").css("visibility", "visible");
+                })
+                let l_dom_week_list = _this.publicFunc.mx(".week_list");
+                for (let i = 0; i < l_dom_week_list.length; i++) {
+                  let is_has = $(this).hasClass("week_list_active");
+                  l_dom_week_list[i].index = i;
+                  for (let h = 0; h < week_new.length; h++) {
+                    if (i == week_new[h]) {
+                      let id_week = "#week" + i;
+                      $(id_week).css("display", "block");
+                      if (h == week_new.length - 1) {
+                        $(id_week).find(".dian_tip").css("display", "none");
+                      }
+                    }
+                  }
+                  for (let j = 0; j < week.length; j++) {
+                    if (week_new.length !== 0) {
+                      continue;
+                    }
+                    if (i == week[j]) {
+                      //  l_dom_week_list[i].click();
+                      old_week_select[i] = 1;
+                      let id_week = "#week" + i;
+                      $(id_week).css("display", "block");
+                      if (j == week.length - 1) {
+                        $(id_week).find(".dian_tip").css("display", "none");
+                      }
+                    }
+                  }
+                }
+                if (temp.length != 0) {
+                  let y = temp;
+                  for (let i = 0; i < l_dom_week_list.length; i++) {
+                    for (let j = 0; j < week.length; j++) {
+                      if (i == week[j]) {
+                        old_week_select[i] = 1;
+                      }
+                      week_select[i] = y[i];
+                    }
+                  }
+                } else {
+                  for (let i = 0; i < l_dom_week_list.length; i++) {
+                    for (let j = 0; j < week.length; j++) {
+                      if (i == week[j]) {
+                        old_week_select[i] = 1;
+                        week_select[i] = 1;
+                      }
+                    }
+                  }
+                }
+                function set_time_func (type) {
+                  repeat = false;
+                  let index = -1;
+                  let time_select = [];
+                  let start_time = parseInt(_this.publicFunc.mx("#start_time").innerHTML);
+                  let end_time = parseInt(_this.publicFunc.mx("#end_time").innerHTML);
+                  let new_time_select = [];
+                  if (start_time >= end_time) {
+                    repeat = true;
+                    flag = false;
+                    _this.publicFunc.msg_tips({ msg: mcs_start_time_is_greater, type: "error", timeout: 3000 })
+                    return;
+                  }
+                  flag = true;
+                  for (let i = 0; i < week_select.length; i++) {
+                    if (week_select[i]) {
+                      for (let j = 0; j < 24; j++) {
+                        if (j % 8 == 0) {
+                          let tmp_data = "";
+                          index++;
+                        }
+                        if (j >= start_time && j < end_time) {
+                          tmp_data += "0"
+                        } else {
+                          tmp_data += "1"
+                        }
+                        time_select[index] = tmp_data.split("").reverse().join("");
+                      }
+                    } else {
+                      for (let j = 0; j < 24; j++) {
+                        if (j % 8 == 0) {
+                          let tmp_data = "";
+                          index++;
+                        }
+                        tmp_data += "1"
+                        time_select[index] = tmp_data;
+                      }
+                    }
+                  }
+                  function get_select_time (g_total_data) {
+                    if (g_total_data != "") {
+                      let l_data_2 = mcodec.b64_2_binary(g_total_data, 1), str = "", arr = [], arr2 = [], arr_tmp = [];
+                      if (!l_data_2) return;
+                      for (let k = 0; k < l_data_2.length; k++) {
+                        str = "";
+                        arr[k] = l_data_2[k].toString(2);
+                      }
+                      for (let i = 0; i < arr.length; i++) {
+                        for (let j = 0; j < 8; j++) {
+                          if (arr[i].length < 8) {
+                            let addStr = "";
+                            for (let k = 0; k < (8 - arr[i].length); k++) {
+                              addStr += "0";
+                            }
+                            arr[i] = addStr + arr[i];
+                          }
+                        }
+                      }
+                      if (type == "submit") {
+                        if (_this.g_is_add == "false") {
+                          for (let i = 0; i < old_week.length; i++) {
+                            let arr_all = "";
+                            let arr_all_arr = [];
+                            let arr1 = "", arr2 = "", arr3 = "";
+                            for (let j = 0; j < 3; j++) {
+                              arr_all += arr[old_week[i] * 3 + j].split("").reverse().join("");
+                            }
+                            arr_all_arr = arr_all.split("");
+                            for (let m = parseInt(old_start_time); m < parseInt(old_end_time); m++) {
+                              arr_all_arr[m] = "1";
+                            }
+                            for (let k = 0; k <= 7; k++) {
+                              arr1 += arr_all_arr[k];
+                            }
+                            for (k = 8; k <= 15; k++) {
+                              arr2 += arr_all_arr[k]
+                            }
+                            for (k = 16; k <= 23; k++) {
+                              arr3 += arr_all_arr[k]
+                            }
+                            arr[old_week[i] * 3] = arr1.split("").reverse().join("");
+                            arr[old_week[i] * 3 + 1] = arr2.split("").reverse().join("");
+                            arr[old_week[i] * 3 + 2] = arr3.split("").reverse().join("");
+
+                          }
+                        }
+                        let select = [];
+                        if (_this.g_is_add == "false") {
+                          for (let i = 0; i < week_select.length; i++) {
+                            if (week_select[i] == 1) {
+                              for (let j = 0; j < 3; j++) {
+                                select.push(i * 3 + j);
+                              }
+                            }
+                          }
+                        }
+                        for (let n = 0; n < arr.length; n++) {
+                          let tmp_arr = arr[n].split("");
+                          let tmp_time_arr = time_select[n].split("");
+                          let arr_old = "";
+                          let arr_new = "";
+                          let tmp = "";
+                          for (let num = 0; num < tmp_arr.length; num++) {
+                            if (tmp_arr[num] == "1" && tmp_time_arr[num] == "0") {
+                              tmp += "0"
+                            } else if (tmp_arr[num] == "0" || tmp_time_arr[num] == "0") {
+                              tmp += "0"
+                            } else if (tmp_arr[num] == "0" && tmp_time_arr[num] == "0") {
+                              tmp += "0"
+                            } else if (tmp_arr[num] == "1" && tmp_time_arr[num] == "1") {
+                              tmp += "1"
+                            } else if (tmp_arr[num] == "0" && tmp_time_arr[num] == "1") {
+                              tmp += "0"
+                            }
+                          }
+                          new_time_select[n] = tmp;
+                        }
+                        new_time_select = stringToHex(new_time_select);
+                        let l_data_64 = mcodec.binary_2_b64(new_time_select, 1);
+                        g_total_data = l_data_64
+                        g_aa_data = l_data_64;
+                      } else {
+                        for (let n = 0; n < arr.length; n++) {
+                          let tmp_arr = arr[n].split("");
+                          let tmp_time_arr = time_select[n].split("");
+                          let tmp = "";
+                          for (let num = 0; num < tmp_arr.length; num++) {
+                            if (tmp_time_arr[num] == "1") {
+                              tmp_time_arr[num] = "0"
+                            } else {
+                              tmp_time_arr[num] = "1"
+                            }
+                            if (tmp_arr[num] == "1" || tmp_time_arr[num] == "1") {
+                              tmp += "1"
+                            } else {
+                              tmp += "0"
+                            }
+                          }
+                          new_time_select[n] = tmp;
+                        }
+                        new_time_select = stringToHex(new_time_select);
+                        let l_data_64 = mcodec.binary_2_b64(new_time_select, 1);
+                        g_total_data = l_data_64
+                        g_aa_data = l_data_64;
+
+                      }
+                    }
+                  }//get_select_time
+                  get_select_time(g_total_data)
+                }
+                let l_dom_record_back_box = _this.publicFunc.mx("#record_back_box");
+
+                l_dom_record_back_box.onclick = function () {
+                  let arr = "";
+                  if (week_select[0] == 1) {
+                    arr += mcs_Sunday_and + "、";
+                  }
+                  if (week_select[1] == 1) {
+                    arr += mcs_Monday_and + "、";
+                  }
+                  if (week_select[2] == 1) {
+                    arr += mcs_Tuesday_and + "、";
+                  }
+                  if (week_select[3] == 1) {
+                    arr += mcs_Wednesday_and + "、";
+                  }
+                  if (week_select[4] == 1) {
+                    arr += mcs_Thursday_and + "、";
+                  }
+                  if (week_select[5] == 1) {
+                    arr += mcs_Friday_and + "、";
+                  }
+                  if (week_select[6] == 1) {
+                    arr += mcs_Saturday_and + "、";
+                  }
+                  arr = arr.substring(0, arr.length - 1);
+                  set_time_func("submit");
+                  if (!flag) {
+                    return;
+                  }
+                  if (_this.g_is_add == "false") {
+                    day_list[index].start = parseInt(_this.publicFunc.mx("#start_time").innerHTML);
+                    day_list[index].end = parseInt(_this.publicFunc.mx("#end_time").innerHTML);
+                    day_list[index].week = arr;
+                  } else {
+                    day_list.push({ start: parseInt(_this.publicFunc.mx("#start_time").innerHTML), end: parseInt(_this.publicFunc.mx("#end_time").innerHTML), week: arr })
+                  }
+                  if (!repeat) {
+                    g_set_old_out_time = "";
+                    _this.g_set_out_time = "";
+                    g_week_w = [];
+                    g_total_data = g_aa_data;
+                    create_set_alarm_page(1);
+                  }
+                }
+                // 报警时间设置页面删除按钮事件
+                _this.publicFunc.mx("#delete_set_record").onclick = function () {
+                  let arr = "";
+                  if (week_select[0] == 1) {
+                    arr += mcs_Sunday_and + "、";
+                  }
+                  if (week_select[1] == 1) {
+                    arr += mcs_Monday_and + "、";
+                  }
+                  if (week_select[2] == 1) {
+                    arr += mcs_Tuesday_and + "、";
+                  }
+                  if (week_select[3] == 1) {
+                    arr += mcs_Wednesday_and + "、";
+                  }
+                  if (week_select[4] == 1) {
+                    arr += mcs_Thursday_and + "、";
+                  }
+                  if (week_select[5] == 1) {
+                    arr += mcs_Friday_and + "、";
+                  }
+                  if (week_select[6] == 1) {
+                    arr += mcs_Saturday_and + "、";
+                  }
+                  arr = arr.substring(0, arr.length - 1);
+                  if (_this.g_is_add == "false") {
+                    day_list.splice(index, 1);
+                  } else {
+                    create_set_alarm_page();
+                    return;
+                  }
+                  set_time_func("del");
+                  if (!repeat) {
+                    g_set_old_out_time = "";
+                    g_total_data = g_aa_data;
+                    create_set_alarm_page();
+                  }
+                }
+              }
+              set_time_event();
+            }
+          }
       function schedule_get_ack (msg) {
         _this.publicFunc.closeBufferPage()
         if (msg && msg.result == "") {
           g_total_data = msg.data.sch.schedule;
           let l_data_2 = mcodec.b64_2_binary(msg.data.sch.schedule, 1), arr = [], arr2 = [], arr_tmp = [];
-          // let str = "";
+          let str = "";
           if (!l_data_2) return;
           for (let k = 0; k < l_data_2.length; k++) {
             str = "";
@@ -12313,6 +13221,1062 @@ export default {
           schedule_time_format(arr2)
         }
       }//schedule_get_ack
+function schedule_time_format (arr) {
+    let start_time = [], end_time = [];
+    let l_dom_set_out_time_box = _this.publicFunc.mx("#set_out_time_box");
+    for (let j = 0; j < arr.length; j++) {
+      let num = -1;
+      start_time[j] = [];
+      end_time[j] = [];
+      for (let i = -1; i < arr[j].length;) {
+        if (arr[j].indexOf(0, i) == i && i != -1) {
+          i++;
+          end_time[j][num]++;
+        } else if (arr[j].indexOf(0, i) < 0 && i > 0) {
+          i = arr[j].length;
+        } else if (arr[j].indexOf(0, i) < 0 && i <= 0) {
+          i = arr[j].length;
+          start_time[j][0] = 0;
+          end_time[j][0] = 0;
+        } else {
+          num++;
+          start_time[j][num] = arr[j].indexOf(0, i)
+          end_time[j][num] = arr[j].indexOf(0, i)
+          i = arr[j].indexOf(0, i);
+        }
+      }
+    }
+    let length;
+    for (let time_i = 0; time_i < 7; time_i++) {
+      for (let time_j = 0; time_j < start_time[time_i].length; time_j++) {
+        if (end_time[time_i][time_j]) {
+          length = time_format.length;
+          if (length > 0) {
+            let is_exist = 0;
+            for (let time_format_i = 0; time_format_i < length; time_format_i++) {
+              if (start_time[time_i][time_j] == time_format[time_format_i].start_time && end_time[time_i][time_j] == time_format[time_format_i].end_time) {
+                time_format[time_format_i].week.push(time_i);
+                is_exist = 1;
+              }
+            }
+            if (is_exist == 0) {
+              time_format.push({ start_time: start_time[time_i][time_j], end_time: end_time[time_i][time_j], week: [time_i] })
+            }
+          } else {
+            time_format.push({ start_time: start_time[time_i][time_j], end_time: end_time[time_i][time_j], week: [time_i] })
+          }
+        }
+      }
+    }
+    // l_dom_set_out_time_box.innerHTML = "<div id='set_time_box'></div>"
+    for (let k = 0; k < time_format.length; k++) {
+      let week = "";
+      let week_num = '';
+      for (let m = 0; m < time_format[k].week.length; m++) {
+        if (time_format[k].week[m] == 0) {
+          week += mcs_Sunday_and + "、";
+          week_num += time_format[k].week[m] + ".";
+        } else if (time_format[k].week[m] == 1) {
+          week += mcs_Monday_and + "、";
+          week_num += time_format[k].week[m] + ".";
+        } else if (time_format[k].week[m] == 2) {
+          week += mcs_Tuesday_and + "、";
+          week_num += time_format[k].week[m] + ".";
+        } else if (time_format[k].week[m] == 3) {
+          week += mcs_Wednesday_and + "、";
+          week_num += time_format[k].week[m] + ".";
+        } else if (time_format[k].week[m] == 4) {
+          week += mcs_Thursday_and + "、";
+          week_num += time_format[k].week[m] + ".";
+        } else if (time_format[k].week[m] == 5) {
+          week += mcs_Friday_and + "、";
+          week_num += time_format[k].week[m] + ".";
+        } else if (time_format[k].week[m] == 6) {
+          week += mcs_Saturday_and + "、";
+          week_num += time_format[k].week[m] + ".";
+        }
+      }
+      week = week.substring(0, week.length - 1)
+      week_num = week_num.substring(0, week_num.length - 1)
+
+      let classname = '';
+      // if (k == time_format.length - 1) {
+      //   classname = 'time_menu_list_last';
+      // } else {
+      //   classname = 'time_menu_list';
+      // }
+      l_dom_set_out_time_box.innerHTML +=
+        "<div class='" + classname + " selsect_set_time_btn' index='" + k + "' time='" + time_format[k].start_time + "_" + time_format[k].end_time + "_" + week_num + "'>"
+        + "<div class='time_list_name'>"
+        + "<div class='time_list_name_title record_padding'>" + time_format[k].start_time + ":00 - " + time_format[k].end_time + ":00</div>"
+        + "<div class='time_list_name_tips'>" + week + "</div>"
+        + "</div>"
+        + "<div class='list_info'>"
+        + "<div class='right_arrow'></div>"
+        + "</div>"
+        + "</div>";
+      day_list.push({ start: time_format[k].start_time, end: time_format[k].end_time, week: week });
+    }
+    let l_dom_selsect_set_time_btn = _this.publicFunc.mx('.selsect_set_time_btn');
+    for (let n = 0; n < l_dom_selsect_set_time_btn.length; n++) {
+      l_dom_selsect_set_time_btn[n].onclick = function () {
+        _this.g_is_add = "false";
+        let time = this.getAttribute('time');
+        index = this.getAttribute('index');
+        _this.g_set_out_time = time;
+        // console.log("从此处进入set_time")
+        record_set_time();
+      }
+    }
+      function record_set_time () {
+        // console.log("进入set_time")
+        _this.native_can_back= true;
+        g_aa_data = g_total_data;
+        let flag = true;
+        let repeat = false;
+        let start_time = '00';
+        let end_time = '24';
+        let old_start_time = '00';
+        let old_end_time = "00";
+        let old_week = "";
+        let week = '';
+        let tmp_data = '';
+        let week_new = []; //保存选中哪些日期值
+        if (g_set_old_out_time == "" && _this.g_is_add == "false") {
+          g_set_old_out_time = _this.g_set_out_time;
+          old_start_time = g_set_old_out_time.split("_")[0];
+          old_end_time = g_set_old_out_time.split("_")[1];
+          old_week = g_set_old_out_time.split("_")[2].split(".");
+        }
+        if (g_set_old_out_time != "" && _this.g_is_add == "false") {
+          old_start_time = g_set_old_out_time.split("_")[0];
+          old_end_time = g_set_old_out_time.split("_")[1];
+          old_week = g_set_old_out_time.split("_")[2].split(".");
+        }
+        if (_this.g_set_out_time) {
+          let set_time_out_data = _this.g_set_out_time.split("_");
+          start_time = set_time_out_data[0] >= 10 ? set_time_out_data[0] : "0" + set_time_out_data[0];
+          end_time = set_time_out_data[1] >= 10 ? set_time_out_data[1] : "0" + set_time_out_data[1];
+          week = set_time_out_data[2] ? set_time_out_data[2].split(".") : [];
+        }
+        //add default time
+        if (_this.g_is_add == "true") {
+          week = [0, 1, 2, 3, 4, 5, 6]
+        }
+
+        let temp = eval(g_week_w);
+        if (temp.length == 7) {
+          let j = 0;
+          for (let i = 0; i < temp.length; i++) {
+            if (temp[i]) {
+              week_new[j] = i;
+              j++;
+            }
+          }
+        }
+        _this.publicFunc.mx("#add_device_page").innerHTML =
+          "<div id='attachmen_box'>"
+          + "<div class='record_box_top'><div id='record_back_box' class='record_back'><div id='record_return_img'></div><div class='record_back'>" + mcs_back + "</div></div><div class='record_edit_time'>" + mcs_edit_time + "</div><div id='delete_set_record'>" + mcs_delete + "</div></div>"
+          + "<div id='set_time_main_page'>"
+          + "<div class='set_time_list set_starttime_list'>"
+          + "<div class='set_time_list_left record_padding'>" + mcs_begin_time + "</div>"
+          + "<div class='set_time_list_right record_padding' id='start_time'>" + start_time + ":00</div>"
+          + "</div>"
+
+          + "<div style='height:2rem;background:#EFEFF4'></div>"
+          + "<div class='set_time_list set_endtime_list'>"
+          + "<div class='set_time_list_left record_padding'>" + mcs_end_time + "</div>"
+          + "<div class='set_time_list_right record_padding' id='end_time'>" + end_time + ":00</div>"
+          + "</div>"
+          + "<div class='select_time_box' id='datePlugin' style='visibility:hidden'>"
+          + "</div>"
+          + "<div class='select_week_box' id='click_arrow' style='overflow:hidden;width:660px;margin-top:30px;'>"
+          + "<div style='margin-left:1rem;float:left'>" + mcs_repeat + "</div>"
+          + "<div class='week_Box' style='float:right;width:400px;'>"
+          + "<div class='week_list' id='week0'>" + mcs_Sunday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+          + "<div class='week_list' id='week1'>" + mcs_Monday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+          + "<div class='week_list' id='week2'>" + mcs_Tuesday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+          + "<div class='week_list' id='week3'>" + mcs_Wednesday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+          + "<div class='week_list' id='week4'>" + mcs_Thursday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+          + "<div class='week_list' id='week5'>" + mcs_Friday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+          + "<div class='week_list' id='week6'>" + mcs_Saturday_and + "<span class='dian_tip'>" + "、" + "</span>" + "</div>"
+          + "<div id='click_arrow' class='right_arrow' style='margin-right:1.2rem;float:right'></div>"
+          + "</div>"
+
+          + "</div>"
+          + "</div>"
+          + "</div>"
+        //        +"<div id='set_time_submit_btn' class='set_submit_btn'>"+mcs_ok+"</div>"
+        //        +"<div id='set_time_del_btn' class='set_del_btn'>"+mcs_delete+"</div>";
+
+
+        _this.publicFunc.mx("#click_arrow").onclick = function () {
+          if (temp.length != 0) {
+            _this.g_select_week = week_select;
+          } else {
+            _this.g_select_week = old_week_select;
+          }
+          let time = parseInt(_this.publicFunc.mx("#start_time").innerHTML) + "_" + parseInt(_this.publicFunc.mx("#end_time").innerHTML) + "_";
+          for (let i = 0; i < _this.g_select_week.length; i++) {
+            if (_this.g_select_week[i] == 1) {
+              time += i + "."
+            }
+          }
+          time.substring(0, time.length - 1)
+          _this.g_set_out_time = time;
+          compile_week();
+        }
+
+        let week_select = [0, 0, 0, 0, 0, 0, 0];
+        let old_week_select = [0, 0, 0, 0, 0, 0, 0];
+
+        if (temp.length !== 0) {
+          week_select = temp;
+        }
+
+        function stringToHex (data) {
+          let val = "", arr = [], arr0 = [];
+          for (let i = 0; i < data.length; i++) {
+            val = parseInt(data[i], 2).toString(16);
+            arr[i] = val;
+          }
+          for (let j = 0; j < data.length; j++) {
+            arr0[j] = 0xff & ("0x" + arr[j]);
+          }
+          return arr0;
+        }
+
+
+        function set_time_event () {
+          $("#start_time").date({ theme: "datetime", h: start_time });
+          $("#end_time").date({ theme: "datetime", h: end_time });
+          $("#start_time").click(function () {
+            $("#start_time").addClass('start_time_active');
+            $("#datePlugin").css("visibility", "visible");
+          })
+
+          $("#end_time").click(function () {
+            $("#start_time").addClass('start_time_active');
+            $("#datePlugin").css("visibility", "visible");
+          })
+          let l_dom_week_list = _this.publicFunc.mx(".week_list");
+          for (let i = 0; i < l_dom_week_list.length; i++) {
+            // let is_has = $(this).hasClass("week_list_active");
+            l_dom_week_list[i].index = i;
+            for (let h = 0; h < week_new.length; h++) {
+              if (i == week_new[h]) {
+                let id_week = "#week" + i;
+                $(id_week).css("display", "block");
+                if (h == week_new.length - 1) {
+                  $(id_week).find(".dian_tip").css("display", "none");
+                }
+              }
+            }
+            for (let j = 0; j < week.length; j++) {
+              if (week_new.length !== 0) {
+                continue;
+              }
+              if (i == week[j]) {
+                old_week_select[i] = 1;
+                let id_week = "#week" + i;
+                $(id_week).css("display", "block");
+                if (j == week.length - 1) {
+                  $(id_week).find(".dian_tip").css("display", "none");
+                }
+              }
+            }
+          }
+
+          if (temp.length != 0) {
+            let y = temp;
+            for (let i = 0; i < l_dom_week_list.length; i++) {
+              for (let j = 0; j < week.length; j++) {
+                if (i == week[j]) {
+                  old_week_select[i] = 1;
+                }
+                week_select[i] = y[i];
+              }
+            }
+          } else {
+            for (let i = 0; i < l_dom_week_list.length; i++) {
+              for (let j = 0; j < week.length; j++) {
+                if (i == week[j]) {
+                  old_week_select[i] = 1;
+                  week_select[i] = 1;
+                }
+              }
+            }
+          }
+          function set_time_func (type) {
+            repeat = false;
+            let index = -1;
+            let time_select = [];
+            let start_time = parseInt(_this.publicFunc.mx("#start_time").innerHTML);
+            let end_time = parseInt(_this.publicFunc.mx("#end_time").innerHTML);
+            let new_time_select = [];
+            if (start_time >= end_time) {
+              repeat = true;
+              flag = false;
+              _this.publicFunc.msg_tips({ msg: mcs_start_time_is_greater, type: "error", timeout: 3000 })
+              return;
+            }
+            flag = true;
+            for (let i = 0; i < week_select.length; i++) {
+              if (week_select[i]) {
+                for (let j = 0; j < 24; j++) {
+                  if (j % 8 == 0) {
+                    tmp_data = "";
+                    index++;
+                  }
+                  if (j >= start_time && j < end_time) {
+                    tmp_data += "0"
+                  } else {
+                    tmp_data += "1"
+                  }
+                  time_select[index] = tmp_data.split("").reverse().join("");
+                }
+              } else {
+                for (let j = 0; j < 24; j++) {
+                  if (j % 8 == 0) {
+                    tmp_data = "";
+                    index++;
+                  }
+                  tmp_data += "1"
+                  time_select[index] = tmp_data;
+                }
+              }
+            }
+            function get_select_time (g_total_data) {
+              if (g_total_data != "") {
+                let l_data_2 = mcodec.b64_2_binary(g_total_data, 1), str = "", arr = [], arr2 = [], arr_tmp = [];
+                if (!l_data_2) return;
+                for (let k = 0; k < l_data_2.length; k++) {
+                  str = "";
+                  arr[k] = l_data_2[k].toString(2);
+                }
+                for (let i = 0; i < arr.length; i++) {
+                  for (let j = 0; j < 8; j++) {
+                    if (arr[i].length < 8) {
+                      let addStr = "";
+                      for (let k = 0; k < (8 - arr[i].length); k++) {
+                        addStr += "0";
+                      }
+                      arr[i] = addStr + arr[i];
+                    }
+                  }
+                }
+                if (type == "submit") {
+                  if (_this.g_is_add == "false") {
+                    for (let i = 0; i < old_week.length; i++) {
+                      let arr_all = "";
+                      let arr_all_arr = [];
+                      let arr1 = "", arr2 = "", arr3 = "";
+                      for (let j = 0; j < 3; j++) {
+                        arr_all += arr[old_week[i] * 3 + j].split("").reverse().join("");
+                      }
+                      arr_all_arr = arr_all.split("");
+                      for (let m = parseInt(old_start_time); m < parseInt(old_end_time); m++) {
+                        arr_all_arr[m] = "1";
+                      }
+                      for (let k = 0; k <= 7; k++) {
+                        arr1 += arr_all_arr[k];
+                      }
+                      for (let k = 8; k <= 15; k++) {
+                        arr2 += arr_all_arr[k]
+                      }
+                      for (let k = 16; k <= 23; k++) {
+                        arr3 += arr_all_arr[k]
+                      }
+                      arr[old_week[i] * 3] = arr1.split("").reverse().join("");
+                      arr[old_week[i] * 3 + 1] = arr2.split("").reverse().join("");
+                      arr[old_week[i] * 3 + 2] = arr3.split("").reverse().join("");
+                    }
+                  }
+                  let select = [];
+                  if (_this.g_is_add == "false") {
+                    for (let i = 0; i < week_select.length; i++) {
+                      if (week_select[i] == 1) {
+                        for (let j = 0; j < 3; j++) {
+                          select.push(i * 3 + j);
+                        }
+                      }
+                    }
+                  }
+                  for (let n = 0; n < arr.length; n++) {
+                    let tmp_arr = arr[n].split("");
+                    let tmp_time_arr = time_select[n].split("");
+                    let arr_old = "";
+                    let arr_new = "";
+                    let tmp = "";
+                    for (let num = 0; num < tmp_arr.length; num++) {
+                      if (tmp_arr[num] == "1" && tmp_time_arr[num] == "0") {
+                        tmp += "0"
+                      } else if (tmp_arr[num] == "0" || tmp_time_arr[num] == "0") {
+                        tmp += "0"
+                      } else if (tmp_arr[num] == "0" && tmp_time_arr[num] == "0") {
+                        tmp += "0"
+                      } else if (tmp_arr[num] == "1" && tmp_time_arr[num] == "1") {
+                        tmp += "1"
+                      } else if (tmp_arr[num] == "0" && tmp_time_arr[num] == "1") {
+                        tmp += "0"
+                      }
+                    }
+                    new_time_select[n] = tmp;
+                  }
+                  new_time_select = stringToHex(new_time_select);
+                  let l_data_64 = mcodec.binary_2_b64(new_time_select, 1);
+                  g_total_data = l_data_64
+                  g_aa_data = l_data_64;
+                } else {
+                  for (let n = 0; n < arr.length; n++) {
+                    let tmp_arr = arr[n].split("");
+                    let tmp_time_arr = time_select[n].split("");
+                    let tmp = "";
+                    for (let num = 0; num < tmp_arr.length; num++) {
+                      if (tmp_time_arr[num] == "1") {
+                        tmp_time_arr[num] = "0"
+                      } else {
+                        tmp_time_arr[num] = "1"
+                      }
+                      if (tmp_arr[num] == "1" || tmp_time_arr[num] == "1") {
+                        tmp += "1"
+                      } else {
+                        tmp += "0"
+                      }
+                    }
+                    new_time_select[n] = tmp;
+                  }
+                  new_time_select = stringToHex(new_time_select);
+                  let l_data_64 = mcodec.binary_2_b64(new_time_select, 1);
+                  g_total_data = l_data_64
+                  g_aa_data = l_data_64;
+                }
+              }
+            }//get_select_time
+            get_select_time(g_total_data)
+          }//set_time_func
+          let l_dom_record_back_box = _this.publicFunc.mx("#record_back_box");
+
+          l_dom_record_back_box.onclick = function () { //设置完时间，返回到允许录像开关页面
+            let arr = "";
+            if (week_select[0] == 1) {
+              arr += mcs_Sunday_and + "、";
+            }
+            if (week_select[1] == 1) {
+              arr += mcs_Monday_and + "、";
+            }
+            if (week_select[2] == 1) {
+              arr += mcs_Tuesday_and + "、";
+            }
+            if (week_select[3] == 1) {
+              arr += mcs_Wednesday_and + "、";
+            }
+            if (week_select[4] == 1) {
+              arr += mcs_Thursday_and + "、";
+            }
+            if (week_select[5] == 1) {
+              arr += mcs_Friday_and + "、";
+            }
+            if (week_select[6] == 1) {
+              arr += mcs_Saturday_and + "、";
+            }
+            arr = arr.substring(0, arr.length - 1);
+            set_time_func("submit");
+            if (!flag) {
+              return;
+            }
+            if (_this.g_is_add == "false") {
+              day_list[index].start = parseInt(_this.publicFunc.mx("#start_time").innerHTML);
+              day_list[index].end = parseInt(_this.publicFunc.mx("#end_time").innerHTML);
+              day_list[index].week = arr;
+            } else {
+              day_list.push({ start: parseInt(_this.publicFunc.mx("#start_time").innerHTML), end: parseInt(_this.publicFunc.mx("#end_time").innerHTML), week: arr })
+            }
+            if (!repeat) {
+              g_set_old_out_time = "";
+              _this.g_set_out_time = "";
+              g_week_w = [];
+              g_total_data = g_aa_data;
+              create_set_record_page(1);
+            }
+          }
+
+          _this.publicFunc.mx("#delete_set_record").onclick = function () { //设置完时间日期页面点击删除
+            let arr;// eslint-disable-line no-unused-vars
+            if (week_select[0] == 1) {
+              arr += mcs_Sunday_and + "、";
+            }
+            if (week_select[1] == 1) {
+              arr += mcs_Monday_and + "、";
+            }
+            if (week_select[2] == 1) {
+              arr += mcs_Tuesday_and + "、";
+            }
+            if (week_select[3] == 1) {
+              arr += mcs_Wednesday_and + "、";
+            }
+            if (week_select[4] == 1) {
+              arr += mcs_Thursday_and + "、";
+            }
+            if (week_select[5] == 1) {
+              arr += mcs_Friday_and + "、";
+            }
+            if (week_select[6] == 1) {
+              arr += mcs_Saturday_and + "、";
+            }
+            arr = arr.substring(0, arr.length - 1);
+            if (_this.g_is_add == "false") {
+              day_list.splice(index, 1);
+            } else {
+              create_set_record_page();
+              return;
+            }
+            set_time_func("del");
+            if (!repeat) {
+              g_set_old_out_time = "";
+              g_total_data = g_aa_data;
+              create_set_record_page();
+            }
+          }
+        }//set_time_event
+
+        set_time_event();
+      }//record_set_time
+    function create_set_record_page (repeat_page) { //允许录像设置开关时间页面
+      // console.log("enter create_set_record_page")
+      let set_record_alarm_title, set_record_alarm_content;
+      _this.record_flag_out = 'true';
+      set_record_alarm_title = mcs_Allow_record;
+      let set_record_alarm_allow_title = mcs_Allow_record_schedule;
+      if (g_accessory_type == 1) { //移动侦测
+        set_record_alarm_content = mcs_move_record_new_detail;
+      } else if (g_accessory_type == 5) {
+        set_record_alarm_content = mcs_sos_record_detail;
+      } else if (g_accessory_type == 6) {
+        set_record_alarm_content = mcs_door_record_detail;
+      } else if (g_accessory_type == 8) {
+        set_record_alarm_content = mcs_move_record_detail;
+      } else if (g_accessory_type == 9) {
+        set_record_alarm_content = mcs_move_record_detail;
+      } else if (g_accessory_type == "") {
+        set_record_alarm_content = mcs_continuous_recording_hint;
+      }
+      $("#add_device_page").show();
+      _this.publicFunc.mx("#add_device_page").innerHTML =
+        "<div id='attachmen_box'>"
+        + "<div id='attachmen_box_close'></div>"
+        + "<div class='set_main_page_alarm'>"
+        + "<div class='menu_list_box'>" //允许录像和开关
+        + "<div class='menu_list record_allow'>"
+        + "<div class='list_name record_padding'>" + set_record_alarm_title + "</div>"  //set_record_alarm_title
+        + "<div class='list_info record_padding'><div id='at_home_btn'></div></div>"
+        + "</div>"
+        + "</div>"
+        + "<div class='menu_list_box_title2 record_background'>" + set_record_alarm_content + "</div>" //set_record_alarm_content
+
+        + "<div class='margin'>" //设置时间
+        + "<div class='set_alarm_time_word' style='display:none;'>" + set_record_alarm_allow_title + "</div>" //set_record_alarm_allow_title
+        + "<div class='menu_list_box' id='hide_timebox' style='display:none'>"
+        + "<div id='set_out_time_box'></div>"
+        + "<div class='time_menu_list_add' id='set_time_add'><div class='set_time_add'></div></div>"
+        + "</div>"
+        + "</div>"
+        + "<div class='menu_list_apply' id='submit_apply'>" + mcs_apply + "</div>"
+        + "</div>"
+        + "</div>"
+      let l_dom_attachmen_box_close = _this.publicFunc.mx("#attachmen_box_close");
+      l_dom_attachmen_box_close.onclick = function () {
+        _this.record_flag(time_format, day_list)
+        if (_this.g_show == "true") {
+          _this.publicFunc.delete_tips({
+            content: mcs_is_save_hint, func: function () {
+              $("#add_device_page").css('display', 'none');
+              _this.create_right_page({ type: 'record', dom: _this.publicFunc.mx("#create_setting_page_right") })
+            }
+          })
+        } else {
+          _this.create_right_page({ type: 'record', dom: _this.publicFunc.mx("#create_setting_page_right") });
+          $("#add_device_page").css('display', 'none');
+        }
+      }
+      let data, l_scene_data_out, l_scene_data_active;
+      let req_data;
+      $("#at_home_btn").switchBtn();
+
+      _this.publicFunc.mx("#set_time_add").onclick = function () {
+        _this.g_set_out_time = "";
+        _this.g_is_add = "true";
+        record_set_time();
+      }
+      function record_set_event () {
+        let at_home_type = _this.publicFunc.mx("#at_home_btn").getAttribute("type");
+        for (let i = 0; i < l_scene_data_out.dev.length; i++) {
+          if (l_scene_data_out.dev[i].id == g_accessory_sn) {
+            if (at_home_type == "true") {
+              //away
+              req_data.info.scene[1].dev[i].flag = l_scene_data_out.dev[i].flag | 0x2; //on video
+              req_data.info.scene[2].dev[i].flag = l_scene_data_active.dev[i].flag | 0x2; //on video
+              $("#hide_timebox").show();
+              $(".set_alarm_time_word").show();
+            } else {
+              //away
+              req_data.info.scene[1].dev[i].flag = l_scene_data_out.dev[i].flag & 0x5; //off video
+              req_data.info.scene[2].dev[i].flag = l_scene_data_active.dev[i].flag & 0x5; //off video
+              $("#hide_timebox").hide();
+              $(".set_alarm_time_word").hide();
+            }
+          }
+        }
+      } //record_set_event 
+      function set_plan_record () { //允许录像开关
+        let at_home_type = _this.publicFunc.mx("#at_home_btn").getAttribute("type");
+        if (at_home_type == "true") {
+          req_data.info.scene[2].flag = 0;
+          req_data.info.scene[1].flag = 1;
+          $("#hide_timebox").show();
+          $(".set_alarm_time_word").show();
+        } else {
+          req_data.info.scene[2].flag = 0;
+          req_data.info.scene[1].flag = 0;
+          $("#hide_timebox").hide();
+          $(".set_alarm_time_word").hide();
+        }
+      }
+
+      function get_scene_ack (msg) {
+        let scene_data;
+        g_total_type = msg;
+        _this.publicFunc.closeBufferPage()
+        if (msg && msg.result == "") {
+          data = msg;
+          for (let i = 0; i < msg.data.info.scene.length; i++) {
+            scene_data = msg.data.info.scene[i];
+            if (scene_data.name == "out") {
+              l_scene_data_out = msg.data.info.scene[i];
+              if (g_accessory_sn) {
+                for (let j = 0; j < scene_data.dev.length; j++) {
+                  if (scene_data.dev[j].id == g_accessory_sn) {
+                    if (repeat_page !== 1) {
+                      if (scene_data.dev[j].flag & 0x2) {
+                        $("#at_home_btn").switchBtn(true, "", "", record_set_event);
+                        $("#hide_timebox").show();
+                        $(".set_alarm_time_word").show();
+                      } else {
+                        $("#at_home_btn").switchBtn(false, "", "", record_set_event);
+                        $("#hide_timebox").hide();
+                        $(".set_alarm_time_word").hide();
+                      }
+                    } else {
+                      $("#at_home_btn").switchBtn(true, "", "", record_set_event);
+                      $("#hide_timebox").show();
+                      $(".set_alarm_time_word").show();
+                    }
+
+                  }
+                }
+              } else {
+                if (repeat_page !== 1) { //标记是第一次打开create_set_record_page页面，还是设置完时间返回的页面
+                  if (scene_data.flag) {
+                    $("#at_home_btn").switchBtn(true, "", "", set_plan_record);
+                    $("#hide_timebox").show();
+                    $(".set_alarm_time_word").show();
+                  } else {
+                    $("#at_home_btn").switchBtn(false, "", "", set_plan_record);
+                    $("#hide_timebox").hide();
+                  }
+                } else {
+                  $("#at_home_btn").switchBtn(true, "", "", set_plan_record);
+                  $("#hide_timebox").show();
+                  $(".set_alarm_time_word").show();
+                }
+
+              }
+            } else if (scene_data.name == "in") {
+              l_scene_data_active = msg.data.info.scene[i];
+            }
+          }
+          req_data = {
+            sn: _this.$store.state.jumpPageData.selectDeviceIpc, all: 1,
+            info: {
+              select: data.data.info.select,
+              scene: [{ name: "auto", flag: 0 },
+              {
+                name: "out",
+                flag: l_scene_data_out.flag,
+                dev: l_scene_data_out.dev
+    },
+              {
+                name: "in",
+                flag: l_scene_data_active.flag,
+                dev: l_scene_data_active.dev
+              }]
+            },
+            func: function () {//msg
+              //_this.publicFunc.msg_tips({msg:msg.msg, type:msg.type, timeout:3000});
+            }
+          }
+          if (repeat_page == 1) { //解决点击应用，开关值显示开，请求参数没改bug，最后开关还是关
+            if (g_accessory_sn) {
+              for (let i = 0; i < l_scene_data_out.dev.length; i++) {
+                if (l_scene_data_out.dev[i].id == g_accessory_sn) {
+                  req_data.info.scene[1].dev[i].flag = l_scene_data_out.dev[i].flag | 0x2; //on video
+                  req_data.info.scene[2].dev[i].flag = l_scene_data_active.dev[i].flag | 0x2; //on video         
+                }
+              }
+            } else {
+              req_data.info.scene[2].flag = 0;
+              req_data.info.scene[1].flag = 1;
+            }
+          }
+        }
+      }//get_scene_ack 
+
+
+      // function get_scene(msg){  
+      //  let scene_data;
+      //  $("#buffer_page").hide();
+      //  if(msg&&msg.result==""){
+      //       data = msg;
+      //  for(let i=0;i<msg.data.info.scene.length;i++){
+      //    scene_data = msg.data.info.scene[i];
+      //    if(scene_data.name=="out"){
+      //    l_scene_data_out = msg.data.info.scene[i];
+      //        if(g_accessory_sn){ 
+      //            for(let j=0;j<scene_data.dev.length;j++){
+      //                if(scene_data.dev[j].id==g_accessory_sn){
+      //                  if(scene_data.dev[j].flag&0x2){
+      //                      $("#at_home_btn").switchBtn(true,"","",record_set_event);
+      //                      $("#hide_timebox").show();
+      //                      $(".set_alarm_time_word").show();
+      //                  }else{
+      //                      $("#at_home_btn").switchBtn(false,"","",record_set_event);
+      //                      $("#hide_timebox").hide();
+      //                      $(".set_alarm_time_word").hide();
+      //                  }
+      //                }
+      //            }
+      //        }else{
+      //          if(scene_data.flag){
+      //              $("#at_home_btn").switchBtn(true,"","",set_plan_record);
+      //              $("#hide_timebox").show();
+      //              $(".set_alarm_time_word").show();
+      //          }else{
+      //              $("#at_home_btn").switchBtn(false,"","",set_plan_record);
+      //              $("#hide_timebox").hide();
+      //          }
+      //        }
+      //      }else if(scene_data.name=="in"){
+      //                l_scene_data_active = msg.data.info.scene[i];
+      //      }
+      //  }
+      //  req_data = {
+      //    sn: _this.$store.state.jumpPageData.selectDeviceIpc, all: 1,
+      //    info: {
+      //      select: data.data.info.select,
+      //      scene: [{name: "auto", flag: 0},
+      //      {
+      //        name: "out",
+      //        flag: l_scene_data_out.flag,
+      //        dev: l_scene_data_out.dev
+      //      },
+      //      {
+      //        name: "in",
+      //        flag: l_scene_data_active.flag,
+      //        dev: l_scene_data_active.dev
+      //      }]
+      //    },
+      //    func:function(msg){
+      //  //                    _this.publicFunc.msg_tips({msg:msg.msg, type:msg.type, timeout:3000});
+      //  }
+
+      //  }
+      //  } 
+      // }
+
+      // $("#buffer_page").show();
+      // 展示遮罩层
+      _this.publicFunc.showBufferPage()
+      _this.$api.set.scene_get({ //页面一上来从接口取得值渲染开关页面
+        sn: _this.$store.state.jumpPageData.selectDeviceIpc
+      }).then(res => {
+        get_scene_ack(res)
+      })
+      let l_dom_set_out_time_box = _this.publicFunc.mx("#set_out_time_box");
+
+      if (g_total_data != "") {      //根据设置的时间日期值渲染开关页面
+        schedule_get(g_total_data);
+      } else {
+        //获取跟设置的时间请求，页面一上来从接口取得值渲染开关页面
+        _this.$api.set.schedule_get({
+          sn: _this.$store.state.jumpPageData.selectDeviceIpc
+        }).then(res => {
+          schedule_get_ack(res)
+        })
+      }
+
+      function schedule_get () { //设置完时间日期 点返回走的函数 (g_data)
+        if (day_list.length != 0) {
+          for (let i = 0; i < day_list.length; i++) {
+            let classname = '';
+            if (i == day_list.length - 1) {
+              classname = 'time_menu_list_last';
+            } else {
+              classname = 'time_menu_list';
+            }
+            l_dom_set_out_time_box.innerHTML +=
+              "<div class='" + classname + " select_set_time_btn' index='" + i + "' time='" + day_list[i].start + "_" + day_list[i].end + "_" + day_list[i].week + "'>"
+              + "<div class='time_list_name'>"
+              + "<div class='time_list_name_title record_padding'>" + day_list[i].start + ":00 - " + day_list[i].end + ":00</div>"
+              + "<div class='time_list_name_tips'>" + day_list[i].week + "</div>"
+              + "</div>"
+              + "<div class='list_info'>"
+              + "<div class='right_arrow'></div>"
+              + "</div>"
+              + "</div>";
+          }
+          let l_dom_selsect_set_time_btn = _this.publicFunc.mx('.select_set_time_btn');
+          for (let n = 0; n < l_dom_selsect_set_time_btn.length; n++) {
+            l_dom_selsect_set_time_btn[n].onclick = function () {
+              _this.g_is_add = "false";
+              let time = this.getAttribute('time');
+              index = this.getAttribute('index');
+              let arr = "";
+              if (time.split("_")[2].indexOf(mcs_Sunday_and) != -1) {
+                arr += "0."
+              }
+              if (time.split("_")[2].indexOf(mcs_Monday_and) != -1) {
+                arr += "1."
+              }
+              if (time.split("_")[2].indexOf(mcs_Tuesday_and) != -1) {
+                arr += "2."
+              }
+              if (time.split("_")[2].indexOf(mcs_Wednesday_and) != -1) {
+                arr += "3."
+              }
+              if (time.split("_")[2].indexOf(mcs_Thursday_and) != -1) {
+                arr += "4."
+              }
+              if (time.split("_")[2].indexOf(mcs_Friday_and) != -1) {
+                arr += "5."
+              }
+              if (time.split("_")[2].indexOf(mcs_Saturday_and) != -1) {
+                arr += "6."
+              }
+              arr = arr.substring(0, arr.length - 1);
+              _this.g_set_out_time = day_list[index].start + "_" + day_list[index].end + "_" + arr;
+              record_set_time();
+            }
+          }
+        }
+      }//schedule_get
+
+      function schedule_time_format (arr) {
+        let start_time = [], end_time = [];
+        for (let j = 0; j < arr.length; j++) {
+          let num = -1;
+          start_time[j] = [];
+          end_time[j] = [];
+          for (let i = -1; i < arr[j].length;) {
+            if (arr[j].indexOf(0, i) == i && i != -1) {
+              i++;
+              end_time[j][num]++;
+            } else if (arr[j].indexOf(0, i) < 0 && i > 0) {
+              i = arr[j].length;
+            } else if (arr[j].indexOf(0, i) < 0 && i <= 0) {
+              i = arr[j].length;
+              start_time[j][0] = 0;
+              end_time[j][0] = 0;
+            } else {
+              num++;
+              start_time[j][num] = arr[j].indexOf(0, i)
+              end_time[j][num] = arr[j].indexOf(0, i)
+              i = arr[j].indexOf(0, i);
+            }
+          }
+        }
+        let length;
+        for (let time_i = 0; time_i < 7; time_i++) {
+          for (let time_j = 0; time_j < start_time[time_i].length; time_j++) {
+            if (end_time[time_i][time_j]) {
+              length = time_format.length;
+              if (length > 0) {
+                let is_exist = 0;
+                for (let time_format_i = 0; time_format_i < length; time_format_i++) {
+                  if (start_time[time_i][time_j] == time_format[time_format_i].start_time && end_time[time_i][time_j] == time_format[time_format_i].end_time) {
+                    time_format[time_format_i].week.push(time_i);
+                    is_exist = 1;
+                  }
+                }
+                if (is_exist == 0) {
+                  time_format.push({ start_time: start_time[time_i][time_j], end_time: end_time[time_i][time_j], week: [time_i] })
+                }
+              } else {
+                time_format.push({ start_time: start_time[time_i][time_j], end_time: end_time[time_i][time_j], week: [time_i] })
+              }
+            }
+          }
+        }
+        // l_dom_set_out_time_box.innerHTML = "<div id='set_time_box'></div>"
+        for (let k = 0; k < time_format.length; k++) {
+          let week = "";
+          let week_num = '';
+          for (let m = 0; m < time_format[k].week.length; m++) {
+            if (time_format[k].week[m] == 0) {
+              week += mcs_Sunday_and + "、";
+              week_num += time_format[k].week[m] + ".";
+            } else if (time_format[k].week[m] == 1) {
+              week += mcs_Monday_and + "、";
+              week_num += time_format[k].week[m] + ".";
+            } else if (time_format[k].week[m] == 2) {
+              week += mcs_Tuesday_and + "、";
+              week_num += time_format[k].week[m] + ".";
+            } else if (time_format[k].week[m] == 3) {
+              week += mcs_Wednesday_and + "、";
+              week_num += time_format[k].week[m] + ".";
+            } else if (time_format[k].week[m] == 4) {
+              week += mcs_Thursday_and + "、";
+              week_num += time_format[k].week[m] + ".";
+            } else if (time_format[k].week[m] == 5) {
+              week += mcs_Friday_and + "、";
+              week_num += time_format[k].week[m] + ".";
+            } else if (time_format[k].week[m] == 6) {
+              week += mcs_Saturday_and + "、";
+              week_num += time_format[k].week[m] + ".";
+            }
+          }
+          week = week.substring(0, week.length - 1)
+          week_num = week_num.substring(0, week_num.length - 1)
+
+          let classname = '';
+          // if (k == time_format.length - 1) {
+          //   classname = 'time_menu_list_last';
+          // } else {
+          //   classname = 'time_menu_list';
+          // }
+          l_dom_set_out_time_box.innerHTML +=
+            "<div class='" + classname + " selsect_set_time_btn' index='" + k + "' time='" + time_format[k].start_time + "_" + time_format[k].end_time + "_" + week_num + "'>"
+            + "<div class='time_list_name'>"
+            + "<div class='time_list_name_title record_padding'>" + time_format[k].start_time + ":00 - " + time_format[k].end_time + ":00</div>"
+            + "<div class='time_list_name_tips'>" + week + "</div>"
+            + "</div>"
+            + "<div class='list_info'>"
+            + "<div class='right_arrow'></div>"
+            + "</div>"
+            + "</div>";
+          day_list.push({ start: time_format[k].start_time, end: time_format[k].end_time, week: week });
+        }
+        let l_dom_selsect_set_time_btn = _this.publicFunc.mx('.selsect_set_time_btn');
+        for (let n = 0; n < l_dom_selsect_set_time_btn.length; n++) {
+          l_dom_selsect_set_time_btn[n].onclick = function () {
+            _this.g_is_add = "false";
+            let time = this.getAttribute('time');
+            index = this.getAttribute('index');
+            _this.g_set_out_time = time;
+            // console.log("从此处进入set_time")
+            record_set_time();
+          }
+        }
+      }//schedule_time_format
+
+      _this.publicFunc.mx("#submit_apply").onclick = function () { //点击应用
+        _this.record_flag_out = "false";
+        _this.g_show = 'false';
+        _this.$api.set.schedule_set({
+          sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+          sch: {
+            degree: 3600,
+            schedule: g_total_data
+          }
+        }).then(res => {
+          if (res && res.result === "") {
+            _this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 })
+          } else if (res.result === "permission.denied") {
+            _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
+          } else {
+            _this.publicFunc.msg_tips({ msg: mcs_failed_to_set_the, type: "error", timeout: 3000 });
+          }
+        req_data.info.scene[2].flag = 0;
+        req_data.info.scene[2].dev[0].flag = 0;
+        // console.log(req_data)
+        _this.$api.set.scene_set(req_data)
+        })
+      }
+
+    }//create_set_record_page  
+    function compile_week () {
+      let week_select = _this.g_select_week.slice();
+      $("add_device_page").show();
+      _this.publicFunc.mx("#add_device_page").innerHTML =
+        "<div id='attachmen_box'>"
+        + "<div class='record_box_top'><div id='record_back_box' class='record_back'><div id='record_return_img'></div><div class='record_back'>" + mcs_back + "</div></div><div class='record_edit_time'>" + mcs_edit_time + "</div></div>"
+        + "<div id='set_time_main_page'>"
+        + "<div class='set_week'>"
+        + "<div class='week_every'>" + mcs_Sunday_and + "</div>"
+        + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+        + "</div>"
+        + "<div class='set_week'>"
+        + "<div class='week_every'>" + mcs_Monday_and + "</div>"
+        + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+        + "</div>"
+        + "<div class='set_week'>"
+        + "<div class='week_every'>" + mcs_Tuesday_and + "</div>"
+        + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+        + "</div>"
+        + "<div class='set_week'>"
+        + "<div class='week_every'>" + mcs_Wednesday_and + "</div>"
+        + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+        + "</div>"
+        + "<div class='set_week'>"
+        + "<div class='week_every'>" + mcs_Thursday_and + "</div>"
+        + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+        + "</div>"
+        + "<div class='set_week'>"
+        + "<div class='week_every'>" + mcs_Friday_and + "</div>"
+        + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+        + "</div>"
+        + "<div class='set_week'>"
+        + "<div class='week_every'>" + mcs_Saturday_and + "</div>"
+        + "<div class='week_every_imgbox'><div class='list_info_select list_info_select_img'></div></div>"
+        + "</div>"
+        + "</div>"
+        + "</div>"
+
+      let l_dom_record_back_box = _this.publicFunc.mx("#record_back_box");
+      let l_dom_set_week_list = _this.publicFunc.mx(".set_week");
+      for (let i = 0; i < l_dom_set_week_list.length; i++) {
+        l_dom_set_week_list[i].index = i;
+        l_dom_set_week_list[i].onclick = function () {
+          if ($(this).find(".list_info_select").hasClass("list_info_select_img")) {
+            week_select[this.index] = 1;
+            $(this).find(".list_info_select").removeClass('list_info_select_img').addClass('list_info_clickselect_img')
+          } else {
+            week_select[this.index] = 0;
+            $(this).find(".list_info_select").removeClass('list_info_clickselect_img').addClass('list_info_select_img')
+          }
+          for (let i = 0; i < week_select.length; i++) {
+            if (week_select[i] == 1) {
+              g_week_w = "[" + week_select.join() + "]";
+              return;
+            }
+          }
+          _this.native_can_back= false;
+        }
+      }
+      for (let i = 0; i < week_select.length; i++) {
+        if (week_select[i]) {
+          l_dom_set_week_list[i].click();
+        }
+      }
+      l_dom_record_back_box.onclick = function () {  //设置完星期返回到时间设置页面
+        if (week_select.indexOf(1) == -1) {
+          $(".time_select_tips").show();
+          setTimeout("$('.time_select_tips').hide();", 3000)
+        } else {
+          record_set_time();
+        }
+      }
+    }//compile_week
+  }//schedule_time_format
     },
     // ************************************* 联动框架公共函数 ************************************* //
     // 创建设置列表接口 回调至创建列表函数

@@ -28,7 +28,7 @@
         </div>
 
         <div id='top_box' class='menu_box' v-else :style="project_name == 'ebitcam'?'background-color:#f5f5f5; border-bottom: 1px solid #ccc':''">
-            <div id='top_box_main'>
+            <div id='top_box_main' v-if='!back_sign'>
                 <div id='mipc_logo_img' :class="kbwin_sign?project_name+'_logo_img kbwin_logo_img':project_name+'_logo_img'" @click="mipc_logo_click"></div>
                 <div id='menu_more' :class="project_name == 'ebitcam'?switch_more?'ebit_menu_top_li_active':'ebit_menu_top_li':switch_more?'menu_top_li_active':'menu_top_li'" @click="menu_more_click">
                     <div id='menu_more_img' class='menu_img'></div>
@@ -43,8 +43,8 @@
                     </div>
                 </div>
             </div>
-            <div id='set_back'>
-                <div id='mipcBack'>
+            <div id='set_back' v-if='back_sign'>
+                <div id='mipcBack' @click="back_btn">
                     <div id='main_title_box_return_img'></div>
                     {{mcs_back}}
                 </div>
@@ -56,7 +56,6 @@
 <script>
     import md5 from '@/util/mmd5.js'
     import languageSelect from '../../lib/exportModule/languageSelect.js'
-    import './index.scss'
     export default {
         data() {
             return {
@@ -81,6 +80,7 @@
                 switch_download: false, //切换下载
                 switch_more: false, //切换更多
                 language_list: [{ val: "ar", lang: "العربية" }, { val: "en", lang: "English" }, { val: "es", lang: "española" }, { val: "fr", lang: "française" }, { val: "de", lang: "Deutsch" }, { val: "it", lang: "italiana" }, { val: "ja", lang: "日本語" }, { val: "ko", lang: "한국의" }, { val: "pt", lang: "português" }, { val: "ru", lang: "русский" }, { val: "zh", lang: "中文(简体)" }, { val: "tw", lang: "中文(繁体)" }, { val: "hu", lang: "magyar" }, { val: "nl", lang: "Nederlands" }, { val: "sk", lang: "slovenského jazyk" }, { val: "tr", lang: "Türk dili" }, { val: "cz", lang: "Česky" }, { val: "vi", lang: "Người việt nam" }, { val: "iw", lang: "עברית" }, { val: "pl", lang: "Polski" }, { val: "uk", lang: "Українська мова" }, { val: "th", lang: "ภาษาไทย" }],
+                back_sign:false, //是否有返回键
             }
         },
         async mounted() {
@@ -300,6 +300,13 @@
                         name: 'login'
                     });
                 }
+            },
+            back_btn(){ //点击返回
+                if(this.$route.name == 'history' || this.$route.name == 'set'){
+                    this.$router.push({name:'devlist'})
+                }else if(this.$route.name == 'playback'){
+                    this.$router.push({name:'history'})
+                }
             }
         },
         watch: {
@@ -313,6 +320,11 @@
                 } else {
                     this.switch_more = false;
                     this.switch_download = false;
+                }
+                if (this.$route.name == 'history' || this.$route.name == 'set'){
+                    this.back_sign = true;
+                }else{
+                    this.back_sign = false;
                 }
             },
             "$store.state.user.name"(val) {
@@ -331,6 +343,6 @@
     }
 </script>
 
-<style>
+<style src="./index.scss" lang='scss' scoped>
 
 </style>
