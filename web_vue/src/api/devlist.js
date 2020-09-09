@@ -564,16 +564,16 @@ const devlist = {
         await imgContent.drawImage(this, 0, 0, this.width, this.height)
         let ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase()
         let imgAsDataUrl = imgCanvas.toDataURL("image/" + ext) // toDataURL('image/jpg' || 'image/png')
-        try {
-          sessionStorage.setItem(key, imgAsDataUrl)
-          let get_img = sessionStorage.getItem(key)
-          if (get_img) {
-            let storage_time = new Date().getTime()
-            sessionStorage.setItem(params.sn + "_storage_time", storage_time)
-          }
-        } catch (e) {
-          console.log(e, '抛出异常')
-        }
+        // try {
+        //   sessionStorage.setItem(key, imgAsDataUrl)
+        //   let get_img = sessionStorage.getItem(key)
+        //   if (get_img) {
+        //     let storage_time = new Date().getTime()
+        //     sessionStorage.setItem(params.sn + "_storage_time", storage_time)
+        //   }
+        // } catch (e) {
+        //   console.log(e, '抛出异常')
+        // }
       }
     }
     function get (key) { // 获取图片

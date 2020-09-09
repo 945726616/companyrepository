@@ -2609,7 +2609,7 @@ export default {
                 "<div class='menu_switch' id='mobile_tracking_switch_box' style='height: 4.4rem; width: 100%;background-color: #fff;margin-top: 30px'>"
                 + "<div class='list_name' id='menu_name_switch' style='color:#333;float: left;height: 4.4rem;line-height: 4.4rem;'>" + mcs_mobile_tracking + "</div>"
                 + "<div class='list_info'><input id='mobile_tracking_switch' type='checkbox'></div>"
-                + "</div>"//智能追踪   
+                + "</div>"//智能追踪
                 + "<div class='attachmen_set_list_title'>" + mcs_motion_detection_sensitivity + "</div>"
                 + "<div id='attachmen_door_day'>"
                 + "<div id='attachmen_day_img'></div>"
@@ -2758,9 +2758,11 @@ export default {
             }
             l_dom_attachmen_del_box_ok.onclick = function () {
               _this.$api.set.exdev_del({
-                sn: _this.$store.state.jumpPageData.selectDeviceIpc, id: l_attachmen_id
+                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
+                id: l_attachmen_id
               }).then(res => {
                 if (res && res.result === "") {
+                  console.log('enter this')
                   $("#add_device_page").hide()
                   _this.create_right_page(info)
                 }
@@ -2826,7 +2828,9 @@ export default {
                       sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                       dev: dev
                     }).then(res => {
+                      console.log('click this')
                       if (res.result === "") {
+                        $("#add_device_page").hide();
                         _this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 })
                       } else if (res.result === "permission.denied") {
                         _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
@@ -3331,27 +3335,27 @@ export default {
 
             + "</div>";
 
-          let l_dom_record_event = _this.publicFunc.mx("#record_event");
-          let data;
-          let l_scene_data_out, l_scene_data_active;
-          let l_select_scene_name;
-          let face_detect = ''
-          let sound_detect = "";
-          let g_accessory_sn = "";
-          let g_accessory_type = "";
+          var l_dom_record_event = _this.publicFunc.mx("#record_event");
+          var data;
+          var l_scene_data_out, l_scene_data_active;
+          var l_select_scene_name;
+          var face_detect = ''
+          var sound_detect = "";
+          var g_accessory_sn = "";
+          var g_accessory_type = "";
           _this.g_show = "false";
-          let time_format = [];
+          var time_format = [];
           $("#sd_mode").hide();
 
           //原来function add_event()位置
 
-          let day_list = [];
+          var day_list = [];
           // let g_total_type = "";
-          let g_aa_data = "";
-          let g_set_old_out_time = "";
-          let index = -1;
-          let g_week_w = [];
-          let g_total_data = "";
+          var g_aa_data = "";
+          var g_set_old_out_time = "";
+          var index = -1;
+          var g_week_w = [];
+          var g_total_data = "";
           // let set_record_alarm_title, set_record_alarm_content;
 
           function create_set_record_page (repeat_page) { //允许录像设置开关时间页面
@@ -6929,6 +6933,7 @@ export default {
               } else {
                 _this.$api.set.reboot_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res =>{
                   setTimeout(function () {
+                    _this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 })
                     _this.$router.push({name:'devlist'})
                   }, 3000)
                 })
@@ -6941,12 +6946,14 @@ export default {
                 if (_this.publicFunc.mx("#save_configuration").checked) {
                   _this.$api.set.reset_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc, keep_cofig: 1 }).then(res =>{
                     setTimeout(function () {
+                      _this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 })
                       _this.$router.push({name:'devlist'})
                     }, 3000)
                   })
                 } else {
                   _this.$api.set.reset_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc, keep_cofig: 0 }).then(res =>{
                     setTimeout(function () {
+                      _this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 })
                       _this.$router.push({name:'devlist'})
                     }, 3000)
                   })
@@ -10275,6 +10282,7 @@ export default {
                 record_mode = this.getAttribute("type");
                 $(".list_info_select").removeClass('list_info_clickselect_img').addClass('list_info_select_img');
                 $(this).removeClass('list_info_select_img').addClass('list_info_clickselect_img');
+                console.log(record_mode, 'click record_mode')
               }
             }
             if (msg && msg.result == "") {
@@ -10355,11 +10363,12 @@ export default {
             } else {
               $('.new_record_list').css('color', '#323232')
             }
-            _this.publicFunc.mx("#sd_mode_btn").onclick = function () {
-              _this.$api.set.sd_set({ sn: _this.$store.state.jumpPageData.selectDeviceIpc, ctrl_type: "", record_mode: record_mode, flag: 1 }).then(res => {
-                _this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
-              })
-            }
+            // _this.publicFunc.mx("#sd_mode_btn").onclick = function () {
+            //   console.log(record_mode, 'record_mode')
+            //   _this.$api.set.sd_set({ sn: _this.$store.state.jumpPageData.selectDeviceIpc, ctrl_type: "", record_mode: record_mode, flag: 1 }).then(res => {
+            //     _this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
+            //   })
+            // }
           }
 
           // ccm_dev_action_get获取动作开关接口回调
@@ -12129,14 +12138,17 @@ export default {
       }
       function mode_sd_get_ack_event () {
         let length = _this.publicFunc.mx(".list_info_select").length;
+        let record_mode
         for (let i = 0; i < length; i++) {
           _this.publicFunc.mx(".list_info_select")[i].onclick = function () {
             record_mode = this.getAttribute("type");
             $(".list_info_select").removeClass('list_info_clickselect_img').addClass('list_info_select_img');
             $(this).removeClass('list_info_select_img').addClass('list_info_clickselect_img');
+            console.log('this click', record_mode)
           }
         }
         _this.publicFunc.mx("#sd_mode_btn").onclick = function () {
+          console.log(record_mode, 'record_mode')
           _this.$api.set.sd_set({ sn: _this.$store.state.jumpPageData.selectDeviceIpc, ctrl_type: "", record_mode: record_mode, flag: 1 }).then(res => {
             _this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
           })
@@ -12186,7 +12198,7 @@ export default {
           let l_scene_data = msg.data.info.scene;
           // console.log(msg.data.info, "msg.data.info")
           let event_record = 0;
-          l_select_scene_name = msg.data.info.select;
+          // l_select_scene_name = msg.data.info.select;
           for (let i = 0, len = l_scene_data.length; i < len; i++) {
             if (l_scene_data[i].name == "out") {
               l_scene_data_out = l_scene_data[i];
@@ -12312,6 +12324,7 @@ export default {
         _this.publicFunc.mx("#create_setting_page_left").innerHTML = null // 清空左侧选项列表 防止重复
       }
       _this.$api.set.set_list_get({ flag: _this.obj.type, sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
+        $('#add_device_page').hide()
         _this.create_set_list(res)
       })
     },

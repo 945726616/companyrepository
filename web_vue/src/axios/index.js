@@ -67,6 +67,7 @@ const errorHandle = (status, other) => {
 
 // 创建axios实例
 let instance = axios.create({ timeout: 400000 })
+let hfrom_handle = Math.floor(Math.random()*10000)
 
 // 设置post请求头
 // instance.defaults.headers['Access-Control-Allow-Origin'] = '*'//解决cors头问题
@@ -88,7 +89,7 @@ instance.interceptors.request.use(
       //   newParams['d' + paramName] = param[paramName] // 遍历对象键值对并重新命名属性名 后续此处需要添加两个额外的固定参数数据值通过vuex进行存取
       // }
       config.params = {
-        hfrom_handle: 27141,
+        hfrom_handle: hfrom_handle++,
         hqid: store.state.user.qid,
         ...newParams
       } // 修改后的对象
@@ -165,6 +166,7 @@ instance.interceptors.response.use(
   // 请求失败
   error => {
     const { response } = error
+    console.log(response)
     if (response) {
       // 请求已发出，但是不在2xx的范围
       errorHandle(response.status, response.data.message)

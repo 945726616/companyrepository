@@ -54,6 +54,15 @@ export default {
       user_info.qid = val;
       sessionStorage.setItem('user_info', JSON.stringify(user_info))
     }
+  },
+  destroyed () {
+    if (this.$store.state.user.setMmqPickTimeFlag1) {
+      clearInterval(this.$store.state.user.setMmqPickTimeFlag1)
+    }
+    if (this.$store.state.user.setMmqPickTimeFlag2) {
+      clearInterval(this.$store.state.user.setMmqPickTimeFlag2)
+    }
+    sessionStorage.removeItem('user_info')
   }
 }
 </script>
