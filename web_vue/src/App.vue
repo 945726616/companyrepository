@@ -31,19 +31,7 @@ export default {
     import(`@/lib/plugins/jquery.mousewheel.min.js`)
     let userLanguage = localStorage.getItem('language_choice_info') ? localStorage.getItem('language_choice_info') : this.$store.state.user.userLanguage
     await this.$chooseLanguage.lang(userLanguage)
-    // let user_info = JSON.parse(sessionStorage.getItem('user_info'))
     this.$api.login.dev_msg_listener_add()
-    // if (user_info && user_info.login_flag) { // 判断其中是否含有登录标识
-    //   this.$store.dispatch('setLoginFlag', user_info.login_flag)
-    //   this.$store.dispatch('setLid', user_info.lid) //登录返回lid head中
-    //   this.$store.dispatch('setName', user_info.name)
-    //   this.$store.dispatch('setSid', user_info.sid)
-    //   this.$store.dispatch('setGuest', user_info.guest)
-    //   this.$store.dispatch('setSeq', user_info.seq)
-    //   this.$store.dispatch('setTid', user_info.tid)
-    //   this.$store.dispatch('setShareKey', user_info.shareKey)
-    //   this.$store.dispatch('setJmLogoFlag', user_info.setJmLogoFlag)
-    // }
   },
   destroyed () {
     if (this.$store.state.user.setMmqPickTimeFlag1) {

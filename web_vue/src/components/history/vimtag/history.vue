@@ -157,6 +157,7 @@
         },
         async mounted() {
             let _this = this;
+            await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
             _this.publicFunc.showBufferPage();
             _this.history_info = _this.$route.params;
             _this.history_info.box_sn = _this.$store.state.jumpPageData.selectDeviceIpc;

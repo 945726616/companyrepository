@@ -259,6 +259,8 @@ export default {
 
     // await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
 
+    await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
+
     // 获取网络环境
     await this.$api.login.svr_dev_get().then(res => {
       if (res.result != "") return;

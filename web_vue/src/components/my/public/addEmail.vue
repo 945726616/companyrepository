@@ -77,7 +77,7 @@
                     user: user_info.user,
                     pass: user_info.password,
                     appid: appid,
-                    lang: sessionStorage.getItem('userLanguage')
+                    lang: _this.$store.state.user.userLanguage
                 }).then(res => {
                     if (res && res.result == '') {
                         _this.email_verification.success = true;

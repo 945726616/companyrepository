@@ -20,7 +20,6 @@
                     <div id='top_login_div' :style="fujikam_sign?'line-height:81px':''" @click="login_div_click"><span id='top_login_span'>
                             {{mcs_my_device}}
                         </span></div>
-                        <!-- {{project_sign}} -->
                     <div id='top_experience_div' class='top_right_menu' :style="fujikam_sign?'line-height:81px':''" @click="experience_div_click" v-if="project_sign">
                         {{mcs_demo}}
                     </div>
@@ -44,9 +43,9 @@
                     </div>
                 </div>
             </div>
-            <div id='set_back' v-if='back_sign'>
+            <div :id='project_name == "ebitcam"?"ebit_back":"top_back"' v-if='back_sign'>
                 <div id='mipcBack' @click="back_btn">
-                    <div id='main_title_box_return_img'></div>
+                    <div :id='project_name == "ebitcam"?"ebit_main_title_box_return_img":"main_title_box_return_img"'></div>
                     {{mcs_back}}
                 </div>
             </div>

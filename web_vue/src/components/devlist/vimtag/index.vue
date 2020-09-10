@@ -1161,7 +1161,7 @@ export default {
         srv: window.location.host,
         ver_type: version_type,
         ver_from: "v3.9.1.1607051739",
-        lang: sessionStorage.getItem('userLanguage')
+        lang: _this.$store.state.user.userLanguage
       }).then(res => {
         let msg = res.data
         if (msg && msg.result == "") {

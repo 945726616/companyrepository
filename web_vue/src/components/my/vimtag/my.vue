@@ -190,24 +190,18 @@
                 version_number: '', //版本号
             }
         },
-        mounted() {
+        async mounted() {
             let _this = this;
-            _this.$store.dispatch('setLoginFlag', sessionStorage.getItem('login_flag'));
-            let userLanguage = sessionStorage.getItem('userLanguage')
-            if (userLanguage) {
-                _this.$chooseLanguage.lang(userLanguage)
-            } else {
-                _this.$chooseLanguage.lang('en')
-            }
+            await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
             if (window.fujikam == "fujikam") {
                 _this.fujikam_sign = true;
             } else {
                 _this.fujikam_sign = false;
             }
-            if (_this.$store.state.jumpPageData.loginFlag) {
+            if (_this.$store.state.user.loginFlag) {
                 _this.login_sign = true;
                 _this.username_value = JSON.parse(localStorage.getItem("remember_msg_info")).user;
-                if (_this.$store.state.jumpPageData.autoPlayFlag) {
+                if (_this.$store.state.user.autoPlayFlag) {
                     _this.auto_play_sign = true;
                 }
             }
@@ -226,7 +220,7 @@
 
             $("#set_auto_play_btn").iButton({
                 change: function() {
-                    if (_this.publicFunc.mx("#set_auto_play_btn").checked && _this.$store.state.jumpPageData.autoPlayFlag) {
+                    if (_this.publicFunc.mx("#set_auto_play_btn").checked && _this.$store.state.user.autoPlayFlag) {
                         localStorage.setItem("auto_play", 1)
                         _this.$store.dispatch('setAutoPlayFlag', 1)
                     } else {
@@ -259,7 +253,7 @@
                         }
                         break;
                     case 'local_devs':
-                        location.href = location.href + "&l=local&c=" + this.$store.state.jumpPageData.loginFlag + "" + (location.href.indexOf("file=vimtag") > -1 ? "&file=vimtag" : "");
+                        location.href = location.href + "&l=local&c=" + this.$store.state.user.loginFlag + "" + (location.href.indexOf("file=vimtag") > -1 ? "&file=vimtag" : "");
                         break;
                 }
             },
@@ -271,7 +265,7 @@
             },
             exit_btn() { //退出登录 / 登录/注册
                 let _this = this;
-                if (_this.$store.state.jumpPageData.loginFlag) {
+                if (_this.$store.state.user.loginFlag) {
                     _this.publicFunc.delete_tips({ //g 5.5 flag是后加的，判断是my_page页面，点击取消
                         content: mcs_prompt_exit,
                         flag: "my_page",

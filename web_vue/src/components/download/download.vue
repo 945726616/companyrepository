@@ -117,8 +117,8 @@ export default {
     }
     await this.get_download_url(0)
   },
-  mounted () {
-    this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
+  async mounted () {
+    await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
   },
   methods: {
     async get_download_url (num) { //获取下载地址

@@ -59,7 +59,7 @@
         methods: {
             mp_btn() { //点击提交修改管理密码按钮
                 let _this = this;
-                if (_this.$store.state.jumpPageData.guest) {
+                if (_this.$store.state.user.guest) {
                     _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
                 } else {
                     let reg;

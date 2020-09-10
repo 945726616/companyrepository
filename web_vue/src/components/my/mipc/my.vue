@@ -144,23 +144,18 @@
                 set_mme: {},
             }
         },
-        mounted() {
-            let userLanguage = sessionStorage.getItem('userLanguage')
-            if (userLanguage) {
-                this.$chooseLanguage.lang(userLanguage)
-            } else {
-                this.$chooseLanguage.lang('en')
-            }
+        async mounted() {
+            await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
             this.version_number = process.env.VUE_APP_VERSION;
             this.project_name = this.$store.state.jumpPageData.projectName;
 
-            let g_now_lang = sessionStorage.getItem('userLanguage')
+            let g_now_lang = this.$store.state.user.userLanguage
             if (window.location.protocol == "https:") {
                 this.feedback_url = 'https://js11.vimtag.com:12446/feedback/feedback.htm?hl=' + g_now_lang;
             } else {
                 this.feedback_url = 'http://61.147.115.218:12180/feedback/feedback.htm?hl=' + g_now_lang;
             }
-            if (this.$store.state.jumpPageData.loginFlag) {
+            if (this.$store.state.user.loginFlag) {
                 this.login_sign = true;
             }
             this.set_creat_mme({});
@@ -186,7 +181,7 @@
                         }
                         break;
                     case 'local_devs':
-                        location.href = location.href + "&l=local&c=" + _this.$store.state.jumpPageData.loginFlag + "" + (location.href.indexOf("file=vimtag") > -1 ? "&file=vimtag" : "");
+                        location.href = location.href + "&l=local&c=" + _this.$store.state.user.loginFlag + "" + (location.href.indexOf("file=vimtag") > -1 ? "&file=vimtag" : "");
                         break;
                     case 'feedback': //反馈（未添加）
                         break;

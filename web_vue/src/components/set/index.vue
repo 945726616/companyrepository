@@ -40,7 +40,7 @@ export default {
 
       if (_this.$store.state.jumpPageData.projectFlag) { // mipc系列展示导航栏返回按钮
         $("#menu_box_main").hide();
-        $("#set_back").show();
+        $("#set_back").hide();
       }
 
       $("#mipcBack").on("click", function () {
