@@ -796,7 +796,7 @@ const set = {
         token: "sd",
         type: params.ctrl_type ? params.ctrl_type : "",
         conf: {
-          enable: params.enable ? 1 : 0,
+          enable: params.flag ? 1 : 0,
           record_mode: record_mode
         }
       }).then(res => {

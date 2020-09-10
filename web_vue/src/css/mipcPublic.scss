@@ -1189,15 +1189,15 @@ $projectColor: #2988cc;
 	background-color: rgba(157, 156, 156, 0.2);
 	color: #fff;
 }
-.video_delete{
-	float: right;
-	background: url(../assets/mipc/video_delete.png) no-repeat;
-	width: 20px;
-	height: 19px;
-	margin-top: 6px;
-	margin-right: 4px;
-	display: none;
-}
+// .video_delete{
+// 	float: right;
+// 	background: url(../assets/mipc/video_delete.png) no-repeat;
+// 	width: 20px;
+// 	height: 19px;
+// 	margin-top: 6px;
+// 	margin-right: 4px;
+// 	display: none;
+// }
 #calendar_input{
 	float:right;
 	margin-top:30px;
@@ -1466,14 +1466,14 @@ $projectColor: #2988cc;
 	margin:0 auto;
 	margin-bottom: 24px;
 }
-#history_list_bottom{
-	/* width: 100%; */
-    height: 60px;
-	position: absolute;
-	left: 44%;
-    bottom: 0px;
-    display: none;
-}
+// #history_list_bottom{
+// 	/* width: 100%; */
+//     height: 60px;
+// 	position: absolute;
+// 	left: 44%;
+//     bottom: 0px;
+//     display: none;
+// }
 #page_num_box{
 	/* width:350px; */
 	margin:0 auto;
@@ -1897,7 +1897,7 @@ div.ibutton-label-on {
     padding-left: 40px;
     padding-right:10px;
     font-size: 16px;
-	display: none;
+	// display: none;
 }	
 #manage_password{
 	/*background: url(../assets/device/set.png) no-repeat -92px -52px;*/
@@ -1940,81 +1940,81 @@ div.ibutton-label-on {
 	width:600px;
 	margin:0 auto;
 }
-.mp_list{
-	float:left;
-}
-.mp_title{
-	float:left;
-	width:250px;
-	font-size: 16px;
-	line-height: 50px;
-	color: #6b7a99;
-}
-.mp_input{
-	height:50px;
-	float:left;
-}
-.mp_input input{
-	margin-top:5px;
-	width:200px;
-	height:30px;
-	outline:none;
-}
-.mp_empty{
-	width:100%;
-	height:50px;
-}
-#mp_btn{
-	float:left;
-	width:100px;
-	height:34px;
-	color:#fff;
-	background: $projectColor;
-	text-align:center;
-	line-height: 36px;
-	margin-top:5px;
-	margin-left:40px;
-	cursor:pointer;
-}
-#mp_updata_password{
-	color:$projectColor;
-	width:100%;
-	float:left;
-	text-align: center;
-	display: none;
-}
-#mp_updata_password_error{
-	font-size: 14px;
-	float:left;
-	line-height: 50px;
-	color:#f00;
-	margin-left:10px;
-	display: none;
-}
-.mp_password_empty{
-	font-size: 14px;
-	float:left;
-	line-height: 50px;
-	color:#f00;
-	margin-left:10px;
-	display: none;
-}
-.mp_password_demand{
-	font-size: 14px;
-	float:left;
-	line-height: 50px;
-	color:#f00;
-	margin-left:10px;
-	display: none;
-}
-.mp_password_inconsistent{
-	font-size: 14px;
-	float:left;
-	line-height: 50px;
-	color:#f00;
-	margin-left:10px;
-	display: none;
-}
+// .mp_list{
+// 	float:left;
+// }
+// .mp_title{
+// 	float:left;
+// 	width:250px;
+// 	font-size: 16px;
+// 	line-height: 50px;
+// 	color: #6b7a99;
+// }
+// .mp_input{
+// 	height:50px;
+// 	float:left;
+// }
+// .mp_input input{
+// 	margin-top:5px;
+// 	width:200px;
+// 	height:30px;
+// 	outline:none;
+// }
+// .mp_empty{
+// 	width:100%;
+// 	height:50px;
+// }
+// #mp_btn{
+// 	float:left;
+// 	width:100px;
+// 	height:34px;
+// 	color:#fff;
+// 	background: $projectColor;
+// 	text-align:center;
+// 	line-height: 36px;
+// 	margin-top:5px;
+// 	margin-left:40px;
+// 	cursor:pointer;
+// }
+// #mp_updata_password{
+// 	color:$projectColor;
+// 	width:100%;
+// 	float:left;
+// 	text-align: center;
+// 	display: none;
+// }
+// #mp_updata_password_error{
+// 	font-size: 14px;
+// 	float:left;
+// 	line-height: 50px;
+// 	color:#f00;
+// 	margin-left:10px;
+// 	display: none;
+// }
+// .mp_password_empty{
+// 	font-size: 14px;
+// 	float:left;
+// 	line-height: 50px;
+// 	color:#f00;
+// 	margin-left:10px;
+// 	display: none;
+// }
+// .mp_password_demand{
+// 	font-size: 14px;
+// 	float:left;
+// 	line-height: 50px;
+// 	color:#f00;
+// 	margin-left:10px;
+// 	display: none;
+// }
+// .mp_password_inconsistent{
+// 	font-size: 14px;
+// 	float:left;
+// 	line-height: 50px;
+// 	color:#f00;
+// 	margin-left:10px;
+// 	display: none;
+// }
 /* 修改密码新密码与旧密码相同 */
 .mp_same_op{
 	font-size: 14px;
@@ -2024,84 +2024,84 @@ div.ibutton-label-on {
 	margin-left:10px;
 	display: none;
 }
-#set_guest_password_page{
-	display: none;
-}
-.gp_list{
-	float:left;
-}
-.gp_title{
-	float:left;
-	width:250px;
-	font-size: 16px;
-	color: #6b7a99;
-	line-height: 50px;
-}
-.gp_input{
-	height:50px;
-	float:left;
-}
-.gp_input input{
-	margin-top:5px;
-	width:200px;
-	height:30px;
-	outline:none;
-}
-.gp_empty{
-	width:100%;
-	height:50px;
-}
-#gp_btn{
-	float:left;
-	width:100px;
-	height:34px;
-	color:#fff;
-	background: $projectColor;
-	text-align:center;
-	line-height: 36px;
-	margin-top:5px;
-	margin-left:40px;
-	cursor:pointer;
-}
-#gp_updata_password{
-	color:$projectColor;
-	width:100%;
-	float:left;
-	text-align: center;
-	display: none;
-}
-#gp_updata_password_error{
-	font-size: 14px;
-	float:left;
-	line-height: 50px;
-	color:#f00;
-	margin-left:10px;
-	display: none;
-}
-.gp_password_empty{
-	font-size: 14px;
-	float:left;
-	line-height: 50px;
-	color:#f00;
-	margin-left:10px;
-	display: none;
-}
-.gp_password_demand{
-	font-size: 14px;
-	float:left;
-	line-height: 50px;
-	color:#f00;
-	margin-left:10px;
-	display: none;
-}
-.gp_password_inconsistent{
-	font-size: 14px;
-	float:left;
-	line-height: 50px;
-	color:#f00;
-	margin-left:10px;
-	display: none;
-}
+// #set_guest_password_page{
+// 	display: none;
+// }
+// .gp_list{
+// 	float:left;
+// }
+// .gp_title{
+// 	float:left;
+// 	width:250px;
+// 	font-size: 16px;
+// 	color: #6b7a99;
+// 	line-height: 50px;
+// }
+// .gp_input{
+// 	height:50px;
+// 	float:left;
+// }
+// .gp_input input{
+// 	margin-top:5px;
+// 	width:200px;
+// 	height:30px;
+// 	outline:none;
+// }
+// .gp_empty{
+// 	width:100%;
+// 	height:50px;
+// }
+// #gp_btn{
+// 	float:left;
+// 	width:100px;
+// 	height:34px;
+// 	color:#fff;
+// 	background: $projectColor;
+// 	text-align:center;
+// 	line-height: 36px;
+// 	margin-top:5px;
+// 	margin-left:40px;
+// 	cursor:pointer;
+// }
+// #gp_updata_password{
+// 	color:$projectColor;
+// 	width:100%;
+// 	float:left;
+// 	text-align: center;
+// 	display: none;
+// }
+// #gp_updata_password_error{
+// 	font-size: 14px;
+// 	float:left;
+// 	line-height: 50px;
+// 	color:#f00;
+// 	margin-left:10px;
+// 	display: none;
+// }
+// .gp_password_empty{
+// 	font-size: 14px;
+// 	float:left;
+// 	line-height: 50px;
+// 	color:#f00;
+// 	margin-left:10px;
+// 	display: none;
+// }
+// .gp_password_demand{
+// 	font-size: 14px;
+// 	float:left;
+// 	line-height: 50px;
+// 	color:#f00;
+// 	margin-left:10px;
+// 	display: none;
+// }
+// .gp_password_inconsistent{
+// 	font-size: 14px;
+// 	float:left;
+// 	line-height: 50px;
+// 	color:#f00;
+// 	margin-left:10px;
+// 	display: none;
+// }
 /* 访客密码与管理密码相同 */
 .gp_same_ap{ 
 	font-size: 14px;
@@ -2111,116 +2111,116 @@ div.ibutton-label-on {
 	margin-left:10px;
 	display: none;
 }
-#set_add_email_page{
-	display: none;
-	width: 500px;
-	margin: 0 auto;
-}
-#ae_lable{
-	/*display: none;*/
-}
-#send_msg{
-	color:$projectColor;
-	float:left;
-	display: none;
-}
-.ae_list{
-	float:left;
-}
-.ae_title{
-	float:left;
-	width:150px;
-	height:50px;
-	font-size: 16px;
-	color: #6b7a99;
-	line-height: 50px;
-}
-#version_logo_img_mipc_new{
-	margin-left:70px;
-    margin-bottom: 30px;
-    width: 168px;
-    height: 88px;
-    background: url(../assets/mipc/mipc_new_img.png) no-repeat -416px -288px;
-    display: none;
-}
-.ae_input{
-	height:50px;
-	float:left;
-}
-.ae_input input{
-	margin-top:5px;
-	width:200px;
-	height:30px;
-	outline:none;
-}
-.ae_empty{
-	width:100%;
-	height:50px;
-}
-#ae_btn{
-	float:left;
-	width:100px;
-	height:34px;
-	color:#fff;
-	background: $projectColor;
-	text-align:center;
-	line-height: 36px;
-	margin-top:5px;
-	margin-left:40px;
-	cursor:pointer;
-}
-.ae_tips{
-	margin-top:10px;
-	float:left;
-	font-size: 12px;
-	color:#999;
-}
-#email_invalid{
-	color:#f00;
-	float:left;
-	width:100%;
-	text-align: center;
-	display: none;
-}
-#ae_email_exist{
-	color:#f00;
-	float:left;
-	width:100%;
-	text-align: center;
-	display: none;
-}
-#ae_email_busy{
-	color:#f00;
-	float:left;
-	width:100%;
-	text-align: center;
-	display: none;
-}
-#ae_email_inactive{
-	color: #f00;
-	float: left;
-	width: 100%;
-	text-align: center;
-	display: none;
-}
-#set_manage_password_page{
-  display:none;
-}
-.about_input{
-	height:50px;
-	float:left;
-	color:#666;
-	font-size: 18px;
-	line-height: 50px;
-}
-.about_title{
-	float:left;
-	width:200px;
-	height:50px;
-	font-size: 18px;
-	color:#666;
-	line-height: 50px;
-}
+// #set_add_email_page{
+// 	display: none;
+// 	width: 500px;
+// 	margin: 0 auto;
+// }
+// #ae_lable{
+// 	/*display: none;*/
+// }
+// #send_msg{
+// 	color:$projectColor;
+// 	float:left;
+// 	display: none;
+// }
+// .ae_list{
+// 	float:left;
+// }
+// .ae_title{
+// 	float:left;
+// 	width:150px;
+// 	height:50px;
+// 	font-size: 16px;
+// 	color: #6b7a99;
+// 	line-height: 50px;
+// }
+// #version_logo_img_mipc_new{
+// 	margin-left:70px;
+//     margin-bottom: 30px;
+//     width: 168px;
+//     height: 88px;
+//     background: url(../assets/mipc/mipc_new_img.png) no-repeat -416px -288px;
+//     display: none;
+// }
+// .ae_input{
+// 	height:50px;
+// 	float:left;
+// }
+// .ae_input input{
+// 	margin-top:5px;
+// 	width:200px;
+// 	height:30px;
+// 	outline:none;
+// }
+// .ae_empty{
+// 	width:100%;
+// 	height:50px;
+// }
+// #ae_btn{
+// 	float:left;
+// 	width:100px;
+// 	height:34px;
+// 	color:#fff;
+// 	background: $projectColor;
+// 	text-align:center;
+// 	line-height: 36px;
+// 	margin-top:5px;
+// 	margin-left:40px;
+// 	cursor:pointer;
+// }
+// .ae_tips{
+// 	margin-top:10px;
+// 	float:left;
+// 	font-size: 12px;
+// 	color:#999;
+// }
+// #email_invalid{
+// 	color:#f00;
+// 	float:left;
+// 	width:100%;
+// 	text-align: center;
+// 	display: none;
+// }
+// #ae_email_exist{
+// 	color:#f00;
+// 	float:left;
+// 	width:100%;
+// 	text-align: center;
+// 	display: none;
+// }
+// #ae_email_busy{
+// 	color:#f00;
+// 	float:left;
+// 	width:100%;
+// 	text-align: center;
+// 	display: none;
+// }
+// #ae_email_inactive{
+// 	color: #f00;
+// 	float: left;
+// 	width: 100%;
+// 	text-align: center;
+// 	display: none;
+// }
+// #set_manage_password_page{
+//   display:none;
+// }
+// .about_input{
+// 	height:50px;
+// 	float:left;
+// 	color:#666;
+// 	font-size: 18px;
+// 	line-height: 50px;
+// }
+// .about_title{
+// 	float:left;
+// 	width:200px;
+// 	height:50px;
+// 	font-size: 18px;
+// 	color:#666;
+// 	line-height: 50px;
+// }
 #set_nav{
 	margin-top:20px;
 	margin-bottom:20px;

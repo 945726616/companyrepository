@@ -63,3 +63,25 @@ input, button, select, textarea {
 	    height:100%;  
 	}
 }
+
+// 日历选择器公共样式
+.ui-datepicker-header {
+    background-color: $projectColor;
+}
+
+#mipc_datepicker .mn-datepicker {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid #a8abb2;
+    width: 220px;
+    padding: 0;
+}
+.ui-state-active{
+	background: $projectColor;
+}
+.ui-corner-all {
+    border-radius: 5px 5px 0 0;
+    -webkit-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+}//日历选择器公共样式

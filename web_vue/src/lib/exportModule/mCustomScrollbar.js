@@ -2363,7 +2363,7 @@ and dependencies (minified).
     if (methods[method]) {
       return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
     } else if (typeof method === "object" || !method) {
-      console.log(this, arguments, 'mCustomScrollbar enter this')
+      // console.log(this, arguments, 'mCustomScrollbar enter this')
       return methods.init.apply(this, arguments);
     } else {
       $.error("Method " + method + " does not exist");

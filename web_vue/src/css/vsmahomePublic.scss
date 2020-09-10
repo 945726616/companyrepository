@@ -1281,15 +1281,15 @@
 	color: #fff;
 }
 
-.video_delete {
-	float: right;
-	background: url(../assets/mipc/video_delete.png) no-repeat;
-	width: 20px;
-	height: 19px;
-	margin-top: 6px;
-	margin-right: 4px;
-	display: none;
-}
+// .video_delete {
+// 	float: right;
+// 	background: url(../assets/mipc/video_delete.png) no-repeat;
+// 	width: 20px;
+// 	height: 19px;
+// 	margin-top: 6px;
+// 	margin-right: 4px;
+// 	display: none;
+// }
 
 #calendar_input {
 	float: right;
@@ -1569,14 +1569,14 @@
 	margin-bottom: 24px;
 }
 
-#history_list_bottom {
-	/* width: 100%; */
-	height: 60px;
-	position: absolute;
-	left: 44%;
-	bottom: 0px;
-	display: none;
-}
+// #history_list_bottom {
+// 	/* width: 100%; */
+// 	height: 60px;
+// 	position: absolute;
+// 	left: 44%;
+// 	bottom: 0px;
+// 	display: none;
+// }
 
 #page_num_box {
 	/* width:350px; */
@@ -2116,91 +2116,91 @@ input[type="number"] {
 	margin: 0 auto;
 }
 
-.mp_list {
-	float: left;
-}
+// .mp_list {
+// 	float: left;
+// }
 
-.mp_title {
-	float: left;
-	width: 250px;
-	font-size: 16px;
-	line-height: 50px;
-	color: #6b7a99;
-}
+// .mp_title {
+// 	float: left;
+// 	width: 250px;
+// 	font-size: 16px;
+// 	line-height: 50px;
+// 	color: #6b7a99;
+// }
 
-.mp_input {
-	height: 50px;
-	float: left;
-}
+// .mp_input {
+// 	height: 50px;
+// 	float: left;
+// }
 
-.mp_input input {
-	margin-top: 5px;
-	width: 200px;
-	height: 30px;
-	outline: none;
-}
+// .mp_input input {
+// 	margin-top: 5px;
+// 	width: 200px;
+// 	height: 30px;
+// 	outline: none;
+// }
 
-.mp_empty {
-	width: 100%;
-	height: 50px;
-}
+// .mp_empty {
+// 	width: 100%;
+// 	height: 50px;
+// }
 
-#mp_btn {
-	float: left;
-	width: 100px;
-	height: 34px;
-	color: #fff;
-	background: #2988cc;
-	text-align: center;
-	line-height: 36px;
-	margin-top: 5px;
-	margin-left: 40px;
-	cursor: pointer;
-}
+// #mp_btn {
+// 	float: left;
+// 	width: 100px;
+// 	height: 34px;
+// 	color: #fff;
+// 	background: #2988cc;
+// 	text-align: center;
+// 	line-height: 36px;
+// 	margin-top: 5px;
+// 	margin-left: 40px;
+// 	cursor: pointer;
+// }
 
-#mp_updata_password {
-	color: #2988cc;
-	width: 100%;
-	float: left;
-	text-align: center;
-	display: none;
-}
+// #mp_updata_password {
+// 	color: #2988cc;
+// 	width: 100%;
+// 	float: left;
+// 	text-align: center;
+// 	display: none;
+// }
 
-#mp_updata_password_error {
-	font-size: 14px;
-	float: left;
-	line-height: 50px;
-	color: #f00;
-	margin-left: 10px;
-	display: none;
-}
+// #mp_updata_password_error {
+// 	font-size: 14px;
+// 	float: left;
+// 	line-height: 50px;
+// 	color: #f00;
+// 	margin-left: 10px;
+// 	display: none;
+// }
 
-.mp_password_empty {
-	font-size: 14px;
-	float: left;
-	line-height: 50px;
-	color: #f00;
-	margin-left: 10px;
-	display: none;
-}
+// .mp_password_empty {
+// 	font-size: 14px;
+// 	float: left;
+// 	line-height: 50px;
+// 	color: #f00;
+// 	margin-left: 10px;
+// 	display: none;
+// }
 
-.mp_password_demand {
-	font-size: 14px;
-	float: left;
-	line-height: 50px;
-	color: #f00;
-	margin-left: 10px;
-	display: none;
-}
+// .mp_password_demand {
+// 	font-size: 14px;
+// 	float: left;
+// 	line-height: 50px;
+// 	color: #f00;
+// 	margin-left: 10px;
+// 	display: none;
+// }
 
-.mp_password_inconsistent {
-	font-size: 14px;
-	float: left;
-	line-height: 50px;
-	color: #f00;
-	margin-left: 10px;
-	display: none;
-}
+// .mp_password_inconsistent {
+// 	font-size: 14px;
+// 	float: left;
+// 	line-height: 50px;
+// 	color: #f00;
+// 	margin-left: 10px;
+// 	display: none;
+// }
 
 /* 修改密码新密码与旧密码相同 */
 .mp_same_op {
@@ -2212,95 +2212,95 @@ input[type="number"] {
 	display: none;
 }
 
-#set_guest_password_page {
-	display: none;
-}
+// #set_guest_password_page {
+// 	display: none;
+// }
 
-.gp_list {
-	float: left;
-}
+// .gp_list {
+// 	float: left;
+// }
 
-.gp_title {
-	float: left;
-	width: 250px;
-	font-size: 16px;
-	color: #6b7a99;
-	line-height: 50px;
-}
+// .gp_title {
+// 	float: left;
+// 	width: 250px;
+// 	font-size: 16px;
+// 	color: #6b7a99;
+// 	line-height: 50px;
+// }
 
-.gp_input {
-	height: 50px;
-	float: left;
-}
+// .gp_input {
+// 	height: 50px;
+// 	float: left;
+// }
 
-.gp_input input {
-	margin-top: 5px;
-	width: 200px;
-	height: 30px;
-	outline: none;
-}
+// .gp_input input {
+// 	margin-top: 5px;
+// 	width: 200px;
+// 	height: 30px;
+// 	outline: none;
+// }
 
-.gp_empty {
-	width: 100%;
-	height: 50px;
-}
+// .gp_empty {
+// 	width: 100%;
+// 	height: 50px;
+// }
 
-#gp_btn {
-	float: left;
-	width: 100px;
-	height: 34px;
-	color: #fff;
-	background: #2988cc;
-	text-align: center;
-	line-height: 36px;
-	margin-top: 5px;
-	margin-left: 40px;
-	cursor: pointer;
-}
+// #gp_btn {
+// 	float: left;
+// 	width: 100px;
+// 	height: 34px;
+// 	color: #fff;
+// 	background: #2988cc;
+// 	text-align: center;
+// 	line-height: 36px;
+// 	margin-top: 5px;
+// 	margin-left: 40px;
+// 	cursor: pointer;
+// }
 
-#gp_updata_password {
-	color: #2988cc;
-	width: 100%;
-	float: left;
-	text-align: center;
-	display: none;
-}
+// #gp_updata_password {
+// 	color: #2988cc;
+// 	width: 100%;
+// 	float: left;
+// 	text-align: center;
+// 	display: none;
+// }
 
-#gp_updata_password_error {
-	font-size: 14px;
-	float: left;
-	line-height: 50px;
-	color: #f00;
-	margin-left: 10px;
-	display: none;
-}
+// #gp_updata_password_error {
+// 	font-size: 14px;
+// 	float: left;
+// 	line-height: 50px;
+// 	color: #f00;
+// 	margin-left: 10px;
+// 	display: none;
+// }
 
-.gp_password_empty {
-	font-size: 14px;
-	float: left;
-	line-height: 50px;
-	color: #f00;
-	margin-left: 10px;
-	display: none;
-}
+// .gp_password_empty {
+// 	font-size: 14px;
+// 	float: left;
+// 	line-height: 50px;
+// 	color: #f00;
+// 	margin-left: 10px;
+// 	display: none;
+// }
 
-.gp_password_demand {
-	font-size: 14px;
-	float: left;
-	line-height: 50px;
-	color: #f00;
-	margin-left: 10px;
-	display: none;
-}
+// .gp_password_demand {
+// 	font-size: 14px;
+// 	float: left;
+// 	line-height: 50px;
+// 	color: #f00;
+// 	margin-left: 10px;
+// 	display: none;
+// }
 
-.gp_password_inconsistent {
-	font-size: 14px;
-	float: left;
-	line-height: 50px;
-	color: #f00;
-	margin-left: 10px;
-	display: none;
-}
+// .gp_password_inconsistent {
+// 	font-size: 14px;
+// 	float: left;
+// 	line-height: 50px;
+// 	color: #f00;
+// 	margin-left: 10px;
+// 	display: none;
+// }
 
 /* 访客密码与管理密码相同 */
 .gp_same_ap {
@@ -2312,115 +2312,115 @@ input[type="number"] {
 	display: none;
 }
 
-#set_add_email_page {
-	display: none;
-	width: 500px;
-	margin: 0 auto;
-}
+// #set_add_email_page {
+// 	display: none;
+// 	width: 500px;
+// 	margin: 0 auto;
+// }
 
-#ae_lable {
-	/*display: none;*/
-}
+// #ae_lable {
+// 	/*display: none;*/
+// }
 
-#send_msg {
-	color: #2988cc;
-	float: left;
-	display: none;
-}
+// #send_msg {
+// 	color: #2988cc;
+// 	float: left;
+// 	display: none;
+// }
 
-.ae_list {
-	float: left;
-}
+// .ae_list {
+// 	float: left;
+// }
 
-.ae_title {
-	float: left;
-	width: 150px;
-	height: 50px;
-	font-size: 16px;
-	color: #6b7a99;
-	line-height: 50px;
-}
+// .ae_title {
+// 	float: left;
+// 	width: 150px;
+// 	height: 50px;
+// 	font-size: 16px;
+// 	color: #6b7a99;
+// 	line-height: 50px;
+// }
 
-#version_logo_img_mipc_new {
-	margin-left: 70px;
-	margin-bottom: 30px;
-	width: 148px;
-	height: 88px;
-	background: url(../assets/mipc/vsmahome_b.png) no-repeat;
-}
+// #version_logo_img_mipc_new {
+// 	margin-left: 70px;
+// 	margin-bottom: 30px;
+// 	width: 148px;
+// 	height: 88px;
+// 	background: url(../assets/mipc/vsmahome_b.png) no-repeat;
+// }
 
-.ae_input {
-	height: 50px;
-	float: left;
-}
+// .ae_input {
+// 	height: 50px;
+// 	float: left;
+// }
 
-.ae_input input {
-	margin-top: 5px;
-	width: 200px;
-	height: 30px;
-	outline: none;
-}
+// .ae_input input {
+// 	margin-top: 5px;
+// 	width: 200px;
+// 	height: 30px;
+// 	outline: none;
+// }
 
-.ae_empty {
-	width: 100%;
-	height: 50px;
-}
+// .ae_empty {
+// 	width: 100%;
+// 	height: 50px;
+// }
 
-#ae_btn {
-	float: left;
-	width: 100px;
-	height: 34px;
-	color: #fff;
-	background: #2988cc;
-	text-align: center;
-	line-height: 36px;
-	margin-top: 5px;
-	margin-left: 40px;
-	cursor: pointer;
-}
+// #ae_btn {
+// 	float: left;
+// 	width: 100px;
+// 	height: 34px;
+// 	color: #fff;
+// 	background: #2988cc;
+// 	text-align: center;
+// 	line-height: 36px;
+// 	margin-top: 5px;
+// 	margin-left: 40px;
+// 	cursor: pointer;
+// }
 
-.ae_tips {
-	margin-top: 10px;
-	float: left;
-	font-size: 12px;
-	color: #999;
-}
+// .ae_tips {
+// 	margin-top: 10px;
+// 	float: left;
+// 	font-size: 12px;
+// 	color: #999;
+// }
 
-#email_invalid {
-	color: #f00;
-	float: left;
-	width: 100%;
-	text-align: center;
-	display: none;
-}
+// #email_invalid {
+// 	color: #f00;
+// 	float: left;
+// 	width: 100%;
+// 	text-align: center;
+// 	display: none;
+// }
 
-#ae_email_exist {
-	color: #f00;
-	float: left;
-	width: 100%;
-	text-align: center;
-	display: none;
-}
+// #ae_email_exist {
+// 	color: #f00;
+// 	float: left;
+// 	width: 100%;
+// 	text-align: center;
+// 	display: none;
+// }
 
-#ae_email_busy {
-	color: #f00;
-	float: left;
-	width: 100%;
-	text-align: center;
-	display: none;
-}
+// #ae_email_busy {
+// 	color: #f00;
+// 	float: left;
+// 	width: 100%;
+// 	text-align: center;
+// 	display: none;
+// }
 
-#ae_email_inactive {
-	color: #f00;
-	float: left;
-	width: 100%;
-	text-align: center;
-	display: none;
-}
+// #ae_email_inactive {
+// 	color: #f00;
+// 	float: left;
+// 	width: 100%;
+// 	text-align: center;
+// 	display: none;
+// }
 
-#set_manage_password_page {
-	display: none;
-}
+// #set_manage_password_page {
+// 	display: none;
+// }
 
 .about_input {
 	height: 50px;
@@ -2606,23 +2606,23 @@ input[type="number"] {
 	align-items: center;
 }
 
-.feedback_input {
-	overflow: hidden;
-	margin-bottom: 20px;
-}
+// .feedback_input {
+// 	overflow: hidden;
+// 	margin-bottom: 20px;
+// }
 
-.feedback_input input {
-	width: 360px;
-	height: 34px;
-	float: right;
-	border: 1px solid #ccc;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	padding: 0 10px;
-	box-sizing: border-box;
-	background: url(../assets/device/feedback_arrow.png) no-repeat 338px center;
-}
+// .feedback_input input {
+// 	width: 360px;
+// 	height: 34px;
+// 	float: right;
+// 	border: 1px solid #ccc;
+// 	-moz-border-radius: 4px;
+// 	-webkit-border-radius: 4px;
+// 	border-radius: 4px;
+// 	padding: 0 10px;
+// 	box-sizing: border-box;
+// 	background: url(../assets/device/feedback_arrow.png) no-repeat 338px center;
+// }
 
 .feedback_input input::-webkit-input-placeholder {
 	color: #999999;
@@ -2635,93 +2635,93 @@ input[type="number"] {
 	font-family: Arial;
 }
 
-#pb_select_sl {
-	height: 435px;
-	width: 400px;
-	display: none;
-	padding: 30px 70px;
-	box-sizing: border-box;
-	z-index: 10000;
-	top: 140px;
-	left: 50%;
-	margin-left: -200px;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px;
-	position: fixed;
-	background: #fff;
-}
+// #pb_select_sl {
+// 	height: 435px;
+// 	width: 400px;
+// 	display: none;
+// 	padding: 30px 70px;
+// 	box-sizing: border-box;
+// 	z-index: 10000;
+// 	top: 140px;
+// 	left: 50%;
+// 	margin-left: -200px;
+// 	border-top-left-radius: 5px;
+// 	border-top-right-radius: 5px;
+// 	border-bottom-left-radius: 5px;
+// 	border-bottom-right-radius: 5px;
+// 	position: fixed;
+// 	background: #fff;
+// }
 
-.li_design_tittle {
-	font-size: 20px;
-	color: #333333;
-	width: 260px;
-	text-align: center;
-	margin-bottom: 5px;
-}
+// .li_design_tittle {
+// 	font-size: 20px;
+// 	color: #333333;
+// 	width: 260px;
+// 	text-align: center;
+// 	margin-bottom: 5px;
+// }
 
-.li_design {
-	font-size: 16px;
-	color: #333333;
-	text-align: center;
-	border-bottom: 1px solid gray;
-	height: 44px;
-	width: 260px;
-	line-height: 44px;
-	cursor: default;
-}
+// .li_design {
+// 	font-size: 16px;
+// 	color: #333333;
+// 	text-align: center;
+// 	border-bottom: 1px solid gray;
+// 	height: 44px;
+// 	width: 260px;
+// 	line-height: 44px;
+// 	cursor: default;
+// }
 
-.li_design_last {
-	font-size: 16px;
-	color: #333333;
-	height: 44px;
-	width: 260px;
-	text-align: center;
-	line-height: 44px;
-	border-bottom: 1px solid white;
-	cursor: default;
-}
+// .li_design_last {
+// 	font-size: 16px;
+// 	color: #333333;
+// 	height: 44px;
+// 	width: 260px;
+// 	text-align: center;
+// 	line-height: 44px;
+// 	border-bottom: 1px solid white;
+// 	cursor: default;
+// }
 
-.feedback_title {
-	float: left;
-	width: 150px;
-	font-size: 18px;
-	color: #666;
-	line-height: 30px;
-}
+// .feedback_title {
+// 	float: left;
+// 	width: 150px;
+// 	font-size: 18px;
+// 	color: #666;
+// 	line-height: 30px;
+// }
 
-.feedback_input textarea {
-	margin-top: 5px;
-	width: 360px;
-	height: 200px;
-	outline: none;
-	resize: none;
-	border-radius: 4px;
-	padding: 10px;
-	border: 1px solid #ccc;
-	box-sizing: border-box;
-}
+// .feedback_input textarea {
+// 	margin-top: 5px;
+// 	width: 360px;
+// 	height: 200px;
+// 	outline: none;
+// 	resize: none;
+// 	border-radius: 4px;
+// 	padding: 10px;
+// 	border: 1px solid #ccc;
+// 	box-sizing: border-box;
+// }
 
-#upload_image {
-	float: left;
-	width: 350px;
-	margin-top: 5px;
-	margin-bottom: 20px;
-}
+// #upload_image {
+// 	float: left;
+// 	width: 350px;
+// 	margin-top: 5px;
+// 	margin-bottom: 20px;
+// }
 
-#feedback_submit_btn {
-	float: left;
-	width: 100px;
-	height: 34px;
-	color: #fff;
-	background: #2988cc;
-	text-align: center;
-	line-height: 34px;
-	margin-top: 5px;
-	cursor: pointer;
-	display: block;
-}
+// #feedback_submit_btn {
+// 	float: left;
+// 	width: 100px;
+// 	height: 34px;
+// 	color: #fff;
+// 	background: #2988cc;
+// 	text-align: center;
+// 	line-height: 34px;
+// 	margin-top: 5px;
+// 	cursor: pointer;
+// 	display: block;
+// }
 
 #my_buffer_page {
 	position: fixed;

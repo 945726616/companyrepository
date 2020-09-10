@@ -9,11 +9,10 @@ const login = () => import(/* webpackChunkName: "group-Mipc" */'@/components/log
 const devlist = () => import(/* webpackChunkName: "group-Mipc" */'@/components/devlist/mipc')
 const boxlist = () => import(/* webpackChunkName: "group-Mipc" */'@/components/boxlist')
 const play = () => import(/* webpackChunkName: "group-Mipc" */'@/components/play/mipc')
-const history = () => import(/* webpackChunkName: "group-Mipc" */'@/components/history/mipc')
+const history = () => import(/* webpackChunkName: "group-Mipc" */'@/components/history/mipc/history')
 const set = () => import(/* webpackChunkName: "group-Mipc" */'@/components/set')
 const playback = () => import(/* webpackChunkName: "group-Mipc" */'@/components/playback')
-const my = () => import(/* webpackChunkName: "group-Mipc" */'@/components/my/mipc')
-// const my = () => import(/* webpackChunkName: "group-Mipc" */'@/components/my/mipc/my')
+const my = () => import(/* webpackChunkName: "group-Mipc" */'@/components/my/mipc/my')
 const download = () => import(/* webpackChunkName: "group-Mipc" */'@/components/download/download')
 
 const mipcRouter = new Router({

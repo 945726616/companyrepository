@@ -7,11 +7,10 @@ Vue.use(Router)
 
 const login = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/login/login.vue')
 const devlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/devlist/vimtag')
-// const my = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/my/vimtag/my')
-const my = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/my/vimtag')
+const my = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/my/vimtag/my')
 const play = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/play/vimtag')
 const playback = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/playback')
-const history = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/history/vimtag')
+const history = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/history/vimtag/history')
 const set = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/set')
 const boxlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/boxlist')
 

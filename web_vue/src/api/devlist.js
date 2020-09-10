@@ -505,7 +505,6 @@ const devlist = {
   ** token: 传递的token
   */
   load_noid_img (params) {
-    console.log('enter load noid img')
     let images = [] // 创建一个img对象数组
     images[params.num] = new Image()
     if (params.sn !== null && !params.refresh) { // 如果传递的数据包含sn且该图片未加载过

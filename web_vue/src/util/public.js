@@ -82,9 +82,9 @@ const publicFunc = {
         // createPage("my",{ parent: $("#page") }) // 进入我的页面
         // router.push({name:'my',params:{parent: $('#page')}})
         if(window.location.href.indexOf('vimtag') == -1){
-          mipcMyPage({ parent: $('#my') })
+          // mipcMyPage({ parent: $('#my') })
         }else{
-          vimtagMyPage({ parent: $('#my') })
+          // vimtagMyPage({ parent: $('#my') })
         }
       }
     })
