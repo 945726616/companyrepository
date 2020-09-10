@@ -29,31 +29,21 @@ export default {
   async mounted () {
     import(`@/lib/plugins/jquery.ibutton.js`)
     import(`@/lib/plugins/jquery.mousewheel.min.js`)
-    let userLanguage = localStorage.getItem('language_choice_info') ? localStorage.getItem('language_choice_info') : sessionStorage.getItem('userLanguage')
-    if (userLanguage) {
-      await this.$chooseLanguage.lang(userLanguage)
-    } else {
-      await this.$chooseLanguage.lang('en')
-    }
-    if (sessionStorage.getItem('login_flag')) {
-      this.$store.dispatch('setLoginFlag', sessionStorage.getItem('login_flag'));
-      let user_info = JSON.parse(sessionStorage.getItem('user_info'));
-      this.$store.dispatch('setLid', user_info.lid) //登录返回lid head中
-      this.$store.dispatch('setName', user_info.name)
-      this.$store.dispatch('setSid', user_info.sid)
-      this.$store.dispatch('setGuest', user_info.guest)
-      this.$store.dispatch('setSeq', user_info.seq)
-      this.$store.dispatch('setTid', user_info.tid)
-      this.$store.dispatch('setShareKey', user_info.shareKey)
-      this.$api.login.dev_msg_listener_add();
-    }
-  },
-  watch: {
-    "$store.state.user.qid" (val) {
-      let user_info = JSON.parse(sessionStorage.getItem('user_info'))
-      user_info.qid = val;
-      sessionStorage.setItem('user_info', JSON.stringify(user_info))
-    }
+    let userLanguage = localStorage.getItem('language_choice_info') ? localStorage.getItem('language_choice_info') : this.$store.state.user.userLanguage
+    await this.$chooseLanguage.lang(userLanguage)
+    // let user_info = JSON.parse(sessionStorage.getItem('user_info'))
+    this.$api.login.dev_msg_listener_add()
+    // if (user_info && user_info.login_flag) { // 判断其中是否含有登录标识
+    //   this.$store.dispatch('setLoginFlag', user_info.login_flag)
+    //   this.$store.dispatch('setLid', user_info.lid) //登录返回lid head中
+    //   this.$store.dispatch('setName', user_info.name)
+    //   this.$store.dispatch('setSid', user_info.sid)
+    //   this.$store.dispatch('setGuest', user_info.guest)
+    //   this.$store.dispatch('setSeq', user_info.seq)
+    //   this.$store.dispatch('setTid', user_info.tid)
+    //   this.$store.dispatch('setShareKey', user_info.shareKey)
+    //   this.$store.dispatch('setJmLogoFlag', user_info.setJmLogoFlag)
+    // }
   },
   destroyed () {
     if (this.$store.state.user.setMmqPickTimeFlag1) {

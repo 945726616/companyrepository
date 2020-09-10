@@ -102,6 +102,12 @@
     position: relative;
     background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -390px -155px;
   }
+  .device_ipc_offline{
+    background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -830px -155px;
+  }
+  .device_ipc_InvalidAuth{
+    background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -610px -155px;
+  }
 }
 .img_class{
   width:208px;

@@ -29,12 +29,12 @@ const mipcRouter = new Router({
       component: devlist,
       children:[
         {
-          path: '/boxlist',
+          path: '/devlist',
           name: 'boxlist',
           component: boxlist
         },
         {
-          path: '/play',
+          path: '/devlist',
           name: 'play',
           component: play
         }

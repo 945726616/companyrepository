@@ -20,7 +20,7 @@
             <div :class="name+'_password_img'"></div>
             <input id='signin_pw' :class="name == 'vimtag'?'vimtag_input_password':'mipc_input_password'" :type='password_eye_sign?"password":"text"' :style="l_remember_data_obj&&l_remember_data_obj.password?'color: #404040':''" v-model="password_val" :placeholder="mcs_password" @keyup.enter="sign_in">
             <!-- 登录时密码 -->
-                        <div id='password_eye' :class='password_eye_sign?"password_eye_gray":"password_eye"' v-if="eye_sign && name == 'vimtag'" @click="password_eye_sign = !password_eye_sign">
+            <div id='password_eye' :class='password_eye_sign?"password_eye_gray":"password_eye"' v-if="eye_sign && name == 'vimtag'" @click="password_eye_sign = !password_eye_sign">
             </div>
             <div :class="name+'_login_input'"></div>
           </div>
@@ -255,13 +255,7 @@ export default {
       // 自动登录状态为1时,相当于操作一次点击登录按钮
       this.sign_in();
     }
-
-    let userLanguage = sessionStorage.getItem('userLanguage')
-    if (userLanguage) {
-      await this.$chooseLanguage.lang(userLanguage)
-    } else {
-      await this.$chooseLanguage.lang('en')
-    }
+    await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
 
     // await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
 
@@ -277,9 +271,8 @@ export default {
     })
 
     //设置语言
-    if (sessionStorage.getItem("userLanguage")) { // 根据session中存储的语言类型渲染下拉选择框
-      this.current_language = sessionStorage.getItem("userLanguage");
-    }
+    // 根据session中存储的语言类型渲染下拉选择框
+    this.current_language = this.$store.state.user.userLanguage
   },
   methods: {
     binding_account_next_btn () { // 点击下一步按钮
@@ -362,7 +355,7 @@ export default {
         email: _this.pass_email_val,
         appid: _this.appid,
         name: _this.name,
-        lang: sessionStorage.getItem('userLanguage')
+        lang: _this.$store.state.user.userLanguage
       }).then(res => {
         let return_data;
         let msg = res.data;
@@ -414,7 +407,7 @@ export default {
     sign_in () { //点击登录事件
       let _this = this;
       let loginWaitFlag = _this.$store.state.jumpPageData.loginWaitFlag;
-      if (_this.keep_pw) {
+      if (_this.keep_pw) { // 判断是否记住密码
         localStorage.setItem('keep_pw', 1);
       } else {
         localStorage.setItem('keep_pw', '');
@@ -481,14 +474,6 @@ export default {
               _this.$store.dispatch('setGuest', msg.guest)
               _this.$store.dispatch('setSeq', msg.seq)
 
-              let user_info = JSON.parse(sessionStorage.getItem('user_info'))
-              user_info.lid = msg.lid;
-              user_info.name = username_value;
-              user_info.sid = msg.sid;
-              user_info.guest = msg.guest;
-              user_info.seq = msg.seq;
-              sessionStorage.setItem('user_info', JSON.stringify(user_info))
-
               let version_type = ''
               if (navigator.userAgent.indexOf('Intel Mac') > -1) {
                 version_type = 'mac_' + _this.name
@@ -501,33 +486,32 @@ export default {
                 // srv: window.location.host, // 暂时注释由于有代理添加该参数会导致调用地址异常
                 ver_type: version_type,
                 ver_from: 'v3.9.1.1607051739',
-                lang: sessionStorage.getItem('userLanguage'),
+                lang: _this.$store.state.user.userLanguage,
                 p: [{
                   n: "status",
                   v: "main"
                 }]
               }).then(res => {
                 get_version_ack(res.data)
-              })
-
-              function get_version_ack (msg) {
-                if (msg && msg.result === '') {
-                  // app_verson = msg.info.ver_to //登录日志 app版本号  暂时未发现用处注释
-                  // if (msg.info.p && msg.info.p[0].n === 'checksum') { // 日志功能暂时无法对接注释
-                  //   //登录日志 app checksum
-                  //   app_checksum = msg.info.p[0].v
-                  // }
-                  if (window.location.protocol === 'https:') {
-                    msg.info.link_url = msg.info.link_url.replace(
-                      'http://209.133.212.170:2080',
-                      'https://us10.vimtag.com:2446')
-                    msg.info.link_url = msg.info.link_url.replace(
-                      'http://61.147.109.92:7080',
-                      'https://js.vimtag.com:7446')
+                function get_version_ack (msg) {
+                  if (msg && msg.result === '') {
+                    // app_verson = msg.info.ver_to //登录日志 app版本号  暂时未发现用处注释
+                    // if (msg.info.p && msg.info.p[0].n === 'checksum') { // 日志功能暂时无法对接注释
+                    //   //登录日志 app checksum
+                    //   app_checksum = msg.info.p[0].v
+                    // }
+                    if (window.location.protocol === 'https:') {
+                      msg.info.link_url = msg.info.link_url.replace(
+                        'http://209.133.212.170:2080',
+                        'https://us10.vimtag.com:2446')
+                      msg.info.link_url = msg.info.link_url.replace(
+                        'http://61.147.109.92:7080',
+                        'https://js.vimtag.com:7446')
+                    }
+                    _this.$store.dispatch('setPlayDownloadUrl', msg.info.link_url) // 存储播放时需要用到的url
                   }
-                  _this.$store.dispatch('setPlayDownloadUrl', msg.info.link_url) // 存储播放时需要用到的url
                 }
-              }
+              })
 
               // 设备消息轮询
               _this.$api.login.dev_msg_listener_add()
@@ -574,7 +558,7 @@ export default {
                       }
                       if (param[i].n === 'sc.logo' && param[i].v === '1') {
                         //给江门xhjymclz修改设备列表页面图标
-                        _this.$store.commit('SET_JM_LOGO_FLAG', 1)
+                        _this.$store.dispatch('setJmLogoFlag', 1)
                       }
                     }
                   }
@@ -589,13 +573,12 @@ export default {
 
               if (!_this.$store.state.jumpPageData.experienceFlag) { // 判断是否为体验
                 // 记住密码状态/自动登录状态设置
-                localStorage.setItem('remember_msg_info', JSON.stringify({
+                localStorage.setItem('remember_msg_info', JSON.stringify({ // 本地存储帐号密码
                   user: username_value,
                   password: _this.l_pwd_val
                 }))
-                localStorage.setItem('auto_login', '1');
+                localStorage.setItem('auto_login', '1') // 本地存储自动登录标识
                 _this.$store.dispatch('setLoginFlag', 1) // 存储登录状态标识
-                sessionStorage.setItem('login_flag', 1)
               }
             } else {
               //登录结果失败
@@ -707,7 +690,7 @@ export default {
         } else if (msg_data.result === "accounts.user.existed") {
           msg = mcs_username_already_exists;
         } else {
-          msg = mcs_sign_up_failed;
+          msg = mcs_sign_up_failed
         }
         if (msg === mcs_successful_sign_up) { // 判断返回值进行提示
           _this.publicFunc.msg_tips({
@@ -716,7 +699,7 @@ export default {
             timeout: 3000
           })
           // createPage('login', obj)
-          _this.register_sign = false;
+          _this.register_sign = false
           // 切换回登录页面(此处后期可改成点击登录按钮事件)
         } else {
           _this.publicFunc.msg_tips({
@@ -728,22 +711,21 @@ export default {
       })
     },
     choose_language_btn (lang_val) { //选择语言
-      localStorage.setItem("language_choice_info", lang_val)
-      location.reload()
+      localStorage.setItem("language_choice_info", lang_val) // 存储语言标识
+      location.reload() // 刷新页面进行语言文件重载
     },
 
   },
   watch: {
-    password_val (val) {
-      if (val.indexOf("•") == -1) {
-        this.eye_sign = true;
+    password_val (val) { // 检测密码框中是否有隐藏密码(存在时展示显示密码图标)
+      if (val.indexOf("•") === -1) {
+        this.eye_sign = true
       } else {
-        this.eye_sign = false;
+        this.eye_sign = false
       }
     },
   }
 }
 </script>
 <style src="./index.scss" lang='scss' scoped>
-
 </style>

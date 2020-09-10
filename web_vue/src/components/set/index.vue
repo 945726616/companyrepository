@@ -601,7 +601,7 @@ export default {
             // if (g_standard_input_box_onblur) g_standard_input_box_onblur(this);
           };
           _this.publicFunc.mx("#admin_pwd_button_setup").onclick = function () {
-            if (_this.$store.state.jumpPageData.guest) {
+            if (_this.$store.state.user.guest) {
               _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
             } else {
               if (l_dom_input_current_password.value == "amdin") {
@@ -703,7 +703,7 @@ export default {
             // g_standard_input_box_onblur(this);
           };
           _this.publicFunc.mx("#visitor_pwd_button_setup").onclick = function () {
-            if (_this.$store.state.jumpPageData.guest) {
+            if (_this.$store.state.user.guest) {
               _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
             } else {
               if (l_dom_input_current_password.value == "amdin") {
@@ -2526,7 +2526,7 @@ export default {
           function add_storage_device_event () {
             // 点击应用按钮 调用函数
             l_dom_storage_device_button_setup.onclick = function () {
-              if (_this.$store.state.jumpPageData.guest) {
+              if (_this.$store.state.user.guest) {
                 _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
               } else {
                 let flag = _this.publicFunc.mx("#storage_device_switch_checkbox").checked ? 1 : 0;
@@ -6892,7 +6892,7 @@ export default {
           let l_inner_html = "";
           l_inner_html = // 为mipc添加system_class判断样式
             "<div class='list_right_item" + " " + (_this.$store.state.jumpPageData.projectFlag ? 'system_class' : '') + "'>"
-            + "<div class='options_float_left' id='system_upgrade_left' style='" + ((sessionStorage.getItem('userLanguage') == 'ja' || sessionStorage.getItem('userLanguage') == 'ru') ? "width:132px" : "") + "'></div>" //在线升级
+            + "<div class='options_float_left' id='system_upgrade_left' style='" + ((_this.$store.state.user.userLanguage == 'ja' || _this.$store.state.user.userLanguage == 'ru') ? "width:132px" : "") + "'></div>" //在线升级
             + "<div id='system_upgrade_div' class='options_float_right options_float_right_button'></div>"
             + "</div>";
           //Direct Connect Uploads upgrades
@@ -6933,7 +6933,7 @@ export default {
           if (_this.$store.state.jumpPageData.selectDeviceIpc.substr(0, 3) != "166") _this.publicFunc.mx("#activation_div").style.display = "none";
           function add_system_event () {
             function device_reboot () {
-              if (_this.$store.state.jumpPageData.guest) {
+              if (_this.$store.state.user.guest) {
                 _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
               } else {
                 _this.$api.set.reboot_device({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res =>{
@@ -6945,7 +6945,7 @@ export default {
               }
             }
             function system_device_reset () {
-              if (_this.$store.state.jumpPageData.guest) {
+              if (_this.$store.state.user.guest) {
                 _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
               } else {
                 if (_this.publicFunc.mx("#save_configuration").checked) {
@@ -7118,7 +7118,7 @@ export default {
                 if ((msg.ver_valid.length != 0 && msg.ver_current.length != 0 && msg.ver_valid != msg.ver_current) || (msg.ext_prj != msg.ext_hw && msg.ext_hw.length != 0)) {
                   //console.log('test error')
                   l_dom_system_upgrade_left.innerHTML = mcs_online_upgrade;
-                  l_dom_system_upgrade_div.innerHTML = "<div style='float:left;margin-right:8px;" + ((sessionStorage.getItem('userLanguage') == "vi" || sessionStorage.getItem('userLanguage') == "ja") ? "width:242px" : "width:233px") + "'>" + mcs_new_version + msg.ver_valid + mcs_valid + "</div><div style='padding-top:20px;float:left'><div id='Detail_id'></div></div>&nbsp;<button class='list_right_button_ex'>" + mcs_upgrade + "</button>";
+                  l_dom_system_upgrade_div.innerHTML = "<div style='float:left;margin-right:8px;" + ((_this.$store.state.user.userLanguage == "vi" || _this.$store.state.user.userLanguage == "ja") ? "width:242px" : "width:233px") + "'>" + mcs_new_version + msg.ver_valid + mcs_valid + "</div><div style='padding-top:20px;float:left'><div id='Detail_id'></div></div>&nbsp;<button class='list_right_button_ex'>" + mcs_upgrade + "</button>";
                   //console.log('test error')
                   _this.publicFunc.mx("#Detail_id").onclick = function () {
                     $(l_dom_detail_div_page).toggle();
@@ -7129,12 +7129,12 @@ export default {
                     let img_ver = _this.$api.devlist.ldev_get(_this.$store.state.jumpPageData.selectDeviceIpc).img_ver;
                     let valid_ver = msg.ver_valid;
                     let ver_update_warn = "";
-                    if (!_this.$store.state.jumpPageData.guest) {
+                    if (!_this.$store.state.user.guest) {
                       _this.$api.set.desc_get({
                         ver_type: "windows",
                         ver_from: img_ver,
                         ver_to: msg.ver_valid,
-                        lang: sessionStorage.getItem('userLanguage')
+                        lang: _this.$store.state.user.userLanguage
                       }).then(res => {
                         if (res.result === '') {
                           desc_get_ack(res)
@@ -7714,7 +7714,7 @@ export default {
                       ver_type: "windows",
                       ver_from: img_ver,
                       ver_to: msg.ver_valid,
-                      lang: sessionStorage.getItem('userLanguage')
+                      lang: _this.$store.state.user.userLanguage
                     }).then(res => {
                       if (res.result === '') {
                         desc_get_ack(res)
@@ -7979,7 +7979,7 @@ export default {
                       ver_type: "windows",
                       ver_from: img_ver,
                       ver_to: msg.ver_valid,
-                      lang: sessionStorage.getItem('userLanguage')
+                      lang: _this.$store.state.user.userLanguage
                     }).then(res => {
                       if (res.result === '') {
                         desc_get_ack(res)
@@ -8247,7 +8247,7 @@ export default {
                       ver_type: "windows",
                       ver_from: img_ver,
                       ver_to: msg.ver_valid,
-                      lang: sessionStorage.getItem('userLanguage')
+                      lang: _this.$store.state.user.userLanguage
                     }).then(res => {
                       if (res.result === '') {
                         desc_get_ack(res)
@@ -14688,12 +14688,7 @@ function schedule_time_format (arr) {
   async mounted () {
     import(`@/lib/plugins/jquery.tzSelect.js`)
     import(`@/lib/plugins/time_select.js`)
-    let userLanguage = sessionStorage.getItem('userLanguage')
-    if (userLanguage) {
-      await this.$chooseLanguage.lang(userLanguage)
-    } else {
-      await this.$chooseLanguage.lang('en')
-    }
+    await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
     let pageData;//页面创建相关对象
     if (this.$route.params) {
       pageData = this.$route.params;

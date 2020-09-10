@@ -1,4 +1,5 @@
 // 多国语言选择下拉
+import store from '../../store'
 import chooseLanguage from './languageExport'
 let languageSelect = {
   mipc (domNode) {
@@ -28,10 +29,10 @@ let languageSelect = {
       + "<option class='select_language_option' tag='th' value='uk'>ภาษาไทย</option>"
       + "</select>"
       + "</div>")
-    if (sessionStorage.getItem("userLanguage")) { // 根据session中存储的语言类型渲染下拉选择框
+    if (store.state.user.userLanguage) { // 根据session中存储的语言类型渲染下拉选择框
       let select_language_option_length = $(".select_language_option").length
       for (let lang_num = 0; lang_num < select_language_option_length; lang_num++) {
-        if (sessionStorage.getItem("userLanguage") === $(".select_language_option")[lang_num].value) { // 此处jq获取到的为原生dom节点,非jq节点
+        if (store.state.user.userLanguage === $(".select_language_option")[lang_num].value) { // 此处jq获取到的为原生dom节点,非jq节点
           $(".select_language_option")[lang_num].selected = true
         }
       }

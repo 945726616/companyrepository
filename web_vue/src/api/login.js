@@ -42,14 +42,6 @@ const login = {
       store.dispatch('setLid', data.lid)
       // 注: 此处secret_key值为mdh()函数中所使用的secret_key,使用方法创建会重新随机私钥导致无法匹配
       store.dispatch('setShareKey', mdh.gen_shared_secret(secret_key, data.key_b2a))
-
-      let user_info = {
-        tid : data.tid,
-        lid : data.lid,
-        shareKey : mdh.gen_shared_secret(secret_key, data.key_b2a)
-      }
-      sessionStorage.setItem('user_info',JSON.stringify(user_info))
-      
       // store.dispatch('setShareKey', mdh.gen_shared_secret('569506728890274752', '634875532707788715527841908380286147'))
       let uctx = login.get_uctx({ app: { id: params.appid } })
       returnItem = axios.get('/ccm/cacs_login_req', { // 调用登录接口

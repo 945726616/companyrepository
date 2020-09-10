@@ -662,13 +662,8 @@ export default {
     }
   },
   async mounted () {
-    let userLanguage = this.$store.state.user.userLanguage
-    if (userLanguage) {
-      await this.$chooseLanguage.lang(userLanguage)
-    } else {
-      await this.$chooseLanguage.lang('en')
-    }
-    let pageData;//页面创建相关对象
+    await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
+    let pageData // 页面创建相关对象
     if(this.$route.params){
       pageData = this.$route.params;
       pageData.parent = $("#" + this.$route.name)
@@ -686,7 +681,7 @@ export default {
       languageSelect.mipc($('#login_box'))
       $('#login_box').append("<div id='is_mipc_div'></div>")
     }
-    this.publicFunc.projectReload.call(this);
+    // this.publicFunc.projectReload.call(this);
     window.create_boxlist_page = this.create_boxlist_page;
   }
 }

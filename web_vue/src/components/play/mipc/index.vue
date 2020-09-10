@@ -227,7 +227,7 @@ export default {
             l_dom_voice_close_open.style.display = 'none'
 
             let l_dom_definition_cha = _this.publicFunc.mx(".definition_cha")
-            if (sessionStorage.getItem('userLanguage') == 'vi') {
+            if (_this.$store.state.user.userLanguage === 'vi') {
                 for (let i = 0; i < l_dom_definition_cha.length; i++) {
                     l_dom_definition_cha[i].style.width = 78 + 'px'
                 }
@@ -1100,12 +1100,7 @@ export default {
     }
   },
   async mounted () {
-    let userLanguage = sessionStorage.getItem('userLanguage')
-    if (userLanguage) {
-      await this.$chooseLanguage.lang(userLanguage)
-    } else {
-      await this.$chooseLanguage.lang('en')
-    }
+    await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
     let pageData;//页面创建相关对象
     if(this.$route.params){
       pageData = this.$route.params;

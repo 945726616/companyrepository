@@ -207,7 +207,7 @@ export default {
                   // srv: window.location.host, // 暂时注释由于有代理添加该参数会导致调用地址异常
                   ver_type: ver_type[num],
                   ver_from: 'v3.7.1.1607051739',
-                  lang: sessionStorage.getItem('userLanguage'),
+                  lang: _this.$store.state.user.userLanguage,
                 }).then(res => {
                     let msg = res.data;
                     msg.info.link_url = msg.info.link_url.replace("209.133.212.170:2080", "us10.mipcm.com:2080")
@@ -224,12 +224,7 @@ export default {
   },
   async mounted() {
     this.publicFunc.projectReload.call(this);
-    let userLanguage = sessionStorage.getItem("userLanguage");
-    if (userLanguage) {
-      await this.$chooseLanguage.lang(userLanguage);
-    } else {
-      await this.$chooseLanguage.lang("en");
-    }
+    await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
     let pageData; //页面创建相关对象
     if (this.$route.params) {
       pageData = this.$route.params;

@@ -11,7 +11,7 @@ import './css/public.scss'
 // 引入多国语言切换插件
 import chooseLanguage from './lib/exportModule/languageExport'
 Vue.prototype.$chooseLanguage = chooseLanguage
-if (!sessionStorage.getItem('userLanguage')) {
+if (!store.state.user.userLanguage) {
   let chromeLang = (navigator.language || navigator.userLanguage).substr(0, 2)
   if (chromeLang === 'zh') {
     let originalLang = navigator.language || navigator.userLanguage
@@ -19,7 +19,6 @@ if (!sessionStorage.getItem('userLanguage')) {
       chromeLang = 'tw'
     }
   }
-  sessionStorage.setItem('userLanguage', chromeLang)
   store.dispatch('setUserLanguage', chromeLang)
   chooseLanguage.lang(chromeLang)
 } else {
@@ -45,6 +44,7 @@ Date.prototype.format = function (format) {
   }
   return format
 }
+// 赋值项目底色(项目主色调,scss方便获取)
 if (store.state.jumpPageData.projectName === 'vimtag') {
   document.getElementsByTagName('body')[0].style.setProperty('--projectBackgroundColor', '#00a6ba')
 } else if (store.state.jumpPageData.projectName === 'ebitcam') {
@@ -55,7 +55,7 @@ if (store.state.jumpPageData.projectName === 'vimtag') {
   document.getElementsByTagName('body')[0].style.setProperty('--projectBackgroundColor', '#2988cc')
 }
 router.beforeEach((to, from, next) => {
-  if (sessionStorage.getItem('login_flag') == 1) { // 如果已经登录的话
+  if (store.state.user.loginFlag === 1) { // 如果已经登录的话
     next();
   } else {
     if (to.path === '/' || to.path === '/download' || to.path === '/my') { // 如果是login/my/download页面的话，直接next()

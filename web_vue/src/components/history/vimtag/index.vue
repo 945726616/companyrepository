@@ -599,12 +599,7 @@ export default {
     }
   },
   async mounted () {
-    let userLanguage = sessionStorage.getItem('userLanguage')
-    if (userLanguage) {
-      await this.$chooseLanguage.lang(userLanguage)
-    } else {
-      await this.$chooseLanguage.lang('en')
-    }
+    await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
     let pageData;//页面创建相关对象
     if(this.$route.params){
       pageData = this.$route.params;

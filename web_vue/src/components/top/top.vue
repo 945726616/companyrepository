@@ -5,7 +5,7 @@
                 <div id='top_box_left' @click="top_left_click">
                     <a target='_top'>
                         <div id='top_logo'>
-                            <img v-if="jmLogo_sign" :src="require('@/assets/device/m_logo.png')" style="width:220px;height:36px" />
+                            <img v-if="$store.state.user.jmLogoFlag === 1" :src="require('@/assets/device/m_logo.png')" style="width:220px;height:36px" />
                             <img v-else :src="require('@/assets/device/logo.png')" style="width:145px;height:36px" />
                         </div>
                     </a>
@@ -20,7 +20,8 @@
                     <div id='top_login_div' :style="fujikam_sign?'line-height:81px':''" @click="login_div_click"><span id='top_login_span'>
                             {{mcs_my_device}}
                         </span></div>
-                    <div id='top_experience_div' class='top_right_menu' :style="fujikam_sign?'line-height:81px':''" @click="experience_div_click" v-if="!project_sign">
+                        <!-- {{project_sign}} -->
+                    <div id='top_experience_div' class='top_right_menu' :style="fujikam_sign?'line-height:81px':''" @click="experience_div_click" v-if="project_sign">
                         {{mcs_demo}}
                     </div>
                 </div>
@@ -65,12 +66,11 @@
                 mcs_more_options: '', //更多
                 mcs_download: '', //下载
                 mcs_back: '', //返回
-
                 project_sign: true, //判断是vimtag(true)还是mipc(false)
                 project_name: '', //项目名
                 project_logo_img: '', //项目logo
-                jmLogo_sign: false, //vimtag江门专属logo
-                username_value: '', // 定义用户名
+                jmLogo_sign: this.$store.state.user.jmLogoFlag === 1 ? this.$store.state.user.jmLogoFlag : false, //vimtag江门专属logo
+                username_value: this.$store.state.user.name !== '' ? this.$store.state.user.name : '', // 定义用户名
                 l_pwd_val: '', // 定义密码
                 fujikam_sign: false, //是否为客户端
                 select_lang_val: '', //语言
@@ -86,18 +86,12 @@
         async mounted() {
             this.$nextTick(async () => {
                 // 强制重新引入多国语言 main.js中的引用无法确保在调用top时能够全局使用
-                let userLanguage = sessionStorage.getItem('userLanguage')
-                if (userLanguage) {
-                    await this.$chooseLanguage.lang(userLanguage)
-                } else {
-                    await this.$chooseLanguage.lang('en')
-                }
+                await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
                 this.mcs_my_device = mcs_my_device;
                 this.mcs_demo = mcs_demo;
                 this.mcs_more_options = mcs_more_options;
                 this.mcs_download = mcs_download;
                 this.mcs_back = mcs_back;
-
                 this.project_sign = window.location.href.indexOf('vimtag') > -1;
                 this.project_name = this.$store.state.jumpPageData.projectName;
                 if (!this.project_sign) {
@@ -119,7 +113,7 @@
                     this.$store.dispatch('setLoginFlag', this.publicFunc.urlParam() && this.publicFunc.urlParam().c == 1 ? 1 : 0)
                     let l_remember_data = sessionStorage.get('remember_msg_info')
                     l_remember_data = eval('(' + l_remember_data + ')')
-                    if (this.$store.state.jumpPageData.loginFlag) {
+                    if (this.$store.state.user.loginFlag) {
                         // this.username_value = l_remember_data.user
                         this.l_pwd_val = l_remember_data.password
                     }
@@ -170,7 +164,7 @@
                 if (this.$store.state.jumpPageData.localModel) {
                     //如果点击了本地搜索
                     this.$store.dispatch('setLoginFlag', this.publicFunc.urlParam() && this.publicFunc.urlParam().c == 1 ? 1 : 0)
-                    if (this.$store.state.jumpPageData.loginFlag) {
+                    if (this.$store.state.user.loginFlag) {
                         //已经登录了	点击我的设备无效
                         this.$store.dispatch('setLocalModel', 0)
                         if (window.fujikam === 'fujikam') {
@@ -196,7 +190,7 @@
                         });
                     } else {
                         this.$store.dispatch('setExperienceFlag', 0)
-                        if (this.$store.state.jumpPageData.loginFlag) {
+                        if (this.$store.state.user.loginFlag) {
                             //已经登录，直接到设备列表页面
                             this.$router.push({
                                 name: 'devlist'
@@ -228,7 +222,7 @@
             },
             select_lang() { //选择语言
                 let l_select_lang = document.getElementsByClassName('select_lang')
-                let language_choice_info = sessionStorage.getItem('userLanguage')
+                let language_choice_info = this.$store.state.user.userLanguage
                 let l_lang = language_choice_info ? language_choice_info : 'en'
 
                 for (let l = 0; l < l_select_lang.length; l++) {
@@ -286,7 +280,7 @@
             mipc_logo_click() { //点击mipc标志
                 this.switch_more = false;
                 this.switch_download = false;
-                if (this.$store.state.jumpPageData.loginFlag) {
+                if (this.$store.state.user.loginFlag) {
                     this.$router.push({
                         name: 'devlist'
                     });
@@ -325,18 +319,6 @@
                     this.back_sign = true;
                 }else{
                     this.back_sign = false;
-                }
-            },
-            "$store.state.user.name"(val) {
-                if (val) {
-                    this.username_value = val;
-                }
-            },
-            "$store.state.jumpPageData.jmLogoFlag"(val) {
-                if (val === 1) { // vimtag江门专属logo
-                    this.jmLogo_sign = true;
-                } else {
-                    this.jmLogo_sign = false;
                 }
             }
         }

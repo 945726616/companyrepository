@@ -156,7 +156,7 @@ export default {
           data.parent.innerHTML = "<div id='vimtag_device_list'>"
           let selectNickArr
           let screen_token // 标记设备分辨率
-          // if (_this.$store.state.jumpPageData.supportTreeFlag) { // 如果支持树状结构, 将选中设备的nick分割成数组用于比较使用
+          // if (_this.$store.state.user.supportTreeFlag) { // 如果支持树状结构, 将选中设备的nick分割成数组用于比较使用
           //   // selectNickArr = g_Select_nick.split('.')
           // }
           for (let length = msg.length, i = 0; i < length; i++) {
@@ -180,7 +180,7 @@ export default {
             }
             let sn = dev_data.nick ? dev_data.nick : dev_data.sn;
             // console.log(sn, '获取sn即昵称')
-            if (_this.$store.state.jumpPageData.supportTreeFlag) { // 如果支持树状结构
+            if (_this.$store.state.user.supportTreeFlag) { // 如果支持树状结构
               let sn_nick_arr = sn.split('.')
               let flag_continue = 0
               // 如果分割后的nick数组比较 只展示数组最后一项不同的设备
@@ -1736,12 +1736,7 @@ export default {
     }
   },
   async mounted () {
-    let userLanguage = sessionStorage.getItem('userLanguage')
-    if (userLanguage) {
-      await this.$chooseLanguage.lang(userLanguage)
-    } else {
-      await this.$chooseLanguage.lang('en')
-    }
+    await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
     let pageData;//页面创建相关对象
     if (this.$route.params) {
       pageData = this.$route.params;

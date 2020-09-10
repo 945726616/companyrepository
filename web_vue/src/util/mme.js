@@ -8,6 +8,7 @@
 */
 /*-----------------media_engine-------------------------------------------------*/
 /* dom's background:black for chrome*/
+import store from '../store'
 var mme = function (obj/*
   {parent:xxx,
    on_event:function(event-object{plug:this, ref_obj:xxx}){},
@@ -625,7 +626,7 @@ mme.prototype =
     }
   }
 }
-var userLanguage = sessionStorage.getItem('userLanguage')
+var userLanguage = store.state.user.userLanguage
 if (userLanguage === 'cn' || userLanguage === 'en') {
   mme.prototype.lang = mme.prototype.langs[userLanguage]
 } else {

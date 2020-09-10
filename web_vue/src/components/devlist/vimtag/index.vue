@@ -124,7 +124,7 @@ export default {
       }
     },
     supportFilterFlag: function () { // 支持在线/离线设备筛选标识
-      return this.$store.state.jumpPageData.supportFilterFlag
+      return this.$store.state.user.supportFilterFlag
     },
     autoImgWidth: function () { // 动态计算图片宽度
       let device_list_num = sessionStorage.getItem("device_list_num") ? sessionStorage.getItem("device_list_num") : 4
@@ -482,7 +482,7 @@ export default {
       }
 
       window.onresize = function () { // 监听窗口改变事件
-        if (!_this.$store.state.jumpPageData.localFlag && _this.$store.state.jumpPageData.autoPlayFlag) { // 判断是否为客户端且为本地模式的自动播放情况
+        if (!_this.$store.state.jumpPageData.localFlag && _this.$store.state.user.autoPlayFlag) { // 判断是否为客户端且为本地模式的自动播放情况
           this.device_list_load();  // 重载设备列表
         }
       }
@@ -526,11 +526,10 @@ export default {
         this.search_sort[key] = this.$store.state.user.name + "_" + data[key].sn + "_sort"
         this.search_tree[key] = this.$store.state.user.name + "_" + data[key].sn + "_tree"
       }
-      // console.log(this.$store.state.jumpPageData.supportTreeFlag, 'supportTreeFlag')
-      if (this.$store.state.jumpPageData.supportTreeFlag && flag === 1) { //是不是支持树状结构
+      if (this.$store.state.user.supportTreeFlag && flag === 1) { //是不是支持树状结构
         console.log('是否为树形结构')
         this.get_service_record_list(0, data)
-      } else if (this.$store.state.jumpPageData.supportTreeFlag && flag === 0) { // 从播放页面返回，不发cfsf请求
+      } else if (this.$store.state.user.supportTreeFlag && flag === 0) { // 从播放页面返回，不发cfsf请求
         let back_flag = sessionStorage.getItem("back_flag")
         if (back_flag === null || !back_flag) {
           this.filterData = data // 解决返回后搜索设备功能无效问题
@@ -598,7 +597,7 @@ export default {
       let y_num = parseInt(client_height / dev_list_dom_height)
       let num = x_num * y_num
       let stop_scroll = null
-      let asnyc_time = this.$store.state.jumpPageData.autoPlayFlag ? 2000 : 100
+      let asnyc_time = this.$store.state.user.autoPlayFlag ? 2000 : 100
       stop_scroll = setInterval(() => {
         clearInterval(stop_scroll)
         this.device_event(0, num)
@@ -609,7 +608,7 @@ export default {
         }
         if (document.getElementById("vimtag_device_list_box")) {
           let scrollTop = document.documentElement.scrollTop
-          if (this.$store.state.jumpPageData.autoPlayFlag) {
+          if (this.$store.state.user.autoPlayFlag) {
             stop_scroll = setInterval(() => {
               clearInterval(stop_scroll)
               let top = scrollTop - 111
@@ -673,7 +672,7 @@ export default {
               }
             } else {
               if (l_dom_device_list_img.getAttribute("dtype") === "IPC") {
-                if (this.$store.state.jumpPageData.autoPlayFlag) {
+                if (this.$store.state.user.autoPlayFlag) {
                   let is_play = l_dom_device_list_img.getAttribute("play");
                   if (is_play === 0) {
                     $($(".camera_sign_picture_div")[i].childNodes[0]).hide();
@@ -847,7 +846,7 @@ export default {
       } else {
         $(".device_list_del_ico").hide();
       }
-      if (this.$store.state.jumpPageData.supportTreeFlag) {
+      if (this.$store.state.user.supportTreeFlag) {
         if ($(".device_list_sort_box").css("display") === "none") {
           $(".device_list_sort_box").show();
         } else {
@@ -1077,7 +1076,7 @@ export default {
       mx("#device_list_tree_all").onclick = function () { //点击设备列表全选
         jQuery(".tree_list_menu").removeClass("tree_list_menu_active");
         jQuery(this).addClass("tree_list_menu_active");
-        sessionStorage.clear();
+        // sessionStorage.clear()
         _this.device_list(data);
       }
       for (let lv = 0; lv < tree_level; lv++) {
@@ -1204,7 +1203,7 @@ export default {
     }
     // console.log(pageData,"pageData")
     await this.vimtagDevlist(pageData) // 进入页面后加载
-    // await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
+    await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf('vimtag') === -1) {
       // mipc系列
       languageSelect.mipc($('#login_box'))
@@ -1216,12 +1215,7 @@ export default {
     // this.publicFunc.projectReload.call(this);
   },
   created () {
-    let userLanguage = sessionStorage.getItem('userLanguage')
-    if (userLanguage) {
-      this.$chooseLanguage.lang(userLanguage)
-    } else {
-      this.$chooseLanguage.lang('en')
-    }
+    this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
   }
 }
 </script>

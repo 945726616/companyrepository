@@ -332,7 +332,7 @@ export default {
             email: $('#recovery_pass_email').val(),
             appid: _this.appid,
             name: _this.name,
-            lang: sessionStorage.getItem('userLanguage')
+            lang: _this.$store.state.user.userLanguage
           }).then(res => {
             //console.log(res.data, 'recovery_binding_email_res')
             recovery_binding_email_ack(res.data)
@@ -626,7 +626,7 @@ export default {
                   // srv: window.location.host, // 暂时注释由于有代理添加该参数会导致调用地址异常
                   ver_type: version_type,
                   ver_from: 'v3.9.1.1607051739',
-                  lang: sessionStorage.getItem('userLanguage'),
+                  lang: _this.$store.state.user.userLanguage,
                   p: [{ n: "status", v: "main" }]
                 }).then(res => {
                   get_version_ack(res.data)
@@ -839,12 +839,7 @@ export default {
     }
   },
   async mounted () {
-    let userLanguage = sessionStorage.getItem('userLanguage')
-    if (userLanguage) {
-      await this.$chooseLanguage.lang(userLanguage)
-    } else {
-      await this.$chooseLanguage.lang('en')
-    }
+    await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
     let pageData;//页面创建相关对象
     if(this.$route.params){
       pageData = this.$route.params;

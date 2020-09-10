@@ -103,7 +103,7 @@ export default {
         $('#mipc_logo_img').on('click', function () {
           $('#menu_more').attr('class', 'menu_top_li')
           $('#menu_download').attr('class', 'menu_top_li')
-          if (_this.$store.state.jumpPageData.loginFlag) {
+          if (_this.$store.state.user.loginFlag) {
             // createPage('devlist', { parent: $('#page') })
             _this.$router.push({name:'devlist',params:{parent: $('#page')}});
           } else if (_this.$store.state.jumpPageData.experienceFlag) {
@@ -117,7 +117,7 @@ export default {
         })
       }
       // _this.publicFunc.mx("#top_login_div").setAttribute("style","border:none;height:100%;line-height:62px;margin-top:0;padding:0 10px;");
-      if (_this.$store.state.jumpPageData.jmLogoFlag === 1) { // vimtag江门专属logo
+      if (_this.$store.state.user.jmLogoFlag === 1) { // vimtag江门专属logo
         $('#top_logo').children()[0].setAttribute('src', '../../asset/device/m_logo.png')
         $('#top_logo').children()[0].width = '220'
         $('#top_logo').children()[0].height = '36'
@@ -125,10 +125,10 @@ export default {
       let username_value = mcs_my // 定义用户名
       // console.log(_this.publicFunc.urlParam(), 'url')
       if (_this.$store.state.jumpPageData.localModel) { // 判断是否为本地离线模式
-        _this.$store.state.jumpPageData.loginFlag = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
+        _this.$store.state.user.loginFlag = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
         l_remember_data = sessionStorage.get('remember_msg_info')
         l_remember_data = eval('(' + l_remember_data + ')')
-        if (_this.$store.state.jumpPageData.loginFlag) {
+        if (_this.$store.state.user.loginFlag) {
           username_value = l_remember_data.user
           l_pwd_val = l_remember_data.password
         }
@@ -167,7 +167,7 @@ export default {
           _this.$store.dispatch('setLocalModel', 1)
         }
         if (_this.$store.state.jumpPageData.localModel) {
-          _this.$store.state.jumpPageData.loginFlag = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
+          _this.$store.state.user.loginFlag = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
         }
         if(_this.$route.path != '/my'){
           _this.$router.push({name:'my'})
@@ -180,8 +180,8 @@ export default {
       $('#top_login_div').click(function () {
         if (_this.$store.state.jumpPageData.localModel) {
           //如果点击了本地搜索
-          _this.$store.state.jumpPageData.loginFlag = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
-          if (_this.$store.state.jumpPageData.loginFlag) {
+          _this.$store.state.user.loginFlag = _this.publicFunc.urlParam() && _this.publicFunc.urlParam().c == 1 ? 1 : 0
+          if (_this.$store.state.user.loginFlag) {
             //已经登录了	点击我的设备无效
             // console.log('登录状态点击我的设备')
             _this.$store.dispatch('setLocalModel', 0)
@@ -201,7 +201,7 @@ export default {
             _this.$router.push({name:'devlist',params:{parent: $('#page')}});
           } else {
             //没有登录点击我的设备 跳转到登录页面
-            // console.log("_this.$store.state.jumpPageData.loginFlag === 0")
+            // console.log("_this.$store.state.user.loginFlag === 0")
             location.href = location.href.replace('&l=local&c=0', '')
           }
         } else {
@@ -212,7 +212,7 @@ export default {
             _this.$router.push({name:'login',params:{parent: $('#page')}});
           } else {
             _this.$store.dispatch('setExperienceFlag', 0)
-            if (_this.$store.state.jumpPageData.loginFlag) {
+            if (_this.$store.state.user.loginFlag) {
               //已经登录，直接到设备列表页面
               // console.log('点击了设备列表按钮')
               // createPage('devlist', { parent: $('#page') })
@@ -244,7 +244,7 @@ export default {
       select_lang()
       function select_lang () {
         let l_select_lang = document.getElementsByClassName('select_lang')
-        let language_choice_info = sessionStorage.getItem('userLanguage')
+        let language_choice_info = _this.$store.state.user.userLanguage
         let l_lang = language_choice_info ? language_choice_info : 'en'
 
         for (let l = 0; l < l_select_lang.length; l++) {
@@ -328,12 +328,7 @@ export default {
   mounted () {
     this.$nextTick(async () => {
       // 强制重新引入多国语言 main.js中的引用无法确保在调用top时能够全局使用
-      let userLanguage = sessionStorage.getItem('userLanguage')
-      if (userLanguage) {
-        await this.$chooseLanguage.lang(userLanguage)
-      } else {
-        await this.$chooseLanguage.lang('en')
-      }
+      await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
       if (!this.$store.state.jumpPageData.projectFlag) { 
         $("#top_experience_div").css("display","none");
       }

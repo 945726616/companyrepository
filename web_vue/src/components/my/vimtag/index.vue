@@ -237,12 +237,12 @@ export default {
       if (_this.$store.state.jumpPageData.localFlag) {
         l_remember_data = localStorage.getItem("remember_msg_info"); //点击本地搜索后这个还有
         l_remember_data = eval('(' + l_remember_data + ')');
-        if (_this.$store.state.jumpPageData.loginFlag) {
+        if (_this.$store.state.user.loginFlag) {
           username_value = l_remember_data.user;
           l_pwd_val = l_remember_data.password;
         }
       }
-      if (_this.$store.state.jumpPageData.loginFlag) {
+      if (_this.$store.state.user.loginFlag) {
         let username_value = JSON.parse(localStorage.getItem("remember_msg_info")).user;
         _this.publicFunc.mx("#user_logo_username").innerHTML = username_value ? username_value : mcs_username;
         _this.publicFunc.mx("#about").parentNode.style.display = "block";
@@ -254,7 +254,7 @@ export default {
         _this.publicFunc.mx("#add_email").parentNode.style.display = "block";
         _this.publicFunc.mx('#li_line').style.display = "none";
         // _this.publicFunc.mx("#local_div").parentNode.style.display = "block";// 本地搜索测试	
-        if (_this.$store.state.jumpPageData.autoPlayFlag) {
+        if (_this.$store.state.user.autoPlayFlag) {
           _this.publicFunc.mx("#auto_play").parentNode.style.display = "block";
         }
         if (window.fujikam) {
@@ -458,7 +458,7 @@ export default {
             }
             // g_loacl部分目前仅vimtag可以使用,mipc系列暂不支持相关参数
             _this.$store.state.jumpPageData.localFlag = (_this.publicFunc.urlParam() && _this.publicFunc.urlParam().l === "local") ? 1 : 0;
-            if (_this.$store.state.jumpPageData.loginFlag) {
+            if (_this.$store.state.user.loginFlag) {
               _this.publicFunc.delete_tips({
                 content: mcs_prompt_exit, flag: "my_page", func: function () { //g 5.5 flag是后加的，判断是my_page页面，点击取消
                   localStorage.setItem("auto_login", 0);
@@ -497,11 +497,11 @@ export default {
           if (id_name == "local_devs") { // 点击本地搜索按钮后执行
             // console.log("进入判断")
             // console.log(location.href, "location.href")
-            // console.log(_this.$store.state.jumpPageData.loginFlag, "_this.$store.state.jumpPageData.loginFlag")
+            // console.log(_this.$store.state.user.loginFlag, "_this.$store.state.user.loginFlag")
             // console.log(urlparms, "urlparms")
             //  console.log(_this.$store.state.jumpPageData.localFlag, "_this.$store.state.jumpPageData.localFlag")
             // location.href=location.href+"&l=local"+(location.href.indexOf("file=vimtag")>-1?"&file=vimtag":"");
-            location.href = location.href + "&l=local&c=" + _this.$store.state.jumpPageData.loginFlag + "" + (location.href.indexOf("file=vimtag") > -1 ? "&file=vimtag" : "");
+            location.href = location.href + "&l=local&c=" + _this.$store.state.user.loginFlag + "" + (location.href.indexOf("file=vimtag") > -1 ? "&file=vimtag" : "");
             // alert(location.href)
           }
           if (id_name == "my_other") {
@@ -803,7 +803,7 @@ export default {
           sessionStorage.setItem("developer", checkbox_check);
         };
         $("#mp_btn").click(function () { // 点击提交修改管理密码按钮
-          if (_this.$store.state.jumpPageData.guest) {
+          if (_this.$store.state.user.guest) {
             _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
           } else {
             let reg;
@@ -865,7 +865,7 @@ export default {
           }
         })
         $("#gp_btn").click(function () { // 点击提交访客密码按钮
-          if (_this.$store.state.jumpPageData.guest) {
+          if (_this.$store.state.user.guest) {
             _this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
           } else {
             let reg;
@@ -940,7 +940,7 @@ export default {
             user: user_info.user,
             pass: user_info.password,
             appid: appid,
-            lang: sessionStorage.getItem('userLanguage')
+            lang: _this.$store.state.user.userLanguage
           }).then(res => {
             binding_email_ack(res)
           })
@@ -1007,7 +1007,7 @@ export default {
         // }
         $("#set_auto_play_btn").iButton({
           change: function () {
-            if (_this.publicFunc.mx("#set_auto_play_btn").checked && _this.$store.state.jumpPageData.autoPlayFlag) {
+            if (_this.publicFunc.mx("#set_auto_play_btn").checked && _this.$store.state.user.autoPlayFlag) {
               localStorage.setItem("auto_play", 1)
               _this.$store.dispatch('setAutoPlayFlag', 1)
             } else {
@@ -1030,12 +1030,7 @@ export default {
     }
   },
   async mounted () {
-    let userLanguage = sessionStorage.getItem('userLanguage')
-    if (userLanguage) {
-      await this.$chooseLanguage.lang(userLanguage)
-    } else {
-      await this.$chooseLanguage.lang('en')
-    }
+    await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
     let pageData;//页面创建相关对象
     if (this.$route.params) {
       pageData = this.$route.params;

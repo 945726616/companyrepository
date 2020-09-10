@@ -111,19 +111,27 @@ export default {
       for (let i = 0; i < msg.length; i++) {
         if (msg[i].type !== "socket") {
           let device_status_img = ""
+          let no_get_img = false
           if (msg[i].stat === "Offline") {
             device_status_img = "device_ipc_offline"
+            no_get_img = true
           } else if (msg[i].stat === "InvalidAuth") {
             device_status_img = "device_ipc_InvalidAuth"
+            no_get_img = true
           } else if (msg[i].stat === "Online") {
             if (!this.$store.state.jumpPageData.selectDeviceIpc) {
+              console.log(this.$store.state.jumpPageData.selectDeviceIpc, 'this.$store.state.jumpPageData.selectDeviceIpc')
               this.$store.dispatch('setSelectDeviceIpc', msg[i].sn)
             }
           }
           let itemNick = msg[i].nick.length < 15 ? msg[i].nick : msg[i].nick.substr(0, 13) + "..."
           msg[i].nick = itemNick
           msg[i].imgClass = device_status_img
-          msg[i].def_img = this.$api.devlist.pic_url_get({ sn: msg[i].sn, token: "p1" })
+          if (!no_get_img) {
+            msg[i].def_img = this.$api.devlist.pic_url_get({ sn: msg[i].sn, token: "p1" })
+          } else {
+            msg[i].def_img = null
+          }
           // this.deviceArr.push(msg[i])
           this.$set(this.deviceArr, i, msg[i])
         }
@@ -261,13 +269,9 @@ export default {
     // 点击事件 结束
   },
   async mounted () {
-    this.publicFunc.projectReload.call(this);
-    let userLanguage = sessionStorage.getItem("userLanguage");
-    if (userLanguage) {
-      await this.$chooseLanguage.lang(userLanguage);
-    } else {
-      await this.$chooseLanguage.lang("en");
-    }
+    // this.publicFunc.projectReload.call(this);
+    console.log(this.$store.state.user, '(this.$store.state.user')
+    await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
     let pageData; //页面创建相关对象
     if (this.$route.params) {
       pageData = this.$route.params;
@@ -277,14 +281,14 @@ export default {
     }
     // console.log(pageData, "pageData");
     await this.mipcDevlist(pageData); // 进入页面后加载
-    // await this.publicFunc.importCss("Public.scss"); // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
+    await this.publicFunc.importCss("Public.scss"); // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     if (window.location.href.indexOf("vimtag") === -1) {
       // mipc系列
       languageSelect.mipc($("#login_box"));
       $("#login_box").append("<div id='is_mipc_div'></div>");
     }
     if (!this.$store.state.jumpPageData.projectFlag) {
-      $("#top_experience_div").css("display", "none");
+      $("#top_experience_div").css("display", "none")
     }
 
   }
