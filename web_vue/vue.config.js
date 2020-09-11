@@ -51,7 +51,7 @@ module.exports = {
   configureWebpack: config => {
     if (process.env.NODE_ENV === 'production') { // 生产环境打包使用插件
       // 为生产环境修改配置...
-      config.optimization.minimize = false // 是否压缩代码
+      config.optimization.minimize = true // 是否压缩代码
       config.mode = 'production'
       config.plugins.push(
         new FileManagerPlugin({ // 打包文件处理插件 用于构造合适的压缩包路径以及删除多余的打包内容 打包时需要传递--appVersion=xxx参数

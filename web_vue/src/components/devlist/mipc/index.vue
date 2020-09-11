@@ -53,7 +53,7 @@
       <!-- 右侧详情内容 结束 -->
     </div>
     <!-- 使用添加设备弹窗组件 -->
-    <device-Model :addDeviceModelObj='addDeviceModelObj' :addDeviceModel='addDeviceModel' :add_device_type_arr='add_device_type_arr' @closeModel='closeModel'></device-Model>
+    <device-Model :addDeviceModelObj='addDeviceModelObj' :addDeviceModel='addDeviceModel' :add_device_type_arr='add_device_type_arr' @closeModel='closeModel' :add_device_input_id='add_device_input_id'></device-Model>
   </div>
 </template>
 <style lang="scss">
@@ -83,6 +83,7 @@ export default {
         { type: 's1', url: require('@/assets/mipc/mipc-guide-box.png'), name: mcs_cloud_box },
         { type: 'fisheye', url: require('@/assets/mipc/fisheye_off.png'), name: mrs_fisheye },
       ],
+      add_device_input_id: null, // 添加设备输入框输入的id
       imgRefresh: null // 传递过来的图片是否刷新标识
     }
   },
@@ -167,6 +168,7 @@ export default {
     closeModel () {
       this.addDeviceModel = false
       this.addDeviceModelObj = {}
+      this.add_device_input_id = null
       this.get_dev_list("refresh")
     },
     // 点击事件
@@ -176,20 +178,14 @@ export default {
         let sn = item.sn
         let type = item.type
         let state = item.stat
+        // console.log('执行', state, type, this.$store.state.jumpPageData.selectDeviceIpc, sn)
         if (sn === this.$store.state.jumpPageData.selectDeviceIpc) {
           this.publicFunc.mx("#active_dev_li").style.top = (154 * index) + "px" // 154为固定的active高度
           this.publicFunc.mx(".dev_list")[index].className = "dev_list dev_list_active"
           if (type === 'IPC') {
-            // createPage("play", {parent:$("#dev_main_right")})
-            if (this.$route.path !== '/play') {
-              this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
-            }
+            this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
           } else if (type === "BOX") {
-            let jumpData = { parent: $("#dev_main_right"), parentId: "dev_main_right" }
-            // createPage("boxlist", {parent:$("#dev_main_right")})
-            if (this.$route.path !== '/boxlist') {
-              this.$router.push({ name: 'boxlist', params: jumpData })
-            }
+            this.$router.push({ name: 'boxlist', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
           }
         }
         if (state === "Online") {
@@ -204,16 +200,16 @@ export default {
           this.publicFunc.mx(".dev_list")[index].className = "dev_list"
           this.publicFunc.mx(".dev_list")[index].className = "dev_list dev_list_active"
           if (type === 'IPC') {
-            if (this.$route.path !== '/play') {
+            if (this.$route.name !== 'play') {
               this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
             } else {
               mipcPlay({ parent: $('#dev_main_right') })
             }
           } else if (type === "BOX") {
-            if (this.$route.path !== '/boxlist') {
+            if (this.$route.name !== 'boxlist') {
               this.$router.push({ name: 'boxlist', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
             } else {
-              create_boxlist_page(jumpData)
+              create_boxlist_page({ parent: $("#dev_main_right"), parentId: "dev_main_right" })
             }
           }
         } else if (state === "InvalidAuth") { // 展示弹窗

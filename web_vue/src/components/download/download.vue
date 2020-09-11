@@ -21,6 +21,12 @@
             <div id='download_mac_btn' class='download_btn'>Mac {{mcs_download}} </div>
           </a>
         </div>
+        <div class='download_list download_mac' v-if="project_name === 'mipcm'">
+          <div :id="project_name == 'ebitcam'?'ebit_download_mac_img':'download_mac_img'"></div>
+          <a href='https://ovca17.mipcm.com:7443/dcm/static/MacCatalina/Mipcm.pkg' target='_blank' id='download_mac'>
+            <div id='download_mac_btn' class='download_btn'>Mac Catalina {{mcs_download}} </div>
+          </a>
+        </div>
         <div class='download_list download_android' v-if="download_info[2].link_url">
           <div :id="project_name == 'ebitcam'?'ebit_download_android_img':'download_android_img'"></div>
           <a :href='download_info[2].link_url' target='_blank' id='download_android'>
