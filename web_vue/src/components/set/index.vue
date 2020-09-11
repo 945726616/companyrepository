@@ -12249,6 +12249,7 @@ export default {
       //报警录像公用代码
       function mode_sd_get_ack (msg) {
         let length = _this.publicFunc.mx(".list_info_select").length;
+        let record_mode;
         for (let i = 0; i < length; i++) {
           _this.publicFunc.mx(".list_info_select")[i].onclick = function () {
             record_mode = this.getAttribute("type");
