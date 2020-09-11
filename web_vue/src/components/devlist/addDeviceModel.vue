@@ -198,11 +198,15 @@ export default {
     addDeviceModel: { // 添加设备弹窗控制标识
       type: Boolean,
       default: false
+    },
+    add_device_input_id: { // 添加设备输入设备Id Input框value
+      type: String,
+      default: null
     }
   },
   data () {
     return {
-      add_device_input_id: null, // 添加设备输入设备Id Input框value
+      // add_device_input_id: null, 
       add_device_password: null, // 添加设备输入密码 Input框value
       edit_password_1st: null, // 修改密码第一次输入 Input框value
       edit_password_2nd: null, // 修改密码第二次输入 Input框value
@@ -244,7 +248,9 @@ export default {
       mcs_device_offline_check: mcs_device_offline_check,
       mcs_choose_device_type: mcs_choose_device_type,
       mcs_reconfigure: mcs_reconfigure,
-      mcs_device_offline_fourth_reson: mcs_device_offline_fourth_reson
+      mcs_device_offline_fourth_reson: mcs_device_offline_fourth_reson,
+      mcs_search_help: mcs_search_help,
+      mcs_device_offline: mcs_device_offline
     }
   },
   methods: {
@@ -568,7 +574,7 @@ export default {
     closeModel () { // 关闭弹窗
       // this.addDeviceModelObj = {} // 清空弹窗所需对象 解决再次打开后的污染
       // this.addDeviceModel = false // 关闭弹窗
-      this.add_device_input_id = '' // 重置输入的设备Id
+      // this.add_device_input_id = '' // 重置输入的设备Id
       this.add_device_password = '' // 重置设备输入密码 Input框value
       this.edit_password_1st = '' // 重置修改密码第一次输入 Input框value
       this.edit_password_2nd = '' // 重置修改密码第二次输入 Input框value

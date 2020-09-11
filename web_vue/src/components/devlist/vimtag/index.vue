@@ -103,10 +103,10 @@
     </div>
     <!-- 设备列表展示部分 结束 -->
     <!-- 使用添加设备弹窗组件 -->
-    <device-Model :addDeviceModelObj='addDeviceModelObj' :addDeviceModel='addDeviceModel' :add_device_type_arr='add_device_type_arr' @closeModel='closeModel'></device-Model>
+    <device-Model :addDeviceModelObj='addDeviceModelObj' :addDeviceModel='addDeviceModel' :add_device_type_arr='add_device_type_arr' @closeModel='closeModel' :add_device_input_id='add_device_input_id'></device-Model>
   </div>
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
 @import 'index.scss';
 </style>
 <script>
@@ -831,6 +831,7 @@ export default {
     closeModel () { // 子组件关闭弹窗
       this.addDeviceModel = false
       this.addDeviceModelObj = {}
+      this.add_device_input_id = null
       this.get_dev_list("refresh")
     },
     addDevClick () { // 添加设备点击事件

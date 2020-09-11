@@ -198,7 +198,7 @@
                                     localStorage.setItem("remember_msg_info", JSON.stringify({ user: username }));
                                 }
                                 _this.$router.push({ name: 'login' })
-                                sessionStorage.clear();
+                                sessionStorage.clear()
                                 location.reload()
                             }
                         })

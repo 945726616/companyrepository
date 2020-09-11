@@ -141,99 +141,6 @@ input, button, select, textarea {
 // 	height:62px;
 // }
 //top-end
-#buffer_page{
-		position:fixed;
-		width:100%;
-		height:100%;
-		z-index:99999;
-		// display:none;
-		left:0px;
-		top:0px;
-		background-color:#000000;
-		filter:alpha(opacity=50);  /*IE*/
-		opacity:0.5;               /*Mozilla*/
-		font-size:16px;
-		color:#ffffff;
-		text-align:center;
-		padding-top:23%;
-}
-#buffer_image{
-		background:url("../assets/device/buffer.gif") 0px 0px transparent no-repeat;
-		width:100px;
-		height:100px;
-		margin:0 auto;
-}
-#back_to_dev_list{
-	margin: auto;
-	margin-top: 20px;
-	padding: 20px 40px;
-	// display: none;
-	background-color: $projectColor;
-	width: max-content;
-	border-radius: 5px;
-	cursor: pointer;
-}
-/*delete_tips*/
-#delete_tips{
-	width:100%;
-	position: fixed;
-	z-index: 10000;
-}
-#delete_tips_box{
-	width:340px;
-    background: #fff;
-    border-radius: 5px;
-    -moz-box-shadow: 2px 2px 5px #333333;
-    -webkit-box-shadow: 2px 2px 5px #333333;
-    box-shadow: 2px 2px 5px #333333;
-    position: absolute;
-    z-index: 100000;
-    top: 250px;
-    left: 50%;
-    margin-left:-170px;
-}
-
-#delete_tips_content{
-	font-size: 18px;
-	text-align: center;
-	color:#646464;
-	padding-top:18px;
-	padding-bottom: 29px;
-}
-#delete_tips_title{
-	font-size: 21px;
-	color:#323232;
-	text-align: center;
-	padding-top:38px;
-}
-#delete_tips_btn{
- height:65px;
-}
-#delete_tips_cancel{
-	float:left;
-	color:$projectColor;
-	font-size:21px;
-	cursor:pointer;
-	border-top:1px solid #ccc;
-	box-sizing: border-box;
-	text-align:center;
-	line-height: 65px;
-	width:50%;
-	height:100%;
-}
-#delete_tips_ok{
-	float:right;
-	box-sizing: border-box;
-    height:100%;
-	color:$projectColor;
-	font-size:21px;
-	cursor:pointer;
-	border-top:1px solid #ccc;
-	border-left:1px solid #ccc;
-	width:50%;
-	text-align:center;
-	line-height: 65px;
-}
 // #login_page{
 // 	width:100%;
 // 	height:100%;
@@ -838,9 +745,9 @@ div.ibutton-label-on, div.ibutton-label-off {
 	border: 1px solid #ccc;
 }
 .ibutton-container {
-	margin-top: 18px;
-	width: 60px;
-	overflow: visible;
+	margin-top: 18px !important;
+	width: 60px !important;
+	overflow: visible !important;
 }
 .ibutton-handle {
 	height: 20px;
@@ -1990,11 +1897,11 @@ div.ibutton-label-on {
     height:8px;
     margin:40px auto;
 }
-#add_device_sample_img{
-    width:320px;
-    height:200px;
-    margin:55px auto;
-}
+// #add_device_sample_img{
+//     width:320px;
+//     height:200px;
+//     margin:55px auto;
+// }
 #add_device_fail_img{
 	width:100px;
 	height:100px;

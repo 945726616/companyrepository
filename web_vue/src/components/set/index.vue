@@ -1,10 +1,183 @@
 <template>
   <div id="set"></div>
 </template>
+<style>
+.fd-slider-bar {
+	background-image: none;
+	cursor: pointer;
+	height: 0.5px;
+    background-color: rgb(0, 166, 186) !important;
+    border-bottom: 1px solid rgb(0, 166, 186) !important;
+}
+.fd-slider-cover {
+	background: #c0c0c0 !important;
+	border-bottom: 1px solid #c0c0c0 !important;
+	cursor: pointer;
+	height:0.5px;
+}
+.fd-slider-handle {
+	background: none;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	background: rgb(255, 255, 255) !important;
+    height: 15px !important;
+    width: 15px !important;
+    border: 1px solid rgb(204, 204, 204) !important;
+}
+.fd-slider-hover .fd-slider-handle {
+	background: none;
+	background-color: #fff;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+}
+.ibutton-handle-middle {
+	float: right;
+	margin-top: -3px;
+	margin-left: 1px;
+	width: 17px;
+	height: 17px;
+	background: none;
+	background-color: #fff;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border: 1px solid #ccc;
+}
+.ibutton-container {
+	margin-top: 18px !important;
+	width: 60px !important;
+	overflow: visible !important;
+}
+.ibutton-handle {
+	height: 20px !important;
+	width: 20px;
+	background: none;
+	padding: 0px;
+}
+.ibutton-container label {
+	cursor: inherit;
+	font-size: 12px !important;
+	font-weight: normal;
+	color:#0ea9bb;
+}
+div.ibutton-label-on {
+	color: #7c7c7c;
+	/*修改了这里*/
+	text-shadow: 0 -1px 2px rgba(153, 153, 153, 0.4);
+	left: 0;
+	z-index: 1;
+}
+.tzSelect {
+	width: 210px;
+	height:34px;
+}
+.tzSelect .selectBox {
+	position: relative;
+	width:200px;
+	height: 34px;
+	line-height: 34px;
+	text-align: center;
+	padding-right: 3px;
+	margin-top: 5px;
+	background-color: #ffffff;
+	background-image: none;
+	background-repeat: no-repeat;
+	background-position: 98% 40%;
+	border: 1px solid #22aaaa;
+	cursor: pointer;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	z-index: 20;
+}
+.tzSelect .dropDown {
+	position: absolute;
+	top: 30px;
+	padding-top: 13px;
+	padding-bottom: 13px;
+	left: 0;
+	width: 100%;
+	border: 1px solid #22aaaa;
+	background-image: none;
+	background-color: #ffffff;
+	-moz-background-size: 100% 100%;
+	-webkit-background-size: 100% 100%;
+	-o-background-size: 100% 100%;
+	background-size: 100% 100%;
+	list-style: none;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	-moz-box-shadow: 0 0 4px #111;
+	-webkit-box-shadow: 0 0 4px #111;
+	box-shadow: 0 0 4px #111;
+	z-index: 21;
+	max-height: 230px;
+	overflow: auto;
+}
+.tzSelect .dropDown::-webkit-scrollbar{
+    width:5px;
+}
+.tzSelect .dropDown::-webkit-scrollbar-thumb:vertical{
+    background-color:#999;
+    border-radius: 6px;
+}
+.tzSelect #select_network_edit {
+	background-color: gary;
+	border: 0pt;
+	color: #000000;
+	font-size: 14px;
+	font-weight: 500;
+	text-align: center;
+	position: absolute;
+	line-height: 22px;
+	height: 22px;
+	width: 88%;
+	top: 6px;
+	left: 1px;
+	border-radius: 8px;
+	background-color: #ffffff;
+	z-index: 3;
+	margin-top:0;
+}
+#select_network_li .tzSelect {
+	width: 200px;
+}
+#select_network_edit .dropDown{
+	height:200px;
+}
+div.ibutton-label-on, div.ibutton-label-off {
+	/*修改了这里  background-color ;height原来是9 px*/
+	background-color: #dedede; 
+	border-radius: 20px;
+	height: 9px;
+	white-space: nowrap;
+	font-size: 17px;
+	line-height: 17px;
+	font-weight: bold;
+	text-transform: uppercase;
+	cursor: inherit;
+	display: block;
+	position: absolute;
+	top: 0;
+	padding-top: 3px;
+	overflow: hidden;
+	/*background: url("../assets/device/vimtag_img.png") no-repeat -145px -116px;*/
+	width: 60px;
+	/*height: 22px;*/
+}
+</style>
 <script>
 import fdSliderController from '../../util/fdSliderController'
 import languageSelect from '../../lib/exportModule/languageSelect.js'
 import mcodec from '../../util/mcodec.js'
+import '../../css/jquery.ibutton.scss'
+import "../../css/jquery.tzSelect.scss"
 export default {
   data () {
     return {
