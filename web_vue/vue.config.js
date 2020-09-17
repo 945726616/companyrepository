@@ -1,5 +1,7 @@
 const webpack = require("webpack")
 const FileManagerPlugin = require('filemanager-webpack-plugin')
+// let scssVariables = require('./src/css/variables.scss.js')
+// const cssvariables = require("postcss-css-variables")
 
 // 版本管理
 let date = new Date()
@@ -46,7 +48,14 @@ module.exports = {
   outputDir: './dist/http_' + process.env.VUE_APP_VERSION + time, // 项目打包输出路径
   productionSourceMap: false,
   css: {
-    extract: false
+    extract: false,
+    // loaderOptions: {
+    //   sass: {
+    //     prependData: Object.keys(scssVariables)
+    //       .map(k => `\$${k.replace('_', '-')}: ${scssVariables[k]};`)
+    //       .join('\n')
+    //   }
+    // }
   },
   configureWebpack: config => {
     if (process.env.NODE_ENV === 'production') { // 生产环境打包使用插件
@@ -85,6 +94,11 @@ module.exports = {
         'window.jQuery': 'jquery'
       })
     )
+    // config.plugins.push(
+    //   new cssvariables({
+    //     preserve: true
+    //   })
+    // )
   },
   chainWebpack: config => { // 解决webpack无法打包.ico文件
     config.module

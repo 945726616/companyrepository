@@ -23,9 +23,11 @@
     cursor:pointer;
     width:22px;
     height:22px;
-    background: url(~@/assets/device/refresh.png) no-repeat;
+    background-image: url(~@/assets/device/refresh.png);
+    background-repeat: no-repeat;
     &:hover{
-      background: url(~@/assets/device/refresh2.png) no-repeat;
+      background-image: url(~@/assets/device/refresh2.png);
+      background-repeat: no-repeat;
     }
   }
   #dev_search{ // 搜索输入框
@@ -51,7 +53,9 @@
       float:left;
       width:40px;
       height:30px;
-      background:url(~@/assets/device/search2.png) no-repeat 10px 5px;
+      background-image: url(~@/assets/device/search2.png);
+      background-repeat: no-repeat;
+      background-position: 10px 5px;
       background-color: $projectColor;
       border-top-right-radius: 4px;
       border-bottom-right-radius: 4px;
@@ -77,16 +81,19 @@
         margin-left:6px;
       }
       .online_btn_down{
-        background: url(~@/assets/device/down.png) no-repeat;
+        background-image: url(~@/assets/device/down.png);
+        background-repeat: no-repeat;
       }
       .online_btn_up{
-        background: url(~@/assets/device/up.png) no-repeat;
+        background-image: url(~@/assets/device/up.png);
+        background-repeat: no-repeat;
       }
     }
     #online_btn_box{
       width: 100px;
       height: 82px;
-      background: url(~@/assets/device/frame2.png) no-repeat;
+      background-image: url(~@/assets/device/frame2.png);
+      background-repeat: no-repeat;
       background-size:100% 100%;
       font-size:14px;
       left:-33px;
@@ -152,7 +159,8 @@
       line-height:52px;
       width:146px;
       height:52px;
-      background:url(~@/assets/device/prompt-box.png) no-repeat;
+      background-image:url(~@/assets/device/prompt-box.png);
+      background-repeat: no-repeat;
       position:absolute;
       left:-47px;
       top:32px;
@@ -233,9 +241,11 @@
     margin-top:10px;
     margin-right:10px;
     display: none;
-    background: url(~@/assets/device/device_delete.png) no-repeat;
+    background-image: url(~@/assets/device/device_delete.png);
+    background-repeat: no-repeat;
     &:hover{
-      background: url(~@/assets/device/device_delete2.png) no-repeat;
+      background-image: url(~@/assets/device/device_delete2.png);
+      background-repeat: no-repeat;
     }
   }
   .device_list_sort_box{
@@ -258,7 +268,8 @@
   }
 }
 #empty_div_img{ // 设备列表无设备时展示图片
-  background:url(~@/assets/device/dev_no.png) no-repeat;
+  background-image:url(~@/assets/device/dev_no.png);
+  background-repeat: no-repeat;
   width:52px;
   height:52px;
   background-size: 100% 100%;
@@ -300,9 +311,11 @@
         margin-top:17px;
         float:right;
         cursor:pointer;
-        background: url(~@/assets/device/n-close.png) no-repeat;
+        background-image: url(~@/assets/device/n-close.png);
+        background-repeat: no-repeat;
         &:hover {
-          background: url(~@/assets/device/c-close.png) no-repeat;
+          background-image: url(~@/assets/device/c-close.png);
+          background-repeat: no-repeat;
         }
       }
       #add_devices_help{
@@ -312,7 +325,8 @@
           cursor:pointer;
           margin-right: 20px; 
           margin-top: 17px;
-          background: url(~@/assets/device/help.png) no-repeat;
+          background-image: url(~@/assets/device/help.png);
+          background-repeat: no-repeat;
           background-size:100% 100%;
       }
       #add_devices_box_back{
@@ -321,10 +335,14 @@
         padding-left: 13px;
         line-height: 60px;
         margin-left:20px;
-        background: url(~@/assets/device/back.png) 0 24px no-repeat;
+        background-image: url(~@/assets/device/back.png);
+        background-repeat: no-repeat;
+        background-position: 0 24px;
         &:hover{
           color:$projectColor;
-          background: url(~@/assets/device/choose-back.png) 0 24px no-repeat;
+          background-image: url(~@/assets/device/choose-back.png);
+          background-repeat: no-repeat;
+          background-position: 0 24px;
         }
       }
       #add_devices_box_title{
@@ -372,35 +390,54 @@
         }
       }
       #input_device_id{ // 填写设备id
-        .add_device_sample_img_361{
-          background: url(~@/assets/device/id_361.png) no-repeat;
+        .vimtag_add_device_sample_img_361{
+          background-image: url(~@/assets/device/id_361.png);
+          background-repeat: no-repeat;
+          background-size: contain;
         }
-        .add_device_sample_img_b1{
-          background: url(~@/assets/device/id_b1.png) no-repeat;
+        .vimtag_add_device_sample_img_b1{
+          background-image: url(~@/assets/device/id_b1.png);
+          background-repeat: no-repeat;
+          background-size: contain;
         }
-        .add_device_sample_img_b2{
-          background: url(~@/assets/device/id_b2.png) no-repeat;
+        .vimtag_add_device_sample_img_b2{
+          background-image: url(~@/assets/device/id_b2.png);
+          background-repeat: no-repeat;
+          background-size: contain;
         }
-        .add_device_sample_img_b3{
-          background: url(~@/assets/device/id_b3.png) no-repeat;
+        .vimtag_add_device_sample_img_b3{
+          background-image: url(~@/assets/device/id_b3.png);
+          background-repeat: no-repeat;
+          background-size: contain;
         }
-        .add_device_sample_img_cm1{
-          background: url(~@/assets/device/id_cm1.png) no-repeat;
+        .vimtag_add_device_sample_img_cm1{
+          background-image: url(~@/assets/device/id_cm1.png);
+          background-repeat: no-repeat;
+          background-size: contain;
         }
-        .add_device_sample_img_cp1{
-          background: url(~@/assets/device/id_cp1.png) no-repeat;
+        .vimtag_add_device_sample_img_cp1{
+          background-image: url(~@/assets/device/id_cp1.png);
+          background-repeat: no-repeat;
+          background-size: contain;
         }
-        .add_device_sample_img_fisheye{
-          background: url(~@/assets/device/id_fisheye.png) no-repeat;
+        .vimtag_add_device_sample_img_fisheye{
+          background-image: url(~@/assets/device/id_fisheye.png);
+          background-repeat: no-repeat;
+          background-size: contain;
         }
-        .add_device_sample_img_m1{
-          background: url(~@/assets/device/id_m1.png) no-repeat;
+        .vimtag_add_device_sample_img_m1{
+          background-image: url(~@/assets/device/id_m1.png);
+          background-repeat: no-repeat;
+          background-size: contain;
         }
-        .add_device_sample_img_p1{
-          background: url(~@/assets/device/id_p1.png) no-repeat;
+        .vimtag_add_device_sample_img_p1{
+          background-image: url(~@/assets/device/id_p1.png);
+          background-repeat: no-repeat;
+          background-size: contain;
         }
-        .add_device_sample_img_s1{
-          background: url(~@/assets/device/id_s1.png) no-repeat;
+        .vimtag_add_device_sample_img_s1{
+          background-image: url(~@/assets/device/id_s1.png);
+          background-repeat: no-repeat;
         }
         .add_device_input_id_box_del{
           width:16px;
@@ -408,7 +445,8 @@
           float: right;
           margin: 10px;
           cursor: pointer;
-          background: url(~@/assets/device/cause.png) no-repeat;
+          background-image: url(~@/assets/device/cause.png);
+          background-repeat: no-repeat;
         }
       }
       #add_offline_device{ // 离线设备添加
@@ -427,7 +465,8 @@
           width:20px;
           height:20px;
           display:inline-block;
-          background:url(~@/assets/device/sound.png) no-repeat;
+          background-image:url(~@/assets/device/sound.png);
+          background-repeat: no-repeat;
           background-size: 100% 100%;
           margin-left: 12px;
           vertical-align: middle;
@@ -456,8 +495,9 @@
           height:100px;
           margin:55px auto;
           cursor: pointer;
-          background: url(~@/assets/device/error.png) no-repeat;
+          background-image: url(~@/assets/device/error.png);
           background-size: 100% 100%;
+          background-repeat: no-repeat;
         }
         #add_devices_unconnect_info{
           margin-left:141px;
@@ -499,10 +539,12 @@
           margin-top:7px;
           margin-right:230px;
           cursor:pointer;
-          background: url(~@/assets/device/refresh.png) no-repeat;
+          background-image: url(~@/assets/device/refresh.png);
+          background-repeat: no-repeat;
       }
       #add_device_set_wifi_refresh:hover{
-          background: url(~@/assets/device/refresh2.png) no-repeat;
+          background-image: url(~@/assets/device/refresh2.png);
+          background-repeat: no-repeat;
       }
         #add_device_set_wifi_box{
           width:240px;
@@ -516,7 +558,8 @@
             height:16px;
             float: left;
             margin: 10px;
-            background: url(~@/assets/device/wifi.png) no-repeat;
+            background-image: url(~@/assets/device/wifi.png);
+            background-repeat: no-repeat;
           }
         }
       }
@@ -535,7 +578,8 @@
           height:16px;
           float: left;
           margin: 10px;
-          background: url(~@/assets/device/nickname.png) no-repeat;
+          background-image: url(~@/assets/device/nickname.png);
+          background-repeat: no-repeat;
         }
       }
       #set_device_zone{ // 设置设备时区
@@ -552,7 +596,8 @@
             height:16px;
             float: left;
             margin: 10px;
-            background: url(~@/assets/device/place.png) no-repeat;
+            background-image: url(~@/assets/device/place.png);
+            background-repeat: no-repeat;
           }
         }
       }
@@ -612,7 +657,8 @@
         height:16px;
         float: left;
         margin: 10px;
-        background: url(~@/assets/device/camera.png) no-repeat;
+        background-image: url(~@/assets/device/camera.png);
+        background-repeat: no-repeat;
       }
       #add_device_submit{
         color:#fff;
@@ -645,14 +691,16 @@
         margin:0 auto;
         margin-top:50px;
         margin-bottom: 14px;
-        background: url(~@/assets/device/success2.png) no-repeat;
+        background-image: url(~@/assets/device/success2.png);
+        background-repeat: no-repeat;
       }
       .add_device_input_pass_box_ico{
         width:16px;
         height:16px;
         float: left;
         margin: 10px;
-        background: url(~@/assets/device/key.png) no-repeat;
+        background-image: url(~@/assets/device/key.png);
+        background-repeat: no-repeat;
       }
       #add_device_success_txt{
         text-align: center;
@@ -674,7 +722,8 @@
         float:right;
         margin-top:15px;
         margin-right:10px;
-        background: url(~@/assets/device/up.png) no-repeat;
+        background-image: url(~@/assets/device/up.png);
+        background-repeat: no-repeat;
       }
       .add_device_set_wifi_up{
         width:14px;
@@ -682,7 +731,8 @@
         float:right;
         margin-top:15px;
         margin-right:10px;
-        background: url(~@/assets/device/down.png) no-repeat;
+        background-image: url(~@/assets/device/down.png);
+        background-repeat: no-repeat;
       }
       .add_device_set_wifi_input{
         line-height: 34px;
@@ -768,7 +818,8 @@
   color:#fff;
   font-size: 12px;
   text-align: center;
-  background: url(~@/assets/device/tree_close.png) no-repeat;
+  background-image: url(~@/assets/device/tree_close.png);
+  background-repeat: no-repeat;
   background-size: 100%;
   // margin-top: 50%;
 }

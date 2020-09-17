@@ -1,5 +1,7 @@
 @import './public.scss';
 
+$projectColor: #ff781f !global;
+
 #menu_box{
 	width: 100%;
 	height:54px;
@@ -262,10 +264,10 @@
 //     border: none;
 // }
 /*dev_list page*/
-#dev_list{
-	width:100%;
-	overflow:hidden;
-}
+// #dev_list{
+// 	width:100%;
+// 	overflow:hidden;
+// }
 #dev_main_page{
 	width:100%;
 }
@@ -289,7 +291,7 @@
 	height:20px;
 	float:right;
 	cursor:pointer;
-	display: none;
+	// display: none;
 	background: url(../assets/mipc/mipc_new_img.png) no-repeat -725px -3px;
 }
 #menu_add_dev_btn{
@@ -4462,3 +4464,136 @@ line-height: 30px;
 	font-size: 15px;
 	color: #ffffff;
 }
+// 样式颜色
+#active_dev_li{
+  border-color: $projectColor;
+}
+.dev_list_active .device_sidebar_point{
+	background-color: $projectColor;
+}
+#add_devices_timenum{
+  background-color: $projectColor;
+}
+#search_help{
+  background-color: $projectColor;
+}
+#reconfig_wifi{
+  color:$projectColor;
+}
+#add_device_submit{
+  background-color: $projectColor;
+}
+#add_device_success_txt{
+  color:$projectColor;
+}
+.add_device_set_wifi_list:hover{
+  color:$projectColor;
+}
+#add_device_skip{
+  background-color: $projectColor;
+}
+.operation_manual {
+  color: $projectColor;
+}
+.user_guide_download_text{
+  color: $projectColor;
+}
+.download_btn{
+  color: $projectColor;
+  border-color: $projectColor;
+}
+.page_num_btn{
+  border-color: $projectColor;
+}
+.page_num_btn_yes {
+  background-color: $projectColor;
+}
+
+.page_num_btn_no {
+  color: $projectColor;
+}
+
+.page_jump_input {
+  border-color: $projectColor;
+  color: $projectColor;
+}
+.page_jump_btn{
+  background-color: $projectColor;
+}
+.select_filter_li_active{
+  color: $projectColor;
+}
+#keep_sign_in {
+  color: $projectColor;
+}
+.vimtag_btn {
+  background-color: $projectColor;
+}
+.mipc_btn {
+  background-color: $projectColor;
+}
+#register_account {
+  color: $projectColor;
+}
+#forget_pass {
+  color: $projectColor;
+}
+#sign_account {
+  color: $projectColor;
+}
+#binding_account_cancel_btn {
+  background-color: $projectColor;
+}
+#binding_account_next_btn {
+  background-color: $projectColor;
+}
+
+#recovery_pass_ok_btn {
+  background-color: $projectColor;
+}
+
+#forget_password_close_btn {
+  background-color: $projectColor;
+}
+#input_email_page {
+  color: $projectColor;
+}
+
+#forget_password_page {
+  color: $projectColor;
+}
+.active_list {
+  color: $projectColor;
+  border-color: $projectColor;
+}
+#export_success_icon {
+  color: $projectColor;
+}
+#progress_bar {
+  background-color: $projectColor;
+}
+#sd_export_submit {
+  background-color: $projectColor;
+}
+.menu_box {
+  background-color: $projectColor;
+}
+.top_list_menu:hover {
+  background-color: $projectColor;
+}
+.top_right_menu:hover {
+  color: $projectColor;
+}
+#top_menu_my:hover {
+  background-color: $projectColor;
+}
+#top_login_div:hover {
+  background-color: $projectColor;
+}
+#top_login_span:hover {
+  background-color: $projectColor;
+}
+#bottom_select_lang:hover {
+  color: $projectColor;
+}
+// 样式颜色 结束

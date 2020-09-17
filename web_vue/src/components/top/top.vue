@@ -297,9 +297,12 @@ export default {
       }
     },
     back_btn () { //点击返回
+      console.log(this.$route.name)
       if (this.$route.name == 'history' || this.$route.name == 'set') {
+        console.log('enter this devlist')
         this.$router.push({ name: 'devlist' })
       } else if (this.$route.name == 'playback') {
+        console.log('enter this history')
         this.$router.push({ name: 'history' })
       }
     }
@@ -316,7 +319,7 @@ export default {
         this.switch_more = false;
         this.switch_download = false;
       }
-      if (this.$route.name == 'history' || this.$route.name == 'set') {
+      if (this.$route.name == 'history' || this.$route.name == 'set' || this.$route.name == 'playback') {
         this.back_sign = true;
       } else {
         this.back_sign = false;

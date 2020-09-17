@@ -258,7 +258,6 @@ export default {
     await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
 
     // await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
-
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
 
     // 获取网络环境

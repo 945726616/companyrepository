@@ -6,7 +6,9 @@
 // @import "./jquery.tzSelect.scss";
 @import "./msg_tips.scss";
 
-$projectColor:var(--projectBackgroundColor, #00a6ba);
+$projectColor:var(--projectBackgroundColor) !default;
+
+
 
 *{
 	margin:0;

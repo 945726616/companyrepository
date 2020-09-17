@@ -109,8 +109,9 @@ export default {
       }
     },
     device_list (msg) { // 设备列表数据整理, 用于渲染
+      let listArr = []
       for (let i = 0; i < msg.length; i++) {
-        if (msg[i].type !== "socket") {
+        if (msg[i].type !== "socket") { // 非socket类型
           let device_status_img = ""
           let no_get_img = false
           if (msg[i].stat === "Offline") {
@@ -127,26 +128,31 @@ export default {
           }
           let itemNick = msg[i].nick.length < 15 ? msg[i].nick : msg[i].nick.substr(0, 13) + "..."
           msg[i].nick = itemNick
+          console.log(device_status_img, 'device_status_img')
           msg[i].imgClass = device_status_img
-          if (!no_get_img) {
+          if (!no_get_img) { // 设备在线直接添加设备图片地址
             msg[i].def_img = this.$api.devlist.pic_url_get({ sn: msg[i].sn, token: "p1" })
-          } else {
-            msg[i].def_img = null
           }
+          listArr.push(msg[i])
           // this.deviceArr.push(msg[i])
-          this.$set(this.deviceArr, i, msg[i])
         }
       }
-      console.log(this.deviceArr, 'deviceArr')
-      this.get_device_img() // 调用获取设备图片
+      for(let setIndex = 0; setIndex < listArr.length; setIndex++) {
+        this.$set(this.deviceArr, setIndex, listArr[setIndex])
+      }
+      // this.$set(this.deviceArr, listArr)
+      console.log(this.deviceArr, 'deviceArr', listArr)
+      // this.get_device_img() // 调用获取设备图片
+      this.chooseFirstOnlineDevice() // 自动选中第一个在线设备
     },
     get_device_img () { // 获取设备图片
       // 保持原有的图片获取方式后续将该接口改写 不在需要统一获取imgUrl
       let length = this.publicFunc.mx(".dev_list").length
+      console.log(this.publicFunc.mx(".dev_list"),'dev_list')
       for (let i = 0; i < length; i++) {
         this.$api.devlist.load_noid_img({
           refresh: this.imgRefresh ? 1 : 0,
-          sn: sn,
+          sn: this.publicFunc.mx(".dev_list")[i].getAttribute('sn'),
           num: i,
           dom: document.getElementsByClassName('dev_list')
         })

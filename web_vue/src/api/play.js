@@ -21,7 +21,7 @@ const play = {
         images[k].src = "http://" + data.dom[k].getAttribute("addr") + "/ccm/ccm_pic_get.js?dsess=1&dsess_nid=&dsess_sn=" + data.dom[k].getAttribute("sn") + "&dtoken=p1&dflag=2";
       } else {
         if (sessionStorage.getItem(sn) && data.box_ipc !== 1) {
-          $(data.dom).eq(k).children()[0].style.background = "url(" + sessionStorage.getItem(sn) + ")";
+          $(data.dom).eq(k).children()[0].style.backgroundImage = "url(" + sessionStorage.getItem(sn) + ")";
           $(data.dom).eq(k).children()[0].style.backgroundSize = "100% 100%";
         } else {
           if (data.box_ipc == 1) { //如果云盒子列表
@@ -49,7 +49,7 @@ const play = {
               break;
             }
           }
-          $(data.dom).eq(j).children()[0].style.background = "url(" + this.src + ")";
+          $(data.dom).eq(j).children()[0].style.backgroundImage = "url(" + this.src + ")";
           $(data.dom).eq(j).children()[0].style.backgroundSize = "100% 100%";
         } else {
           let j;
@@ -60,7 +60,7 @@ const play = {
               break;
             }
           }
-          $(data.dom).eq(j).children()[0].style.background = "url(" + this.src + ")";
+          $(data.dom).eq(j).children()[0].style.backgroundImage = "url(" + this.src + ")";
           $(data.dom).eq(j).children()[0].style.backgroundSize = "100% 100%";
         }
       };
@@ -428,8 +428,9 @@ const play = {
     }else{
       url = (params.addr ? "http://" + params.addr : window.location.protocol + "//" + window.location.host) + "/api/ccm/ccm_pic_get.js?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + params.pic_token + "&dflag=2";
     }
-    params.dom.css('background', 'url(' + url + ') 100% 100% no-repeat')
+    params.dom.css('background-image', 'url(' + url + ')')
     params.dom.css('background-size', '100% 100%')
+    params.dom.css('background-repeat', 'no-repeat')
   },
   /*
    ** 全屏播放

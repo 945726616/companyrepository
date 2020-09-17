@@ -47,12 +47,16 @@ Date.prototype.format = function (format) {
 // 赋值项目底色(项目主色调,scss方便获取)
 if (store.state.jumpPageData.projectName === 'vimtag') {
   document.getElementsByTagName('body')[0].style.setProperty('--projectBackgroundColor', '#00a6ba')
+  // project_color = '#00a6ba'
 } else if (store.state.jumpPageData.projectName === 'ebitcam') {
   document.getElementsByTagName('body')[0].style.setProperty('--projectBackgroundColor', '#ff781f')
+  // project_color = '#ff781f'
 } else if (store.state.jumpPageData.projectName === 'mipcm') {
   document.getElementsByTagName('body')[0].style.setProperty('--projectBackgroundColor', '#2988cc')
+  // project_color = '#2988cc'
 } else {
   document.getElementsByTagName('body')[0].style.setProperty('--projectBackgroundColor', '#2988cc')
+  // project_color = '#2988cc'
 }
 router.beforeEach((to, from, next) => {
   if (store.state.user.loginFlag === 1) { // 如果已经登录的话
@@ -73,6 +77,10 @@ Vue.prototype.$ = $
 Vue.prototype.$api = Api
 Vue.config.productionTip = false
 Vue.prototype.publicFunc = Public
+
+if (window.fujikam === 'fujikam') {
+  Public.importCss('Public.scss')
+}
 
 new Vue({
   router,

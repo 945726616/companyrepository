@@ -1,6 +1,7 @@
 <template>
   <!-- 入口文件 -->
   <div id="app">
+    <div id="project_color" :class="projectClass"></div>
     <div id="tip_div"></div>
     <div id="buffer_page">
       <div id="buffer_image"></div>
@@ -19,6 +20,11 @@ export default {
   name: "App",
   components: { // 组件注册
     topBar: TopBar
+  },
+  data () {
+    return {
+      projectClass: this.$store.state.jumpPageData.projectName
+    }
   },
   methods: {
     jumpToDevlist () { // 请求超时点击可跳转回设备列表页面
@@ -52,5 +58,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   height: 100%;
+}
+#project_color {
+  color: #00a6ba;
+  display: none;
 }
 </style>

@@ -4,7 +4,7 @@
     <div id='add_devices_box'>
       <!-- 弹窗顶部标题导航栏 -->
       <div id='add_devices_box_menu'>
-        <div v-if="addDeviceModelObj.addDeviceBodyFlag !== 'chooseDevice' && addDeviceModelObj.addDeviceBodyFlag !== 'offlineDeviceAlert'" @click="addDeviceModelBack" id='add_devices_box_back'>{{mcs_back}}</div> <!-- 返回上一层 除选择设备类型页外其他页面均展示 -->
+        <div v-if="addDeviceModelObj.addDeviceBodyFlag !== 'chooseDevice' && addDeviceModelObj.addDeviceBodyFlag !== 'offlineDeviceAlert'" @click="addDeviceModelBack" id='add_devices_box_back'>{{$store.state.jumpPageData.projectName === 'vimtag' ? mcs_back : ''}}</div> <!-- 返回上一层 除选择设备类型页外其他页面均展示 -->
         <div id='add_devices_box_close' @click="closeModel"></div>
         <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'connectFail'" id='add_devices_help' @click="clickQuestion"></div> <!-- 仅配置失败时 展示问号 -->
         <div id='add_devices_box_title'>{{addDeviceModelObj.menuTitle}}</div> <!-- 选择设备类型 -->
@@ -26,8 +26,8 @@
           <div id='add_device_sample_img' :class="addDeviceModelObj.typeUrlInputId"></div>
           <div class='add_device_input_id_box'>
             <div class='add_device_input_id_box_ico'></div>
-            <div id='add_device_input_id_box_del' class='add_device_input_id_box_del' @click="add_device_input_id = null"></div> <!-- 删除图标点击情况输入框中内容 -->
-            <input id='add_device_input_id_box_input' class='add_device_input_id_box_input' type='text' :placeholder='mcs_input_device_id' v-model="add_device_input_id"> <!-- v-model绑定input输入框内容值 -->
+            <div id='add_device_input_id_box_del' class='add_device_input_id_box_del' @click="add_device_input_id_model = null"></div> <!-- 删除图标点击情况输入框中内容 -->
+            <input id='add_device_input_id_box_input' class='add_device_input_id_box_input' type='text' :placeholder='mcs_input_device_id' v-model="add_device_input_id_model" @change="changeInputId"> <!-- v-model绑定input输入框内容值 -->
           </div>
           <div id='add_device_submit' @click="inputDeviceIdNext">{{mcs_action_next}}</div>
         </div>
@@ -41,7 +41,7 @@
           </div>
           <!-- d_type else -->
           <div v-else>
-            <div id='add_device_sample_img' :style="{'background-image': 'url('+ addDeviceModelObj.typeUrlAddOffline +')', 'background-repeat': 'no-repeat', 'background-position': 'center', 'background-size': '100% 100%'}"></div>
+            <div id='add_device_sample_img' :style="{'background-image': 'url('+ addDeviceModelObj.typeUrlAddOffline +')', 'background-repeat': 'no-repeat', 'background-position': 'center', 'background-size': 'contain'}"></div>
             <div class='add_devices_box_info'>{{addDeviceModelObj.devicesBoxInfo}}
               <div v-if="addDeviceModelObj.offlineOtherflag" id='add_devices_img'></div><!-- 设备类型为除b1,b2,b3,s1(云盒子)以为的设备类型展示 -->
             </div>
@@ -73,7 +73,7 @@
         <!-- 配置失败原因 结束 -->
         <!-- 设备在线输入密码 -->
         <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'inputDevicePassword'" id="input_device_password">
-          <div id='add_device_info'>{{mcs_device_id + ":" + add_device_input_id.toUpperCase() + " &nbsp;&nbsp;" + mcs_status + ":" + mcs_state_device_online}}</div>
+          <div id='add_device_info'>{{mcs_device_id + ":" + add_device_input_id_model.toUpperCase() + " &nbsp;&nbsp;" + mcs_status + ":" + mcs_state_device_online}}</div>
           <div class='add_device_input_id_box'>
             <div class='add_device_input_pass_box_ico'></div>
             <div id='add_device_input_pass_box_del' class='add_device_input_id_box_del' @click="add_device_password = null"></div> <!-- 清空输入的设备密码 -->
@@ -87,7 +87,7 @@
         <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'editDevicePassword'" id="edit_device_password">
           <div id='add_device_success'>
             <div id='add_device_success_ico'></div>
-            <div id='add_device_success_txt'>{{mcs_device_id + ":" + add_device_input_id.toUpperCase() + " " + mcs_add_successfully + "!"}}</div>
+            <div id='add_device_success_txt'>{{mcs_device_id + ":" + add_device_input_id_model.toUpperCase() + " " + mcs_add_successfully + "!"}}</div>
           </div>
           <div id='add_device_edit_pass_tips'>{{mcs_device_password_too_simple}}</div> <!-- 密码8到32位 -->
           <div class='add_device_input_id_box'>
@@ -105,7 +105,7 @@
         <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'setDeviceWifi'" id="set_device_wifi">
           <div id='add_device_success'>
             <div id='add_device_success_ico'></div>
-            <div id='add_device_success_txt'>{{mcs_device_id + ":" + add_device_input_id.toUpperCase() + " " + mcs_add_successfully + "!"}}</div>
+            <div id='add_device_success_txt'>{{mcs_device_id + ":" + add_device_input_id_model.toUpperCase() + " " + mcs_add_successfully + "!"}}</div>
           </div>
           <div id='add_device_edit_pass_tips'>{{mcs_prompt_config_wifi}}</div>
           <div id='add_device_set_wifi_refresh' @click="getDropdownDom"></div>
@@ -127,7 +127,7 @@
         <!-- 设置wifi 结束 -->
         <!-- 设置设备昵称 -->
         <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'setDeviceNick'" id="set_device_nick">
-          <div id='add_device_edit_name_tips'>{{mcs_device_id + ":" + add_device_input_id.toUpperCase()}}</div>
+          <div id='add_device_edit_name_tips'>{{mcs_device_id + ":" + add_device_input_id_model.toUpperCase()}}</div>
           <div class='add_device_input_id_box'>
             <div class='add_device_input_name_box_ico'></div>
             <input id='add_device_nick' class='add_device_input_id_box_input' type='text' v-model="input_device_nick" :placeholder='mcs_input_nick'>
@@ -159,7 +159,7 @@
         <!-- 离线设备点击提示 -->
         <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'offlineDeviceAlert'" id="offline_device_alert">
           <div id='video_play_offline'>
-            <div id='video_play_id'>{{mcs_device_id + ":  " + add_device_input_id.toUpperCase()}}</div>
+            <div id='video_play_id'>{{mcs_device_id + ":  " + add_device_input_id_model.toUpperCase()}}</div>
             <div id='video_play_offline_word'>{{mcs_video_play_offline}}</div>
           </div>
           <div id='search_help' @click="$set(addDeviceModelObj, 'addDeviceBodyFlag', 'offlineDeviceHelp'), $set(addDeviceModelObj, 'menuTitle', mcs_device_offline)">{{mcs_search_help}}</div>
@@ -206,12 +206,13 @@ export default {
   },
   data () {
     return {
-      // add_device_input_id: null, 
+      add_device_input_id_model: this.add_device_input_id, // 子组件中使用的添加设备输入的Id
       add_device_password: null, // 添加设备输入密码 Input框value
       edit_password_1st: null, // 修改密码第一次输入 Input框value
       edit_password_2nd: null, // 修改密码第二次输入 Input框value
       input_wifi_password: null, // 设置wifi密码输入
       input_device_nick: null, // 设置设备昵称输入
+      connectNetTimeArr: [], // 等待网络链接定时器数组
       // 多国语言
       mcs_back: mcs_back,
       mcs_cloud_camera: mcs_cloud_camera,
@@ -257,7 +258,7 @@ export default {
     getDropdownDom () { // 获取wifi下拉列表dom结构
       this.publicFunc.showBufferPage()
       this.$api.devlist.wifi_get({ // 设备可连接wifi获取
-        sn: this.add_device_input_id
+        sn: this.add_device_input_id_model
       }).then(res => {
         this.publicFunc.closeBufferPage()
         if (res) {
@@ -277,12 +278,12 @@ export default {
       this.$set(this.addDeviceModelObj, 'menuTitle', mcs_settings + mcs_time_zone) // 设置设备时区页面顶部菜单标题
       this.publicFunc.showBufferPage() // 展示遮罩层
       this.$api.devlist.time_zone_get({ // 设备时区获取
-        sn: this.add_device_input_id
+        sn: this.add_device_input_id_model
       }).then(res => {
         let wifi_Dom
         if (res) {
           this.$api.devlist.time_get({ // 设备详细时间获取
-            sn: this.add_device_input_id
+            sn: this.add_device_input_id_model
           }).then(res_time_get => {
             time_get_ack(res_time_get)
             this.publicFunc.closeBufferPage()
@@ -313,7 +314,8 @@ export default {
     chooseDeviceType (item) { // 添加设备时选择设备类型,跳转至填写设备Id页面
       this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'inputDeviceId') // 切换至填写设备Id页面
       this.$set(this.addDeviceModelObj, 'deviceType', item.type) // 存储选择的设备类型 item.type
-      this.$set(this.addDeviceModelObj, 'typeUrlInputId', 'add_device_sample_img_' + item.type) // 设置输入设备Id页面图片Class
+      console.log(item.type, 'item.type')
+      this.$set(this.addDeviceModelObj, 'typeUrlInputId', this.$store.state.jumpPageData.projectName + '_add_device_sample_img_' + item.type) // 设置输入设备Id页面图片Class
       this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device) // 设置填写设备Id页面顶部菜单标题
     },
     inputDeviceIdNext () { // 输入设备Id点击确定事件
@@ -322,13 +324,13 @@ export default {
       let device_existed = 0
       // let add_device_stat 日志用暂时注释
       let deviceType = this.addDeviceModelObj.deviceType
-      if (!this.add_device_input_id.match(reg)) { // 设备号正则校验
+      if (!this.add_device_input_id_model || !this.add_device_input_id_model.match(reg)) { // 设备号正则校验
         // console.log('匹配失败')
         this.publicFunc.msg_tips({ msg: mrs_device_ID_input_error, type: "error", timeout: 3000 })
         return
       }
       for (let i = 0; i < this.$store.state.jumpPageData.deviceData.length; i++) { // 在vuex中存储的设备列表中对比是否存在该设备
-        if (this.$store.state.jumpPageData.deviceData[i].sn === this.add_device_input_id) {
+        if (this.$store.state.jumpPageData.deviceData[i].sn === this.add_device_input_id_model) {
           device_existed = 1
         }
       }
@@ -338,7 +340,7 @@ export default {
       } else { // 其他情况校验该设备是否在线
         this.publicFunc.showBufferPage() // 展示遮罩层
         this.$api.devlist.devlist_check_online({ // 检测设备是否在线(密码为默认固定值)
-          sn: this.add_device_input_id,
+          sn: this.add_device_input_id_model,
           pass: "1pl%*.1"
         }).then(res => {
           this.publicFunc.closeBufferPage() // 关闭遮罩层
@@ -347,20 +349,20 @@ export default {
           } else if (res === "user.offline") { // 设备不在线时 进入引导页面
             // add_device_stat = 'offline' // 日志 设备状态
             this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'addOfflineDevice') // 切换至添加离线设备页面
-            if (deviceType === 'cm1' || deviceType === 'm1' || deviceType === 'fisheye') { // 这三种类型的设备不能在网页和客户端进行添加
-              this.$set(this.addDeviceModelObj, 'typeUrlAddOffline', require("@/assets/device/" + deviceType + ".png")) // 设置动态切换的图片地址
+            if (deviceType === 'cm1' || deviceType === 'm1' || deviceType === 'fisheye' || this.$store.state.jumpPageData.projectName !== 'vimtag') { // 这三种类型的设备不能在网页和客户端进行添加(以及非vimtag均采用图片提示链接电源)
+              this.$set(this.addDeviceModelObj, 'typeUrlAddOffline', require("@/assets/" + this.$store.state.jumpPageData.projectName + "/" + deviceType + ".png")) // 设置动态切换的图片地址
               this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device) // 设置添加离线设备页面顶部菜单标题
             } else { // 其余种类的设备加载动图地址
-              this.$set(this.addDeviceModelObj, 'typeUrlAddOffline', require("@/assets/device/" + deviceType + ".gif")) // 设置动态切换的图片地址
-              if (deviceType === "b1" || deviceType === "b2" || deviceType === "b3") { // 摄像头类型为b1,b2,b3时
-                this.$set(this.addDeviceModelObj, 'devicesBoxInfo', mcs_device_outdoor_camera_connect_power) // 添加b1,b2,b3提示文字内容
-              } else if (deviceType === "s1") {
-                this.$set(this.addDeviceModelObj, 'devicesBoxInfo', mcs_device_box_connect_power) // 添加s1云盒子提示文字内容
-              } else { // 其他类型设备
-                this.$set(this.addDeviceModelObj, 'offlineOtherflag', true) // 添加单独喇叭图标标识
-                this.$set(this.addDeviceModelObj, 'devicesBoxInfo', mcs_normal_device_connect_power + mcs_camera_turn_on_voice) // 添加其他类型设备提示文字内容
-              }
+              this.$set(this.addDeviceModelObj, 'typeUrlAddOffline', require("@/assets/" + this.$store.state.jumpPageData.projectName + "/" + deviceType + ".gif")) // 设置动态切换的图片地址
               this.$set(this.addDeviceModelObj, 'menuTitle', mcs_connect_power) // 设置添加离线设备页面顶部菜单标题
+            }
+            if (deviceType === "b1" || deviceType === "b2" || deviceType === "b3") { // 摄像头类型为b1,b2,b3时
+              this.$set(this.addDeviceModelObj, 'devicesBoxInfo', mcs_device_outdoor_camera_connect_power) // 添加b1,b2,b3提示文字内容
+            } else if (deviceType === "s1") {
+              this.$set(this.addDeviceModelObj, 'devicesBoxInfo', mcs_device_box_connect_power) // 添加s1云盒子提示文字内容
+            } else { // 其他类型设备
+              this.$set(this.addDeviceModelObj, 'offlineOtherflag', true) // 添加单独喇叭图标标识
+              this.$set(this.addDeviceModelObj, 'devicesBoxInfo', mcs_normal_device_connect_power + mcs_camera_turn_on_voice) // 添加其他类型设备提示文字内容
             }
           } else if (res === "") { // 设备在线 进入输入设备密码页面
             // add_device_stat = 'online' // 日志
@@ -375,7 +377,7 @@ export default {
     addOfflineDevice () { // 输入链接电源页面点击下一步 进入连接网络页面
       this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'connectNet') // 切换至链接网络提示页面
       this.$set(this.addDeviceModelObj, 'menuTitle', mcs_ethernet_configuration) // 设置连接以太网页面顶部菜单标题
-      this.$set(this.addDeviceModelObj, 'typeUrlWaitDevice', require("@/assets/device/net_" + this.addDeviceModelObj.deviceType + ".png")) // 设置动态切换的图片地址
+      this.$set(this.addDeviceModelObj, 'typeUrlWaitDevice', require("@/assets/" + this.$store.state.jumpPageData.projectName + "/net_" + this.addDeviceModelObj.deviceType + ".png")) // 设置动态切换的图片地址
       this.$set(this.addDeviceModelObj, 'connectNetTime', 60) // 设置链接设备倒计时
       let showTime = this.addDeviceModelObj.connectNetTime
       let timer1 = setInterval(() => { // 倒计时出现负数(360浏览器出现) 修改方法两种 1.将定时器清除判断放入timer1中 2.在判断时提前-4秒防止360浏览器定时不准的问题
@@ -389,7 +391,7 @@ export default {
       }, 1000);
       let timer2 = setInterval(() => { // 每5秒重新调用查询设备是否上线接口
         this.$api.devlist.devlist_check_online({ // 验证设备是否在线
-          sn: this.add_device_input_id,
+          sn: this.add_device_input_id_model,
           pass: "1pl%*.1"
         }).then(res => {
           if (res === "") {
@@ -411,7 +413,7 @@ export default {
         // 展示遮罩层
         this.publicFunc.showBufferPage()
         this.$api.devlist.dev_add({ // 调用添加设备接口
-          sn: this.add_device_input_id,
+          sn: this.add_device_input_id_model,
           password: password
         }).then(res => {
           this.publicFunc.closeBufferPage()
@@ -470,13 +472,13 @@ export default {
         this.publicFunc.msg_tips({ msg: mcs_two_password_input_inconsistent, type: "error", timeout: 3000 })
       } else {
         this.$api.devlist.dev_passwd_set({ // 设备密码设置
-          sn: this.add_device_input_id,
+          sn: this.add_device_input_id_model,
           old_pass: this.add_device_password, // 登录设备页面中输入的密码(旧密码)
           new_pass: password
         }).then(res => {
           if (res) {
             this.$api.devlist.dev_add({ // 添加设备
-              sn: this.add_device_input_id,
+              sn: this.add_device_input_id_model,
               password: password
             }).then(res => { // 跳转至设置wifi页面
               this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'setDeviceWifi') // 切换至设置wifi页面
@@ -501,7 +503,7 @@ export default {
       // 展示遮罩层
       this.publicFunc.showBufferPage()
       this.$api.devlist.wifi_set({
-        sn: this.add_device_input_id,
+        sn: this.add_device_input_id_model,
         ssid: wifi_ssid,
         key: wifi_password
       }).then(res => {
@@ -530,7 +532,7 @@ export default {
         this.publicFunc.msg_tips({ msg: mcs_nick_not_empty, type: "error", timeout: 3000 })
       } else {
         this.$api.devlist.nick_set({ // 设置设备昵称
-          sn: this.add_device_input_id,
+          sn: this.add_device_input_id_model,
           nick: nick
         }).then(res => {
           this.skipToZone() // 跳转至时区设置页面
@@ -541,7 +543,7 @@ export default {
     setDeviceZoneFinish () { // 设置设备时区完成
       this.publicFunc.showBufferPage()
       this.$api.devlist.time_set({ // 设置设备时区及时间
-        sn: this.add_device_input_id,
+        sn: this.add_device_input_id_model,
         timezone: this.addDeviceModelObj.chooseZoneCity
       }).then(res => {
         if (res === 1) {
@@ -580,6 +582,7 @@ export default {
       this.edit_password_2nd = '' // 重置修改密码第二次输入 Input框value
       this.input_wifi_password = '' // 重置wifi密码输入
       this.input_device_nick = '' // 重置设备昵称输入
+      this.add_device_input_id_model = null // 重置组件用输入设备Id变量
       if (this.connectNetTimeArr) { // 如果存在定时器数组
         for (let item of this.connectNetTimeArr) { // 终止等待网络链接的定时器
           clearInterval(item)
@@ -602,10 +605,36 @@ export default {
         'forgetDevicePassword': 'inputDevicePassword',
         'offlineDeviceHelp': 'offlineDeviceAlert'
       }
+      if (this.connectNetTimeArr) { // 如果存在定时器数组
+        for (let item of this.connectNetTimeArr) { // 终止等待网络链接的定时器
+          clearInterval(item)
+        }
+      }
       let modelObj = this.addDeviceModelObj
       let backPageFlag = backListObj[this.addDeviceModelObj.addDeviceBodyFlag]
       this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', backPageFlag) // 点击返回跳转的页面
-      console.log(modelObj)
+      if (backPageFlag === 'chooseDevice') { // 设置返回后的弹窗标题
+        this.$set(this.addDeviceModelObj, 'menuTitle', mcs_choose_device_type)
+      } else if (backPageFlag === 'inputDeviceId') {
+        this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device)
+      } else if (backPageFlag === 'addOfflineDevice') {
+        this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device)
+      } else if (backPageFlag === 'connectNet') {
+        this.$set(this.addDeviceModelObj, 'menuTitle', mcs_ethernet_configuration)
+      } else if (backPageFlag === 'connectFail') {
+        this.$set(this.addDeviceModelObj, 'menuTitle', mcs_finish)
+      } else if (backPageFlag === 'inputDevicePassword') {
+        this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device)
+      } else if (backPageFlag === 'setDeviceWifi') {
+        this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device)
+      } else if (backPageFlag === 'setDeviceNick') {
+        this.$set(this.addDeviceModelObj, 'menuTitle', mcs_nick_modify)
+      } else if (backPageFlag === 'offlineDeviceAlert') {
+        this.$set(this.addDeviceModelObj, 'menuTitle', mcs_device_offline)
+      }
+    },
+    changeInputId () { // 改变输入的设备Id
+      this.$emit('add_device_input_id', this.add_device_input_id_model)
     }
   }
 }

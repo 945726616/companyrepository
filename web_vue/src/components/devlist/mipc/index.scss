@@ -26,21 +26,27 @@
         height: 20px;
         margin: 0 auto;
         margin-top: 4px;
-        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -246px -3px;
+        background-image: url(~@/assets/mipc/mipc_new_img.png);
+        background-position: -246px -3px;
+        background-repeat: no-repeat;
       }
       #menu_edit_dev_btn{ // 编辑设备列表按钮
         width: 20px;
         height: 20px;
         margin: 0 auto;
         margin-top: 4px;
-        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -285px -3px;
+        background-image: url(~@/assets/mipc/mipc_new_img.png);
+        background-position: -285px -3px;
+        background-repeat: no-repeat;
       }
       #menu_refresh_dev_btn{ // 刷新设备列表按钮
         width: 20px;
         height: 20px;
         margin: 0 auto;
         margin-top: 4px;
-        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -327px -3px;
+        background-image: url(~@/assets/mipc/mipc_new_img.png);
+        background-position: -327px -3px;
+        background-repeat: no-repeat;
       }
       .menu_nav{
         width:1px;
@@ -100,13 +106,19 @@
     z-index: 1;
     background-size: cover;
     position: relative;
-    background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -390px -155px;
+    background-image: url(~@/assets/mipc/mipc_new_img.png);
+    background-position: -390px -155px;
+    background-repeat: no-repeat;
   }
   .device_ipc_offline{
-    background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -830px -155px;
+    background-image: url(~@/assets/mipc/mipc_new_img.png);
+    background-position: -830px -155px;
+    background-repeat: no-repeat;
   }
   .device_ipc_InvalidAuth{
-    background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -610px -155px;
+    background-image: url(~@/assets/mipc/mipc_new_img.png);
+    background-position: -610px -155px;
+    background-repeat: no-repeat;
   }
 }
 .img_class{
@@ -127,7 +139,9 @@
 	height:20px;
 	float:right;
 	cursor:pointer;
-	background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -725px -3px;
+  background: url(~@/assets/mipc/mipc_new_img.png);
+  background-position: -725px -3px;
+  background-repeat: no-repeat;
 }
 .dev_list_active .device_sidebar_point{
 	background: $projectColor;
@@ -160,9 +174,11 @@
         margin-top:10px;
         float:right;
         cursor:pointer;
-        background: url(~@/assets/mipc/n-close.png) no-repeat;
+        background-image: url(~@/assets/mipc/n-close.png);
+        background-repeat: no-repeat;
         &:hover {
-          background: url(~@/assets/mipc/c-close.png) no-repeat;
+          background-image: url(~@/assets/mipc/c-close.png);
+          background-repeat: no-repeat;
         }
       }
       #add_devices_help{
@@ -172,17 +188,20 @@
         cursor:pointer;
         margin-right: 20px; 
         margin-top: 10px;
-        background: url(~@/assets/mipc/help.png) no-repeat;
+        background-image: url(~@/assets/mipc/help.png);
         background-size:100% 100%;
+        background-repeat: no-repeat;
       }
       #add_devices_box_back{
         float:left;
         cursor:pointer;
         margin-left:10px;
-        width: 38px;
+        width: 0px !important;
         height: 35px;
         margin-top:10px;
-        background: url(~@/assets/mipc/mipc-add-back.png) no-repeat 0 10px;
+        background-image: url(~@/assets/mipc/mipc-add-back.png);
+        background-repeat: no-repeat;
+        background-position: 0 10px;
         padding-left: 16px;
         line-height: 35px;
       }
@@ -197,20 +216,83 @@
     #add_devices_box_body{ // 添加设备弹窗主体样式
       width:100%;
       margin:0 auto;
-      .add_device_sample_img_361{
-        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -195px -935px;
+      // ebitcam输入设备id图片
+      .ebitcam_add_device_sample_img_361{
+        background-image: url(~@/assets/ebitcam/ebitcam_add_device_sample_img_361.png);
+        background-repeat: no-repeat;
+        background-size: contain;
       }
-      .add_device_sample_img_p1{
-        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -386px -936px;
+      .ebitcam_add_device_sample_img_p1{
+        background-image: url(~@/assets/ebitcam/ebitcam_add_device_sample_img_p1.png);
+        background-repeat: no-repeat;
+        background-size: contain;
       }
-      .add_device_sample_img_m1{
-        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -5px -936px;
+      .ebitcam_add_device_sample_img_m1{
+        background-image: url(~@/assets/ebitcam/ebitcam_add_device_sample_img_m1.png);
+        background-repeat: no-repeat;
+        background-size: contain;
       }
-      .add_device_sample_img_s1{
-        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -580px -936px;
+      .ebitcam_add_device_sample_img_s1{
+        background-image: url(~@/assets/ebitcam/ebitcam_add_device_sample_img_s1.png);
+        background-repeat: no-repeat;
+        background-size: contain;
       }
-      .add_device_sample_img_fisheye{
-        background: url(~@/assets/mipc/fisheye_input.png) no-repeat 80% 100%;
+      .ebitcam_add_device_sample_img_fisheye{
+        background-image: url(~@/assets/ebitcam/ebitcam_add_device_sample_img_fisheye.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      // vsmahome输入设备id图片
+      .vsmahome_add_device_sample_img_361{
+        background-image: url(~@/assets/vsmahome/vsmahome_add_device_sample_img_361.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      .vsmahome_add_device_sample_img_p1{
+        background-image: url(~@/assets/vsmahome/vsmahome_add_device_sample_img_p1.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      .vsmahome_add_device_sample_img_m1{
+        background-image: url(~@/assets/vsmahome/vsmahome_add_device_sample_img_m1.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      .vsmahome_add_device_sample_img_s1{
+        background-image: url(~@/assets/vsmahome/vsmahome_add_device_sample_img_s1.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      .vsmahome_add_device_sample_img_fisheye{
+        background-image: url(~@/assets/vsmahome/vsmahome_add_device_sample_img_fisheye.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      // mipcm输入设备id图片
+      .mipcm_add_device_sample_img_361{
+        background-image: url(~@/assets/mipcm/mipcm_add_device_sample_img_361.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      .mipcm_add_device_sample_img_p1{
+        background-image: url(~@/assets/mipcm/mipcm_add_device_sample_img_p1.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      .mipcm_add_device_sample_img_m1{
+        background-image: url(~@/assets/mipcm/mipcm_add_device_sample_img_m1.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      .mipcm_add_device_sample_img_s1{
+        background-image: url(~@/assets/mipcm/mipcm_add_device_sample_img_s1.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      .mipcm_add_device_sample_img_fisheye{
+        background-image: url(~@/assets/mipcm/mipcm_add_device_sample_img_fisheye.png);
+        background-repeat: no-repeat;
+        background-size: contain;
       }
       .add_devices_type{ // 选择设备类型
         width:100%;
@@ -242,7 +324,8 @@
           height:16px;
           float: right;
           margin: 10px;
-          background: url(~@/assets/mipc/cause.png) no-repeat;
+          background-image: url(~@/assets/mipc/cause.png);
+          background-repeat: no-repeat;
         }
       }
       #add_offline_device{ // 离线设备添加
@@ -250,6 +333,9 @@
           text-align: center;
           .dev_offline_tips_img{
             margin:70px 0;
+            width: 190px;
+            height: 160px;
+            background-size: contain;
           }
           .dev_offline_tips_text{
             text-align: center;
@@ -261,8 +347,9 @@
           width:20px;
           height:20px;
           display:inline-block;
-          background:url(~@/assets/device/sound.png) no-repeat;
+          background-image:url(~@/assets/device/sound.png);
           background-size: 100% 100%;
+          background-repeat: no-repeat;
           margin-left: 12px;
           vertical-align: middle;
         }
@@ -290,8 +377,9 @@
           width:100px;
           height:100px;
           margin:55px auto;
-          background: url(~@/assets/mipc/mipc_fail.png) no-repeat;
+          background-image: url(~@/assets/mipc/mipc_fail.png);
           background-size: 100% 100%;
+          background-repeat: no-repeat;
         }
         #add_devices_unconnect_info{
           text-align: center;
@@ -337,7 +425,9 @@
           margin-top:7px;
           margin-right:90px;
           cursor:pointer;
-          background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -327px -3px;
+          background-image: url(~@/assets/mipc/mipc_new_img.png);
+          background-repeat: no-repeat;
+          background-position: -327px -3px;
         }
         #add_device_set_wifi_box{
           width:240px;
@@ -351,7 +441,9 @@
             height:16px;
             float: left;
             margin: 10px;
-            background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -1058px -3px;
+            background-image: url(~@/assets/mipc/mipc_new_img.png);
+            background-repeat: no-repeat;
+            background-position: -1058px -3px;
           }
         }
       }
@@ -370,7 +462,9 @@
           height:16px;
           float: left;
           margin: 10px 3px;
-          background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -20px -3px;
+          background-image: url(~@/assets/mipc/mipc_new_img.png);
+          background-repeat: no-repeat;
+          background-position: -20px -3px;
         }
       }
       #set_device_zone{ // 设置设备时区
@@ -387,7 +481,8 @@
             height:16px;
             float: left;
             margin: 10px;
-            background: url(~@/assets/mipc/place.png) no-repeat;
+            background-image: url(~@/assets/mipc/place.png);
+            background-repeat: no-repeat;
           }
         }
       }
@@ -449,7 +544,9 @@
         height:16px;
         float: left;
         margin: 10px;
-        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -25px -4px;
+        background-image: url(~@/assets/mipc/mipc_new_img.png);
+        background-repeat: no-repeat;
+        background-position: -25px -4px;
       }
       #add_device_submit{
         color:#fff;
@@ -481,14 +578,17 @@
         margin:0 auto;
         margin-top:50px;
         margin-bottom: 14px;
-        background: url(~@/assets/device/success2.png) no-repeat;
+        background-image: url(~@/assets/device/success2.png);
+        background-repeat: no-repeat;
       }
       .add_device_input_pass_box_ico{
         width:16px;
         height:16px;
         float: left;
         margin: 10px;
-        background: url(~@/assets/mipc/mipc_new_img.png) no-repeat -58px -3px;
+        background-image: url(~@/assets/mipc/mipc_new_img.png);
+        background-repeat: no-repeat;
+        background-position: -58px -3px;
       }
       #add_device_success_txt{
         text-align: center;
@@ -510,7 +610,8 @@
         float:right;
         margin-top:15px;
         margin-right:10px;
-        background: url(~@/assets/mipc/down.png) no-repeat;
+        background-image: url(~@/assets/mipc/down.png);
+        background-repeat: no-repeat;
       }
       .add_device_set_wifi_up{
         width:14px;
@@ -518,7 +619,8 @@
         float:right;
         margin-top:15px;
         margin-right:10px;
-        background: url(~@/assets/mipc/up.png) no-repeat;
+        background-image: url(~@/assets/mipc/up.png);
+        background-repeat: no-repeat;
       }
       .add_device_set_wifi_input{
         line-height: 34px;

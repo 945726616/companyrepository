@@ -93,7 +93,7 @@ const playback = {
       data.dom.html("<img id='flash_img' width='1px' src='" + urls + "'>")
       if (publicFunc.mx("#flash_img")) {
         publicFunc.mx("#flash_img").onload = function () {
-          data.dom.css('background', "url(" + this.src + ")")
+          data.dom.css('backgroundImage', "url(" + this.src + ")")
           data.dom.css('backgroundSize', "100% 100%")
         }
       } else {
@@ -593,8 +593,9 @@ const playback = {
     } else {
       url = (data.addr ? "http://" + data.addr : window.location.protocol + "//" + window.location.host) + "/api/ccm/ccm_pic_get.js?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + data.pic_token + "&dflag=2";
     }
-    data.dom[0].style.background = 'url(' + url + ') no-repeat';
+    data.dom[0].style.backgroundImage = 'url(' + url + ')';
     data.dom[0].style.backgroundSize = '100% 100%';
+    data.dom[0].style.backgroundRepeat = 'no-repeat';
     // data.dom[0].attr('style', 'background: url('+url+') no-repeat')
     // data.dom[0].attr('style', 'backgroundSize: 100% 100%')
   }

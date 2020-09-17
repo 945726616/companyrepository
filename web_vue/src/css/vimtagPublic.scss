@@ -1,5 +1,6 @@
 @import './public.scss';
-// $projectColor: #00a6ba;
+$projectColor: #00a6ba !global;
+
 .disabled{
 	pointer-events:none;
 }
@@ -6192,3 +6193,163 @@ line-height: 30px;
   margin-top: 5px;
 }
 // devlist树状结构添加dom样式 结束
+
+// 样式颜色
+.device_list_menu:hover{
+  color:$projectColor;
+}
+#dev_search_btn{
+  background-color: $projectColor;
+}
+#online_btn:hover{
+  color:$projectColor;
+}
+#online_btn_select_all:hover{
+  color:$projectColor;
+}
+#online_btn_select_online:hover{
+  color:$projectColor;
+}
+#online_btn_select_offline:hover{
+  color:$projectColor;
+}
+.device_list_sort_btn{
+  background-color: $projectColor;
+}
+#add_devices_box_back:hover{
+  color:$projectColor;
+}
+.add_devices_type_list:hover{
+  color:$projectColor;
+}
+#add_devices_timenum{
+  background-color: $projectColor;
+}
+#search_help{
+  background-color: $projectColor;
+}
+#reconfig_wifi{
+  color:$projectColor;
+}
+#add_device_submit{
+  background-color: $projectColor;
+}
+#add_device_success_txt{
+  color:$projectColor;
+}
+.add_device_set_wifi_list:hover{
+  color:$projectColor;
+}
+#add_device_skip{
+  background-color: $projectColor;
+}
+#device_list_tree_box_btn{
+  background-color: $projectColor;
+  border-color: $projectColor;
+}
+#back:hover {
+  color: $projectColor;
+}
+.filter_btn{
+  border-color: $projectColor;
+}
+input[type=radio]:checked:before {
+  background-color: $projectColor;
+}
+.page_num_btn_no {
+  color: $projectColor;
+}
+#keep_sign_in {
+  color: $projectColor;
+}
+.vimtag_btn {
+  background-color: $projectColor;
+}
+.mipc_btn {
+  background-color: $projectColor;
+}
+#register_account {
+  color: $projectColor;
+}
+#forget_pass {
+  color: $projectColor;
+}
+#sign_account {
+  color: $projectColor;
+}
+#binding_account_cancel_btn {
+  background-color: $projectColor;
+}
+#binding_account_next_btn {
+  background-color: $projectColor;
+}
+
+#recovery_pass_ok_btn {
+  background-color: $projectColor;
+}
+
+#forget_password_close_btn {
+  background-color: $projectColor;
+}
+#input_email_page {
+  color: $projectColor;
+}
+#forget_password_page {
+  color: $projectColor;
+}
+.set_list:hover {
+  color: $projectColor;
+}
+#export_success_icon {
+  color: $projectColor;
+}
+#progress_bar {
+  background-color: $projectColor;
+}
+#sd_export_submit {
+  background: $projectColor;
+}
+#logo_exit #exit_btn_img {
+  border-color: $projectColor;
+  color: $projectColor;
+}
+#logo_exit #exit_btn_img:hover {
+  background-color: $projectColor;
+}
+.my_page_box_back:hover {
+  color: $projectColor;
+}
+.options_float_right {
+  color: $projectColor;
+}
+.options_float_right input {
+  color: $projectColor;
+}
+.normal_input_right {
+  color: $projectColor;
+}
+.list_right_button {
+  background-color: $projectColor;
+}
+.menu_box {
+  background-color: $projectColor;
+}
+.top_list_menu:hover {
+  background-color: $projectColor;
+}
+.top_right_menu:hover {
+  color: $projectColor;
+}
+#top_menu_my:hover {
+  background-color: $projectColor;
+}
+#top_login_div:hover {
+  background-color: $projectColor;
+}
+#top_login_span:hover {
+  background-color: $projectColor;
+}
+#bottom_select_lang:hover {
+  color: $projectColor;
+}
+// 样式颜色 结束
