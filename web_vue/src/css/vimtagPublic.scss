@@ -76,10 +76,10 @@ input, button, select, textarea {
 // 	color: #666666;
 // 	line-height:62px;
 // }
-// .top_list_menu:hover{
+.top_list_menu:hover{
 // 	color: #fff;
-// 	background: $projectColor;
-// }
+	background-color: $projectColor;
+}
 // #top_box_right{
 // 	height:100%;
 // 	color:#666666;
@@ -91,9 +91,9 @@ input, button, select, textarea {
 // 	margin-left: 20px;
 // 	cursor:pointer;
 // }
-// .top_right_menu:hover{
-// 	color:$projectColor;
-// }
+.top_right_menu:hover{
+	color:$projectColor;
+}
 // #top_menu_my{
 // 	height:100%;
 // 	text-align:center;
@@ -103,10 +103,10 @@ input, button, select, textarea {
 // 	min-width: 50px;
 // 	border-radius: 3px;
 // }
-// #top_menu_my:hover{
+#top_menu_my:hover{
 // 	color:white;
-// 	background: $projectColor;
-// }
+	background-color: $projectColor;
+}
 // #top_login_div{
 // 	border: none;
 //     height: 100%;
@@ -129,18 +129,18 @@ input, button, select, textarea {
 // 	margin-right:5px;
 // 	background: url(../assets/device/equipment.png) no-repeat;
 // }
-// #top_login_div:hover{
-// 	color:#fff;
-// 	background: $projectColor;
-// }
+#top_login_div:hover{
+	// color:#fff;
+	background-color: $projectColor;
+}
 // #top_login_div:hover #top_login_div_ico{
 // 	background: url(../assets/device/equipment2.png) no-repeat;
 // }
-// #top_login_span:hover{
+#top_login_span:hover{
 // 	color:#fff;
-// 	background: $projectColor;
+	background-color: $projectColor;
 // 	height:62px;
-// }
+}
 //top-end
 // #login_page{
 // 	width:100%;
@@ -231,47 +231,47 @@ input, button, select, textarea {
 // 	cursor: pointer;
 // 	background: url("../assets/device/vimtag_img.png") no-repeat -56px -95px;
 // }
-// #keep_sign_in{
+#keep_sign_in{
 // 	float: right;
 // 	margin-bottom: 10px;
-// 	color: $projectColor;
-// }
+	color: $projectColor;
+}
 // #keep_sign_in_check{
 // 	float: left;
 // 	margin-top: 2px;
 // 	margin-right: 5px;
 // }
-// .vimtag_btn{
+.vimtag_btn{
 // 	color: #ffffff;
 // 	font-size: 16px;
 // 	width: 290px;
 // 	height: 44px;
 // 	margin-bottom: 16px;
 // 	cursor: pointer;
-// 	background-color: $projectColor;
+	background-color: $projectColor;
 // 	border: 0px;
 // 	-webkit-border-radius: 4px;
 // 	-moz-border-radius: 4px;
 // 	border-radius: 4px;
-// }
-// #register_account{
-// 	color: $projectColor;
+}
+#register_account{
+	color: $projectColor;
 // 	font-size: 14px;
 // 	cursor: pointer;
 // 	float: left;
-// }
-// #forget_pass{
-// 	color: $projectColor;
+}
+#forget_pass{
+	color: $projectColor;
 // 	font-size: 14px;
 // 	cursor: pointer;
 // 	float: right;
-// }
-// #sign_account{
-// 	color: rgb(0, 166, 186);
+}
+#sign_account{
+	color: $projectColor;
 // 	font-size: 14px;
 // 	cursor: pointer;
 // 	text-align: center;
-// }
+}
 //login-end
 
 // #vimtag_device_list_box {
@@ -1459,17 +1459,17 @@ div.ibutton-label-on {
 	height: 148px;
 	margin-left: 6px;
 } */
-.box_device_list_img{
-	position: relative;
-	/*margin: 10px 0 0 10px;*/
-	width: 270px;
-	height: 170px;
-	float: left;
-	text-align: center;
-	cursor: pointer;
-	background: url("../assets/device/box_background.png") no-repeat;
-	padding: 24px 10px;
-}
+// .box_device_list_img{
+// 	position: relative;
+// 	/*margin: 10px 0 0 10px;*/
+// 	width: 270px;
+// 	height: 170px;
+// 	float: left;
+// 	text-align: center;
+// 	cursor: pointer;
+// 	background: url("../assets/device/box_background.png") no-repeat;
+// 	padding: 24px 10px;
+// }
 .box_camera_sign_picture{
 	background-color: #d9d9d9;
 	width: 256px;
@@ -1502,14 +1502,14 @@ div.ibutton-label-on {
 	/*background: url("../assets/device/not-recording.png") no-repeat;*/
 	background: url("../assets/device/noonline.png") no-repeat;
 }
-.del_box_ipc_btn{
-	display:none;
-	width:18px;
-	height:20px;
-	background:url("../assets/device/device_delete.png") no-repeat;
-	float:right;
-	margin-top:8px;
-}
+// .del_box_ipc_btn{
+// 	display:none;
+// 	width:18px;
+// 	height:20px;
+// 	background:url("../assets/device/device_delete.png") no-repeat;
+// 	float:right;
+// 	margin-top:8px;
+// }
 // .history_list_img{
 // 	/*6.1.2*/
 // 	/*margin: 10px 0 0 10px;*/
@@ -1945,7 +1945,7 @@ div.ibutton-label-on {
     line-height: 35px;
     margin:0 auto;
     border-radius: 5px;
-    background: $projectColor;
+    background-color: $projectColor;
 }
 #add_device_skip{
     color:#fff;
@@ -2232,20 +2232,20 @@ div.ibutton-label-on {
 // 	font-size: 14px;
 // 	float: left;
 // }
-// .filter_btn{
+.filter_btn{
 // 	/*background-color: #efeff4; 6.1.2*/
 // 	color: #000000;
 // 	font-size: 14px;
 // 	/*width: 62px;6.4.1*/
 // 	height: 26px;
-// 	border-color: $projectColor;
+	border-color: $projectColor;
 // 	margin-left: 20px;
 // 	border-width: 1px;
 // 	text-align: center;
 // 	line-height: 26px;
 // 	float:left;
 // 	cursor:pointer;
-// }
+}
 /*.filter_btn:hover{  6.1.2
 	color: #fff;
 	background-color: $projectColor;
@@ -2344,14 +2344,14 @@ input[type=radio]{
 	box-shadow: 0 2px 30px #050505;
 }
 #binding_account_cancel_btn{
-	float:right;
+	// float:right;
 	background-color:$projectColor;
-	color:#fff;
-	font-size:24px;
-	cursor:pointer;
-	height:24px;
-	width:24px;
-	line-height:24px;
+	// color:#fff;
+	// font-size:24px;
+	// cursor:pointer;
+	// height:24px;
+	// width:24px;
+	// line-height:24px;
 }
 .standard_inputs_normal {
 	color: #BDBDBD;
@@ -2393,7 +2393,7 @@ input[type=radio]{
 	background-size:100%;
 	cursor: pointer;
 }
-#boxlist_set_btn:hover{
+#vimtag_boxlist_set_btn:hover{
 	color:$projectColor;
 }
 #boxlist_set_btn:hover #boxlist_set_btn_img{
@@ -2429,10 +2429,10 @@ input[type=radio]{
 	background-size:100%;
 	cursor: pointer;
 }
-#boxlist_edit_btn:hover{
+#vimtag_boxlist_edit_btn:hover{
 	color:$projectColor;
 }
-#boxlist_edit_btn:hover #boxlist_edit_btn_img{
+#vimtag_boxlist_edit_btn:hover #boxlist_edit_btn_img{
 	background: url("../assets/device/choose_edit.png") no-repeat 0 21px;
 	background-size:100%;
 }
@@ -2858,9 +2858,9 @@ input[type=radio]{
 // 	box-sizing: border-box;
 // 	padding:20px 0;
 // }
-// .active_list{
-// 	color:$projectColor;
-// }	
+.set_list:hover {
+    color: $projectColor;
+}	
 // .set_list #search{
 // 	background: url(../assets/device/search.png) no-repeat;
 // 	background-size:24px 26px;
@@ -2948,18 +2948,18 @@ input[type=radio]{
 // #mp_lable{
 // 	margin-top:100px;
 // }
-// #mp_btn{
+#mp_btn{
 // 	float:right;
 // 	width:120px;
 // 	height:30px;
 // 	border-radius: 4px;
 // 	color:#fff;
-// 	background: #0EA9BB;
+	background-color: $projectColor;
 // 	text-align:center;
 // 	line-height: 30px;
 // 	margin-top:60px;
 // 	cursor:pointer;
-// }
+}
 // #mp_updata_password{
 // 	color:#00A7BA;
 // 	width:100%;
@@ -3037,18 +3037,18 @@ input[type=radio]{
 // 	width:100%;
 // 	height:50px;
 // }
-// #gp_btn{
+#gp_btn{
 // 	float:right;
 // 	width:120px;
 // 	height:30px;
 // 	border-radius: 4px;
 // 	color:#fff;
-// 	background: #0EA9BB;
+	background-color: $projectColor;
 // 	text-align:center;
 // 	line-height: 30px;
 // 	margin-top:60px;
 // 	cursor:pointer;
-// }
+}
 // #gp_updata_password{
 // 	color:#00A7BA;
 // 	width:100%;
@@ -3132,18 +3132,18 @@ input[type=radio]{
 // 	width:100%;
 // 	height:50px;
 // }
-// #ae_btn{
+#ae_btn{
 //     float:right;
 // 	width:120px;
 // 	height:30px;
 // 	border-radius: 4px;
 // 	color:#fff;
-// 	background: #0EA9BB;
+	background-color: $projectColor;
 // 	text-align:center;
 // 	line-height: 30px;
 // 	margin-top:60px;
 // 	cursor:pointer;
-// }
+}
 // .ae_tips{
 // 	margin-top:100px;
 // 	margin-left:12px;
@@ -3224,16 +3224,16 @@ input[type=radio]{
 // 	width:500px;
 // 	margin:0 auto;
 // }
-// #export_success_icon {
+#export_success_icon {
 // 	line-height:36px;
 // 	padding-left:40px;
-// 	color:$projectColor;
+	color:$projectColor;
 // 	height:36px;
 // 	background:url(../assets/device/over.png) no-repeat;
 // 	margin-left:110px;
 // 	margin-bottom:10px;
 // 	display:none;
-// }
+}
 // #notice_content {
 // 	color: #666;
 // 	margin-bottom: 10px;
@@ -3258,14 +3258,14 @@ input[type=radio]{
 // 	margin-bottom: 5px;
 // 	float:left;
 // }
-// #progress_bar {
+#progress_bar {
 // 	float: left;
 // 	line-height: 5px;
 // 	width: 0;
 // 	border-radius: 3px;
 // 	height: 5px;
-// 	background: $projectColor;
-// }
+	background-color: $projectColor;
+}
 // #sd_export_path_show {
 // 	width: 200px;
 // 	height: 30px;
@@ -3288,19 +3288,19 @@ input[type=radio]{
 // 	text-align: center;
 // 	font-size: 14px;
 // }
-// #sd_export_submit {
+#sd_export_submit {
 // 	width: 100px;
 // 	height: 30px;
 // 	line-height: 30px;
 // 	text-align: center;
 // 	cursor: pointer;
 // 	color: #fff;
-// 	background: $projectColor;
+	background-color: $projectColor;
 // 	float: left;
 // 	margin-left: 220px;
 // 	margin-top: 20px;
 // 	font-size: 14px;
-// }
+}
 // #sd_export_submit_tip{
 // 	color:#f00;
 // }
@@ -3322,21 +3322,21 @@ input[type=radio]{
 //     margin-left:80px;
 //     line-height:60px;
 // }
-// #logo_exit #exit_btn_img {
+#logo_exit #exit_btn_img {
 // 	float:right;
-// 	border:1px solid $projectColor;
-// 	color:$projectColor;
+	border:1px solid $projectColor;
+	color:$projectColor;
 // 	font-size: 16px;
 // 	border-radius:2px;
 // 	text-align:center;
 // 	margin-right:128px;
 // 	margin-top:17px;
 // 	line-height:34px;
-// }
-// #logo_exit #exit_btn_img:hover{
-// 	background:$projectColor;
+}
+#logo_exit #exit_btn_img:hover{
+	background-color:$projectColor;
 // 	color:#fff;
-// }
+}
 // #feedback{
 // 	background: url(../assets/device/feedback_icon.png) no-repeat;
 // }
@@ -4791,10 +4791,10 @@ input[type=radio]{
 	line-height: 30px;
 	/*float:left;6.4.3*/
 }
-// .page_num_btn_no{
-// 	color: $projectColor;
+.page_num_btn_no{
+	color: $projectColor;
 // 	background: #fff;
-// }
+}
 .page_num_btn_yes{
 	color: #fff;
 	background: $projectColor;
@@ -4904,21 +4904,21 @@ input[type=radio]{
 	z-index:1001;
 	// display:none;
 }*/
-#boxlist_search_btn_down{
-	/*6.1.2*/
-	font-size:16px;
-	color:#333333;
-	text-align:center;
-	line-height:52px;
-	width:146px;
-	height:52px;
-	background:url(../assets/device/prompt-box.png) no-repeat;
-	position:absolute;
-	left:-19px;
-	top:41px;
-	z-index:1001;
-	display:none;
-}
+// #boxlist_search_btn_down{
+// 	/*6.1.2*/
+// 	font-size:16px;
+// 	color:#333333;
+// 	text-align:center;
+// 	line-height:52px;
+// 	width:146px;
+// 	height:52px;
+// 	background:url(../assets/device/prompt-box.png) no-repeat;
+// 	position:absolute;
+// 	left:-19px;
+// 	top:41px;
+// 	z-index:1001;
+// 	display:none;
+// }
 #boxlist_search_btn{
 	position: relative;
 }
@@ -5821,17 +5821,17 @@ line-height: 30px;
 }
 /*6.1.2*/
 #empty_search_btn{
-	border-radius: 4px;
-    height: 34px;
-    line-height: 34px;
-    width: 120px;
-    border: 0;
-    font-size: 16px;
+	// border-radius: 4px;
+    // height: 34px;
+    // line-height: 34px;
+    // width: 120px;
+    // border: 0;
+    // font-size: 16px;
     background-color: $projectColor;
-    color:#fff;
-    /*110改为55*/
-    margin:55px auto 0;
-    text-align: center;
+    // color:#fff;
+    // /*110改为55*/
+    // margin:55px auto 0;
+    // text-align: center;
 }
 #box_per_ipc{
 	color:#323232;
@@ -5841,19 +5841,19 @@ line-height: 30px;
 #box_per_ipc_box{
 	overflow:hidden;
 }
-#box_onvif_ipc{
-	margin:10px 0;
-	font-size:15px;
-	color:#323232;
-	display: none;
-}
-#box_onvif_unadd_box{
-	width:685px;
-	margin:0 auto;
-	border-top: 1px solid #ccc;
-	display:none;
-	overflow: hidden;
-}
+// #box_onvif_ipc{
+// 	margin:10px 0;
+// 	font-size:15px;
+// 	color:#323232;
+// 	display: none;
+// }
+// #box_onvif_unadd_box{
+// 	width:685px;
+// 	margin:0 auto;
+// 	border-top: 1px solid #ccc;
+// 	display:none;
+// 	overflow: hidden;
+// }
 #box_onvif_img{
     width:367px;
     height:184px;
@@ -5881,24 +5881,24 @@ line-height: 30px;
     margin-top: 40px;
     background-position: 247px 1px;
 }
-#onvif_no_searching{
-	width: 685px;
-    margin: 0 auto;
-    text-align: center;
-    font-size: 16px;
-    color: #323232;
-    margin-top: 40px;
-    display:none;
-}
+// #onvif_no_searching{
+// 	width: 685px;
+//     margin: 0 auto;
+//     text-align: center;
+//     font-size: 16px;
+//     color: #323232;
+//     margin-top: 40px;
+//     display:none;
+// }
 #onvif_re_searching{
-	width: 685px;
-    margin: 0 auto;
-    text-align: center;
-    font-size: 16px;
+	// width: 685px;
+    // margin: 0 auto;
+    // text-align: center;
+    // font-size: 16px;
     color: $projectColor;
-	margin-top: 30px;
-	cursor: default;
-    display:none;
+	// margin-top: 30px;
+	// cursor: default;
+    // display:none;
 }
 .box_onvif_unadd_img_box{
 	/*width:190px; 设计稿为190px 但一排显示3个 有空白*/
@@ -5929,15 +5929,15 @@ line-height: 30px;
 	font-size:14px;
 }
 .box_onvif_add_btn{
-	margin:24px auto 0;
-	width:76px;
-	height:32px;
-	font-size: 16px;
-	line-height:32px;
-	text-align:center;
+	// margin:24px auto 0;
+	// width:76px;
+	// height:32px;
+	// font-size: 16px;
+	// line-height:32px;
+	// text-align:center;
 	color:$projectColor;
 	border:1px solid $projectColor;
-	border-radius: 4px;
+	// border-radius: 4px;
 }
 #add_onvif_devices_box{
     width:840px;
@@ -6029,15 +6029,15 @@ line-height: 30px;
 	line-height: 30px;
 	float:left;
 }
-.del_box_ipc_record_btn{
-	display:none;
-	width:18px;
-	height:20px;
-	background:url(../assets/device/relate_delete.png) no-repeat;
-	float:right;
-	margin-top:8px;
-	margin-right:5px;
-}
+// .del_box_ipc_record_btn{
+// 	display:none;
+// 	width:18px;
+// 	height:20px;
+// 	background:url(../assets/device/relate_delete.png) no-repeat;
+// 	float:right;
+// 	margin-top:8px;
+// 	margin-right:5px;
+// }
 .box_delete_btn{
 	float:right;
 	/*padding-top:7px;*/

@@ -501,10 +501,9 @@ export default {
         })
       } else {
         if (this.$store.state.jumpPageData.deviceData.length === 0 || type === 'refresh') {
-          console.log('进入设备请求判断')
           //发送设备列表请求
           this.$api.devlist.devs_refresh().then(res => {
-            console.log(res, '获取设备列表数据')
+            // console.log(res, '获取设备列表数据')
             this.devlist_get_ack(res)
           })
         } else {
@@ -527,7 +526,6 @@ export default {
         this.search_tree[key] = this.$store.state.user.name + "_" + data[key].sn + "_tree"
       }
       if (this.$store.state.user.supportTreeFlag && flag === 1) { //是不是支持树状结构
-        console.log('是否为树形结构')
         this.get_service_record_list(0, data)
       } else if (this.$store.state.user.supportTreeFlag && flag === 0) { // 从播放页面返回，不发cfsf请求
         let back_flag = sessionStorage.getItem("back_flag")
@@ -907,7 +905,7 @@ export default {
         })
       } else {
         data = data.sort(compare)
-        console.log(data, 'sortAfterData')
+        // console.log(data, 'sortAfterData')
         this.tree_back_data = data
         this.tree_list(data)
         this.devlistData = this.$store.state.jumpPageData.deviceData

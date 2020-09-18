@@ -302,8 +302,7 @@ export default {
         console.log('enter this devlist')
         this.$router.push({ name: 'devlist' })
       } else if (this.$route.name == 'playback') {
-        console.log('enter this history')
-        this.$router.push({ name: 'history' })
+        this.$router.push({name:"history",params:{dev_sn:this.$store.state.jumpPageData.selectDeviceIpc}})
       }
     }
   },

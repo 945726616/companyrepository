@@ -295,7 +295,7 @@
                         location.href = url.replace("&l=local&c=0", "");
                         sessionStorage.clear();
                     } else {
-                        sessionStorage.clear();
+                        // sessionStorage.clear();
                         location.reload();
                     }
                 }

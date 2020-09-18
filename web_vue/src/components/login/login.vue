@@ -4,19 +4,19 @@
       <div id='login_box' :class="name == 'vimtag'?'vimtag_login_bg':''" :style="name == 'ebit'?'background:#F5F5F5':''">
         <div id='vimtag_signin_inner' :style="name == 'vimtag'?'width:290px':'width:230px'">
           <div :id="'signin_logo_'+name"></div>
-          <div id='sigin_in_username' class='input_div' :style="register_sign?'display:none':'display:block'">
+          <div id='sigin_in_username' class='input_div' v-if="!register_sign">
             <div :class="name+'_login_user'"></div>
             <input id='signin_name' :class="name == 'vimtag'?'vimtag_input_username':'mipc_input_username'" :placeholder="mcs_username" :style="remember_data_sign?'color: #404040':''" v-model="user_val">
             <!-- 登录时用户名 -->
             <div :class="name+'_login_input'"></div>
           </div>
-          <div id='register_username' class='input_div' :style="register_sign?'display:block':'display:none'">
+          <div id='register_username' class='input_div' v-if="register_sign">
             <div :class="name+'_login_user'"></div>
             <input id='register_signin_name' :class="name == 'vimtag'?'vimtag_input_username':'mipc_input_username'" :placeholder="mcs_input_username" v-model="register_name_val">
             <!-- 注册时填写用户名 -->
             <div :class="name+'_login_input'"></div>
           </div>
-          <div id='sigin_in_password' class='input_div' :style="register_sign?'display:none':'display:block'">
+          <div id='sigin_in_password' class='input_div' v-if="!register_sign">
             <div :class="name+'_password_img'"></div>
             <input id='signin_pw' :class="name == 'vimtag'?'vimtag_input_password':'mipc_input_password'" :type='password_eye_sign?"password":"text"' :style="l_remember_data_obj&&l_remember_data_obj.password?'color: #404040':''" v-model="password_val" :placeholder="mcs_password" @keyup.enter="sign_in">
             <!-- 登录时密码 -->
@@ -24,31 +24,31 @@
             </div>
             <div :class="name+'_login_input'"></div>
           </div>
-          <div id='register_account_pwd' class='input_div' :style="register_sign?'display:block':'display:none'">
+          <div id='register_account_pwd' class='input_div' v-if="register_sign">
             <div :class="name+'_password_img'"></div>
             <input id='register_signin_pw' :class="name == 'vimtag'?'vimtag_input_password':'mipc_input_password'" v-model="register_pw_val" :type='register_password_eye_sign?"password":"text"' :placeholder='mcs_input_password'>
             <!-- 注册时填写密码 -->
             <div id='register_password_eye' v-if="name == 'vimtag'" :class='register_password_eye_sign?"password_eye_gray":"password_eye"' @click="register_password_eye_sign = !register_password_eye_sign"></div>
             <div :class="name+'_login_input'"></div>
           </div>
-          <div id='register_account_pwd_again' class='input_div' :style="register_sign?'display:block':'display:none'">
+          <div id='register_account_pwd_again' class='input_div' v-if="register_sign">
             <div :class="name+'_password_img'"></div>
             <input id='register_signin_pw_again' :class="name == 'vimtag'?'vimtag_input_password':'mipc_input_password'" :type='register_password_eye_again_sign?"password":"text"' :placeholder='mcs_confirm_password' v-model="register_pw_again_val"><!-- 注册时填写确认密码 -->
             <div id='register_password_eye_again' v-if="name == 'vimtag'" :class='register_password_eye_again_sign?"password_eye_gray":"password_eye"' @click="register_password_eye_again_sign = !register_password_eye_again_sign"></div>
             <div :class="name+'_login_input'"></div>
           </div>
-          <div id='keep_sign_in' :style="register_sign?'display:none':'display:block'">
+          <div id='keep_sign_in' v-if="!register_sign">
             <input id='keep_sign_in_check' type='checkbox' v-model="keep_pw"><span>{{mcs_remember_password}}</span>
             <!-- 记住密码选框 -->
           </div>
-          <button :class="name == 'vimtag'?'vimtag_btn':'mipc_btn'" id='sign_in' :style="register_sign?'display:none':'display:block'" @click="sign_in">{{mcs_sign_in}}</button><!-- 登录页面中登录按钮 -->
-          <button :class="name == 'vimtag'?'vimtag_btn':'mipc_btn'" id='register_btn' @click="sign_up" :style="register_sign?'display:block':'display:none'">{{mcs_sign_up}}</button><!-- 注册页面中注册按钮 -->
+          <button :class="name == 'vimtag'?'vimtag_btn':'mipc_btn'" id='sign_in' v-if="!register_sign" @click="sign_in">{{mcs_sign_in}}</button><!-- 登录页面中登录按钮 -->
+          <button :class="name == 'vimtag'?'vimtag_btn':'mipc_btn'" id='register_btn' @click="sign_up" v-if="register_sign">{{mcs_sign_up}}</button><!-- 注册页面中注册按钮 -->
           <div>
-            <span id='register_account' @click="register_sign = true" :style="register_sign?'display:none':'display:block'">{{mcs_sign_up}}</span>
+            <span id='register_account' @click="register_sign = true" v-if="!register_sign">{{mcs_sign_up}}</span>
             <!-- 登录页面中注册文字按钮 -->
-            <span id='forget_pass' @click="forget_pw_sign = true" :style="register_sign?'display:none':'display:block'">{{mcs_forgot_your_password}}?</span>
+            <span id='forget_pass' @click="forget_pw_sign = true" v-if="!register_sign">{{mcs_forgot_your_password}}?</span>
             <!-- 登录页面中忘记密码文字按钮 -->
-            <span id='sign_account' :style="register_sign?'display:block':'display:none'" @click="register_sign = false">{{mcs_sign_in}}</span>
+            <span id='sign_account' v-if="register_sign" @click="register_sign = false">{{mcs_sign_in}}</span>
             <!-- 注册页面中登录文字按钮 -->
           </div>
         </div>
@@ -75,7 +75,7 @@
                 <input id='binding_account_next_btn' style='width:100%; line-height:34px; height:34px;' type='button' class='vimtag_button_right' :value='mcs_action_next' @click="binding_account_next_btn">
               </div>
             </div>
-            <div :style='forget_pass_second?"display:block":"display:none"' id='input_email_page'>
+            <div v-if='forget_pass_second' id='input_email_page'>
               <div style='font-size:20px; color:#323232;'>
                 {{mcs_forgot_your_password}}
               </div>
@@ -84,7 +84,7 @@
                 {{mcs_binding_mailbox}}
               </div>
               <!-- 第二步：请输入绑定的邮箱 -->
-              <div id='email_warn' :style='email_sign?"display:block; margin-bottom:10px;":"display:none; margin-bottom:10px;"'>
+              <div id='email_warn' v-if='email_sign' style='margin-bottom:10px;'>
                 <span>
                   {{mcs_prompt}}
                   : </span><span id='binding_account_email'>{{email_val}}</span>

@@ -7,7 +7,7 @@ Vue.use(Router)
 
 const login = () => import(/* webpackChunkName: "group-Mipc" */'@/components/login/login')
 const devlist = () => import(/* webpackChunkName: "group-Mipc" */'@/components/devlist/mipc')
-const boxlist = () => import(/* webpackChunkName: "group-Mipc" */'@/components/boxlist')
+const boxlist = () => import(/* webpackChunkName: "group-Mipc" */'@/components/boxlist/boxlist')
 const play = () => import(/* webpackChunkName: "group-Mipc" */'@/components/play/mipc')
 const history = () => import(/* webpackChunkName: "group-Mipc" */'@/components/history/mipc/history')
 const set = () => import(/* webpackChunkName: "group-Mipc" */'@/components/set')

@@ -200,8 +200,12 @@ export default {
       default: false
     },
     add_device_input_id: { // 添加设备输入设备Id Input框value
-      type: String,
-      default: null
+      type: String
+    }
+  },
+  watch: {
+    add_device_input_id: function (newVal, oldVal) {
+      this.add_device_input_id_model = newVal
     }
   },
   data () {
@@ -559,13 +563,16 @@ export default {
     forgetDevicePassword () { // 点击忘记设备密码
       this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'forgetDevicePassword') // 展示设备忘记密码页面
       this.$set(this.addDeviceModelObj, 'menuTitle', mcs_forgot_your_password) // 设置设备忘记密码页面顶部菜单标题
-      this.$set(this.addDeviceModelObj, 'typeUrlForgetPass', require("@/assets/device/reset_" + this.addDeviceModelObj.deviceType + ".png")) // 设置动态切换的图片地址
+      this.$set(this.addDeviceModelObj, 'typeUrlForgetPass', require("@/assets/" + this.$store.state.jumpPageData.projectName + "/reset_" + this.addDeviceModelObj.deviceType + ".png")) // 设置动态切换的图片地址
       let deviceType = this.addDeviceModelObj.deviceType
       if (deviceType === 'b1' || deviceType === 'b2' || deviceType === 'b3') {
         this.$set(this.addDeviceModelObj, 'forgetInfo', mcs_bseries_forget_password) // 设置设备忘记密码页面info提示语
       } else if (deviceType === 'p1' || deviceType === '361') {
         this.$set(this.addDeviceModelObj, 'forgetInfo', mcs_press_hole_restore_to_reset_password) // 设置设备忘记密码页面info提示语
-      } else {
+      } else if (deviceType === 'IPC') {
+        this.$set(this.addDeviceModelObj, 'forgetInfo', mcs_press_hole_restore_to_reset_password) // 设置设备忘记密码页面info提示语
+        this.$set(this.addDeviceModelObj, 'typeUrlInputId', this.$store.state.jumpPageData.projectName + '_add_device_sample_img_IPC') // 设置设备忘记密码页面info提示语
+      }else {
         this.$set(this.addDeviceModelObj, 'forgetInfo', mcs_press_button_restore_to_reset_password) // 设置设备忘记密码页面info提示语
       }
     },

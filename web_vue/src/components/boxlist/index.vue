@@ -149,7 +149,6 @@ export default {
           conf.flag=2;
           conf.uuid=data.parent().parent().attr("uuid");
           conf.func=onvif_box_add_ipc_ack;
-          // console.log(conf)
           _this.publicFunc.delete_tips({content:mrs_delete_association_and_video,func:function(){
             _this.$api.boxlist.onvif_box_add_ipc(conf) // ccm_box_set_ipc_req
           }})

@@ -231,14 +231,7 @@ export default {
               // sessionStorage.clear();
             }
           }
-        } else {
-          _this.publicFunc.mx("#mipcBack").onclick = function () {
-            let jumpData = {parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page};
-            // createPage("history", { parent: obj.parent, dev_sn: obj.dev_sn, back_page: obj.back_page })
-            _this.$router.push({name:'history',params:jumpData});
-            // sessionStorage.clear();
-          }
-        }
+        } 
         _this.publicFunc.mx("#playback_download_path_submit").onclick = function () { // 下载部分函数
           let download_path = _this.publicFunc.mx("#playback_download_path_input").value; //下载路径
           $("#playback_download_path_box").hide();

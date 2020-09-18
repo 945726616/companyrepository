@@ -122,7 +122,7 @@ export default {
             no_get_img = true
           } else if (msg[i].stat === "Online") {
             if (!this.$store.state.jumpPageData.selectDeviceIpc) {
-              console.log(this.$store.state.jumpPageData.selectDeviceIpc, 'this.$store.state.jumpPageData.selectDeviceIpc')
+              // console.log(this.$store.state.jumpPageData.selectDeviceIpc, 'this.$store.state.jumpPageData.selectDeviceIpc')
               this.$store.dispatch('setSelectDeviceIpc', msg[i].sn)
             }
           }
@@ -161,7 +161,7 @@ export default {
     },
     // 自动选中第一个在线设备
     chooseFirstOnlineDevice () {
-      console.log('进入chooseFirstOnlineDevice', this.deviceArr)
+      // console.log('进入chooseFirstOnlineDevice', this.deviceArr)
       for (let index = 0; index < this.deviceArr.length; index++) {
         let item = this.deviceArr[index]
         if (item.stat === 'Online') {
@@ -209,15 +209,11 @@ export default {
             if (this.$route.name !== 'play') {
               this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
             } else {
-              mipcPlay({ parent: $('#dev_main_right') })
+              mipcPlay({ parent: $('#play') })
             }
           } else if (type === "BOX") {
-            if (this.$route.name !== 'boxlist') {
-              this.$router.push({ name: 'boxlist', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
-            } else {
-              create_boxlist_page({ parent: $("#dev_main_right"), parentId: "dev_main_right" })
+              this.$router.push({ name: 'boxlist'})
             }
-          }
         } else if (state === "InvalidAuth") { // 展示弹窗
           this.addDeviceModel = true
           this.add_device_input_id = this.$store.state.jumpPageData.selectDeviceIpc
@@ -232,17 +228,17 @@ export default {
       })
     },
     clickEditDevice () { // 点击编辑事件
-      console.log('enter click edit device')
+      // console.log('enter click edit device')
       if (this.$store.state.jumpPageData.experienceFlag) { // 体验帐号
         // 提示操作无权限
         this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 })
         return
       }
       this.deviceDelIconFlag = !this.deviceDelIconFlag // 标识取反
-      console.log(this.deviceDelIconFlag, 'this.deviceDelIconFlag')
+      // console.log(this.deviceDelIconFlag, 'this.deviceDelIconFlag')
     },
     clickItemDel (item, e) { // 点击具体设备的删除按钮
-      console.log(e, 'deviceDel_E', '删除被点击')
+      // console.log(e, 'deviceDel_E', '删除被点击')
       e.stopPropagation()
       let sn = item.sn
       this.publicFunc.delete_tips({
@@ -272,7 +268,7 @@ export default {
   },
   async mounted () {
     // this.publicFunc.projectReload.call(this);
-    console.log(this.$store.state.user, '(this.$store.state.user')
+    // console.log(this.$store.state.user, '(this.$store.state.user')
     await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
     let pageData; //页面创建相关对象
     if (this.$route.params) {

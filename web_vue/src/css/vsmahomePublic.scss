@@ -7,7 +7,9 @@ $projectColor: #2988cc !global;
 	height: 54px;
 	background-color: $projectColor;
 }
-
+.menu_box {
+    background-color: $projectColor;
+}
 // #menu_more {
 // 	margin-right: 35px;
 // }
@@ -165,11 +167,11 @@ $projectColor: #2988cc !global;
 // 	/*background: url("../assets/device/vimtag_img.png") no-repeat -56px -95px;*/
 // }
 
-// #keep_sign_in {
+#keep_sign_in {
 // 	float: right;
 // 	margin-bottom: 10px;
-// 	color: #6b7a99;
-// }
+	color: $projectColor;
+}
 
 // #keep_sign_in_check {
 // 	float: left;
@@ -177,40 +179,40 @@ $projectColor: #2988cc !global;
 // 	margin-right: 5px;
 // }
 
-// .vimtag_btn {
+.mipc_btn {
 // 	color: #ffffff;
 // 	font-size: 14px;
 // 	width: 230px;
 // 	height: 34px;
 // 	margin-bottom: 16px;
 // 	cursor: pointer;
-// 	background-color: #2988cc;
+	background-color: $projectColor;
 // 	border: 0px;
 // 	-webkit-border-radius: 2px;
 // 	-moz-border-radius: 2px;
 // 	border-radius: 2px;
-// }
+}
 
-// #register_account {
-// 	color: #6b7a99;
+#register_account {
+	color: $projectColor;
 // 	font-size: 14px;
 // 	cursor: pointer;
 // 	float: left;
-// }
+}
 
-// #forget_pass {
-// 	color: #6b7a99;
+#forget_pass {
+	color: $projectColor;
 // 	font-size: 14px;
 // 	cursor: pointer;
 // 	float: right;
-// }
+}
 
-// #sign_account {
-// 	color: #2988cc;
+#sign_account {
+	color: $projectColor;
 // 	font-size: 14px;
 // 	cursor: pointer;
 // 	text-align: center;
-// }
+}
 
 // #forget_pass_inner {
 // 	position: absolute;
@@ -223,16 +225,16 @@ $projectColor: #2988cc !global;
 // 	box-shadow: 0 2px 30px #050505;
 // }
 
-// #binding_account_cancel_btn {
+#binding_account_cancel_btn {
 // 	float: right;
-// 	background-color: #2988cc;
+	background-color: $projectColor;
 // 	color: #fff;
 // 	font-size: 24px;
 // 	cursor: pointer;
 // 	height: 24px;
 // 	width: 24px;
 // 	line-height: 24px;
-// }
+}
 
 // .standard_inputs_normal {
 // 	color: #BDBDBD;
@@ -243,46 +245,46 @@ $projectColor: #2988cc !global;
 // 	float: left;
 // }
 
-// #binding_account_next_btn {
+#binding_account_next_btn {
 // 	width: 100%;
 // 	line-height: 34px;
 // 	height: 34px;
 // 	color: #fff;
 // 	border: none;
-// 	background-color: #2988cc;
-// }
+	background-color: $projectColor;
+}
 
-// #recovery_pass_ok_btn {
+#recovery_pass_ok_btn {
 // 	width: 100%;
 // 	line-height: 34px;
 // 	height: 34px;
 // 	color: #fff;
 // 	border: none;
-// 	background-color: #2988cc;
-// }
+	background-color: $projectColor;
+}
 
-// #forget_password_close_btn {
+#forget_password_close_btn {
 // 	width: 100%;
 // 	line-height: 34px;
 // 	height: 34px;
 // 	color: #fff;
 // 	border: none;
-// 	background-color: #2988cc;
-// }
+	background-color: $projectColor;
+}
 
-// #input_email_page {
+#input_email_page {
 // 	margin-top: 50px;
 // 	display: none;
-// 	color: #2988cc;
+	color: $projectColor;
 // 	font-size: 14px;
-// }
+}
 
-// #forget_password_page {
+#forget_password_page {
 // 	margin-top: 50px;
 // 	display: none;
-// 	color: #2988cc;
+	color: $projectColor;
 // 	font-size: 14px;
-// }
+}
 
 // #select_lang_btn {
 // 	height: 35px;
@@ -1113,14 +1115,14 @@ $projectColor: #2988cc !global;
 	background: url("../assets/mipc/not-recording.png") no-repeat;
 }
 
-.del_box_ipc_btn {
-	display: none;
-	width: 18px;
-	height: 20px;
-	background: url(../assets/mipc/video_delete.png) no-repeat;
-	float: right;
-	margin-top: 10px;
-}
+// .del_box_ipc_btn {
+// 	display: none;
+// 	width: 18px;
+// 	height: 20px;
+// 	background: url(../assets/mipc/video_delete.png) no-repeat;
+// 	float: right;
+// 	margin-top: 10px;
+// }
 
 .history_list_img {
 	margin: 10px 0 0 10px;
@@ -1368,10 +1370,10 @@ $projectColor: #2988cc !global;
 }
 
 .select_filter_li_active {
-	color: #2988cc;
-	margin-left: 20px;
-	line-height: 30px;
-	cursor: pointer;
+	color: $projectColor;
+	// margin-left: 20px;
+	// line-height: 30px;
+	// cursor: pointer;
 }
 
 .alarm_sign_ico {
@@ -1481,35 +1483,37 @@ $projectColor: #2988cc !global;
 }
 
 .page_num_btn {
-	width: 30px;
-	height: 30px;
-	margin: 0 10px 0 10px;
-	cursor: pointer;
-	border: 1px solid #2e87e6;
-	-moz-border-radius: 2px;
-	-webkit-border-radius: 2px;
-	border-radius: 2px;
-	text-align: center;
-	line-height: 30px;
-	float: left;
-	flex-shrink: 0;
+	// width: 30px;
+	// height: 30px;
+	// margin: 0 10px 0 10px;
+	// cursor: pointer;
+	border: 1px solid $projectColor;
+	// -moz-border-radius: 2px;
+	// -webkit-border-radius: 2px;
+	// border-radius: 2px;
+	// text-align: center;
+	// line-height: 30px;
+	// float: left;
+	// flex-shrink: 0;
 }
 
 .page_num_btn_no {
-	color: #2e87e6;
-	background: #fff;
+	color: $projectColor;
+	// background: #fff;
 }
 
 .page_num_btn_yes {
-	color: #fff;
-	background: #2e87e6;
+	// color: #fff;
+	background-color: $projectColor;
 }
 
 .page_jump_input {
-	height: 28px;
-	width: 40px;
-	text-align: center;
-	flex-shrink: 0;
+	// height: 28px;
+	// width: 40px;
+	// text-align: center;
+	// flex-shrink: 0;
+	border: 1px solid $projectColor;
+    color: $projectColor;
 }
 
 .page_jump_input::-webkit-outer-spin-button,
@@ -1522,13 +1526,13 @@ input[type="number"] {
 }
 
 .page_jump_btn {
-	width: 75px;
-	height: 30px;
-	padding: 0 10px;
-	margin: 0 10px;
-	color: #fff;
-	background-color: #2e87e6;
-	flex-shrink: 0;
+	// width: 75px;
+	// height: 30px;
+	// padding: 0 10px;
+	// margin: 0 10px;
+	// color: #fff;
+	background-color: $projectColor;
+	// flex-shrink: 0;
 }
 
 /*playback page*/
@@ -1972,8 +1976,8 @@ input[type="number"] {
 
 .active_list {
 	background-color: #FFF;
-	color: #2988cc;
-	border-left: 4px solid #2988cc;
+	color: $projectColor;
+    border-left: 4px solid $projectColor;
 	padding-left: 36px;
 }
 
@@ -2035,18 +2039,18 @@ input[type="number"] {
 // 	height: 50px;
 // }
 
-// #mp_btn {
+#mp_btn {
 // 	float: left;
 // 	width: 100px;
 // 	height: 34px;
 // 	color: #fff;
-// 	background: #2988cc;
+	background-color: $projectColor;
 // 	text-align: center;
 // 	line-height: 36px;
 // 	margin-top: 5px;
 // 	margin-left: 40px;
 // 	cursor: pointer;
-// }
+}
 
 // #mp_updata_password {
 // 	color: #2988cc;
@@ -2135,18 +2139,18 @@ input[type="number"] {
 // 	height: 50px;
 // }
 
-// #gp_btn {
+#gp_btn {
 // 	float: left;
 // 	width: 100px;
 // 	height: 34px;
 // 	color: #fff;
-// 	background: #2988cc;
+	background-color: $projectColor;
 // 	text-align: center;
 // 	line-height: 36px;
 // 	margin-top: 5px;
 // 	margin-left: 40px;
 // 	cursor: pointer;
-// }
+}
 
 // #gp_updata_password {
 // 	color: #2988cc;
@@ -2256,18 +2260,18 @@ input[type="number"] {
 // 	height: 50px;
 // }
 
-// #ae_btn {
+#ae_btn {
 // 	float: left;
 // 	width: 100px;
 // 	height: 34px;
 // 	color: #fff;
-// 	background: #2988cc;
+	background-color: $projectColor;
 // 	text-align: center;
 // 	line-height: 36px;
 // 	margin-top: 5px;
 // 	margin-left: 40px;
 // 	cursor: pointer;
-// }
+}
 
 // .ae_tips {
 // 	margin-top: 10px;
@@ -2357,14 +2361,14 @@ input[type="number"] {
 }
 
 #export_success_icon {
-	line-height: 36px;
-	padding-left: 40px;
-	color: #2988cc;
-	height: 36px;
-	/*background:url(../assets/device/over.png) no-repeat;*/
-	margin-left: 110px;
-	margin-bottom: 10px;
-	display: none;
+	// line-height: 36px;
+	// padding-left: 40px;
+	color: $projectColor;
+	// height: 36px;
+	// /*background:url(../assets/device/over.png) no-repeat;*/
+	// margin-left: 110px;
+	// margin-bottom: 10px;
+	// display: none;
 }
 
 #notice_content {
@@ -2396,12 +2400,12 @@ input[type="number"] {
 }
 
 #progress_bar {
-	float: left;
-	line-height: 5px;
-	width: 0;
-	border-radius: 3px;
-	height: 5px;
-	background: #2988cc;
+	// float: left;
+	// line-height: 5px;
+	// width: 0;
+	// border-radius: 3px;
+	// height: 5px;
+	background-color: $projectColor;
 }
 
 #sd_export_path_show {
@@ -2429,17 +2433,17 @@ input[type="number"] {
 }
 
 #sd_export_submit {
-	width: 100px;
-	height: 30px;
-	line-height: 30px;
-	text-align: center;
-	cursor: pointer;
-	color: #fff;
-	background: #2988cc;
-	float: left;
-	margin-left: 220px;
-	margin-top: 20px;
-	font-size: 14px;
+	// width: 100px;
+	// height: 30px;
+	// line-height: 30px;
+	// text-align: center;
+	// cursor: pointer;
+	// color: #fff;
+	background-color: $projectColor;
+	// float: left;
+	// margin-left: 220px;
+	// margin-top: 20px;
+	// font-size: 14px;
 }
 
 #sd_export_submit_tip {
@@ -2772,28 +2776,28 @@ input[type="number"] {
 // 	line-height: 30px;
 // }
 
-// .operation_manual {
+.operation_manual {
 // 	float: left;
 // 	/*margin-left: -200px;*/
 // 	margin-left: -10px;
 // 	margin-top: 60px;
 // 	height: 30px;
 // 	font-size: 16px;
-// 	color: #2988cc;
+	color: $projectColor;
 // 	line-height: 30px;
-// }
+}
 
 // #manual_box {
 // 	float: left;
 // 	margin-top: 140px;
 // }
 
-// .user_guide_download_text {
+.user_guide_download_text {
 // 	font-size: 16px;
-// 	color: #2988cc;
+	color: $projectColor;
 // 	/*margin-left: 180px;*/
 // 	margin-top: 10px;
-// }
+}
 
 // .user_guide_device_img {
 // 	margin-left: 33px;
@@ -2844,21 +2848,21 @@ input[type="number"] {
 // 	background-size: cover;
 // }
 
-// .download_btn {
+.download_btn {
 // 	width: 100%;
 // 	height: 30px;
 // 	font-size: 13px;
-// 	color: #2988cc;
+	color: $projectColor;
 // 	background-color: #FFF;
 // 	margin-top: 11px;
 // 	cursor: pointer;
-// 	border: 1px solid #2988cc;
+	border: 1px solid $projectColor;
 // 	-webkit-border-radius: 2px;
 // 	-moz-border-radius: 2px;
 // 	border-radius: 2px;
 // 	text-align: center;
 // 	line-height: 30px;
-// }
+}
 
 /*add_device*/
 #add_device_page {
@@ -3004,7 +3008,7 @@ input[type="number"] {
 	line-height: 35px;
 	margin: 0 auto;
 	border-radius: 5px;
-	background: #2988cc;
+	background-color: $projectColor;
 }
 
 #add_device_skip {
@@ -4794,13 +4798,13 @@ div.ibutton-label-on {
 	box-sizing: border-box;
 }
 
-#box_onvif_unadd_box {
-	width: 685px;
-	margin: 0 auto;
-	border-top: 1px solid #ccc;
-	display: none;
-	overflow: hidden;
-}
+// #box_onvif_unadd_box {
+// 	width: 685px;
+// 	margin: 0 auto;
+// 	border-top: 1px solid #ccc;
+// 	display: none;
+// 	overflow: hidden;
+// }
 
 #box_onvif_img {
 	width: 367px;
@@ -4832,25 +4836,25 @@ div.ibutton-label-on {
 	background-position: 247px 1px;
 }
 
-#onvif_no_searching {
-	width: 685px;
-	margin: 0 auto;
-	text-align: center;
-	font-size: 16px;
-	color: #323232;
-	margin-top: 40px;
-	display: none;
-}
+// #onvif_no_searching {
+// 	width: 685px;
+// 	margin: 0 auto;
+// 	text-align: center;
+// 	font-size: 16px;
+// 	color: #323232;
+// 	margin-top: 40px;
+// 	display: none;
+// }
 
 #onvif_re_searching {
-	width: 685px;
-	margin: 0 auto;
-	text-align: center;
-	font-size: 16px;
-	color: #2988cc;
-	margin-top: 30px;
-	cursor: default;
-	display: none;
+// 	width: 685px;
+// 	margin: 0 auto;
+// 	text-align: center;
+// 	font-size: 16px;
+	color: $projectColor;
+// 	margin-top: 30px;
+// 	cursor: default;
+// 	display: none;
 }
 
 .box_onvif_unadd_img_box {
@@ -4887,33 +4891,33 @@ div.ibutton-label-on {
 }
 
 .box_onvif_add_btn {
-	margin: 24px auto 0;
-	width: 76px;
-	height: 32px;
-	font-size: 16px;
-	line-height: 32px;
-	text-align: center;
-	color: #2988cc;
-	border: 1px solid #2988cc;
-	border-radius: 4px;
+	// margin: 24px auto 0;
+	// width: 76px;
+	// height: 32px;
+	// font-size: 16px;
+	// line-height: 32px;
+	// text-align: center;
+	color: $projectColor;
+    border: 1px solid $projectColor;
+	// border-radius: 4px;
 }
 
-#box_per_ipc {
-	color: #323232;
-	font-size: 15px;
-	margin: 0 0 16px 20px;
-	/*	margin-left:20px;
-	margin-bottom:16px;*/
-	display: none;
-}
+// #box_per_ipc {
+// 	color: #323232;
+// 	font-size: 15px;
+// 	margin: 0 0 16px 20px;
+// 	/*	margin-left:20px;
+// 	margin-bottom:16px;*/
+// 	display: none;
+// }
 
-#box_onvif_ipc {
-	/*margin:10px 0;*/
-	margin-left: 20px;
-	font-size: 15px;
-	color: #323232;
-	display: none;
-}
+// #box_onvif_ipc {
+// 	/*margin:10px 0;*/
+// 	margin-left: 20px;
+// 	font-size: 15px;
+// 	color: #323232;
+// 	display: none;
+// }
 
 #box_per_ipc_box {
 	overflow: hidden;
@@ -4935,27 +4939,27 @@ div.ibutton-label-on {
 	margin-right: 5px;
 }
 
-.box_device_nick {
-	width: 268px;
-	height: 34px;
-	color: #000000;
-	font-size: 14px;
-	z-index: 2;
-	line-height: 34px;
-	/*margin-left: 50px;*/
-	margin-top: 5px;
-	display: flex;
-	justify-content: space-between;
-}
+// .box_device_nick {
+// 	width: 268px;
+// 	height: 34px;
+// 	color: #000000;
+// 	font-size: 14px;
+// 	z-index: 2;
+// 	line-height: 34px;
+// 	/*margin-left: 50px;*/
+// 	margin-top: 5px;
+// 	display: flex;
+// 	justify-content: space-between;
+// }
 
-.del_box_ipc_record_btn {
-	display: none;
-	width: 18px;
-	height: 20px;
-	background: url(../assets/mipc/relate_delete.png) no-repeat;
-	float: right;
-	margin-top: 10px;
-}
+// .del_box_ipc_record_btn {
+// 	display: none;
+// 	width: 18px;
+// 	height: 20px;
+// 	background: url(../assets/mipc/relate_delete.png) no-repeat;
+// 	float: right;
+// 	margin-top: 10px;
+// }
 
 .add_device_input_ip_box_ico {
 	width: 16px;
@@ -4973,15 +4977,15 @@ div.ibutton-label-on {
 	background: url(../assets/mipc/add_ovf_port.png) no-repeat;
 }
 
-.del_box_ipc_btn {
-	display: none;
-	width: 18px;
-	height: 16px;
-	background: url(../assets/mipc/video_delete.png) no-repeat;
-	float: right;
-	margin-top: 10px;
-	margin-left: 8px;
-}
+// .del_box_ipc_btn {
+// 	display: none;
+// 	width: 18px;
+// 	height: 16px;
+// 	background: url(../assets/mipc/video_delete.png) no-repeat;
+// 	float: right;
+// 	margin-top: 10px;
+// 	margin-left: 8px;
+// }
 
 .box_delete_btn {
 	float: right;
