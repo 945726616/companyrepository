@@ -53,7 +53,7 @@
                 <div id='box_onvif_ipc' v-if='box_onvif_ipc_sign && project_flag_name === "vimtag"'>ONVIF</div>
                 <div id='box_onvif_ipc_container' v-if='onvif_ipc_data1 && onvif_ipc_data1.length>0'>
                     <div :class='project_flag_name === "vimtag"?"box_device_list_img":"mipc_box_device_list_img"' v-for='(item,index) in onvif_ipc_data1' :key='index'>
-                        <img class='box_camera_sign_picture' :sn='item.conf.sn' :imgId='index' />
+                        <img class='box_camera_sign_picture' :sn='item.conf.sn' :imgId='index' @click='box_camera_btn' />
                         <div class='box_device_nick' :sn='item.conf.sn' :uuid='item.conf.uuid'>
                             <div :class='item.connect_infos.status == 1 ? project_flag_name+"_box_device_online" : "box_device_offline"'></div>
                             <span class='box_device_nick_span'> {{decodeURI(item.conf.nick) ? decodeURI(item.conf.nick) : item.conf.sn}} </span>
@@ -68,7 +68,7 @@
                 </div>
                 <div id='box_onvif_ipc_container' v-else-if='onvif_ipc_data2 && onvif_ipc_data2.length>0'>
                     <div :class='project_flag_name === "vimtag"?"box_device_list_img":"mipc_box_device_list_img"' v-for='(item,index) in onvif_ipc_data2' :key='index'>
-                        <img class='box_camera_sign_picture' :sn='item.sn' />
+                        <img class='box_camera_sign_picture' :sn='item.sn' @click='box_camera_btn' />
                         <div class='box_device_nick' :sn='item.sn'>
                             <!-- 暂时用conted==1代替在线判断 3时网络信号不好代替离线 -->
                             <div :class='item.conted == 1 ? project_flag_name+"_box_device_online" : "box_device_offline"'></div>
@@ -117,6 +117,8 @@
             }
         },
         async mounted() {
+            await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
+            
             this.project_flag_name = this.$store.state.jumpPageData.projectFlag ? "mipc" : "vimtag";
             this.boxlist_params = this.$route.params;
             this.project_name = this.$store.state.jumpPageData.projectName;
@@ -220,7 +222,7 @@
                     this.$router.push({ name: 'play', params: this.boxlist_params })
                 } else {
                     let dev_sn = e.currentTarget.getAttribute("sn");
-                    let jumpData = { dev_sn: dev_sn, addr: this.boxlist_params.addr, agent: this.boxlist_params.agent };
+                    let jumpData = { dev_sn: dev_sn, addr: this.boxlist_params.addr, back_page: "boxlist", agent: this.boxlist_params.agent };
                     this.$router.push({ name: 'history', params: jumpData })
                 }
             },
@@ -370,9 +372,9 @@
         components: {
             deviceModel
         },
-        watch:{
-            "$store.state.jumpPageData.selectDeviceIpc"(val){
-                if(val){
+        watch: {
+            "$store.state.jumpPageData.selectDeviceIpc"(val) {
+                if (val) {
                     this.publicFunc.showBufferPage()
                     this.box_search();
                 }

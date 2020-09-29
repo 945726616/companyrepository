@@ -392,13 +392,6 @@ $projectColor: #ff781f !global;
 	position: relative;
 }
 /*play page*/
-#play_box{
-	margin-left:10px;
-}
-#play_view{
-	width:100%;
-	float:left;
-}
 #play_dev_list{
 	width:234px;
 	float:left;
@@ -454,21 +447,6 @@ $projectColor: #ff781f !global;
 	cursor: pointer;
 	color:#fff;
 }
-#play_screen{
-	position: relative;
-}
-#play_menu_box{
-	width:80%;
-	height: 40px;
-	position: relative;
-	z-index: 9;
-	background-color: #5c5c66;
-	bottom: 45px;
-	left:10%;
-}
-#play_menu_left{
-	float:left;
-}
 .video_play_stop{
 	float:left;
 	width:18px;
@@ -493,107 +471,11 @@ $projectColor: #ff781f !global;
 .video_play_start:hover{
 	background:url("../assets/mipc/ebit_img.png") no-repeat -459px -3px;
 }
-#voice_close{
-	float:left;
-	width:20px;
-	height:20px;
-	margin-top:10px;
-	margin-left:15px;
-	cursor: pointer;
-}
-.voice_close_close{
-	background:url("../assets/mipc/ebit_img.png") no-repeat -661px -3px;
-}
-.voice_close_close:hover{
-	background:url("../assets/mipc/ebit_img.png") no-repeat -644px -3px;
-}
 .voice_close_open{
 	background:url("../assets/mipc/ebit_img.png") no-repeat -704px -3px;
 }
 .voice_close_open:hover{
 	background:url("../assets/mipc/ebit_img.png") no-repeat -682px -3px;
-}
-#play_menu_right{
-	float:right;
-	/*5.12.2*/
-	/*width:132px;6.3.2*/
-	position:relative;
-}
-#resolute_choice {
-	font-size: 16px;
-	padding:0 10px;
-	color: #a0a5b1;
-	border: none;
-	margin-top: 9px;
-	text-align: center;
-	float:right;
-	cursor:pointer;
-}
-#resolute_choice:hover{
-	color:#ff781f;
-}
-.enter_nav{
-	height: 18px;
-	width: 1px;
-	background: #d6d7dc;
-	float: right;
-	margin-top: 11px;
-	margin-left:15px;
-}
-.enter_nav_left{
-	height: 18px;
-	width: 1px;
-	background: #d6d7dc;
-	float: left;
-	margin-top: 11px;
-	margin-left:15px;
-}
-
-#choice_play_definition {
-	/*width: 66px;*/
-	/*padding:0 5px;*/
-	background-color: #000000;
-	position: absolute;
-	opacity: 0.4;
-	/*margin-left: 50px;*/
-	right:0;
-	z-index: 30;
-	display: none;
-}
-.definition_nav{
-	width:55px;
-	height:0.8px;
-	background-color:#ffffff;
-	margin:auto;
-}
-.definition_cha{
-	color: #ffffff;
-	font-size: 14px;
-	height: 25px;
-	line-height: 25px;
-	text-align: center;
-	cursor: pointer;
-}
-.definition_cha:hover{
-	color:#83eefa;
-}
-#play_buffer_ret{
-	position: absolute;
-	color:white;
-	font-size:14px;
-	float:left;
-	margin-top:10px;
-	z-index: 100;
-	right:100px;
-}
-.video_off_picture {
-	background: url("../assets/mipc/ebit_img.png") no-repeat -515px -3px;
-	width: 20px;
-	height: 20px;
-	float: left;
-	margin-left: 15px;
-	margin-top: 10px;
-	cursor:pointer;
 }
 .video_on_picture {
 	background: url("../assets/mipc/ebit_img.png") no-repeat -491px -3px;
@@ -603,44 +485,6 @@ $projectColor: #ff781f !global;
 	margin-left: 15px;
 	margin-top: 10px;
 	cursor:pointer;
-}
-.camera_off_picture {
-	background: url("../assets/mipc/ebit_img.png") no-repeat -560px -3px;
-	width: 20px;
-	height: 20px;
-	float: left;
-	margin-left:15px;
-	margin-top: 10px;
-	cursor:pointer;
-}
-#snapshot_preview_div{
-	width:666px;
-	height:386px;
-	position: absolute; 
-	z-index: 50;
-	top:20%;
-	left:28%;
-	display: none;
-}
-#snapshot_preview_inner{
-	border-radius: 10px;
-	background-color: #F4F4F4;
-	width:653px;
-	height:373px;
-	padding:6px;
-}
-#snapshot_preview_content{
-	width:100%;
-	height:100%;
-}
-#snapshot_preview_close{
-	position: absolute;
-	right: 6px;
-	top: 6px;
-	cursor: pointer;
-	background: url("../assets/mipc/close.png") no-repeat;
-	width: 25px;
-	height: 25px;
 }
 .talkback_off_picture {
 	background: url("../assets/mipc/ebit_img.png") no-repeat -593px -3px;
@@ -660,15 +504,6 @@ $projectColor: #ff781f !global;
 	margin-top: 10px;
 	cursor:pointer;
 }
-.adjust_off_picture {
-	background: url("../assets/mipc/ebit_img.png") no-repeat -627px -3px;
-	width: 18px;
-	height: 20px;
-	float: left;
-	margin-left: 15px;
-	margin-top: 10px;
-	cursor:pointer;
-}
 .adjust_on_picture {
 	background: url("../assets/mipc/ebit_img.png") no-repeat -609px -3px;
 	width: 18px;
@@ -677,44 +512,6 @@ $projectColor: #ff781f !global;
 	margin-left: 15px;
 	margin-top: 10px;
 	cursor:pointer;
-}
-#adjust_setting {
-	width: 430px;
-	height: 340px;
-	background-color: #fff;
-	position: absolute;
-	left: 25%;
-	bottom:100px;
-	box-shadow: 0 2px 30px #050505;
-	display: none;
-}
-.adjust_line {
-	width: 348px;
-	height: 40px;
-	margin: 0 auto;
-}
-.delete_adjust_page {
-	padding-right: 8px;
-	padding-top: 8px;
-	float: right;
-	font-size: 24px;
-	cursor: pointer;
-	height: 24px;
-	width: 24px;
-	line-height: 16px;
-}
-.adjust_cha {
-	height: 30px;
-	line-height: 40px;
-	font-size: 14px;
-	float: left;
-}
-.adjust_cha_right{
-	height: 30px;
-	width: 240px;
-	float: right;
-	display: block;
-	margin-right: 10px;
 }
 .adjust_mode_circle {
 	width: 14px;
@@ -732,50 +529,6 @@ $projectColor: #ff781f !global;
 	width: 240px;
 	float: right;
 	margin-right: 10px;
-}
-.adjust_out_box {
-	width: 200px;
-	float: left;
-	height: 2px;
-	background: #a1a6b3;
-	border: none;
-	margin-top: 18px;
-	cursor: pointer;
-}
-.adjust_in_box {
-	width:1px;
-	height: 2px;
-	float: left;
-	background: #ff781f;
-	border: 0;
-	position: absolute;
-}
-.adjust_circle {
-	width: 14px;
-	height: 14px;
-	float: left;
-	margin-top: -6px;
-	margin-left: -7px;
-	background-color: #ff781f;
-	border-radius: 50%;
-	position: absolute;
-	cursor: pointer;
-}
-.adjust_mode{
-	height: 40px;
-	width: 280px;
-	display: flex;
-	align-items: center;
-	justify-content: space-around;
-}
-#adjust_setting {
-	& > .adjust_line {
-		&:nth-child(6) {
-		.adjust_mode {
-			margin-left: 55px;
-		}
-		}
-	}
 }
 .mode_cha{
 	float: left;
@@ -824,41 +577,6 @@ $projectColor: #ff781f !global;
 	text-align: center;
 	line-height: 34px;
 }
-#play_view_control{
-	display: none;
-}
-#mipc_ptz_control {
-	position: absolute;
-}
-#ptz_control_center{
-	float:left;
-	width:70%;
-	height:60%;
-}
-#ptz_control_left{
-	width: 15%;
-	height: 80%;
-	float: left;
-	text-align: center;
-	font-size: 16px;
-	color: rgb(255, 255, 255);
-}
-.left_key {
-	background: url("../assets/mipc/control_left.png") no-repeat;
-	width: 24px;
-	height: 44px;
-	margin-top: 246.5px;
-	position: absolute;
-	display: none;
-	bottom: 50%;
-}
-#ptz_control_up{
-	width: 100%;
-	height: 20%;
-	text-align: center;
-	font-size: 16px;
-	color: rgb(255, 255, 255);
-}
 .up_key {
 	background: url("../assets/mipc/control_top.png") no-repeat;
 	width: 44px;
@@ -885,68 +603,6 @@ $projectColor: #ff781f !global;
 	display: none;
 	left:46%;
 	bottom: 0;
-}
-#ptz_control_right{
-	width: 15%;
-	height: 80%;
-	float: right;
-	text-align: center;
-	font-size: 16px;
-	color: rgb(255, 255, 255);
-}
-.right_key {
-	background: url("../assets/mipc/control_right.png") no-repeat;
-	width: 24px;
-	height: 44px;
-	margin-top: 136.5px;
-	position: absolute;
-	display: none;
-	right:10px;
-	bottom: 50%;
-}
-.play_top_menu_li{
-	float:left;
-	cursor:pointer;
-	margin:10px 15px 10px 0;
-}
-#enter_history_img{
-	background: url(../assets/mipc/ebit_img.png) no-repeat -367px -3px;
-	width: 20px;
-	height: 20px;
-	float:left;
-	margin-right: 5px;
-}
-#enter_history_txt{
-	color:#5c5c66;
-	float:left;
-}
-#enter_set_img{
-	background: url(../assets/mipc/ebit_img.png) no-repeat -407px -3px;
-	width: 20px;
-	height: 20px;
-	float:left;
-	margin-right: 5px;
-}
-#enter_set_txt{
-	color:#5c5c66;
-	float:left;
-}
-#play_pause_pic {
-	cursor: pointer;
-	position: relative;
-	opacity: 0.5;
-	left: 45%;
-	top: 40%;
-	width: 80px;
-	height: 80px;
-	background: url(../assets/mipc/vimtag_img.png) no-repeat -15px -273px;
-}
-#play_view_box{
-	cursor: pointer;
-	width: 100%;
-	height: 100%;
-	opacity: 0.5;
-	background-color: gray;
 }
 /*box page*/
 .box_device_list_img{
@@ -4600,5 +4256,62 @@ line-height: 30px;
 }
 #bottom_select_lang:hover {
   color: $projectColor;
+}
+.video_play_stop{
+  background-image:url(~@/assets/mipc/ebit_img.png);
+  background-repeat: no-repeat;
+  background-position: -443px -3px;
+}
+.video_play_stop:hover{
+  background-image:url(~@/assets/mipc/ebit_img.png);
+  background-repeat: no-repeat;
+  background-position: -427px -3px;
+}
+.video_off_picture {
+  background-image: url(~@/assets/mipc/ebit_img.png);
+  background-repeat: no-repeat;
+  background-position: -515px -3px;
+}
+.camera_off_picture {
+  background-image: url(~@/assets/mipc/ebit_img.png);
+  background-repeat: no-repeat;
+  background-position: -560px -3px;
+}
+.talkback_off_picture {
+	background-image: url(~@/assets/mipc/ebit_img.png);
+  background-repeat: no-repeat;
+  background-position: -593px -3px;
+}
+.adjust_off_picture {
+	background-image: url(../assets/mipc/ebit_img.png);
+	background-repeat: no-repeat;
+  background-position: -627px -3px;
+}
+#resolute_choice:hover{
+	color:$projectColor;
+}
+.voice_close_close{
+  background-image:url(~@/assets/mipc/ebit_img.png);
+  background-repeat: no-repeat;
+  background-position: -661px -3px;
+}
+.voice_close_close:hover{
+  background-image:url(~@/assets/mipc/ebit_img.png);
+  background-repeat: no-repeat;
+  background-position: -644px -3px;
+}
+#enter_set_img{
+  background-image: url(~@/assets/mipc/ebit_img.png);
+  background-repeat: no-repeat;
+  background-position: -407px -3px;
+}
+.adjust_in_box {
+	background: $projectColor;
+}
+.adjust_circle {
+	background-color: $projectColor;
+}
+#adjust_reset{
+	background-color: $projectColor;
 }
 // 样式颜色 结束

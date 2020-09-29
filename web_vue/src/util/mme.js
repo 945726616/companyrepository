@@ -18,7 +18,7 @@ var mme = function (obj/*
    enable_native_plug:true[default]|false,
    enable_flash_plug:true[default]|false
    */) {
-  this.create(obj);
+  this.create(obj)
 }
 mme.prototype =
 {
@@ -110,11 +110,11 @@ mme.prototype =
         && navigator.mimeTypes[this.types.xpcom.mime].enabledPlugin) { type = this.types.xpcom; }
     }
     if (!type && enable_flash_plug) {/* check flash */
-      if (ie) { try { test = new ActiveXObject(this.types.flash.xname); type = this.types.flash; } catch (e) { } }
+      if (ie) { try { test = new ActiveXObject(this.types.flash.xname); type = this.types.flash; } catch (e) { } } // IE浏览器检测flash插件功能
       else if ((null != navigator.mimeTypes)
         && (0 < navigator.mimeTypes.length)
         && (null != navigator.mimeTypes[this.types.flash.mime])
-        && navigator.mimeTypes[this.types.flash.mime].enabledPlugin) { type = this.types.flash; }
+        && navigator.mimeTypes[this.types.flash.mime].enabledPlugin) { type = this.types.flash; } // 其他浏览器检测flash插件是否正常
     }
     // console.log(type, 'create_plug_type')
     if (type) {
@@ -167,7 +167,6 @@ mme.prototype =
     }
     return null;
   },
-
   /* plug_valid: */
   check_plug_install: function (ref, on_check_ack/* function(ref, version) */) {
     var plug, info, timer, timer_counts = 20, cont = document.createElement("div"), ret = false;
@@ -222,7 +221,6 @@ mme.prototype =
     if (this.install_panel) { if (this.install_panel) { this.install_panel.innerHTML = ""; this.install_panel.parentNode.removeChild(this.install_panel); } delete this.install_panel; }
     if (this.install_test_panel) { if (this.install_test_panel.parentNode) { this.install_test_panel.innerHTML = ""; this.install_test_panel.parentNode.removeChild(this.install_test_panel); } delete this.install_test_panel; }
   },
-
   install: function () {
     var a, i, link_name, alist, me = this, codebase = mme.prototype.types.install.codebase,
       description_flag = 'block', button_width = 210, font_size = 18, flash_float_type = 'left', plug_float_type = 'right',
@@ -352,7 +350,6 @@ mme.prototype =
       });
     }
   },
-
   on_plug_event: function (json) {
     var e = meval(json);
     if (null == e) {/* xxxxxx error. what append. */
@@ -379,8 +376,7 @@ mme.prototype =
     return 0;
   },
   create: async function (obj) {
-    var parent = obj.parent, me = this;
-
+    var parent = obj.parent, me = this
     /* init parent and skin */
     this.skin = this.get_default_skin();
     if ("object" == typeof (obj.skin)) {

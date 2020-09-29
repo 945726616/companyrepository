@@ -209,7 +209,7 @@ export default {
             if (this.$route.name !== 'play') {
               this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
             } else {
-              mipcPlay({ parent: $('#play') })
+              this.$router.push({ name: 'boxlist', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
             }
           } else if (type === "BOX") {
               this.$router.push({ name: 'boxlist'})

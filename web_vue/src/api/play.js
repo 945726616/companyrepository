@@ -6,12 +6,14 @@ import devlist from './devlist'
 // import md5 from '@/util/mmd5.js'
 // import mcodec from '@/util/mcodec.js'
 import mme from '@/util/mme.js'
+import mme_hls from '@/util/mme_hls.js'
 import publicFunc from '@/util/public.js'
+import MSdk from '@/util/msdk_plug.js'
 const play = {
   /*
    ** 请求图片
    */
-  load_imgs(data) {
+  load_imgs (data) {
     let images = new Array()
     for (let length = data.dom.length, k = 0; k < length; k++) {
       let sn = data.dom[k].getAttribute("sn")
@@ -69,7 +71,7 @@ const play = {
   /*
    ** 停止视频播放
    */
-  async video_stop(params) {
+  async video_stop (params) {
     let flash_isplay = store.state.jumpPageData.flashIsPlay
     // console.log(flash_isplay, 'flash_isplay')
     let play_info = store.state.jumpPageData.playInfo
@@ -96,13 +98,36 @@ const play = {
     } else {
       params.dom.html('')
     }
-    let returnItem = null
-    return await returnItem
+    return await params.dom
   },
   /*
    ** 播放总接口
    */
-  async play(data) {
+  async play (data) { // 播放方式选择接口
+    return this.play_flash(data)
+    // if (window.fujikam || navigator.mimeTypes["application/x-shockwave-flash"]) { // 客户端/支付flash的浏览器使用flash播放方法
+    //   console.log('use flash')
+    //   return this.play_flash(data)
+    // } else { // 其余则直接使用HLS进行播放
+    //   console.log('use hls')
+    //   let msdk = new MSdk()
+    //   console.log(msdk, 'msdk')
+    //   msdk.create({ data: { token: "create" } }).then(res => {
+    //     console.log(res, 'isInitialized', msdk_create)
+    //     let msdk_create_timer = setInterval(function () {
+    //       console.log(data, 'setInterval_data')
+    //       if (typeof msdk_create != 'undefined' && msdk_create instanceof Function) {
+    //         msdk_create(res, data)
+    //         clearInterval(msdk_create_timer)
+    //       }
+    //     }, 500)
+    //     // if (res) {
+    //     //   return this.play_hls(data)
+    //     // }
+    //   })
+    // }
+  },
+  async play_flash (data) {
     let returnItem = "";
     let flash_isplay = store.state.jumpPageData.flashIsPlay
     let judge_enable_native_plug = true;
@@ -110,7 +135,7 @@ const play = {
     let ref_obj = create_play_ipc(data);
     let playback = data.playback ? 1 : 0;
     let l_plug_type = "";
-    if (ref_obj.isDownload) {
+    if (ref_obj.isDownload) { // 下载按钮添加
       if (!$("#download_dom").length > 0) {
         $("body").append("<div id='download_dom' style='width:1px;height:1px;'></div>")
       }
@@ -134,30 +159,30 @@ const play = {
     }
     store.dispatch('setPlayInfo', ref_obj)
 
-    function flash_play() {
-      let profile_token_choice = get_profile_token_choice(data.profile_token);
+    function flash_play () {
+      let profile_token_choice = get_profile_token_choice(data.profile_token)
       let urls
-      if (process.env.NODE_ENV === 'production') {
+      if (process.env.NODE_ENV === 'production') { // 正式环境下截图播放地址
         // urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
         urls = window.location.protocol + "//" + window.location.host + "/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
-      } else {
+      } else { // 测试环境下截图播放地址
         urls = window.location.protocol + "//" + window.location.host + "/api/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
       }
-      console.log(urls, 'urls')
-      data.dom.html("<img id='flash_img' width='1px' src='" + urls + "'>")
+      // console.log(urls, 'urls')
+      data.dom.html("<img id='flash_img' width='1px' src='" + urls + "'>") // 写入封面图
       if (publicFunc.mx("#flash_img")) {
         publicFunc.mx("#flash_img").onload = function () {
           data.dom.css('background', "url(" + this.src + ")")
           data.dom.css('backgroundSize', "100% 100%")
         }
       } else {
-        clearInterval(flash_isplay)
+        clearInterval(flash_isplay) // 终止定时器 取消循环请求图片播放视频
       }
     }
-    async function on_plug_event(obj) {
-      sessionStorage.setItem("type_tip", obj.type);
-      sessionStorage.setItem("code_tip", obj.code);
-      switch (obj.type) {
+    async function on_plug_event (obj) { // 创建插件事件
+      sessionStorage.setItem("type_tip", obj.type) // 存储类型提示
+      sessionStorage.setItem("code_tip", obj.code) // 存储编码提示
+      switch (obj.type) { // switch选择存储类型进行判断执行
         case "missing": {
           if (!playback) {
             if ((navigator.userAgent.toLowerCase().match(/chrome\/[\d.]+/gi) + "").replace(/[^0-9.]/ig, "") > "44") {
@@ -261,7 +286,7 @@ const play = {
       }
     }
 
-    async function play_ack(msg, ref) {
+    async function play_ack (msg, ref) {
       if (msg.result == "") {
         return await chl_video_create({
           type: msg.type,
@@ -293,11 +318,11 @@ const play = {
       }
     }
 
-    async function chl_video_create(obj) {
+    async function chl_video_create (obj) {
       let uri = obj.uri,
-        chl_params = (obj.type == "publish") ? "" : ",thread:\"istream\", jitter:{max:3000}" /* for old version's mme plugin */ ,
+        chl_params = (obj.type == "publish") ? "" : ",thread:\"istream\", jitter:{max:3000}" /* for old version's mme plugin */,
         trans_params = (obj.type == "play") ? ",trans:[{flow_ctrl:\"jitter\",thread:\"istream\"}]" :
-        ((obj.type == "playback") ? ",trans:[{flow_ctrl:\"delay\",thread:\"istream\"}]" : "");
+          ((obj.type == "playback") ? ",trans:[{flow_ctrl:\"delay\",thread:\"istream\"}]" : "");
       let params_data;
       let l_ipc_speed_time;
       let l_Last_speed = 0;
@@ -315,7 +340,7 @@ const play = {
         params: params_data
       });
       if (obj.inner_window_info.video_chls !== null) {
-        obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "speaker.mute", obj.type == "playback" ? "{value:0}" :  "{value:1}") // 参考旧代码此处原本含有一处全局变量判断,但未发现该值有后赋值行为默认删减成单一属性
+        obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "speaker.mute", obj.type == "playback" ? "{value:0}" : "{value:1}") // 参考旧代码此处原本含有一处全局变量判断,但未发现该值有后赋值行为默认删减成单一属性
         if (l_ipc_speed_time) {
           clearInterval(l_ipc_speed_time);
         }
@@ -375,13 +400,13 @@ const play = {
       return returnItem;
     }
 
-    function play_ipc(obj) {
+    function play_ipc (obj) {
       obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "play", "");
       obj.inner_window_info.playback_state = "play";
       return 0;
     }
 
-    function create_play_ipc(obj) {
+    function create_play_ipc (obj) {
       obj.protocol = "auto";
       obj.videoSize = obj.videoSize ? obj.videoSize : 0;
       obj.localPath = obj.download_path ? obj.download_path : null;
@@ -400,10 +425,303 @@ const play = {
     }
     return returnItem
   },
+  async play_hls (data) {
+    console.log('enter play_hls', data)
+    // dom: $("#play_screen"),
+    // sn: this.$store.state.jumpPageData.selectDeviceIpc,
+    // profile_token: "p0" 播放方式(插件/flash/hls/截图播放)由mme文件进行选择切换
+    let macFlag = navigator.userAgent.toLowerCase().indexOf('macintosh') > -1 ? true : false // mac客户端判别标识(自动播放)
+    let new_data = {
+      data: { sn: data.sn, dom: data.dom[0], stream: "major" },
+      ref: { ref: "live_play_ack" },
+      obj: data.dom,
+      callback: function (msg, ref) {
+        console.log(msg, ref, '调用播放打印回调')
+      }
+    }
+    data = new_data
+    // hls 播放
+    let returnItem = null
+    console.log(data, 'playData')
+    var judge_enable_native_plug = true
+    var judge_enable_flash_plug = false
+    var ref_obj = create_play_ipc(data)
+    var playback = data.playback ? 1 : 0;
+    if (playback) {
+      var token = data.data.token.split("-");
+      data.data.sn = token[0];
+      data.data.token = token[0] + "_" + token[1] + "_" + token[2] + "_end.cid:" + token[3] + "_end.sid:" + token[4];
+      data.data.videoSize = data.data.duration * 1000;
+    }
+    var screen = data.data.dom
+    screen.style.display = "block";
+    console.log(screen, 'screen')
+    var mme_params = {
+      parent: screen,
+      enable_native_plug: judge_enable_native_plug,
+      enable_flash_plug: judge_enable_flash_plug,
+      params: "{key:'data:application/octet-stream;base64,OenOl2/PvPX7EuqqZdvMsNf5PqEOlOJZ4sROOBtnvW8F6Fc+azokLNtti6Cb/oiuO9qhOxvDfL8cVpGY4UcCe81OIVHkbiNzuHKwiE+K6gmmWwIoHgSRn2RN4qsZO62QkqGePdR6L94n2ruSeixjqAgWFTW8AIlQptovRZSN1Dh/8M87RIRdYyVFqKqsZoZTYibPLyDFONKIqxzrFkJPtqR/wn8jnYMc1qUH/w3IYJZh/OqctPTDp8tYuQSWN3EE6+kVmDIMV9F92SZJORMnvxy+zYzpbO7Gz44fBQNQSGMelsf7yQpfTF/X8t1Qn73fu53xp3MTIGH0kklFH2tMPkO/Raelhw5A4JQbczWg0n4pcNxpRl6mCEIjFprTboJ/B2eI0qUX/zTPM7l1hBmxjxsewORsXp0y2+NnCRH0uVBGUq6fOWrdhJwotIIu5ZAZwdoDZZu6eaycol2TIS5smusoD0ODPtQ2xZoCy7djIC4MVhB5uKe0zDXbLr+Serdlq6en5HyvUN0EEmYle0fORmgNFn0DTqqTab6cx8WfFkysciJSveN4swoR66qMQUi9+TfkHTnZ/REp3kHJtSq8XJyzTe+KCXlJXGx07nAbK4svIPanx39A5o5XlpLK/ohxiMpEJZ6OhmWb9yAnL+8Bedw+epvbNQkhADh2QqB4ItsIq5KTOsNzA0aNn3FEXzyd7WLVBqcF1lUVxu1vpYRPKv01im1ORbVhDoJ9eiqkfchutpAGYOwhYzxFWOIhTMouY+m/oQhc1d8FF4T+zSx6WVmj2f+RDUdOKbQVxJdEeiGKyIDm14K34Kz+RdzF0fY50sbs/SUfMWwuKQsEPFU5KQ'}",
+      on_event: function (e) {
+        e.sn = data.sn;
+        on_plug_event(e)
+      },
+      ref_obj: ref_obj,
+      debug: 0
+    };
+    console.log(mme_params, 'screen_mme_params')
+    var me1 = new mme_hls(mme_params);
+
+    async function on_plug_event (obj) {
+      console.log(obj.type)
+      console.log(data, ref_obj, 'data.data.key_mme')
+      switch (obj.type) {
+        case "missing": {
+          if (!playback) {
+            if ((navigator.userAgent.toLowerCase().match(/chrome\/[\d.]+/gi) + "").replace(/[^0-9.]/ig, "") > "44") {
+              location.href = "https://www.adobe.com/go/getflashplayer";
+            }
+          }
+          var resolution = "p3"
+          if (data.data.stream === "major") {
+            resolution = "p1"
+          }
+          if (data.data.key_mme == '' || data.data.sn == '') {
+            var result = new Object();
+            result.data = {
+              "result": "param err"
+            };
+            result.ref = data.ref;
+            // onEvent(JSON.stringify(result))
+          }
+          // let var_protocol = "rtdp"
+          // if (g_browser == "web") {
+          let var_protocol = "http";
+          // }
+          console.log('do this func')
+          if (!playback) {
+            console.log('enter this func')
+            publicFunc.showBufferPage()
+            await axios.get('/ccm/ccm_play', {
+              params: {
+                sess: {
+                  nid: login.create_nid(),
+                  sn: ref_obj.sn
+                },
+                setup: {
+                  stream: "RTP_Unicast",
+                  trans: {
+                    proto: var_protocol
+                  }
+                },
+                token: resolution
+              }
+            }).then(res => {
+              console.log(res, 'play(res)', data)
+              var result = new Object()
+              result.data = {
+                "sn": data.data.sn,
+                "url": res.url,
+                "type": "hls",
+                "key_mme": data.data.key_mme,
+                "param": data
+              };
+              console.log('do this 1')
+              return callNative("livePlay", result, "callback_live_play", data)
+            })
+          } else {
+            publicFunc.showBufferPage()
+            ms.send_msg("playback", {
+              sn: data.data.sn,
+              token: data.data.token,
+              protocol: var_protocol,
+              ref: ""
+            }, data.ref, function (msg, ref) {
+              publicFunc.closeBufferPage()
+              var result = new Object();
+              result.data = {
+                "sn": data.data.sn,
+                "url": msg.url,
+                "type": "hls",
+                "key_mme": data.data.key_mme,
+                "param": data
+              };
+              result.ref = ref;
+              console.log('do this 2')
+              callNative("livePlay", JSON.stringify(result), "callback_live_play", data);
+            });
+          }
+          console.log('do break')
+          break;
+        }
+        case "ready": {
+          var proto = obj.ref_obj.protocol;
+          if (obj.plug.type.name == "flash") {
+            l_plug_type = "flash";
+            proto = "rtmp";
+          } else {
+            if (proto == "auto")
+              proto = "rtdp";
+          }
+          if (playback) {
+            publicFunc.showBufferPage()
+            ref_obj = ref_obj.data;
+            ms.send_msg("playback", {
+              sn: ref_obj.sn,
+              token: ref_obj.token,
+              protocol: proto,
+              ref: obj.ref_obj
+            }, obj.ref_obj, function (msg, ref) {
+
+              msg.type = "playback";
+              play_ack(msg, ref);
+            });
+          } else {
+            ms.send_msg("play", {
+              sn: ref_obj.data.sn,
+              token: obj.ref_obj.inner_window_info.profile_token,
+              protocol: proto,
+              ref: obj.ref_obj
+            }, obj.ref_obj, function (msg, ref) {
+              msg.type = "play";
+              play_ack(msg, ref);
+            });
+          }
+          break;
+        }
+        case "install_ui": {
+          obj.panel.id = "plugin_install_page"
+          break;
+        }
+
+      }
+    }
+
+    async function play_ack (msg, ref) {
+      console.log('enter_play_ack')
+      chl_video_create({
+        type: msg.type,
+        uri: msg.url,
+        me1: me1
+      });
+      var result = new Object();
+      result.data = {
+        "sn": data.data.sn,
+        "url": msg.url,
+        "key_mme": data.data.key_mme,
+        "param": data
+      };
+      result.ref = ref;
+      window.closeBufferPage()
+      console.log('do this 3')
+      callNative("livePlay", JSON.stringify(result), "callback_live_play", data);
+    }
+
+    async function chl_video_create (obj) {
+      var uri = obj.uri,
+        chl_params = (obj.type == "publish") ? "" : ",thread:\"istream\", jitter:{max:3000}" /* for old version's mme plugin */,
+        trans_params = (obj.type == "play") ? ",trans:[{flow_ctrl:\"jitter\",thread:\"istream\"}]" :
+          ((obj.type == "playback") ? ",trans:[{flow_ctrl:\"delay\",thread:\"istream\"}]" : "");
+
+      var params_data;
+      var l_ipc_speed_time;
+      var l_Last_speed = 0;
+      var l_speed = 0;
+      var l_progress = 0;
+
+      params_data = "{" + ((obj.type == "publish") ? "dst" : "src") + ":[{url:\"" + uri + "\"}]" + trans_params + chl_params + "}";
+      me1.video_chls = me1.chl_create({
+        params: params_data
+      });
+      if (me1.video_chls !== null) {
+        if (l_ipc_speed_time) {
+          clearInterval(l_ipc_speed_time);
+        }
+        if (l_plug_type !== "flash") { // 该判断条件中需要添加!此为客户端逻辑(去掉!用于在浏览器中测试使用)
+          l_ipc_speed_time = setInterval(function () {
+            var string_speed = me1.ctrl(me1.video_chls, "query", "{}");
+            if (string_speed.length >= 150) {
+              var json_speed = eval("(" + string_speed + ")");
+              var kb
+              if (playback) {
+                var duration2 = sessionStorage.getItem("duration");
+                kb = json_speed.data.p2ping ? "kB" : "KB";
+                l_speed = json_speed.data.total_bytes > l_Last_speed ? parseInt((json_speed.data.total_bytes - l_Last_speed) / 1000) + kb : l_Last_speed = 0;
+                if (duration2 == json_speed.data.played_duration) {
+                  duration_tip = true;
+                  sessionStorage.setItem("duration_tip", duration_tip)
+                }
+                l_Last_speed = json_speed.data.total_bytes;
+                l_progress = parseInt((json_speed.data.played_duration / data.videoSize) * 100);
+                sessionStorage.setItem("duration", json_speed.data.played_duration);
+
+              } else {
+                kb = json_speed.data.p2ping ? "kB" : "KB";
+                l_speed = json_speed.data.total_bytes > l_Last_speed ? parseInt((json_speed.data.total_bytes - l_Last_speed) / 1000) + kb : l_Last_speed = 0;
+                l_Last_speed = json_speed.data.total_bytes;
+              }
+            }
+          }, 1000)
+        }
+      }
+      if (obj.type == "playback") {
+        setTimeout(function () { play_ipc(obj) }, 1000)
+      }
+    }
+
+    function play_ipc (obj) {
+      me1.ctrl(me1.video_chls, "play", "");
+      me1.playback_state = "play";
+      return 0;
+    }
+
+    function create_play_ipc (obj) {
+      obj.protocol = "auto";
+      obj.videoSize = obj.videoSize ? obj.videoSize : 0;
+      obj.localPath = obj.download_path ? obj.download_path : null;
+      obj.inner_window_info = {
+        dom_id: ("play_screen"),
+        index: 1,
+        video_chls: null,
+        audio_chls: null,
+        mme: null,
+        ipc_state: "",
+        node_sn: obj.sn,
+        profile_token: 'p0'
+      };
+      return obj;
+    }
+
+    // msdk调用函数
+    function callNative (func, param, callback, data) {
+      var msdk = new MSdk(param)
+      console.log(func, param, callback, 'callNative_')
+      msdk.sdk_callNative(func, param).then(res => {
+        if (callback === "callback_live_play") {
+          callback_live_play(res)
+        }
+      })
+    }
+    function callback_live_play (param) {
+      console.log(param, 'callback_live_play_param')
+      var obj;
+      if (typeof param === "string") {
+        obj = eval("(" + param + ")");
+      } else {
+        obj = param;
+      }
+      var result = new Object();
+      result.data = { "ref": obj.param.ref, "result": obj.result };
+      result.ref = obj.param.ref;
+      console.log(result, 'use onEvent1')
+      // onEvent(JSON.stringify(result), data)
+    }
+    return returnItem
+
+  },
   /*
    ** 暂停下载
    */
-  pause_ipc() {
+  pause_ipc () {
     let play_info = store.state.jumpPageData.playInfo
     if (play_info.inner_window_info.mme) {
       play_info.inner_window_info.mme.ctrl(play_info.inner_window_info.video_chls, "pause", "")
@@ -413,7 +731,7 @@ const play = {
   /*
    ** 继续下载
    */
-  play_download_continue() {
+  play_download_continue () {
     let play_info = store.state.jumpPageData.playInfo
     play_info.inner_window_info.mme.ctrl(play_info.inner_window_info.video_chls, "play", "");
     play_info.inner_window_info.playback_state = "play";
@@ -421,11 +739,11 @@ const play = {
   /*
    ** 播放封面图
    */
-  play_preview_img(params) {
+  play_preview_img (params) {
     let url;
-    if(process.env.NODE_ENV === 'production'){
+    if (process.env.NODE_ENV === 'production') {
       url = (params.addr ? "http://" + params.addr : window.location.protocol + "//" + window.location.host) + "/ccm/ccm_pic_get.js?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + params.pic_token + "&dflag=2";
-    }else{
+    } else {
       url = (params.addr ? "http://" + params.addr : window.location.protocol + "//" + window.location.host) + "/api/ccm/ccm_pic_get.js?dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + params.sn + "&dtoken=" + params.pic_token + "&dflag=2";
     }
     params.dom.css('background-image', 'url(' + url + ')')
@@ -435,14 +753,14 @@ const play = {
   /*
    ** 全屏播放
    */
-  fullscreen() {
+  fullscreen () {
     let play_info = store.state.jumpPageData.playInfo
     play_info.inner_window_info.mme.ctrl(0, "fullscreen", "");
   },
   /*
    ** 音量控制
    */
-  voice(params) {
+  voice (params) {
     let play_info = store.state.jumpPageData.playInfo
     var video_chls = play_info.inner_window_info.video_chls;
     play_info.inner_window_info.mme.ctrl(video_chls, "speaker.mute", params.flag ? "{value:1}" : "{value:0}");
@@ -450,7 +768,7 @@ const play = {
   /*
    ** 摄像头视角控制
    */
-  play_ptz_turn(params) {
+  play_ptz_turn (params) {
     // console.log(params, 'turn_params')
     let l_mark = {
       flag: "ready"
@@ -485,7 +803,7 @@ const play = {
   /*
    ** 摄像头视角控制接口
    */
-  async ptz_ctrl(params) {
+  async ptz_ctrl (params) {
     // console.log(params, 'ptz_ctrl_params')
     let returnItem
     await axios.get('/ccm/ccm_ptz_ctl', {
@@ -517,7 +835,7 @@ const play = {
   /*
    ** 摄像头录像处理
    */
-  play_record(params) {
+  play_record (params) {
     if (params.sn) {
       if (params.recording === 1) {
         play.record({
@@ -539,7 +857,7 @@ const play = {
   /*
    ** 摄像头录像接口
    */
-  async record(params) {
+  async record (params) {
     let returnItem
     await axios.get('/ccm/ccm_record_task_get', {
       params: {
@@ -573,7 +891,7 @@ const play = {
   /*
    ** 摄像头录像设置任务接口
    */
-  async record_task_set(params) {
+  async record_task_set (params) {
     let task
     let returnItem
     if (params.task) { // 为两个不同的调用设置task参数值
@@ -605,7 +923,7 @@ const play = {
   /*
    ** 录像回调处理函数
    */
-  record_ack(msg, ref) {
+  record_ack (msg, ref) {
     if (msg && msg.sd_ready === 0) {
       publicFunc.msg_tips({
         msg: mcs_sdcard_not_ready,
@@ -627,7 +945,7 @@ const play = {
   /*
    ** 实时截图
    */
-  async play_snapshot(params) {
+  async play_snapshot (params) {
     let returnItem
     await axios.get('/ccm/ccm_snapshot', {
       params: {
@@ -656,7 +974,7 @@ const play = {
   /*
    ** 对讲处理
    */
-  play_speak(params) {
+  play_speak (params) {
     let play_info = store.state.jumpPageData.playInfo
     if (params.flag) {
       play.push_talk({
@@ -674,7 +992,7 @@ const play = {
       play_info.inner_window_info.mme.chl_destroy(play_info.inner_window_info.audio_chls);
     }
 
-    function chl_audio_create(obj) {
+    function chl_audio_create (obj) {
       var uri = obj.uri,
         chl_params = "";
       obj.inner_window_info.audio_chls = obj.inner_window_info.mme.chl_create({
@@ -685,7 +1003,7 @@ const play = {
   /*
    ** 对讲接口
    */
-  async push_talk(params) {
+  async push_talk (params) {
     let returnItem
     await axios.get('/ccm/ccm_talk', {
       params: {
@@ -712,7 +1030,7 @@ const play = {
   /*
    ** 获取视频地址
    */
-  async adjust_get(params) {
+  async adjust_get (params) {
     let returnItem
     await axios.get('/ccm/ccm_video_srcs_get', {
       params: {
@@ -822,8 +1140,8 @@ const play = {
   /*
    ** 设置视频地址
    */
-  async adjust_set(obj) {
-    if(obj.conf)obj = obj.conf;
+  async adjust_set (obj) {
+    if (obj.conf) obj = obj.conf;
     let returnItem
     if (obj.is_white_light && obj.white_light == 1) {
       await play.img_set({
@@ -958,7 +1276,7 @@ const play = {
   /*
    ** 设置视频地址接口
    */
-  async img_set(params) {
+  async img_set (params) {
     return await axios.get('/ccm/ccm_img_set', {
       params: {
         sess: {
@@ -973,7 +1291,7 @@ const play = {
   /*
    ** 获取设置视频地址接口
    */
-  async img_get(params) {
+  async img_get (params) {
     return await axios.get('/ccm/ccm_img_get', {
       params: {
         sess: {
@@ -987,7 +1305,7 @@ const play = {
   /*
    ** 杂项设置接口
    */
-  async misc_set(params) {
+  async misc_set (params) {
     let returnItem
     await axios.get('/ccm/ccm_misc_set', {
       params: {
@@ -1011,7 +1329,7 @@ const play = {
   /*
    ** 设置设备详细时间
    */
-  set_date_time(params) {
+  set_date_time (params) {
     let returnItem
     // 调用设置设备日期
     devlist.date_set(params).then(res_date_set => {
@@ -1051,7 +1369,7 @@ const play = {
 
 export default play
 
-function get_profile_token_choice(data) {
+function get_profile_token_choice (data) {
   var profile_token_obj = new Object();
   var profile_token_choice = data;
   if (profile_token_choice == "" || profile_token_choice == null) {
@@ -1077,3 +1395,26 @@ function get_profile_token_choice(data) {
   }
   return profile_token_obj;
 }
+// 创建msdk
+function msdk_create (param, data) {
+  console.log('enter msdk_create', param, data)
+  // g_appId = obj.setting.appId;
+  // g_browser = obj.setting.platform;
+  // g_language = obj.setting.language;
+  // g_sdk_version = obj.setting.sdk_version;
+  // g_time_zone = obj.setting.timeZone;
+
+  var result = new Object();
+  result.data = { "result": "" };
+  // result.ref = obj.ref;
+  // onEvent(JSON.stringify(result), data);
+  play.play_hls(data)
+}
+// function onEvent (param, data) {
+//   console.log(param, data, 'param, data, onEvent')
+//   var msdk = new MSdk(param)
+//   msdk.sdk_onEvent(param).then(res => {
+//     console.log(res, 'onEvent', data)
+//     return play.play_hls(data)
+//   })
+// }
