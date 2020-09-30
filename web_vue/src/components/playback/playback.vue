@@ -10,8 +10,8 @@
         <div id='playback_buffer_ret'></div>
         <div id='playback_screen'>
           <div id='download_progress'></div>
-          <div id='download_stop'> mcs_stop </div>
-          <div id='download_pause'> mcs_pause </div>
+          <div id='download_stop'>{{mcs_stop}}</div>
+          <div id='download_pause'>{{mcs_pause}}</div>
         </div>
       </div>
       <div id='playback_menu_box'>
@@ -49,6 +49,8 @@ export default {
       mcs_input_download_path: mcs_input_download_path,
       mcs_cancel: mcs_cancel,
       mcs_ok: mcs_ok,
+      mcs_stop: mcs_stop,
+      mcs_pause: mcs_pause,
       // 多国语言 结束
       project_flag: 0, // 判断是否为vimtag
       playback_params: {}, //接受传过来的数据

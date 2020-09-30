@@ -156,7 +156,7 @@
     <!-- 截图弹窗 结束 -->
   </div>
 </template>
-<style>
+<style lang="scss">
 @import './index.scss';
 </style>
 <script>
@@ -204,10 +204,12 @@ export default {
       topControl: false, // 摄像头上转控制标识
       downControl: false, // 摄像头下转控制标识
       playScreenHeight: null, // 播放区域高度样式
+      mipcPlayObj: null, // mipc调用obj
     }
   },
   methods: {
     mipcPlay (obj) {
+      this.mipcPlayObj = obj
       this.$api.set.dev_info({ // 调用获取设备详细信息接口
         sn: this.$store.state.jumpPageData.selectDeviceIpc
       }).then(res => {
@@ -362,6 +364,7 @@ export default {
     },
     // 按钮点击事件
     clickPlay (event) { // 点击播放按钮
+      let obj = this.mipcPlayObj
       let class_name = event.target.className
       console.log(class_name, 'event class_name')
       if (class_name === "video_play_stop") {
@@ -471,6 +474,7 @@ export default {
       this.definitionSelect = this.mcs_auto
     },
     clickEnterSet () { // 跳转到设置页面
+      let obj = this.mipcPlayObj
       this.publicFunc.showBufferPage()
       this.$api.set.dev_info({
         sn: this.$store.state.jumpPageData.selectDeviceIpc
@@ -552,6 +556,7 @@ export default {
     },
     clickAdjust (event) { // 点击设备调整按钮
       function adjust_get_ack (data) {
+        let dom_out_box = $(".adjust_out_box")
         l_cam_conf = data;
         l_cam_conf.sn = this.$store.state.jumpPageData.selectDeviceIpc;
         if (l_cam_conf.day) {

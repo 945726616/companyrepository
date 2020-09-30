@@ -4,15 +4,15 @@
       <div id='play_content_box'>
         <!-- 顶部返回 -->
         <div id='page_top_menu'>
-          <div id='back'>
+          <div id='back' @click="clickBack">
             <div id='main_title_box_return_img'></div>{{mcs_back}}
           </div>
         </div>
         <!-- 顶部返回 结束 -->
         <!-- 视频播放区 -->
-        <div id='play_view' class='noselect'>
+        <div id='play_view' class='noselect' :style="playViewStyle">
           <div id='play_buffer_ret'></div>
-          <div id='play_screen' class='noselect'>
+          <div id='play_screen' class='noselect' :style="{height: (playViewHeight - 44) + 'px'}">
             <!-- 暂停播放遮罩层 -->
             <div id='play_view_box'>
               <div id='play_pause_pic'></div>
@@ -30,20 +30,20 @@
             <div id='play_menu_right'>
               <!-- 清晰度选择弹出菜单 -->
               <div id='choice_play_definition' v-show="definitionListFlag" :style="{top: definitionTop}">
-                <div id='high_definition' class='definition_cha' :style="languageWidthStyle" @click="clickVideoDefinition"></div>
+                <div id='high_definition' class='definition_cha' @click="clickVideoDefinition"></div>
                 <div class='definition_nav'></div>
-                <div id='standard_definition' class='definition_cha' :style="languageWidthStyle" @click="clickStandard">{{mcs_standard_clear}}</div>
+                <div id='standard_definition' class='definition_cha' @click="clickStandard">{{mcs_standard_clear}}</div>
                 <div class='definition_nav'></div>
-                <div id='fluency_definition' class='definition_cha' :style="languageWidthStyle" @click="clickFluency">{{mcs_fluent_clear}}</div>
+                <div id='fluency_definition' class='definition_cha' @click="clickFluency">{{mcs_fluent_clear}}</div>
                 <div class='definition_nav'></div>
-                <div id='auto_definition' class='definition_cha' :style="languageWidthStyle" @click="clickAuto">{{mcs_auto}}</div>
+                <div id='auto_definition' class='definition_cha' @click="clickAuto">{{mcs_auto}}</div>
               </div>
               <!-- 清晰度选择弹出菜单 结束 -->
               <div ref="resolute_choice" id='resolute_choice' @click="definitionListFlag = !definitionListFlag">{{definitionSelect}}</div> <!-- 点击选择按钮对菜单展示标识取反 -->
               <div class='enter_nav'></div>
-              <div id='enter_set_img'></div>
+              <div id='enter_set_img' @click="clickEnterSet"></div>
               <div class='enter_nav'></div>
-              <div id='enter_history_img'>
+              <div id='enter_history_img' @click="clickEnterHistory">
                 <div id='enter_history_img_box_tip'>{{mcs_playback}}</div>
               </div>
             </div>
@@ -170,9 +170,9 @@
         </div>
         <!-- 视频播放区 结束 -->
         <!-- 侧边播放列表 -->
-        <div id='play_dev_list' v-show="!this.$store.state.jumpPageData.localFlag">
+        <div id='play_dev_list' v-show="!this.$store.state.jumpPageData.localFlag" :style="{height: playViewHeight + 'px'}">
           <div id='device_list_sidebar_up'>{{mcs_device_list}}</div>
-          <div id='device_list_sidebar_center'></div>
+          <div id='device_list_sidebar_center' :style="{height: playListHeight + 'px'}"></div>
         </div>
         <!-- 侧边播放列表 结束 -->
       </div>
@@ -187,7 +187,7 @@
     </div>
   </div>
 </template>
-<style>
+<style lang="scss">
 @import './index.scss';
 </style>
 <script>
@@ -234,7 +234,6 @@ export default {
       talkbackFlag: window.fujikam ? true : false, // 对讲控制图标标识(在客户端中展示,浏览器端隐藏)
       adjustSettingFlag: false, // 设置弹出框标识
       definitionTop: '', // 清晰度选择弹窗top属性
-      languageWidthStyle: this.$store.state.user.userLanguage === 'vi' ? { width: 78 + 'px' } : null, // 特殊语言更改样式宽度
       cameraControlDivFlag: false, // 摄像头转向控制区域展示标识
       leftControl: false, // 摄像头左转控制标识
       rightControl: false, // 摄像头右转控制标识
@@ -242,6 +241,11 @@ export default {
       downControl: false, // 摄像头下转控制标识
       playScreenHeight: null, // 播放区域高度样式
       vimtagPlayObj: null, // 调用vimtagPlay的obj内容
+      playViewStyle: null, // 播放器样式
+      playViewHeight: null, // 播放器高度数值
+      playViewWidth: null, // 播放器宽度数值
+      playViewTop: null, // 播放器顶部偏移数值
+      playListHeight: null, // 播放列表高度数值
     }
   },
   methods: {
@@ -278,7 +282,6 @@ export default {
         l_dom_talkback_off_pic,
         l_dom_adjust_off_pic,
         l_dom_control_menu,
-        l_dom_video_play,
         l_dom_play_view_box,
         inner_window_info,
         support_1080p = "",
@@ -288,35 +291,27 @@ export default {
       local_play_data.dom = _this.publicFunc.mx("#play_screen")
       local_play_data.profile_token = "p0"
 
-      // local_play_data.func = function (msg) { };
       let l_dom_play_box = _this.publicFunc.mx("#play_box");
       let l_dom_play_dev_list = _this.publicFunc.mx("#play_dev_list");
       let l_dom_device_list_sidebar_up = _this.publicFunc.mx("#device_list_sidebar_up");
       let l_dom_play_menu_box = _this.publicFunc.mx("#play_menu_box");
       let l_dom_play_view = _this.publicFunc.mx("#play_view");
-      // let $("#play_screen") = _this.publicFunc.mx("#play_screen");
-      let l_dom_device_list_sidebar_center = _this.publicFunc.mx("#device_list_sidebar_center");
       let l_dom_play_buffer_ret = _this.publicFunc.mx("#play_buffer_ret");
       let l_dom_play_view_control = _this.publicFunc.mx("#play_view_control");
       let l_play_box_width = document.documentElement.clientWidth - 17 - 100;
       $("#play_box").css("width", l_play_box_width + 'px');
-      // let l_list_width = l_dom_play_dev_list.offsetWidth + 20;
-      let l_list_width = parseInt($("#play_dev_list").css("width")) + 20;
-      let l_device_list_sidebar_up_height = l_dom_device_list_sidebar_up.offsetHeight;
 
-      let l_play_view_top = l_dom_play_view.offsetTop;
-      let l_dom_play_view_width = l_play_box_width - l_list_width;
-      let l_dom_play_view_height = l_dom_play_view_width / 16 * 9 + 44;
-      l_dom_play_view.style.width = l_dom_play_view_width + "px";
-      l_dom_play_view.style.height = l_dom_play_view_height + "px";
-      l_dom_play_dev_list.style.height = l_dom_play_view_height + "px";
-      $("#play_screen").css('height', l_dom_play_view_width / 16 * 9 + 'px')
-      l_dom_device_list_sidebar_center.style.height = (l_dom_play_view_height - l_device_list_sidebar_up_height) + "px";
-      // l_dom_play_buffer_ret.style.left = l_play_view_left + "px"; 
-      // l_dom_play_buffer_ret.style.top = l_play_view_top + "px";  
       _this.publicFunc.mx("#play_dev_list").setAttribute("style", "width:234px;float:left;background:#ebebeb;display:block;overflow:hidden;");
-      // _this.publicFunc.mx("#page_top_menu").setAttribute("style","margin-top:15px;margin-bottom:3px;") 
       l_dom_play_buffer_ret.style.display = "none";
+
+      // 动态设置播放器大小
+      this.playViewWidth = (document.documentElement.clientWidth - 17 - 100) - (parseInt($("#play_dev_list").css("width")) + 20)
+      this.playViewHeight = this.playViewWidth / 16 * 9 + 44
+      this.playViewStyle = { width: this.playViewWidth + 'px', height: this.playViewHeight + 'px' }
+      this.playListHeight = this.playViewHeight - document.getElementById('device_list_sidebar_up').offsetHeight
+      this.playViewTop = document.getElementById('play_view').offsetTop
+      // 动态设置播放器大小 结束
+
       if (window.fujikam == "fujikam") {
         l_dom_play_buffer_ret.style.display = "block";
         l_dom_play_box.style.width = "1200px";
@@ -327,7 +322,7 @@ export default {
         // play_screen         background:black
 
         l_dom_play_view.style.height = "586px";
-        l_dom_device_list_sidebar_center.style.height = "586px";
+        this.publicFunc.mx("#device_list_sidebar_center").style.height = "586px";
         l_dom_play_view.style.marginLeft = "0px";
         $("#play_screen").css('height', '100%')
         $("#play_screen").css('width', '100%')
@@ -340,24 +335,8 @@ export default {
       this.play_menu_control({ parent: l_dom_play_menu_box })
       if (!_this.$store.state.jumpPageData.localFlag) {
         // if (_this.$store.state.jumpPageData.localFlag) {//本地
-        this.device_list_box_sidebar({ parent: l_dom_device_list_sidebar_center })
+        this.device_list_box_sidebar({ parent: this.publicFunc.mx("#device_list_sidebar_center") })
         this.play_view_control({ parent: l_dom_play_view_control })
-      }
-      _this.publicFunc.mx("#back").onclick = function () {
-        if (obj.box_ipc == 1) {//云盒子设备播放
-          // createPage("boxlist", obj)//创建云盒子页面
-          _this.$router.push({ name: 'boxlist', params: obj })
-        } else { //否则就是普通ipc
-          // createPage("devlist", obj)//创建设备列表页面
-          _this.$router.push({ name: 'devlist', params: obj })
-        }
-      }
-      function play_speed (data) {
-        _this.publicFunc.mx("#play_buffer_ret").innerHTML = data;
-        window.onresize = function () {
-          l_dom_play_view_control.style.left = l_dom_play_view.offsetLeft + "px";
-          l_dom_play_view_control.style.top = l_play_view_top + "px";
-        }
       }
       function create_preview (data) {
         let profile_token = sessionStorage.getItem("PlayProfile") ? sessionStorage.getItem("PlayProfile") : "p0";
@@ -374,7 +353,7 @@ export default {
         l_dom_play_view_box = _this.publicFunc.mx("#play_view_box");
         l_dom_play_view_box.onclick = function () {
           profile_token = sessionStorage.getItem("PlayProfile") ? sessionStorage.getItem("PlayProfile") : "p0";
-          playFlag = 1;
+          _this.playFlag = 1;
           if (_this.$store.state.jumpPageData.localFlag) {
             local_play_data.profile_token = profile_token;
             local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
@@ -387,7 +366,7 @@ export default {
                 sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                 profile_token: "p0_" + obj.ipc_sn
               }).then(res => {
-                play_speed(res)
+                _this.play_speed(res)
               })
             } else {
               // 调用播放接口
@@ -396,7 +375,7 @@ export default {
                 sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                 profile_token: profile_token
               }).then(res => {
-                play_speed(res)
+                _this.play_speed(res)
               })
             }
           }
@@ -455,14 +434,26 @@ export default {
       // time_alert()
       // ********** 设置设备的时区是校验时间是否与当前系统时间相符 ********** //
       window.onresize = function () {
+        let l_dom_play_view = _this.publicFunc.mx("#play_view")
         l_dom_play_view_control.style.left = l_dom_play_view.offsetLeft + "px";
-        l_dom_play_view_control.style.top = l_play_view_top + "px";
+        l_dom_play_view_control.style.top = this.playViewTop + "px";
       }
       $(window).scroll(function () { })
     },
+    // 播放回调 播放速度
+    play_speed (data) {
+      let l_dom_play_view = this.publicFunc.mx("#play_view")
+      this.publicFunc.mx("#play_buffer_ret").innerHTML = data;
+      window.onresize = function () {
+        l_dom_play_view_control.style.left = l_dom_play_view.offsetLeft + "px";
+        l_dom_play_view_control.style.top = this.playViewTop + "px";
+      }
+    },
+    // 播放回调 播放速度 结束
     // 播放器菜单栏控制
     play_menu_control (data) {
       let _this = this
+      let obj = this.vimtagPlayObj
       this.$api.set.dev_info({ //ms.send_msg("dev_info_get"
         sn: this.$store.state.jumpPageData.selectDeviceIpc
       }).then(res => {
@@ -476,23 +467,23 @@ export default {
             $("#resolute_choice").text(mcs_new_hd);//云盒子实时播放不能切换分辩率，显示高清
           } else {
             if (msg.s_sensor == 'ok') {
-              this.publicFunc.mx("#high_definition").innerHTML = msg.def;
-              this.publicFunc.mx("#resolute_choice").innerHTML = msg.def;
-              support_1080p = msg.def;
+              _this.publicFunc.mx("#high_definition").innerHTML = msg.def;
+              _this.publicFunc.mx("#resolute_choice").innerHTML = msg.def;
+              _this.support_1080p = msg.def;
             } else {
-              this.publicFunc.mx("#high_definition").innerHTML = 'NULL';
-              this.publicFunc.mx("#resolute_choice").innerHTML = 'NULL';
-              support_1080p = 'NULL';
+              _this.publicFunc.mx("#high_definition").innerHTML = 'NULL';
+              _this.publicFunc.mx("#resolute_choice").innerHTML = 'NULL';
+              _this.support_1080p = 'NULL';
             }
           }
           // 迁移接口请求顺序将播放接口放入设备信息请求接口后
-          if (this.$store.state.jumpPageData.localFlag) {
+          if (_this.$store.state.jumpPageData.localFlag) {
             let local_play_sign = {};
-            local_play_sign.sn = this.$store.state.jumpPageData.selectDeviceIpc;
+            local_play_sign.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
             local_play_sign.addr = obj.addr;
-            local_play_sign.password = sessionStorage.getItem("pass_" + this.$store.state.jumpPageData.selectDeviceIpc);
+            local_play_sign.password = sessionStorage.getItem("pass_" + _this.$store.state.jumpPageData.selectDeviceIpc);
             local_play_sign.func = function () {
-              local_play_data.agent = this.$store.state.jumpPageData.localFlag_agent;
+              local_play_data.agent = _this.$store.state.jumpPageData.localFlag_agent;
               create_preview({ parent: $("#play_screen") });
             };
             msdk_ctrl({ type: "local_sign_in", data: local_play_sign })
@@ -500,16 +491,16 @@ export default {
             if (obj.box_ipc === 1) { //如果是云盒子实时视频播放 参数token
               if (obj.ipc_stat === 0) {//页面一进来，标记云盒子设备是否在线
                 // 调用播放接口
-                this.$api.play.play({
+                _this.$api.play.play({
                   dom: $("#play_screen"),
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                   profile_token: "p0_" + obj.ipc_sn + "",
                   ipc_stat: 0
                 }).then(res => {
-                  play_speed(res)
+                  _this.play_speed(res)
                 })
                 $("#play_screen").style.background = 'black';
-                this.publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 })
+                _this.publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 })
                 $("#enter_history_img_box_tip").show();
                 setTimeout(function () {
                   $("#enter_history_img_box_tip").hide();
@@ -517,26 +508,26 @@ export default {
 
               } else {
                 // 调用播放接口
-                this.$api.play.play({
+                _this.$api.play.play({
                   dom: $("#play_screen"),
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                   profile_token: "p0_" + obj.ipc_sn + ""
                 }).then(res => {
-                  play_speed(res)
+                  _this.play_speed(res)
                 })
               }
             } else {
               // 调用播放接口
-              this.$api.play.play({
+              _this.$api.play.play({
                 dom: $("#play_screen"),
                 sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                 profile_token: "p0"
               }).then(res => {
-                play_speed(res)
+                _this.play_speed(res)
               })
             }
-            l_dom_video_play.className = 'video_play_start'
-            playFlag = 1;
+            _this.publicFunc.mx("#video_play").className = 'video_play_start'
+            _this.playFlag = 1;
             $("#play_view_control").show();
           }
         }
@@ -556,6 +547,7 @@ export default {
       }
     },
     device_list (msg, data) {
+      let obj = this.vimtagPlayObj
       data.parent.innerHTML = "<div id='vimtag_device_list'>"
       let selectNickArr
       let screen_token // 标记设备分辨率
@@ -685,7 +677,7 @@ export default {
           $("#active_dev").animate({ "top": active_dev_top + "px" });
           $(_this).find(".device_sidebar_nick").addClass("selected_style");
           _this.$store.dispatch('setSelectDeviceIpc', _this.getAttribute("sn")) // 点击时存储sn
-          if (playFlag) {
+          if (_this.playFlag) {
             _this.$api.play.video_stop({
               dom: $("#play_screen")
             }).then(() => {
@@ -710,7 +702,7 @@ export default {
                       sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                       profile_token: "p0_" + ipc_sn + ""
                     }).then(res => {
-                      play_speed(res)
+                      _this.play_speed(res)
                     })
                   }
                 } else {
@@ -722,7 +714,7 @@ export default {
                     sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                     profile_token: profile_token
                   }).then(res => {
-                    play_speed(res)
+                    _this.play_speed(res)
                   })
                 }
               }
@@ -749,7 +741,7 @@ export default {
                     sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                     profile_token: "p0_" + ipc_sn + ""
                   }).then(res => {
-                    play_speed(res)
+                    _this.play_speed(res)
                   })
                 }
               } else {
@@ -761,13 +753,13 @@ export default {
                   sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                   profile_token: profile_token
                 }).then(res => {
-                  play_speed(res)
+                  _this.play_speed(res)
                 })
               }
             }
-            playFlag = 1;
+            _this.playFlag = 1;
             $("#play_view_control").show();
-            l_dom_video_play.className = "video_play_start";
+            _this.publicFunc.mx("#video_play").className = "video_play_start";
           }
         }
         l_dom_device_list_img[i].ondblclick = function () {
@@ -777,7 +769,7 @@ export default {
           obj.ipc_sn = ipc_sn; //给obj.ipc_sn重新赋值 解决回放bug
           $("#active_dev").animate({ "top": active_dev_top + "px" });
           this.$store.dispatch('setSelectDeviceIpc', this.getAttribute("sn")) // 点击时存储sn
-          if (playFlag) {
+          if (_this.playFlag) {
             this.$api.play.video_stop({
               dom: $("#play_screen")
             }).then(() => {
@@ -802,7 +794,7 @@ export default {
                       sn: this.$store.state.jumpPageData.selectDeviceIpc,
                       profile_token: "p0_" + ipc_sn + ""
                     }).then(res => {
-                      play_speed(res)
+                      this.play_speed(res)
                     })
                   }
                 } else {
@@ -814,7 +806,7 @@ export default {
                     sn: this.$store.state.jumpPageData.selectDeviceIpc,
                     profile_token: profile_token
                   }).then(res => {
-                    play_speed(res)
+                    this.play_speed(res)
                   })
                 }
               }
@@ -841,7 +833,7 @@ export default {
                     sn: this.$store.state.jumpPageData.selectDeviceIpc,
                     profile_token: "p0_" + ipc_sn + ""
                   }).then(res => {
-                    play_speed(res)
+                    this.play_speed(res)
                   })
                 }
               } else {
@@ -853,11 +845,11 @@ export default {
                   sn: this.$store.state.jumpPageData.selectDeviceIpc,
                   profile_token: profile_token
                 }).then(res => {
-                  play_speed(res)
+                  this.play_speed(res)
                 })
               }
             }
-            playFlag = 1;
+            _this.playFlag = 1;
             $("#play_view_control").show();
             l_dom_video_play.className = "video_play_start";
           }
@@ -895,10 +887,10 @@ export default {
       let l_dom_control_menu = this.publicFunc.mx("#control_menu");
       let l_dom_ptz_control_bottom_center = this.publicFunc.mx("#ptz_control_bottom_center");
       let l_dom_play_view_control = this.publicFunc.mx("#play_view_control")
-      l_dom_play_view_control.style.width = l_dom_play_view_width + 'px';
-      l_dom_play_view_control.style.height = l_dom_play_view_height - 44 + 'px';
-      l_dom_play_view_control.style.left = l_dom_play_view.offsetLeft + "px";
-      l_dom_play_view_control.style.top = l_play_view_top + "px";
+      l_dom_play_view_control.style.width = (document.documentElement.clientWidth - 17 - 100) - (parseInt($("#play_dev_list").css("width")) + 20) + 'px';
+      l_dom_play_view_control.style.height = this.playViewHeight - 44 + 'px';
+      l_dom_play_view_control.style.left = this.publicFunc.mx('#play_view').offsetLeft + "px";
+      l_dom_play_view_control.style.top = this.playViewTop + "px";
       l_dom_turn_up.className = "up_key";
       l_dom_turn_down.className = "down_key";
       l_dom_turn_left.className = "left_key";
@@ -1048,6 +1040,7 @@ export default {
           if (e.offsetParent != null) offset += getLeft(e.offsetParent);
           return offset;
         }
+        let dom_out_box = $(".adjust_out_box")
         dom_out_box.mousedown(function (e) {
           for (i = 0; i < 4; i++) {
             if (this == dom_out_box[i]) {
@@ -1500,6 +1493,7 @@ export default {
     },
     clickEnterSet () { // 跳转到设置页面
       this.publicFunc.showBufferPage()
+      let obj = this.vimtagPlayObj
       this.$api.set.dev_info({
         sn: this.$store.state.jumpPageData.selectDeviceIpc
       }).then(res => {
@@ -1626,6 +1620,7 @@ export default {
           if (e.offsetParent != null) offset += getLeft(e.offsetParent);
           return offset;
         }
+        let dom_out_box = $(".adjust_out_box")
         dom_out_box.mousedown(function (e) {
           for (i = 0; i < 4; i++) {
             if (this == dom_out_box[i]) {
@@ -1922,6 +1917,16 @@ export default {
       }
       $("#video_play").attr("class", "video_play_start");
       this.cameraControlDivFlag = true
+    },
+    clickBack () { // 点击返回
+      let obj = this.vimtagPlayObj
+      if (obj.box_ipc == 1) {//云盒子设备播放
+        // createPage("boxlist", obj)//创建云盒子页面
+        this.$router.push({ name: 'boxlist', params: obj })
+      } else { //否则就是普通ipc
+        // createPage("devlist", obj)//创建设备列表页面
+        this.$router.push({ name: 'devlist', params: obj })
+      }
     },
     // 按钮点击事件 结束
   },
