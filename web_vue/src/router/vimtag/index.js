@@ -9,7 +9,7 @@ const login = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/l
 const devlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/devlist/vimtag')
 const my = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/my/vimtag/my')
 const play = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/play/vimtag/play')
-const playback = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/playback')
+const playback = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/playback/playback')
 const history = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/history/vimtag/history')
 const set = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/set')
 const boxlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/boxlist/boxlist')
