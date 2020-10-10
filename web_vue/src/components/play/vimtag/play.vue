@@ -292,7 +292,6 @@ export default {
       local_play_data.profile_token = "p0"
 
       let l_dom_play_box = _this.publicFunc.mx("#play_box");
-      let l_dom_play_dev_list = _this.publicFunc.mx("#play_dev_list");
       let l_dom_device_list_sidebar_up = _this.publicFunc.mx("#device_list_sidebar_up");
       let l_dom_play_menu_box = _this.publicFunc.mx("#play_menu_box");
       let l_dom_play_view = _this.publicFunc.mx("#play_view");
@@ -301,7 +300,7 @@ export default {
       let l_play_box_width = document.documentElement.clientWidth - 17 - 100;
       $("#play_box").css("width", l_play_box_width + 'px');
 
-      _this.publicFunc.mx("#play_dev_list").setAttribute("style", "width:234px;float:left;background:#ebebeb;display:block;overflow:hidden;");
+      _this.publicFunc.mx("#play_dev_list").setAttribute("style", "width:234px;float:left;background:#ebebeb;display:block;overflow:hidden;position: relative;");
       l_dom_play_buffer_ret.style.display = "none";
 
       // 动态设置播放器大小
@@ -663,20 +662,21 @@ export default {
         l_dom_device_list_img[i].onclick = function () {
           // console.log(l_dom_device_list_img[i], 'this.click')
           $(".device_sidebar_nick").removeClass("selected_style");
-          let active_dev_top = _this.offsetTop;
-          let screen_token = _this.getAttribute("screen_token");//点击列表中的设备，屏幕分辩率跟着变
-          let ipc_sn = _this.getAttribute("ipc_sn");//点击列表中的设备，获取云盒子中设备id
-          let box_ipc_stat = _this.getAttribute("state");//获取云盒子设备状态
+          let active_dev_top = this.offsetTop - 44
+          console.log(active_dev_top, 'active_dev_top', this)
+          let screen_token = this.getAttribute("screen_token");//点击列表中的设备，屏幕分辩率跟着变
+          let ipc_sn = this.getAttribute("ipc_sn");//点击列表中的设备，获取云盒子中设备id
+          let box_ipc_stat = this.getAttribute("state");//获取云盒子设备状态
 
           // if (this.getAttribute("white_light")) {
           //   white_light = this.getAttribute("white_light");
           // }
           // l_white_light = white_light;
-          _this.play_view_control({ parent: _this.publicFunc.mx("#play_view_control") });
+          _this.play_view_control({ parent: _this.publicFunc.mx("#play_view_control") })
           obj.ipc_sn = ipc_sn; //给obj.ipc_sn重新赋值 解决回放bug
-          $("#active_dev").animate({ "top": active_dev_top + "px" });
-          $(_this).find(".device_sidebar_nick").addClass("selected_style");
-          _this.$store.dispatch('setSelectDeviceIpc', _this.getAttribute("sn")) // 点击时存储sn
+          $("#active_dev").animate({ "top": active_dev_top + "px" })
+          $(_this).find(".device_sidebar_nick").addClass("selected_style")
+          _this.$store.dispatch('setSelectDeviceIpc', this.getAttribute("sn")) // 点击时存储sn
           if (_this.playFlag) {
             _this.$api.play.video_stop({
               dom: $("#play_screen")
@@ -763,50 +763,48 @@ export default {
           }
         }
         l_dom_device_list_img[i].ondblclick = function () {
-          let active_dev_top = this.offsetTop;
           let screen_token = this.getAttribute("screen_token");//点击列表中的设备，屏幕分辩率跟着变
           let ipc_sn = this.getAttribute("ipc_sn");//点击列表中的设备，获取云盒子中设备id
           obj.ipc_sn = ipc_sn; //给obj.ipc_sn重新赋值 解决回放bug
-          $("#active_dev").animate({ "top": active_dev_top + "px" });
-          this.$store.dispatch('setSelectDeviceIpc', this.getAttribute("sn")) // 点击时存储sn
+          _this.$store.dispatch('setSelectDeviceIpc', this.getAttribute("sn")) // 点击时存储sn
           if (_this.playFlag) {
-            this.$api.play.video_stop({
+            _this.$api.play.video_stop({
               dom: $("#play_screen")
             }).then(() => {
               let profile_token = sessionStorage.getItem("PlayProfile") ? sessionStorage.getItem("PlayProfile") : "p0";
-              if (this.$store.state.jumpPageData.localFlag) {
+              if (_this.$store.state.jumpPageData.localFlag) {
                 local_play_data.profile_token = profile_token;
-                local_play_data.sn = this.$store.state.jumpPageData.selectDeviceIpc;
+                local_play_data.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
                 msdk_ctrl({ type: "local_play", data: local_play_data });
               } else {
                 if (obj.box_ipc == 1) {
                   if (box_ipc_stat == 'offline') {
                     $("#play_screen").style.background = 'black';
-                    this.publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 });
+                    _this.publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 });
                     $("#enter_history_img_box_tip").show();
                     setTimeout(function () {
                       $("#enter_history_img_box_tip").hide();
                     }, 6000);
                   } else {
                     // 调用播放接口
-                    this.$api.play.play({
+                    _this.$api.play.play({
                       dom: $("#play_screen"),
-                      sn: this.$store.state.jumpPageData.selectDeviceIpc,
+                      sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                       profile_token: "p0_" + ipc_sn + ""
                     }).then(res => {
-                      this.play_speed(res)
+                      _this.play_speed(res)
                     })
                   }
                 } else {
                   $("#resolute_choice").text(screen_token);
                   $("#high_definition").text(screen_token);
                   // 调用播放接口
-                  this.$api.play.play({
+                  _this.$api.play.play({
                     dom: $("#play_screen"),
-                    sn: this.$store.state.jumpPageData.selectDeviceIpc,
+                    sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                     profile_token: profile_token
                   }).then(res => {
-                    this.play_speed(res)
+                    _this.play_speed(res)
                   })
                 }
               }

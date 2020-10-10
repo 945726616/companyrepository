@@ -340,25 +340,11 @@ input, button, select, textarea {
 	width:100%;
 	height:100%;
 }
-#play_box{
-	width:90%;
-	margin:0 auto;
-	/*margin-top:10px;6.1.2*/
-	overflow:hidden;
-	margin-bottom:40px;
-	/*5.9.1 自适应后加margin-bottom:40px;*/
-}
-#play_view{
-	float:left;
-}
 #play_dev_list{
 	width:234px;
 	float:left;
 	background:#ebebeb;
 	// display:none;
-}
-#device_list_sidebar_center{
-	overflow: hidden;
 }
 #device_list_sidebar_up{
 	width: 234px;
@@ -426,154 +412,64 @@ input, button, select, textarea {
 	position: relative;
 	background: url("../assets/device/device_offline.png");
 }
-#play_screen{
-	position: relative;
-}
-#play_menu_box{
-	height:44px;
-	background-color:#ebebeb;
-}
-#play_menu_left{
-	float:left;
-}
 .video_play_stop{
-	float:left;
-	width:20px;
-	height:20px;
-	margin-top:12px;
-	margin-left:24px;
-	cursor: pointer;
-	background:url("../assets/device/play.png") no-repeat;
+  background-image: url(~@/assets/device/play.png);
+  background-repeat: no-repeat;
 }
 .video_play_stop:hover{
-	background:url("../assets/device/choose-play.png") no-repeat;
+  background-image:url(~@/assets/device/choose-play.png);
+  background-repeat: no-repeat;
 }
 .video_play_start{
-	float:left;
-	width:20px;
-	height:20px;
-	margin-top:12px;
-	margin-left:24px;
-	cursor: pointer;
-	background:url("../assets/device/pause.png") no-repeat;
+  background-image:url(~@/assets/device/pause.png);
+  background-repeat: no-repeat;
 }
 .video_play_start:hover{
-	background:url("../assets/device/choose-pause.png") no-repeat;
-}
-#voice_close{
-	float:left;
-	width:20px;
-	height:22px;
-	margin-top:12px;
-	margin-left:15px;
-	cursor: pointer;
+  background-image:url(~@/assets/device/choose-pause.png);
+  background-repeat: no-repeat;
 }
 .voice_close_close{
-	background:url("../assets/device/no-voice.png") no-repeat;
+  background-image:url(~@/assets/device/no-voice.png);
+  background-repeat: no-repeat;
 }
 .voice_close_close:hover{
-	background:url("../assets/device/choose-no-voice.png") no-repeat;
+  background-image:url(~@/assets/device/choose-no-voice.png);
+  background-repeat: no-repeat;
 }
 .voice_close_open{
-	background:url("../assets/device/voice.png") no-repeat;
+  background-image:url(~@/assets/device/voice.png);
+  background-repeat: no-repeat;
 }
 .voice_close_open:hover{
-	background:url("../assets/device/choose-voice.png") no-repeat;
-}
-#play_menu_right{
-	float:right;
-	/*5.12.2*/
-	position:relative;
-}
-#resolute_choice {
-	font-size: 16px;
-	padding:0 10px;
-	color: #909090;
-	border: none;
-	margin-top: 12px;
-	text-align: center;
-	float:right;
-	cursor:pointer;
+  background-image:url(~@/assets/device/choose-voice.png);
+  background-repeat: no-repeat;
 }
 #resolute_choice:hover{
 	color:$projectColor;
 }
-.enter_nav{
-	height: 18px;
-	width: 1px;
-	background: #d6d7dc;
-	float: right;
-	margin-top: 12px;
-}
 #enter_set_img {
-	background: url("../assets/device/setting.png") no-repeat;
-	width: 18px;
-	height: 18px;
-	float:right;
-	margin: 12px 25px 0 25px;
-	cursor: pointer;
+  background-image: url(~@/assets/device/setting.png);
+  background-repeat: no-repeat;
 }
 #enter_set_img:hover{
-	background: url("../assets/device/choose-setting.png") no-repeat;
+  background-image: url(~@/assets/device/choose-setting.png);
+  background-repeat: no-repeat;
 }
 #enter_history_img{
-	background: url("../assets/device/history.png") no-repeat;
-	width: 18px;
-	height: 18px;
-	float:right;
-	margin: 12px 25px 0 25px;
-	cursor: pointer;
-	position: relative;
+  background-image: url(~@/assets/device/history.png);
+  background-repeat: no-repeat;
 }
 #enter_history_img:hover{
-	background: url("../assets/device/choose-history.png") no-repeat;
+  background-image: url(~@/assets/device/choose-history.png);
+  background-repeat: no-repeat;
 }
 #full_screen{
-	background: url("../assets/device/full-screen.png") no-repeat;
-	width: 18px;
-	height: 18px;
-	float:right;
-	margin: 12px 25px 0 25px;
-	cursor: pointer;
+  background-image: url(~@/assets/device/full-screen.png);
+  background-repeat: no-repeat;
 }
 #full_screen:hover{
-	background: url("../assets/device/choose-full-screen.png") no-repeat;
-}
-#choice_play_definition {
-	/*width: 66px;*/
-	padding:0 5px;
-	background-color: #000000;
-	position: absolute;
-	/*5.12.2*/
-	bottom:31px;
-	right:0;
-	opacity: 0.4;
-	z-index: 30;
-	display: none;
-}
-.definition_nav{
-	width:55px;
-	height:1px;
-	background-color:#ffffff;
-	margin:auto;
-}
-.definition_cha{
-	color: #ffffff;
-	font-size: 14px;
-	height: 25px;
-	line-height: 25px;
-	text-align: center;
-	cursor: pointer;
-}
-.definition_cha:hover{
-	color:#83eefa;
-}
-#play_buffer_ret{    
-    text-align:right;	
-	color:white;
-	font-size:14px;	
-	position:absolute;
-	z-index: 999;
+  background-image: url(~@/assets/device/choose-full-screen.png);
+  background-repeat: no-repeat;
 }
 #device_setting_page{
 	width:90%;
@@ -977,43 +873,11 @@ div.ibutton-label-on {
 	margin-right: 5px;
 	float: left;
 }
-#vimtag_ptz_control{
-	width:100%;
-	height:100%;
-}
-#play_view_control{
-	position: absolute;
-	overflow: hidden;
-	z-index: 10;
-	top:0;
-	left:0;
-	display: none;
-}
-#ptz_control_left{
-	width: 15%;
-	height: 100%;
-	float: left;
-	text-align: center;
-	font-size: 16px;
-	color: rgb(255, 255, 255);
-}
+
 .left_key {
-/*	background: url("../assets/device/vimtag_img.png") no-repeat -61px -407px;
-	width: 40px;
-	height: 40px;
-	margin-top: 180.5px;
-	margin-left:20px;
-	position: absolute;
-	display: none;*/
-	background: url("../assets/device/vimtag_img.png") no-repeat -61px -407px;
-	width: 40px;
-	height: 40px;
-	margin-top: -20px;
-	/*margin-left:20px;*/
-	top:50%;
-	left:20px;
-	position: absolute;
-	display: none;
+  background-image: url(~@/assets/device/vimtag_img.png);
+  background-repeat: no-repeat;
+  background-position: -61px -407px;
 }
 .window_left_key{
 	background: url("../assets/device/vimtag_img.png") no-repeat -61px -407px;
@@ -1024,36 +888,11 @@ div.ibutton-label-on {
 	position: absolute;
 	display: none;
 }
-#ptz_control_center{
-	width: 70%;
-	height: 100%;
-	float: left;
-}
-#ptz_control_up{
-	width: 100%;
-	/*height: 10%;*/
-	height:15%;
-	text-align: center;
-	font-size: 16px;
-	color: rgb(255, 255, 255);
-}
+
 .up_key {
-	/*background: url("../assets/device/vimtag_img.png") no-repeat -5px -407px;
-	width: 40px;
-	height: 40px;
-	margin-left: 255px;
-	margin-top: 20px;
-	position: absolute;
-	display: none;*/
-	background: url("../assets/device/vimtag_img.png") no-repeat -5px -407px;
-	width: 40px;
-	height: 40px;
-	margin-left: -20px;
-	/*margin-top: 20px;*/
-	position: absolute;
-	top:20px;
-	left:50%;
-	display: none;
+  background-image: url(~@/assets/device/vimtag_img.png);
+  background-repeat: no-repeat;
+  background-position: -5px -407px;
 }
 .window_up_key{
 	background: url("../assets/device/vimtag_img.png") no-repeat -5px -407px;
@@ -1065,34 +904,18 @@ div.ibutton-label-on {
 	display: none;
 }
 
-#ptz_control_bottom{
-	width: 100%;
-	/*height: 60px; g 修改*/ 
-	display: none;
-}
-#ptz_control_bottom_center{
-	width: 100%;
-	/*height: 331.6px;*/
-	height:70%;
-}
-#control_menu{
-	width: 420px;
-	height: 59px;
-	position: absolute;
-	left:127px;
-	top:256px;
-}
+
+
+
 .video_off_picture {
-	background: url("../assets/device/vimtag_img.png") no-repeat -421px -7px;
-	width: 61px;
-	height: 59px;
-	float: left;
-	margin-left: 44px;
+  background-image: url(~@/assets/device/vimtag_img.png);
+  background-repeat: no-repeat;
+  background-position: -421px -7px;
 }
 .video_on_picture {
-	background: url("../assets/device/vimtag_img.png") no-repeat -492px -7px;
-	width: 61px;
-	height: 59px;
+  background-image: url(~@/assets/device/vimtag_img.png);
+  background-repeat: no-repeat;
+  background-position: -492px -7px;
 }
 .voice_on_picture {
 	background: url("../assets/device/vimtag_img.png") no-repeat -192px -87px;
@@ -1100,11 +923,9 @@ div.ibutton-label-on {
 	height: 20px;
 }
 .camera_off_picture {
-	background: url("../assets/device/vimtag_img.png") no-repeat -140px -6px;
-	width: 61px;
-	height: 59px;
-	float: left;
-	margin-left: 44px;
+  background-image: url(~@/assets/device/vimtag_img.png);
+  background-repeat: no-repeat;
+  background-position: -140px -6px;
 }
 .talkback_off_picture {
 	background: url("../assets/device/vimtag_img.png") no-repeat -280px -6px;
@@ -1115,15 +936,9 @@ div.ibutton-label-on {
 }
 .talkback_on_picture {
 	background: url("../assets/device/vimtag_img.png") no-repeat -349px -7px;
-	width: 61px;
-	height: 58px;
 }
 .adjust_off_picture {
 	background: url("../assets/device/vimtag_img.png") no-repeat -5px -6px;
-	width: 61px;
-	height: 58px;
-	float: left;
-	margin-left: 44px;
 }
 .adjust_on_picture {
 	background: url("../assets/device/vimtag_img.png") no-repeat -71px -6px;
@@ -1294,26 +1109,7 @@ div.ibutton-label-on {
 	margin-right: 5px;
 	position: absolute;
 }
-#ptz_click_up{
-	display: none;
-}
-#ptz_click_left{
-	display: none;
-}
-#ptz_click_down{
-	display: none;
-}
-#ptz_click_right{
-	display: none;
-}
-#page_top_menu{
-	width:100%;
-	/*6.1.2*/
-	height:58px;
-/*	padding-left:71px; g5.5后注销*/
-	/*margin-top:15px;
-	margin-bottom:3px;6.1.2*/
-}
+
 #main_title_box_return_img{
 	/*6.1.2*/
 	/*width: 11px;
@@ -1325,9 +1121,6 @@ div.ibutton-label-on {
 	float: left;
 	background: url(../assets/device/back.png) no-repeat 0 22px;
 }
-/*#play_view{ 
-	margin-left:83px;
-}*/
 #back{
 	cursor: pointer;
 	float:left;
@@ -1342,7 +1135,9 @@ div.ibutton-label-on {
 	color:$projectColor;
 }
 #back:hover #main_title_box_return_img{
-	background: url(../assets/device/choose-back.png) no-repeat 0 22px;
+  background-image: url(~@/assets/device/choose-back.png);
+  background-position: 0 22px;
+  background-repeat: no-repeat;
 }
 #new_back{
 	cursor: pointer;
@@ -1356,10 +1151,14 @@ div.ibutton-label-on {
 	color:$projectColor;
 }
 #new_back:hover #main_title_box_return_img{
-	background: url(../assets/device/choose-back.png) no-repeat 0 22px;
+  background-image: url(~@/assets/device/choose-back.png);
+  background-repeat: no-repeat;
+  background-position: 0 22px;
 }
 #snapshot_preview_close {
-	background: url("../assets/device/vimtag_img.png") no-repeat -162px -152px;
+  background-image: url(~@/assets/device/vimtag_img.png);
+  background-repeat: no-repeat;
+  background-position: -162px -152px;
 	width: 25px;
 	height: 25px;
 }
@@ -1374,25 +1173,10 @@ div.ibutton-label-on {
 	text-align: center;
 	cursor: pointer;
 }
-#play_view_box{
-	cursor: pointer;
-	/*position: absolute;
-	left: 0px;
-	top: 0px;*/
-	width: 100%;
-	height: 100%;
-	opacity: 0.5;
-	background-color: gray;
-}
 #play_pause_pic{
-	cursor: pointer;
-	position: relative;
-	opacity: 0.5;
-	left: 45%;
-	top: 40%;
-	width: 80px;
-	height: 80px;
-	background: url(../assets/device/vimtag_img.png) -15px -273px no-repeat;
+  background-image: url(~@/assets/device/vimtag_img.png);
+  background-position: -15px -273px;
+  background-repeat: no-repeat;
 }
 #snapshot_preview_div{
 	width:666px;
@@ -5984,20 +5768,8 @@ line-height: 30px;
 	margin:0 auto;
 }
 #enter_history_img_box_tip{
-	position: absolute;
-	/*53   39*/
-    top: -63px;
-    width: 175px;
-    height: 50px;
-    left: -60px;
-    background: url(../assets/device/promptbox.png) no-repeat;
-    z-index: 9999;
-    color:#909090;
-   /* padding-left: 30px;
-    padding-top: 10px;*/
-    padding:10px 55px 0;
-    font-size: 14px;
-    display:none;
+  background-image: url(~@/assets/device/promptbox.png);
+  background-repeat: no-repeat;
 }
 #box_onvif_ipc_box{
 	overflow:hidden;

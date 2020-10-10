@@ -169,9 +169,11 @@ mme.prototype =
   },
   /* plug_valid: */
   check_plug_install: function (ref, on_check_ack/* function(ref, version) */) {
+    
     var plug, info, timer, timer_counts = 20, cont = document.createElement("div"), ret = false;
     cont.style.cssText = "position:absolute;width:1px;height:1px;left:-1px;top:-1px;";
-    document.body.appendChild(cont);
+    cont.setAttribute('id','check_plug')
+    document.body.appendChild(cont)
     if (plug = this.create_plug(cont, false, true, "{}")) {/* have none flash plugin */
       timer = setInterval(function () {
         if (((plug && ("undefined" != typeof (plug.ctrl)))
@@ -275,7 +277,13 @@ mme.prototype =
       + ">" + this.lang.download + "</a>"
       + "<span name='plug_installing' style='display:none'></span>"
       + "</div><div style='float:clear;'></div>";
-    document.body.appendChild(this.install_test_panel = document.createElement("div"));
+    this.install_test_panel = document.createElement("div")
+    this.install_test_panel.style.cssText = "position:absolute;left:-1px;top:-1px;width:1px;height:1px;"
+    this.install_test_panel.setAttribute('id', 'check_install_test_div')
+    if (!document.getElementById('check_install_test_div')) {
+      document.body.appendChild(this.install_test_panel);
+    }
+    
 
     window.onresize = function () {
       description_div = document.getElementById("install_description_div");
@@ -317,8 +325,6 @@ mme.prototype =
       /* function({panel:install_div_panel, download:cosebase-url}){ build html-content, must var first a-link as try-flash, and second a-link is download with name=[flash|plug]} */
       this.on_event({ type: "install_ui", panel: this.install_panel, download: codebase, ver_cur: this.ver_cur });
     }
-    this.install_panel.style.visibility = "";
-    this.install_test_panel.style.cssText = "position:absolute;left:-1px;top:-1px;width:1px;height:1px;";
     if (a = dom_get_item_by_name(this.install_panel, "*", "flash")) {
       bind(a, "click", function (e) {
         me.clear_install();
