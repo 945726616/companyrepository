@@ -24,7 +24,7 @@ const user = {
     supportFilterFlag: userSession && userSession.setSupportFilterFlag ? userSession.setSupportFilterFlag : 0, // 是否支持筛选标识
     autoPlayFlag: 0, // 自动播放标识(存储在localStorage中)
     loginFlag: userSession && userSession.setLoginFlag ? userSession.setLoginFlag : 0, // 是否登录标识
-    guest: userSession && userSession.setGuest ? userSession.setGuest : 1, //是否为访客模式
+    guest: userSession && userSession.setGuest == 0? userSession.setGuest : 1, //是否为访客模式
   },
 
   mutations: {

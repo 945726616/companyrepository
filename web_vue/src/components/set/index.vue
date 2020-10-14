@@ -11709,7 +11709,7 @@ export default {
               }
             }
 
-            function new_alarm_set_plan_event () {
+            function new_alarm_set_plan_event () { // 弹窗对应的点击事件
               // console.log("进入报警的提交处理")
               $("#at_home_btn").click(function () {
                 let at_home_type = _this.publicFunc.mx("#at_home_btn").getAttribute("type");

@@ -11,7 +11,7 @@ const my = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/my/v
 const play = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/play/vimtag/play')
 const playback = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/playback/playback')
 const history = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/history/vimtag/history')
-const set = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/set')
+const set = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/set/set')
 const boxlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/boxlist/boxlist')
 
 const vimtagRouter = new Router({

@@ -21,7 +21,7 @@ input, button, select, textarea {
 }
 body{
 	font-family: 微软雅黑, Verdana, Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 16px;
 }
 html{
 	height:100%;
@@ -104,6 +104,7 @@ input, button, select, textarea {
 	-moz-box-shadow:2px 2px 5px #333333; 
 	-webkit-box-shadow:2px 2px 5px #333333; 
 	box-shadow:2px 2px 5px #333333;
+	z-index: 1500;
 }
 #delete_tips_content{
 	font-size: 16px;
