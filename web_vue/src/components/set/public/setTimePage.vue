@@ -19,7 +19,7 @@
           <div class='set_alarm_time_word' v-if='scene_data_out_sign'> {{mcs_Allow_alarm_schedule}} </div>
           <div class='menu_list_box' id='hide_timebox' v-if='scene_data_out_sign'>
             <div id='set_out_time_box'>
-              <div v-for='(item,index) in time_format' :key='index' class='selsect_set_time_btn' :index='index' :time='item.start_time + "_" + item.end_time + "_" +  week_num[index]' @click='selsect_set_time_btn'>
+              <div v-for='(item, index) in time_format' :key='index' class='selsect_set_time_btn' :index='index' :time='item.start_time + "_" + item.end_time + "_" +  week_num[index]' @click='selsect_set_time_btn'>
                 <div class='time_list_name'>
                   <div class='time_list_name_title record_padding'>{{ first_click[index]?item.start_time + ":00 - " + item.end_time + ":00":start_time + ":00 - " + end_time + ":00"}}</div>
                   <div class='time_list_name_tips'> {{week[index]}} </div>
@@ -37,6 +37,7 @@
         <div class='menu_list_apply' id='submit_apply' @click='submit_apply'> {{mcs_apply}} </div>
       </div>
     </div>
+
     <div id='attachmen_box' v-if='setTimePageObj.show_page === "attachmen_page" || setTimePageObj.show_page === "week_page"'>
       <div class='record_box_top'>
         <div id='record_back_box' class='record_back' @click='back_btn'>
@@ -209,6 +210,7 @@ export default {
       ],
       g_total_data: '',
       g_set_record_alarm: 'alarm', // 设置报警/录像标识
+      g_hide: null,
     }
   },
   mounted () {
@@ -233,6 +235,7 @@ export default {
   },
   methods: {
     new_process () { // 新版流程(ealf===1, 支持联动框架 报警/录像时间设置可以分别设置)
+      console.log(this.setTimePageObj, 'enter new_process')
       this.g_js_param = this.setTimePageObj
       this.new_set_alarm()
     },
@@ -533,6 +536,19 @@ export default {
     },
     selsect_set_time_btn (e) { //点击时间
       this.select_index = e.currentTarget.getAttribute('index')
+      console.log(e.currentTarget, 'e.currentTarget.getAttribute(index)')
+      if (this.ealf === 1) { // 联动框架需要执行的操作
+        console.log('enter this click event', this.select_index)
+        if (this.select_index) {
+          this.g_select_week = this.g_total_data[this.select_index].day
+          this.g_js_param.set_plan.origin_day = JSON.stringify(this.g_total_data[this.select_index].day)
+          this.new_set_time(this.select_index)
+        } else {
+          let index = "add"
+          this.g_select_week = [1, 1, 1, 1, 1, 1, 1]
+          this.new_set_time(index)
+        }
+      }
       this.set_out_time = e.currentTarget.getAttribute('time')
       this.$set(this.setTimePageObj, "show_page", 'attachmen_page')
       let week_new = []; //保存选中哪些日期值
@@ -875,14 +891,45 @@ export default {
             })
           }
         } else {
+          let commitArr = []
+          // 整理上传时需要的数据
+          for (let commitIndex = 0; commitIndex < this.time_format.length; commitIndex++) {
+            let start
+            let end
+            if ((this.time_format[commitIndex].start_time + '').length < 2) {
+              start = '0' + (this.time_format[commitIndex].start_time + '') + ':00'
+            } else {
+              start = this.time_format[commitIndex].start_time + '' + ':00'
+            }
+            if ((this.time_format[commitIndex].end_time + '').length < 2) {
+              start = '0' + (this.time_format[commitIndex].end_time + '') + ':00'
+            } else {
+              start = this.time_format[commitIndex].end_time + '' + ':00'
+            }
+            // 星期数组
+            let weekArr = [0,0,0,0,0,0,0]
+            for (let weekIndex = 0; weekIndex < this.time_format[commitIndex].week.length; weekIndex++) {
+              let numberWeekIndex = Number(this.time_format[commitIndex].week[weekIndex])
+              weekArr[numberWeekIndex] = 1
+            }
+            // 整理后的数组
+            commitArr.push({
+              start: start,
+              start_time: this.time_format[commitIndex].start_time,
+              end: end,
+              end_time: this.time_format[commitIndex].end_time,
+              day: weekArr
+            })
+          }
+          console.log('submit enter this if', commitArr)
           let plan_temp = []
           // let plan_flag = flag
-          for (let i = 0; i < this.g_total_data.length; i++) {
-            let plan_item = this.g_total_data[i]
+
+          for (let i = 0; i < commitArr.length; i++) {
+            let plan_item = commitArr[i]
             for (let j = 0; j < 7; j++) {
               if (plan_item.day[j] == 1) {
                 plan_temp.push({ day: j, start: plan_item.start_num, end: plan_item.end_num })
-
               }
             }
           }
@@ -944,7 +991,6 @@ export default {
                 plan_same_day_func(xx)
                 same_num = 0;
               } else {
-
                 let day_select_final = day_select_combine[day_select_combine.length - 1] || []
                 if (day_select_final.day < tmp.day || day_select_final.length == 0) {
                   day_select_combine.push(tmp)
@@ -967,6 +1013,7 @@ export default {
             }
           }
           let sche_form = this.g_js_param.set_plan.sche_form
+          console.log(sche_form, 'frist_sche_form')
           let add_flag = this.g_set_record_alarm == 'alarm' ? 4 : 2
           let arr_flag_index = this.g_set_record_alarm == 'alarm' ? 1 : 2
           // console.log(plan_temp)
@@ -1010,7 +1057,9 @@ export default {
               }
             })
           }
+          console.log(sche_form, 'sche_form')
           let plan_sel = this.sche_trans_to_second_format(sche_form)
+          console.log(plan_sel, 'plan_sel')
           if (dev_name == "c_record") {    //持续录像设置计划表
             // console.log(plan_sel)
             plan_sel.forEach(function (item) {
@@ -1048,9 +1097,11 @@ export default {
             })
           }
           else {
+            console.log('enter this commit data')
+            console.log(plan_sel, this.g_js_param.set_plan.type, 'sche_add')
             plan_sel = this.sche_add_action_name(plan_sel, this.g_js_param.set_plan.type)
             sche = { all: 0, dev_name: dev_name, plan: plan_sel }
-            // console.log('调用该方法设置报警')
+            // console.log(sche, this.$store.state.jumpPageData.selectDeviceIpc, this.g_js_param.set_plan.id,'调用该方法设置报警')
             this.$api.set.alarm_sche_set({
               sn: this.$store.state.jumpPageData.selectDeviceIpc,
               exdev_id: this.g_js_param.set_plan.id,
@@ -1073,30 +1124,6 @@ export default {
       this.set_time_func("del");
       this.time_format.splice(this.select_index, 1)
       this.$set(this.setTimePageObj, "show_page", 'time_page')
-    },
-    change_day_to_arr (arr) { // 把星期换成数组
-      let week_standard = [
-        mcs_Sunday_and,
-        mcs_Monday_and,
-        mcs_Tuesday_and,
-        mcs_Wednesday_and,
-        mcs_Thursday_and,
-        mcs_Friday_and,
-        mcs_Saturday_and
-      ]
-      let final_arr = []
-      if (arr[0] == mcs_every_day) {
-        final_arr = [1, 1, 1, 1, 1, 1, 1]
-      } else {
-        for (let i = 0; i < 7; i++) {
-          if (arr.indexOf(week_standard[i]) == -1) {
-            final_arr[i] = 0
-          } else {
-            final_arr[i] = 1
-          }
-        }
-      }
-      return final_arr;
     },
     // 联动框架方法
     sche_set_ack (msg) {
@@ -1177,7 +1204,7 @@ export default {
 
           let sche = []
           // return;
-          if ($("#at_home_btn").attr("type") == "false") {
+          if ($("#at_home_btn").attr("type") === "false") {
             if (dev_name == 'c_record') {    //持续录像设置录像开关和 计划表
               sche = { plan: [{ start: 0, end: 604800, flag: 0, index: 1, mode: "" }] }
               let info = { name: "oflag", enable: 0, dev: [] }
@@ -1440,8 +1467,8 @@ export default {
       }
 
       function alarm_plan_log () {
-        let classname = ''
         let alarm_main_info = _this.g_js_param.set_plan
+        console.log(alarm_main_info, 'alarm_main_info')
         if (_this.g_total_data == "") {
           _this.g_total_data = alarm_main_info.plan
         }
@@ -1456,13 +1483,26 @@ export default {
           $("#at_home_btn").iButton("toggle", false)
           _this.scene_data_out_sign = false
         }
-        $(".selsect_set_time_btn").each(function (index) {
-          $(this).click(function () {
-            _this.g_select_week = _this.g_total_data[index].day
-            _this.g_js_param.set_plan.origin_day = JSON.stringify(_this.g_total_data[index].day)
-            new_set_time(index)
+        // 添加计划表中已有的数据
+        for (let i = 0; i < _this.g_total_data.length; i++) {
+          let temp = _this.g_total_data[i]
+          let alarm_day_time = _this.alarm_timeArr_to_word(_this.g_total_data[i].day)
+          _this.$set(_this.time_format, i, {
+            start_time: temp.start.split(':00')[0],
+            end_time: temp.end.split(':00')[0]
           })
-        })
+          _this.$set(_this.week, i, alarm_day_time)
+          // 存储week_num
+          let week_num_arr = []
+          console.log(temp.day, 'temp.day')
+          for (let week_num_index = 0; week_num_index < temp.day.length; week_num_index++) {
+            if (temp.day[week_num_index]) {
+              week_num_arr.push(week_num_index)
+            }
+          }
+          _this.$set(_this.week_num, i, week_num_arr.join('.'))
+          console.log(_this.week_num, 'week_num_arr')
+        }
       }
 
       $("#at_home_btn").iButton({ // 滑块式开关样式
@@ -1557,7 +1597,9 @@ export default {
       })
     },
     new_set_time (index, arr) {
-      _this.g_hide = g_js_param.hide_nav;
+      console.log('enter set time')
+      let _this = this
+      this.g_hide = this.g_js_param.hide_nav;
       // console.log("进入新时间设置", g_js_param)
       // call_native("send_title", "&title=" + mcs_Setting_time, "");
       let start_time = ""
@@ -1573,53 +1615,52 @@ export default {
           end_time = "24"
         }
         else {
-          start_time = g_total_data[index].start.split(":")[0]
-          end_time = g_total_data[index].end.split(":")[0]
+          start_time = this.g_total_data[index].start.split(":")[0]
+          end_time = this.g_total_data[index].end.split(":")[0]
         }
       }
+      // this.$set(this.setTimePageObj, "show_page", 'attachmen_page')
+      // week_str = _this.alarm_timeArr_to_word(this.g_select_week)
+      // // console.log(week_str, "星期字符串")
+      // _this.publicFunc.mx("#add_device_page").innerHTML =
 
-      week_str = _this.alarm_timeArr_to_word(_this.g_select_week)
-      // console.log(week_str, "星期字符串")
-      _this.publicFunc.mx("#add_device_page").innerHTML =
+      //   "<div id='attachmen_box'>"
+      //   + "<div class='record_box_top'><div id='record_back_box' class='record_back'><div id='record_return_img'></div><div class='record_back'>" + mcs_back + "</div></div><div class='record_edit_time'>" + mcs_edit_time + "</div></div>"
+      //   + "<div id='set_time_main_page'>"
+      //   + "<div class='set_time_list set_starttime_list'>"
+      //   + "<div class='set_time_list_left record_padding'>" + mcs_begin_time + "</div>"
+      //   + "<div class='set_time_list_right record_padding' id='start_time'>" + start_time + ":00</div>"
+      //   + "</div>"
 
-        "<div id='attachmen_box'>"
-        + "<div class='record_box_top'><div id='record_back_box' class='record_back'><div id='record_return_img'></div><div class='record_back'>" + mcs_back + "</div></div><div class='record_edit_time'>" + mcs_edit_time + "</div></div>"
-        + "<div id='set_time_main_page'>"
-        + "<div class='set_time_list set_starttime_list'>"
-        + "<div class='set_time_list_left record_padding'>" + mcs_begin_time + "</div>"
-        + "<div class='set_time_list_right record_padding' id='start_time'>" + start_time + ":00</div>"
-        + "</div>"
+      //   + "<div style='height:2rem;background:#EFEFF4'></div>"
+      //   + "<div class='set_time_list set_endtime_list'>"
+      //   + "<div class='set_time_list_left record_padding'>" + mcs_end_time + "</div>"
+      //   + "<div class='set_time_list_right record_padding' id='end_time'>" + end_time + ":00</div>"
+      //   + "</div>"
+      //   + "<div class='select_time_box' id='datePlugin' style='visibility:hidden'>"
+      //   + "</div>"
+      //   + "<div class='select_week_box' id='alarm_day_select' style='overflow:hidden;width:660px;margin-top:30px;'>"
+      //   + "<div style='margin-left:1rem;float:left'>" + mcs_repeat + "</div>"
+      //   + "<div class='week_Box' style='float:right;width:400px;'>"
+      //   + "<div style='float: right;color: #323232;font-size: 1rem;margin-right:1rem'>" + week_str + "</div>"
+      //   + "<div id='click_arrow' class='right_arrow' style='margin-right:1.2rem;float:right'></div>"
+      //   + "</div>"
 
-        + "<div style='height:2rem;background:#EFEFF4'></div>"
-        + "<div class='set_time_list set_endtime_list'>"
-        + "<div class='set_time_list_left record_padding'>" + mcs_end_time + "</div>"
-        + "<div class='set_time_list_right record_padding' id='end_time'>" + end_time + ":00</div>"
-        + "</div>"
-        + "<div class='select_time_box' id='datePlugin' style='visibility:hidden'>"
-        + "</div>"
-        + "<div class='select_week_box' id='alarm_day_select' style='overflow:hidden;width:660px;margin-top:30px;'>"
-        + "<div style='margin-left:1rem;float:left'>" + mcs_repeat + "</div>"
-        + "<div class='week_Box' style='float:right;width:400px;'>"
-        + "<div style='float: right;color: #323232;font-size: 1rem;margin-right:1rem'>" + week_str + "</div>"
-        + "<div id='click_arrow' class='right_arrow' style='margin-right:1.2rem;float:right'></div>"
-        + "</div>"
+      //   + "</div>"
+      //   // 时间点选择确定取消按钮
+      //   + "<div class='set_time_btn_line'>"
+      //   + "<div id='set_time_confirm_btn' class='set_submit_btn'>" + mcs_ok + "</div>"
+      //   + "<div id='set_time_delete_btn' class='set_del_btn'>" + mcs_delete + "</div>";
+      // + "</div>"
 
-        + "</div>"
-        // 时间点选择确定取消按钮
-        + "<div class='set_time_btn_line'>"
-        + "<div id='set_time_confirm_btn' class='set_submit_btn'>" + mcs_ok + "</div>"
-        + "<div id='set_time_delete_btn' class='set_del_btn'>" + mcs_delete + "</div>";
-      + "</div>"
-
-        + "</div>"
-        + "</div>"
+      //   + "</div>"
+      //   + "</div>"
       function set_time_event () {
         // console.log("进入set_time_event")
         $("#start_time").date({ theme: "datetime", h: start_time });
         $("#end_time").date({ theme: "datetime", h: end_time });
         $("#start_time").click(function () {
           $("#datePlugin").css("visibility", "visible");
-
         })
 
         $("#end_time").click(function () {
@@ -1686,9 +1727,26 @@ export default {
 
         })
       }
-      set_time_event();
+      // set_time_event()
     },
     // 公共计算方法
+    alarm_timeArr_to_word (arr) {
+      console.log(arr, 'alarm_timeArr')
+      let week_standard = [mcs_Sunday_and, mcs_Monday_and, mcs_Tuesday_and, mcs_Wednesday_and, mcs_Thursday_and, mcs_Friday_and, mcs_Saturday_and]
+      let day_str_temp = []
+      let day_str = ""
+      arr.forEach(function (item, index) {
+        if (item == 1) {
+          day_str_temp.push(week_standard[index])
+        }
+      })
+      if (day_str_temp.length == 7) {
+        day_str = mcs_every_day
+      } else {
+        day_str = day_str_temp.join("、")
+      }
+      return day_str;
+    },
     time_deal (arr) {
       // console.log(arr)
       let week_standard = [
@@ -1795,6 +1853,7 @@ export default {
       return arr;
     },
     sche_trans_to_second_format (sche) { //将7*24小时计划表转换成秒的形式
+      console.log(sche, 'sche_trans_to')
       let _this = this;
       let plan_final = []
       let plan_info = []
@@ -1857,6 +1916,7 @@ export default {
           }
         }
       }
+      console.log(plan_sel, 'return_plan_sel')
       return plan_sel;
     },
     sche_add_action_name (sche, type) { // 计划表附带上动作
@@ -1886,7 +1946,7 @@ export default {
           item.action_name = action_name
         }
       })
-      // console.log(sche)
+      console.log(sche, 'sche_add_action_name')
       return sche;
     },
   },

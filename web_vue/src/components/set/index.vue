@@ -10749,6 +10749,7 @@ export default {
                 let sche = []
                 // return;
                 if ($("#at_home_btn").attr("type") == "false") {
+                  console.log('submit enter this if false')
                   if (dev_name == 'c_record') {    //持续录像设置录像开关和 计划表
                     sche = { plan: [{ start: 0, end: 604800, flag: 0, index: 1, mode: "" }] }
                     let info = { name: "oflag", enable: 0, dev: [] }
@@ -10815,6 +10816,7 @@ export default {
                     })
                   }
                 } else {
+                  console.log('submit enter this if')
                   let plan_temp = []
                   // let plan_flag = flag
                   for (let i = 0; i < g_total_data.length; i++) {
@@ -11295,6 +11297,7 @@ export default {
           let day_list = [];
 
           function new_set_time (index, arr) {
+            console.log('enter set time')
             _this.g_hide = g_js_param.hide_nav;
             // console.log("进入新时间设置", g_js_param)
             // call_native("send_title", "&title=" + mcs_Setting_time, "");
@@ -11601,7 +11604,7 @@ export default {
 
           // 报警弹窗代码
           function new_set_alarm () {
-            // console.log(g_js_param, "g_js_param")
+            console.log(g_js_param, "g_js_param")
             let all_dev_name = [
               mcs_continuous_recording, //type=0  //持续录像
               mcs_motion_detection,  //type=1
@@ -11731,6 +11734,7 @@ export default {
 
                 let sche = []
                 // return;
+                console.log($("#at_home_btn").attr("type"), '$("#at_home_btn").attr("type")')
                 if ($("#at_home_btn").attr("type") == "false") {
                   if (dev_name == 'c_record') {    //持续录像设置录像开关和 计划表
                     sche = { plan: [{ start: 0, end: 604800, flag: 0, index: 1, mode: "" }] }
@@ -11798,6 +11802,7 @@ export default {
                     })
                   }
                 } else {
+                  console.log('submit enter this if', g_total_data)
                   let plan_temp = []
                   // let plan_flag = flag
                   for (let i = 0; i < g_total_data.length; i++) {
@@ -11867,7 +11872,6 @@ export default {
                         plan_same_day_func(xx)
                         same_num = 0;
                       } else {
-
                         let day_select_final = day_select_combine[day_select_combine.length - 1] || []
                         if (day_select_final.day < tmp.day || day_select_final.length == 0) {
                           day_select_combine.push(tmp)
@@ -11890,6 +11894,7 @@ export default {
                     }
                   }
                   let sche_form = g_js_param.set_plan.sche_form
+                  console.log(sche_form, 'frist_sche_form')
                   let add_flag = g_set_record_alarm == 'alarm' ? 4 : 2
                   let arr_flag_index = g_set_record_alarm == 'alarm' ? 1 : 2
                   // console.log(plan_temp)
@@ -11933,7 +11938,9 @@ export default {
                       }
                     })
                   }
+                  console.log(sche_form, 'sche_form')
                   let plan_sel = _this.sche_trans_to_second_format(sche_form)
+                  console.log(plan_sel, 'plan_sel')
                   if (dev_name == "c_record") {    //持续录像设置计划表
                     // console.log(plan_sel)
                     plan_sel.forEach(function (item) {
@@ -11971,9 +11978,11 @@ export default {
                     })
                   }
                   else {
+                    console.log('enter this commit data')
+                    console.log(plan_sel, g_js_param.set_plan.type, 'sche_add')
                     plan_sel = _this.sche_add_action_name(plan_sel, g_js_param.set_plan.type)
                     sche = { all: 0, dev_name: dev_name, plan: plan_sel }
-                    // console.log('调用该方法设置报警')
+                    // console.log(sche, _this.$store.state.jumpPageData.selectDeviceIpc, g_js_param.set_plan.id,'调用该方法设置报警')
                     _this.$api.set.alarm_sche_set({
                       sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                       exdev_id: g_js_param.set_plan.id,
@@ -12180,7 +12189,9 @@ export default {
                       item.plan = []
                       item.alarm_status = "off"
                       // item.action_name_list = []
+                      console.log(alarm_final_all_dev, 'alarm_final_all_dev1')
                       alarm_final_all_dev.push(item)
+                      console.log(alarm_final_all_dev, 'alarm_final_all_dev2')
                       item.sche_form = _this.sche_format(item.plan)
 
                     } else {
@@ -12205,7 +12216,9 @@ export default {
                       }
                       // console.log(item)
                       // item.action_name_list = plan_action
+                      console.log(alarm_final_all_dev, 'alarm_final_all_dev3')
                       alarm_final_all_dev.push(item)
+                      console.log(alarm_final_all_dev, 'alarm_final_all_dev4')
                       // console.log(alarm_final_all_dev)
                     }
 
@@ -14468,7 +14481,7 @@ function schedule_time_format (arr) {
     },
 
     sche_format (sche) { // 生成7*24小时计划表
-      //  //console.log(sche)
+       console.log(sche, 'sche_format')
       let start_h = ''
       let end_h = ''
       let start_day = ''
@@ -14554,7 +14567,7 @@ function schedule_time_format (arr) {
       day_h.forEach(function (item, index) {
         final_form.push(item.split('').map(Number))
       })
-      //  //console.log(final_form)
+       console.log(final_form, 'final_form')
       return final_form;
     },
 
@@ -14666,6 +14679,7 @@ function schedule_time_format (arr) {
     },
 
     sche_trans_to_second_format (sche) { //将7*24小时计划表转换成秒的形式
+      console.log(sche, 'sche_trans_to')
       let _this = this;
       let plan_final = []
       let plan_info = []
@@ -14728,6 +14742,7 @@ function schedule_time_format (arr) {
           }
         }
       }
+      console.log(plan_sel, 'return_plan_sel')
       return plan_sel;
     },
 
@@ -14758,7 +14773,7 @@ function schedule_time_format (arr) {
           item.action_name = action_name
         }
       })
-      // console.log(sche)
+      console.log(sche, 'sche_add_action_name')
       return sche;
     },
 

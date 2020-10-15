@@ -192,7 +192,9 @@ export default {
                 item.plan = []
                 item.alarm_status = "off"
                 // item.action_name_list = []
+                console.log(this.alarm_final_all_dev, 'alarm_final_all_dev1')
                 this.alarm_final_all_dev.push(item)
+                console.log(this.alarm_final_all_dev, 'alarm_final_all_dev2')
                 item.sche_form = this.sche_format(item.plan)
               } else {
                 plan_tmp = res.data.sche.plan
@@ -213,7 +215,9 @@ export default {
                   item.alarm_status = "off"
                   item.plan = []
                 }
+                console.log(this.alarm_final_all_dev, 'alarm_final_all_dev3')
                 this.alarm_final_all_dev.push(item)
+                console.log(this.alarm_final_all_dev, 'alarm_final_all_dev4')
               }
 
               if (this.alarm_final_all_dev.length === this.alarm_all_dev.length) {
@@ -250,18 +254,42 @@ export default {
           record_event_type: dev_item.plan.length > 0 ? mcs_turn_on : mcs_turn_off
         })
       }
+      for (let i = 0; i < this.alarm_final_all_dev.length; i++) {
+        let tmp = this.alarm_final_all_dev[i]
+        for (let j = 0; j < tmp.plan.length; j++) {
+          let final_plan_temp = tmp.plan[j]
+          let day_arr = final_plan_temp.day.split("、")
+          final_plan_temp.day = this.change_day_to_arr(day_arr)
+        }
+      }
       this.$set(this.scene_data_out, 'dev', showArr) // 将渲染的内容赋值到scene_data_out.dev中
       console.log(this.scene_data_out.dev, 'this.scene_data_out.dev')
-      // for (let i = 0; i < this.alarm_final_all_dev.length; i++) {
-      //   let tmp = this.alarm_final_all_dev[i]
-      //   for (let j = 0; j < tmp.plan.length; j++) {
-      //     let final_plan_temp = tmp.plan[j]
-      //     let day_arr = final_plan_temp.day.split("、")
-      //     final_plan_temp.day = _this.change_day_to_arr(day_arr)
-      //   }
-      // }
     },
     // 工具函数
+    change_day_to_arr (arr) {
+      let week_standard = [
+        mcs_Sunday_and,
+        mcs_Monday_and,
+        mcs_Tuesday_and,
+        mcs_Wednesday_and,
+        mcs_Thursday_and,
+        mcs_Friday_and,
+        mcs_Saturday_and
+      ]
+      let final_arr = []
+      if (arr[0] == mcs_every_day) {
+        final_arr = [1, 1, 1, 1, 1, 1, 1]
+      } else {
+        for (let i = 0; i < 7; i++) {
+          if (arr.indexOf(week_standard[i]) == -1) {
+            final_arr[i] = 0
+          } else {
+            final_arr[i] = 1
+          }
+        }
+      }
+      return final_arr;
+    },
     time_deal (arr) {
       // console.log(arr)
       let week_standard = [
@@ -357,7 +385,7 @@ export default {
 
     },
     sche_format (sche) { // 生成7*24小时计划表
-      //  //console.log(sche)
+       console.log(sche, 'sche_format')
       let start_h = ''
       let end_h = ''
       let start_day = ''
@@ -443,7 +471,7 @@ export default {
       day_h.forEach(function (item, index) {
         final_form.push(item.split('').map(Number))
       })
-      //  //console.log(final_form)
+      console.log(final_form, 'final_form')
       return final_form;
     },
   },
