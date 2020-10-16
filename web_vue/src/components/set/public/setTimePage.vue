@@ -663,7 +663,7 @@ export default {
         if (this.back_sign) {
           this.$set(this.setTimePageObj, "show_page", 'time_page')
         }
-        if (this.add_time_sign) {
+        if (this.add_time_sign && this.ealf === 0) {
           this.time_format.push({
             start_time: this.start_time,
             end_time: this.end_time,
@@ -832,17 +832,18 @@ export default {
         let start_str = $("#start_time").text()
         let end_time = parseInt(this.publicFunc.mx("#end_time").innerHTML.split(":")[0])
         let end_str = $("#end_time").text()
-        // this.$set(this.time_format, this.select_index, {
-        //   start: start_str,
-        //   start_num: start_time,
-        //   end: end_str,
-        //   end_num: end_time,
-        // })
+        this.$set(this.time_format, this.select_index, {
+          start: start_str,
+          start_time: start_time,
+          end: end_str,
+          end_time: end_time,
+          week: this.repeat_week
+        })
         console.log(this.time_format, this.select_index, 'this.time_format')
-        this.time_format[this.select_index].start = start_str
-        this.time_format[this.select_index].start_num = start_time
-        this.time_format[this.select_index].end = end_str
-        this.time_format[this.select_index].end_num = end_time
+        // this.time_format[this.select_index].start = start_str
+        // this.time_format[this.select_index].start_time = start_time
+        // this.time_format[this.select_index].end = end_str
+        // this.time_format[this.select_index].end_time = end_time
       }
       function stringToHex (data) {
         let val = "";
