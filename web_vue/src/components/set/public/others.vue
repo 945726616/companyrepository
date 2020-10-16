@@ -9,7 +9,7 @@
                 <label for='input_speaker'></label>
                 <input name='slider' type='range' id='input_speaker' min='0' max='100' v-model='input_speaker' ref='speaker' /> </div>
         </div>
-        <div class='list_right_item'>
+        <div class='list_right_item_ex'>
             <div class='vimtag_options_float_left sd_mode_text'>- {{mcs_mic}} </div>
             <div class='options_float_right' style='width:200px;'>
                 <label for='input_microphone'></label>
@@ -186,6 +186,12 @@
         margin: 0 auto;
     }
 
+    .list_right_item_ex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     input[type=range] {
         width: 200px;
         height: 1px;
@@ -210,6 +216,7 @@
         width: 200px;
         height: 34px;
         color: $projectColor;
+        border: 1px solid $projectColor;
         border-radius: 4px;
     }
 
@@ -217,6 +224,9 @@
         width: 100%;
         height: 50px;
         border-bottom: 1px solid #ccc;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     #screen_fr_div {

@@ -11805,15 +11805,16 @@ export default {
                   console.log('submit enter this if', g_total_data)
                   let plan_temp = []
                   // let plan_flag = flag
+                  console.log(g_total_data, 'g_total_data')
                   for (let i = 0; i < g_total_data.length; i++) {
                     let plan_item = g_total_data[i]
                     for (let j = 0; j < 7; j++) {
                       if (plan_item.day[j] == 1) {
                         plan_temp.push({ day: j, start: plan_item.start_num, end: plan_item.end_num })
-
                       }
                     }
                   }
+                  console.log(plan_temp, 'plan_temp')
                   function sortArr (a, b) {
                     return a.day - b.day;
                   }
@@ -11897,6 +11898,7 @@ export default {
                   console.log(sche_form, 'frist_sche_form')
                   let add_flag = g_set_record_alarm == 'alarm' ? 4 : 2
                   let arr_flag_index = g_set_record_alarm == 'alarm' ? 1 : 2
+                  console.log(add_flag, arr_flag_index, 'arr_flag_index')
                   // console.log(plan_temp)
                   for (let i = 0; i < sche_form.length; i++) {
                     let h_arr_temp = sche_form[i]
@@ -14675,6 +14677,7 @@ function schedule_time_format (arr) {
       }
       let f_str = add_zero_string + b_str
       let arr = f_str.split('').map(Number)
+      console.log(arr, 'change_string_to_four_bit_arr')
       return arr;
     },
 

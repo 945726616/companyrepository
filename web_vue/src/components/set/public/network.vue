@@ -206,22 +206,21 @@
                 input_status: mcs_not_connected,
                 radio_ip: '', //判断IP设置状态
                 radio_dns: '', //判断DNS设置状态
-                input_mac_address: '', //MAC地址 l_dom_input_mac_address.value
-                input_auto_ip_address: '', //IP地址 l_dom_input_auto_ip_address.value 
-                input_auto_subnet_mask: '', //子网掩码 l_dom_input_auto_subnet_mask.value
-                input_auto_gateway: '', //网关 l_dom_input_auto_gateway.value
-                input_following_ip_address: '', //手动IP地址 l_dom_input_following_ip_address.value
-                input_following_subnet_mask: '', //手动子网掩码 l_dom_input_following_subnet_mask.value
-                input_following_gateway: '', //手动网关 l_dom_input_following_gateway.value
-                select_network_password: '', //密码 l_dom_select_network_password.value
-                input_auto_dns: '', //DNS l_dom_input_auto_dns.value
-                input_auto_alternate_dns: '', //备用DNS l_dom_input_auto_alternate_dns.value
-                input_following_dns: '', //手动DNS l_dom_input_following_dns.value
-                input_following_alternate_dns: '', //手动备用DNS l_dom_input_following_alternate_dns.value
-                input_ap_start_address: '', //开始地址 l_dom_input_ap_start_address.value
-                input_ap_end_address: '', //结束地址 l_dom_input_ap_end_address.value
-                input_ap_gateway: '', //网关 l_dom_input_ap_gateway.value
-
+                input_mac_address: '', //MAC地址 
+                input_auto_ip_address: '', //IP地址
+                input_auto_subnet_mask: '', //子网掩码 
+                input_auto_gateway: '', //网关 
+                input_following_ip_address: '', //手动IP地址
+                input_following_subnet_mask: '', //手动子网掩码
+                input_following_gateway: '', //手动网关
+                select_network_password: '', //密码
+                input_auto_dns: '', //DNS
+                input_auto_alternate_dns: '', //备用DNS
+                input_following_dns: '', //手动DNS 
+                input_following_alternate_dns: '', //手动备用DNS
+                input_ap_start_address: '', //开始地址
+                input_ap_end_address: '', //结束地址
+                input_ap_gateway: '', //网关
                 network_info: '', // 网络信息
             }
         },
@@ -630,7 +629,7 @@
                     $("#nic_switch_checkbox").iButton("toggle", false);
                 }
             },
-            
+
             generate_wireless_setup_ex(now_ifs) {
                 let l_dom_select_wifi_mode = this.publicFunc.mx("#select_wifi_mode");
                 let l_dom_radio_auto_obtain_ip = this.publicFunc.mx("#radio_auto_obtain_ip");
@@ -933,7 +932,6 @@
                     dns: now_net_info.dns,
                     select: l_dom_select_nic[l_dom_select_nic.selectedIndex].text
                 }).then(res => {
-                    console.log(res, 'set_network')
                     if (res.type == "success") {
                         _this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 })
                         _this.l_refresh_timer = setInterval(function() {

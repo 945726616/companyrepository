@@ -192,7 +192,7 @@
         },
         async mounted() {
             let _this = this;
-            await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
+            await _this.$chooseLanguage.lang(_this.$store.state.user.userLanguage)
             if (window.fujikam == "fujikam") {
                 _this.fujikam_sign = true;
             } else {

@@ -255,9 +255,9 @@
                     } else {
                         this.publicFunc.delete_tips({
                             content: mcs_upgrade_successful_restart_to_take_effect,
-                            func: () =>{
+                            func: () => {
                                 this.$api.set.reboot_device({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(() => {
-                                    setTimeout(() =>{
+                                    setTimeout(() => {
                                         this.$router.push({ name: 'devlist' });
                                     }, 1000);
                                 })

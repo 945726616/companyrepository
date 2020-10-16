@@ -1,15 +1,17 @@
 <template>
   <div id='alarm' class='list_right_box'>
     <div class='menu_list_box_title3' style='height:2rem;margin-top:1rem'> {{mcs_allow_type}} </div>
-    <div class='menu_list2_box' id='record_event' v-if="scene_data_out.dev && scene_data_out.dev.length > 0">
-      <!-- 确保其中有值再进行渲染防止数组更新vue无法检测 -->
-      <div v-for='(item, index) in scene_data_out.dev' :key='index' :num='index' :class="[ealf === 0 ? 'menu_list record_event_btn' : item.classNameString]" :sn='item.id' :type='item.type' @click='record_event_btn'>
-        <div class='list_name'>
-          <div class='list_name_title'> {{item.record_event_name}} </div>
-          <div class='list_name_tips'> {{item.record_event_type}} </div>
-        </div>
-        <div class='list_info'>
-          <div class='right_arrow'></div>
+    <div class='menu_list2_box' id='record_event'>
+      <div class='menu_list2_box' id='record_event' v-if="scene_data_out.dev && scene_data_out.dev.length > 0">
+        <!-- 确保其中有值再进行渲染防止数组更新vue无法检测 -->
+        <div v-for='(item, index) in scene_data_out.dev' :key='index' :num='index' :class="[ealf === 0 ? 'menu_list record_event_btn' : item.classNameString]" :sn='item.id' :type='item.type' @click='record_event_btn'>
+          <div class='list_name'>
+            <div class='list_name_title'> {{item.record_event_name}} </div>
+            <div class='list_name_tips'> {{item.record_event_type}} </div>
+          </div>
+          <div class='list_info'>
+            <div class='right_arrow'></div>
+          </div>
         </div>
       </div>
     </div>
@@ -24,7 +26,6 @@ export default {
     return {
       //多国语言
       mcs_allow_type: mcs_allow_type,
-
       face_detect: '',
       sound_detect: '',
       human_detect: '',
@@ -111,28 +112,28 @@ export default {
           }
         })
       })
-      console.log(this.scene_data_out)
     },
     record_event_btn (e) {
       console.log(e.currentTarget, 'click item', this.alarm_final_all_dev[e.currentTarget.getAttribute('num')])
-      if (this.ealf === 0) { // 非联动框架设备
-        this.setTimePage = true
-        this.$set(this.setTimePageObj, "show_page", 'time_page')
-        this.$set(this.setTimePageObj, "accessory_type", e.currentTarget.getAttribute('type'))
-        this.$set(this.setTimePageObj, "accessory_sn", e.currentTarget.getAttribute('sn'))
-      } else { // 联动框架设备
-        this.setTimePage = true
-        this.$set(this.setTimePageObj, "show_page", 'time_page')
-        this.$set(this.setTimePageObj, "accessory_type", e.currentTarget.getAttribute('type'))
-        this.$set(this.setTimePageObj, "accessory_sn", e.currentTarget.getAttribute('sn'))
-        // 联动框架额外传递的参数
+      this.setTimePage = true
+      this.$set(this.setTimePageObj, "show_page", 'time_page')
+      this.$set(this.setTimePageObj, "accessory_type", e.currentTarget.getAttribute('type'))
+      this.$set(this.setTimePageObj, "accessory_sn", e.currentTarget.getAttribute('sn'))
+      this.$set(this.setTimePageObj, "accessory_mode", 'alarm')//报警模式
+      if (this.ealf === 1) { // 联动框架额外传递的参数
         this.$set(this.setTimePageObj, "set_plan", this.alarm_final_all_dev[e.currentTarget.getAttribute('num')])
         this.$set(this.setTimePageObj, "set_record_alarm", 'alarm')
         this.$set(this.setTimePageObj, "hide_nav", 1)
+        this.alarm_final_all_dev = [] // 清空设备所具有的附件外加计划表和开关状态等(防止多层push导致判断失效)
       }
     },
     time_page_close () { //关闭弹框
-      this.setTimePage = false;
+      this.setTimePage = false
+      if (this.ealf === 0) {
+        this.old_process()
+      } else {
+        this.new_process()
+      }
     },
     // 联动框架设备方法
     new_process () { // 联动框架设备执行的步骤
@@ -210,7 +211,9 @@ export default {
                 })
                 if (plan_filter.length > 0) {
                   item.alarm_status = "on"
+                  console.log(plan_filter, 'plan_filter')
                   item.plan = this.time_deal(plan_filter);
+                  console.log(item.plan, item.plan)
                 } else {
                   item.alarm_status = "off"
                   item.plan = []
@@ -219,7 +222,7 @@ export default {
                 this.alarm_final_all_dev.push(item)
                 console.log(this.alarm_final_all_dev, 'alarm_final_all_dev4')
               }
-
+              console.log(this.alarm_all_dev, 'this.alarm_all_dev')
               if (this.alarm_final_all_dev.length === this.alarm_all_dev.length) {
                 this.alarm_final_all_dev = this.alarm_final_all_dev.sort(this.dev_type_sort)
                 this.alarm_creat_div()   //开始动态打印div
@@ -240,6 +243,7 @@ export default {
     alarm_creat_div () { // 创建报警右侧主界面dom
       // 关闭遮罩层
       this.publicFunc.closeBufferPage()
+      console.log('执行关闭弹窗')
       let showArr = []
       for (let i = 0; i < this.alarm_final_all_dev.length; i++) {
         let dev_item = this.alarm_final_all_dev[i]
@@ -308,8 +312,8 @@ export default {
       let alarm_all_day_choose = ""
       arr.forEach(function (item, index) {
         let clock_temp = {}
-        clock_temp.start_clock = item.start / 3600 % 24 < 10 ? "0" + item.start / 3600 % 24 + ":00" : item.start / 3600 % 24 + ":00"
-        clock_temp.end_clock = item.end / 3600 % 24 == 0 ? "24:00" : item.end / 3600 % 24 < 10 ? "0" + item.end / 3600 % 24 + ":00" : item.end / 3600 % 24 + ":00"
+        clock_temp.start_clock = item.start / 3600 % 24 < 10 ? item.start / 3600 % 24 + ":00" : item.start / 3600 % 24 + ":00"
+        clock_temp.end_clock = item.end / 3600 % 24 == 0 ? "24:00" : item.end / 3600 % 24 < 10 ? item.end / 3600 % 24 + ":00" : item.end / 3600 % 24 + ":00"
         clock_temp.day_num = week_standard[parseInt(item.start / 3600 / 24)]
         //跨天处理 大于一天(分为刚好end_time为整数天或者不为整数天)
         if (parseInt(item.end / 3600 / 24) - parseInt(item.start / 3600 / 24) > 1) {
@@ -317,14 +321,14 @@ export default {
             alarm_all_day_choose = week_standard.slice(parseInt(item.start / 3600 / 24) + 1, parseInt(item.end / 3600 / 24)).join("、")
             alarm_arr.push(
               { start_clock: clock_temp.start_clock, end_clock: "24:00", day_num: clock_temp.day_num },
-              { start_clock: "00:00", end_clock: "24:00", day_num: alarm_all_day_choose }
+              { start_clock: "0:00", end_clock: "24:00", day_num: alarm_all_day_choose }
             )
           } else {
             alarm_all_day_choose = week_standard.slice(parseInt(item.start / 3600 / 24) + 1, parseInt(item.end / 3600 / 24)).join("、")
             alarm_arr.push(
               { start_clock: clock_temp.start_clock, end_clock: "24:00", day_num: clock_temp.day_num },
-              { start_clock: "00:00", end_clock: "24:00", day_num: alarm_all_day_choose },
-              { start_clock: "00:00", end_clock: clock_temp.end_clock, day_num: week_standard[parseInt(item.end / 3600 / 24)] }
+              { start_clock: "0:00", end_clock: "24:00", day_num: alarm_all_day_choose },
+              { start_clock: "0:00", end_clock: clock_temp.end_clock, day_num: week_standard[parseInt(item.end / 3600 / 24)] }
             )
           }
         }
@@ -333,7 +337,7 @@ export default {
           let middle_end_clock = clock_temp.end_clock
           clock_temp.end_clock = "24:00"
           clock_temp.day_num = week_standard[parseInt(item.start / 3600 / 24)]
-          alarm_arr.push(clock_temp, { start_clock: "00:00", end_clock: middle_end_clock, day_num: week_standard[parseInt(item.start / 3600 / 24) + 1] })
+          alarm_arr.push(clock_temp, { start_clock: "0:00", end_clock: middle_end_clock, day_num: week_standard[parseInt(item.start / 3600 / 24) + 1] })
 
         } else {
           clock_temp.day_num = week_standard[parseInt(item.start / 3600 / 24)]
@@ -385,7 +389,7 @@ export default {
 
     },
     sche_format (sche) { // 生成7*24小时计划表
-       console.log(sche, 'sche_format')
+      console.log(sche, 'sche_format')
       let start_h = ''
       let end_h = ''
       let start_day = ''

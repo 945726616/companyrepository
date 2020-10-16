@@ -171,7 +171,6 @@
         methods: {
             label_sd_btn() { //启动状态
                 this.switch_flag = !this.switch_flag;
-                console.log(this.switch_flag)
                 if (this.switch_flag) {
                     $(this.l_dom_label_text_right_sd).fadeOut("fast");
                     $(this.l_dom_label_img_sd).animate({ marginRight: "0px" });

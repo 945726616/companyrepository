@@ -952,25 +952,6 @@ div.ibutton-label-on {
 	font-size: 16px;
 	color: rgb(255, 255, 255);
 }
-.down_key {
-	/*margin-left: 255px;
-	margin-bottom:20px;
-	position: absolute;
-	bottom: 0px;
-	background: url("../assets/device/vimtag_img.png") no-repeat -5px -457px;
-	width: 40px;
-	height: 40px;
-	display: none;*/
-	margin-left: -20px;
-	/*margin-bottom:20px;*/
-	position: absolute;
-	left:50%;
-	bottom: 20px;
-	background: url("../assets/device/vimtag_img.png") no-repeat -5px -457px;
-	width: 40px;
-	height: 40px;
-	display: none;
-}
 .window_down_key{
 	width: 40px;
     height: 40px;
@@ -987,25 +968,6 @@ div.ibutton-label-on {
 	text-align: center;
 	font-size: 16px;
 	color: rgb(255, 255, 255);
-}
-.right_key {
-	/*background: url("../assets/device/vimtag_img.png") no-repeat -61px -457px;
-	width: 40px;
-	height: 40px;
-	margin-top: 180.5px;
-	margin-right:20px;
-	position: absolute;
-	right: 0px;
-	display: none;*/
-	background: url("../assets/device/vimtag_img.png") no-repeat -61px -457px;
-	width: 40px;
-	height: 40px;
-	margin-top: -20px;
-	/*margin-right:20px;*/
-	position: absolute;
-	top:50%;
-	right: 20px;
-	display: none;
 }
 .window_right_key{
 	background: url("../assets/device/vimtag_img.png") no-repeat -61px -457px;
@@ -4758,14 +4720,14 @@ input[type=radio]{
 	font-size: 16px;
 	cursor: pointer;
 }
-.list_info input{
-	width:200px;
-	height:34px;
-	border:1px solid #ccc;
-	border-radius: 4px;
-	color:$projectColor;
-	font-size: 16px;
-}
+// .list_info input{
+// 	width:200px;
+// 	height:34px;
+// 	border:1px solid #ccc;
+// 	border-radius: 4px;
+// 	color:$projectColor;
+// 	font-size: 16px;
+// }
 .record_page .list_name{
 	float:left;
 	height:50px;
@@ -5914,12 +5876,12 @@ line-height: 30px;
 #start_time, #end_time{
 	cursor: pointer;
 }
-.week_list{
-    float:left;
-    color:#323232;
-    font-size: 1rem;
-    display:none ;
-}
+// .week_list{
+//     float:left;
+//     color:#323232;
+//     font-size: 1rem;
+//     display:none ;
+// }
 .week_every_imgbox{
 	float:right;
 }

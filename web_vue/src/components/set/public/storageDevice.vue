@@ -47,7 +47,7 @@
 
                 input_device_id: '', //设备ID
                 input_password: '', //密码
-                input_status:mcs_not_connected,//连接状态
+                input_status: mcs_not_connected, //连接状态
             };
         },
         mounted() {

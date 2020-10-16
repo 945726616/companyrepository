@@ -4,7 +4,7 @@
             <div class='menu_list_last'>
                 <div class='list_name'> {{mcs_IR_mode}} </div>
                 <div class='list_info'>
-                    <input type="radio" value='red' v-model='light_mode' :class='light_mode == "red"?"list_info_clickselect_img":"list_info_select_img"' />
+                    <input type="radio" value='red' v-model='light_mode' :class='light_mode == "red"?project_name+"_list_info_clickselect_img":"list_info_select_img"' />
                 </div>
             </div>
         </div>
@@ -13,7 +13,7 @@
             <div class='menu_list_last'>
                 <div class='list_name'> {{mcs_white_light_mode}} </div>
                 <div class='list_info'>
-                    <input type="radio" value='white' v-model='light_mode' :class='light_mode == "white"?"list_info_clickselect_img":"list_info_select_img"' />
+                    <input type="radio" value='white' v-model='light_mode' :class='light_mode == "white"?project_name+"_list_info_clickselect_img":"list_info_select_img"' />
                 </div>
             </div>
         </div>
@@ -22,7 +22,7 @@
             <div class='menu_list_last'>
                 <div class='list_name'> {{mcs_smart_mode}} </div>
                 <div class='list_info'>
-                    <input type="radio" value='auto' v-model='light_mode' :class='light_mode == "auto"?"list_info_clickselect_img":"list_info_select_img"' />
+                    <input type="radio" value='auto' v-model='light_mode' :class='light_mode == "auto"?project_name+"_list_info_clickselect_img":"list_info_select_img"' />
                 </div>
             </div>
         </div>
@@ -45,9 +45,11 @@
                 mcs_action_apply: mcs_action_apply,
 
                 light_mode: '', //灯光模式
+                project_name: '', //项目名
             }
         },
         mounted() {
+            this.project_name = this.$store.state.jumpPageData.projectName;
             this.$api.set.white_light_get({
                 sn: this.$store.state.jumpPageData.selectDeviceIpc
             }).then(res => {

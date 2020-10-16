@@ -6,7 +6,7 @@
         <!-- 允许报警和开关 -->
         <div class='menu_list_box'>
           <div class='menu_list record_allow'>
-            <div class='list_name record_padding'> {{mcs_Allow_alarm}} </div>
+            <div class='list_name record_padding'> {{set_record_alarm_title}} </div>
             <div class='list_info record_padding'>
               <input id='at_home_btn' type='checkbox' />
             </div>
@@ -16,7 +16,7 @@
 
         <!-- 设置时间 -->
         <div class='margin'>
-          <div class='set_alarm_time_word' v-if='scene_data_out_sign'> {{mcs_Allow_alarm_schedule}} </div>
+          <div class='set_alarm_time_word' v-if='scene_data_out_sign'> {{set_record_alarm_allow_title}} </div>
           <div class='menu_list_box' id='hide_timebox' v-if='scene_data_out_sign'>
             <div id='set_out_time_box'>
               <div v-for='(item, index) in time_format' :key='index' class='selsect_set_time_btn' :index='index' :time='item.start_time + "_" + item.end_time + "_" +  week_num[index]' @click='selsect_set_time_btn'>
@@ -37,7 +37,6 @@
         <div class='menu_list_apply' id='submit_apply' @click='submit_apply'> {{mcs_apply}} </div>
       </div>
     </div>
-
     <div id='attachmen_box' v-if='setTimePageObj.show_page === "attachmen_page" || setTimePageObj.show_page === "week_page"'>
       <div class='record_box_top'>
         <div id='record_back_box' class='record_back' @click='back_btn'>
@@ -57,7 +56,7 @@
           <div class='set_time_list_left record_padding'> {{mcs_end_time}} </div>
           <div :class='date_plugin_sign === "end_time"?"start_time_active record_padding":"record_padding"' id='end_time' @click='date_plugin_sign = "end_time"'> {{end_time}}:00</div>
         </div>
-        <div class='select_time_box' id='datePlugin' :style='date_plugin_sign?"visibility:visible":"visibility:hidden"'>
+        <div class='select_time_box' id='datePlugin' :style='date_plugin_sign?"display:block":"display:none"'>
         </div>
         <div class='select_week_box' id='click_arrow' @click='select_week_btn'>
           <div style='margin-left:1rem;float:left'> {{mcs_repeat}} </div>
@@ -72,47 +71,47 @@
           </div>
         </div>
       </div>
-      <div id='set_day_main_page' v-show='setTimePageObj.show_page === "week_page"'>
+      <div id='set_time_main_page' v-show='setTimePageObj.show_page === "week_page"'>
         <div class='set_week'>
           <div class='week_every'> {{mcs_Sunday_and}} </div>
           <div class='week_every_imgbox'>
-            <input type="checkbox" value='0' v-model='week_select' :class='week_select.indexOf("0")>-1?"list_info_clickselect_img":"list_info_select_img"' />
+            <input type="checkbox" value='0' v-model='week_select' :class='week_select.indexOf("0")>-1?project_name+"_list_info_clickselect_img":"list_info_select_img"' />
           </div>
         </div>
         <div class='set_week'>
           <div class='week_every'> {{mcs_Monday_and}} </div>
           <div class='week_every_imgbox'>
-            <input type="checkbox" value='1' v-model='week_select' :class='week_select.indexOf("1")>-1?"list_info_clickselect_img":"list_info_select_img"' />
+            <input type="checkbox" value='1' v-model='week_select' :class='week_select.indexOf("1")>-1?project_name+"_list_info_clickselect_img":"list_info_select_img"' />
           </div>
         </div>
         <div class='set_week'>
           <div class='week_every'> {{mcs_Tuesday_and}} </div>
           <div class='week_every_imgbox'>
-            <input type="checkbox" value='2' v-model='week_select' :class='week_select.indexOf("2")>-1?"list_info_clickselect_img":"list_info_select_img"' />
+            <input type="checkbox" value='2' v-model='week_select' :class='week_select.indexOf("2")>-1?project_name+"_list_info_clickselect_img":"list_info_select_img"' />
           </div>
         </div>
         <div class='set_week'>
           <div class='week_every'> {{mcs_Wednesday_and}} </div>
           <div class='week_every_imgbox'>
-            <input type="checkbox" value='3' v-model='week_select' :class='week_select.indexOf("3")>-1?"list_info_clickselect_img":"list_info_select_img"' />
+            <input type="checkbox" value='3' v-model='week_select' :class='week_select.indexOf("3")>-1?project_name+"_list_info_clickselect_img":"list_info_select_img"' />
           </div>
         </div>
         <div class='set_week'>
           <div class='week_every'> {{mcs_Thursday_and}} </div>
           <div class='week_every_imgbox'>
-            <input type="checkbox" value='4' v-model='week_select' :class='week_select.indexOf("4")>-1?"list_info_clickselect_img":"list_info_select_img"' />
+            <input type="checkbox" value='4' v-model='week_select' :class='week_select.indexOf("4")>-1?project_name+"_list_info_clickselect_img":"list_info_select_img"' />
           </div>
         </div>
         <div class='set_week'>
           <div class='week_every'> {{mcs_Friday_and}} </div>
           <div class='week_every_imgbox'>
-            <input type="checkbox" value='5' v-model='week_select' :class='week_select.indexOf("5")>-1?"list_info_clickselect_img":"list_info_select_img"' />
+            <input type="checkbox" value='5' v-model='week_select' :class='week_select.indexOf("5")>-1?project_name+"_list_info_clickselect_img":"list_info_select_img"' />
           </div>
         </div>
         <div class='set_week'>
           <div class='week_every'> {{mcs_Saturday_and}} </div>
           <div class='week_every_imgbox'>
-            <input type="checkbox" value='6' v-model='week_select' :class='week_select.indexOf("6")>-1?"list_info_clickselect_img":"list_info_select_img"' />
+            <input type="checkbox" value='6' v-model='week_select' :class='week_select.indexOf("6")>-1?project_name+"_list_info_clickselect_img":"list_info_select_img"' />
           </div>
         </div>
       </div>
@@ -135,8 +134,6 @@ export default {
     return {
       //多国语言
       mcs_apply: mcs_apply,
-      mcs_Allow_alarm: mcs_Allow_alarm,
-      mcs_Allow_alarm_schedule: mcs_Allow_alarm_schedule,
       mcs_back: mcs_back,
       mcs_edit_time: mcs_edit_time,
       mcs_delete: mcs_delete,
@@ -150,25 +147,26 @@ export default {
       mcs_Thursday_and: mcs_Thursday_and,
       mcs_Friday_and: mcs_Friday_and,
       mcs_Saturday_and: mcs_Saturday_and,
-
-      set_record_alarm_content: '',
-      g_show: false,
-      time_format: [],
-      day_list: [],
-      scene_data_out: '',
-      scene_data_active: '',
+      project_name: '', //项目名
+      set_record_alarm_title: '', //报警/录像标题文字
+      set_record_alarm_allow_title: '', //报警/录像时段文字
+      set_record_alarm_content: '', //报警/录像下的详情文字
+      g_show: false, //关闭弹窗是否显示确认离开
+      time_format: [], //获取的时间数据
+      day_list: [], //保存旧的时间数据
+      scene_data_out: '', //保存获取的out数据
+      scene_data_active: '', //保存获取的in数据
       scene_data_out_sign: true, //是否允许报警
       req_data: '',
-      total_data: '',
-      week: [],
-      week_num: [],
-      start_time: '00',
-      end_time: '24',
+      total_data: '', //点击应用时提交的时间数据
+      week: [], //保存星期文字版
+      week_num: [], //保存星期数字版
+      start_time: '00', //开始时间
+      end_time: '24', //结束时间
       repeat_week: '', //重复上显示的星期
       week_select: [], //选择的星期
       set_old_out_time: '',
-      set_out_time: '',
-      g_week_w: [],
+      set_out_time: '', //保存点击时间段上的时间数据
       date_plugin_sign: '', //判断是否点击开始时间结束时间
       first_click: [], //是否首次修改时间
       back_sign: true, //是否返回成功
@@ -178,6 +176,8 @@ export default {
       select_index: '', //选择的时间段
       add_time_sign: false, //判断是否为新添加时间段
       record_flag_out: true, //判断新添加时间段点击关闭是否显示提示
+      switch_on_val: this.setTimePageObj.accessory_mode == 'alarm' ? 0x4 : 0x2, //允许录像或报警计算数值
+      switch_off_val: this.setTimePageObj.accessory_mode == 'alarm' ? 0x3 : 0x5, //不允许录像或报警计算数值
       // 联动框架相关参数
       ealf: this.$store.state.set.deviceEalf, // 是否为支持联动框架设备
       face_detect: null, // 人脸侦测
@@ -214,18 +214,51 @@ export default {
     }
   },
   mounted () {
-    if (this.setTimePageObj.accessory_type == 1) {
-      this.set_record_alarm_content = mcs_move_alarm_new_detail;
-    } else if (this.setTimePageObj.accessory_type == 5) {
-      this.set_record_alarm_content = mcs_sos_alarm_detail;
-    } else if (this.setTimePageObj.accessory_type == 6) {
-      this.set_record_alarm_content = mcs_send_alarm_notification;
-    } else if (this.setTimePageObj.accessory_type == 8) {
-      this.set_record_alarm_content = mcs_move_record_detail;
-    } else if (this.setTimePageObj.accessory_type == 9) {
-      this.set_record_alarm_content = mcs_move_record_detail;
-    } else if (this.setTimePageObj.accessory_type == "") {
-      this.set_record_alarm_content = mcs_7x24_hours_prompt;
+    this.project_name = this.$store.state.jumpPageData.projectName;
+    if (this.setTimePageObj.accessory_mode == 'alarm') {
+      this.set_record_alarm_title = mcs_Allow_alarm;
+      this.set_record_alarm_allow_title = mcs_Allow_alarm_schedule;
+      switch (this.setTimePageObj.accessory_type) {
+        case '1':
+          this.set_record_alarm_content = mcs_move_alarm_new_detail;
+          break;
+        case '5':
+          this.set_record_alarm_content = mcs_sos_alarm_detail;
+          break;
+        case '6':
+          this.set_record_alarm_content = mcs_send_alarm_notification;
+          break;
+        case '8':
+          this.set_record_alarm_content = mcs_move_record_detail;
+          break;
+        case '9':
+          this.set_record_alarm_content = mrs_open_switch_check_abnormal_noise_alarm;
+          break;
+        default:
+          this.set_record_alarm_content = mcs_7x24_hours_prompt;
+      }
+    } else if (this.setTimePageObj.accessory_mode == 'record') {
+      this.set_record_alarm_title = mcs_Allow_record;
+      this.set_record_alarm_allow_title = mcs_Allow_record_schedule;
+      switch (this.setTimePageObj.accessory_type) {
+        case '1':
+          this.set_record_alarm_content = mcs_move_record_new_detail;
+          break;
+        case '5':
+          this.set_record_alarm_content = mcs_sos_record_detail;
+          break;
+        case '6':
+          this.set_record_alarm_content = mcs_door_record_detail;
+          break;
+        case '8':
+          this.set_record_alarm_content = mcs_move_record_detail;
+          break;
+        case '9':
+          this.set_record_alarm_content = mrs_open_switch_check_abnormal_noise_record;
+          break;
+        default:
+          this.set_record_alarm_content = mcs_continuous_recording_hint;
+      }
     }
     if (this.ealf === 0) {
       this.old_process() // 非联动框架执行步骤
@@ -239,30 +272,39 @@ export default {
       this.g_js_param = this.setTimePageObj
       this.new_set_alarm()
     },
-    old_process () { // 旧版流程(ealf===0,不支持联动框架 报警/录像时间设置只能同步设置)
+    old_process () { // // 旧版流程(ealf===0,不支持联动框架 报警/录像时间设置只能同步设置)
       $("#at_home_btn").iButton({
         labelOn: "On",
         labelOff: "Off",
         change: () => {
           if (document.getElementById("at_home_btn").checked) {
-            // this.ipc_turnover_true = 0;
             this.scene_data_out_sign = true;
             if (this.req_data) {
-              for (let i = 0; i < this.scene_data_out.dev.length; i++) {
-                if (this.scene_data_out.dev[i].id == this.setTimePageObj.accessory_sn) {
-                  this.req_data.info.scene[1].dev[i].flag = this.scene_data_out.dev[i].flag | 0x4; //on video
-                  this.req_data.info.scene[2].dev[i].flag = this.scene_data_active.dev[i].flag | 0x4; //on video
+              if (this.setTimePageObj.accessory_sn) { //判断是否为持续录像
+                for (let i = 0; i < this.scene_data_out.dev.length; i++) {
+                  if (this.scene_data_out.dev[i].id == this.setTimePageObj.accessory_sn) {
+                    this.req_data.info.scene[1].dev[i].flag = this.scene_data_out.dev[i].flag | this.switch_on_val; //on video
+                    this.req_data.info.scene[2].dev[i].flag = this.scene_data_active.dev[i].flag | this.switch_on_val; //on video
+                  }
                 }
+              } else {
+                this.req_data.info.scene[2].flag = 0;
+                this.req_data.info.scene[1].flag = 1;
               }
             }
           } else {
             this.scene_data_out_sign = false;
             if (this.req_data) {
-              for (let i = 0; i < this.scene_data_out.dev.length; i++) {
-                if (this.scene_data_out.dev[i].id == this.setTimePageObj.accessory_sn) {
-                  this.req_data.info.scene[1].dev[i].flag = this.scene_data_out.dev[i].flag & 0x3; //off video
-                  this.req_data.info.scene[2].dev[i].flag = this.scene_data_active.dev[i].flag & 0x3; //off video
+              if (this.setTimePageObj.accessory_sn) { //判断是否为允许录像
+                for (let i = 0; i < this.scene_data_out.dev.length; i++) {
+                  if (this.scene_data_out.dev[i].id == this.setTimePageObj.accessory_sn) {
+                    this.req_data.info.scene[1].dev[i].flag = this.scene_data_out.dev[i].flag & this.switch_off_val; //off video
+                    this.req_data.info.scene[2].dev[i].flag = this.scene_data_active.dev[i].flag & this.switch_off_val; //off video
+                  }
                 }
+              } else {
+                this.req_data.info.scene[2].flag = 0;
+                this.req_data.info.scene[1].flag = 0;
               }
             }
           }
@@ -284,7 +326,7 @@ export default {
                 for (let j = 0; j < scene_data.dev.length; j++) {
                   if (scene_data.dev[j].id == this.setTimePageObj.accessory_sn) {
                     if (this.setTimePageObj.repeat_page !== 1) {
-                      if (scene_data.dev[j].flag & 0x4) {
+                      if (scene_data.dev[j].flag & this.switch_on_val) {
                         $("#at_home_btn").iButton("toggle", true);
                         this.scene_data_out_sign = true;
                       } else {
@@ -338,8 +380,8 @@ export default {
             if (this.setTimePageObj.accessory_sn) {
               for (let i = 0; i < this.scene_data_out.dev.length; i++) {
                 if (this.scene_data_out.dev[i].id == this.setTimePageObj.accessory_sn) {
-                  this.req_data.info.scene[1].dev[i].flag = this.scene_data_out.dev[i].flag | 0x4; //on voice
-                  this.req_data.info.scene[2].dev[i].flag = this.scene_data_active.dev[i].flag | 0x4; //on voice
+                  this.req_data.info.scene[1].dev[i].flag = this.scene_data_out.dev[i].flag | this.switch_on_val; //on voice
+                  this.req_data.info.scene[2].dev[i].flag = this.scene_data_active.dev[i].flag | this.switch_on_val; //on voice
                 }
               }
             } else {
@@ -384,7 +426,6 @@ export default {
               let n = m * 3;
               arr2[m] = arr_tmp[n] + arr_tmp[n + 1] + arr_tmp[n + 2];
             }
-            // schedule_time_format(arr2)
             let start_time = [];
             let end_time = [];
             for (let j = 0; j < arr2.length; j++) {
@@ -537,21 +578,10 @@ export default {
     selsect_set_time_btn (e) { //点击时间
       this.select_index = e.currentTarget.getAttribute('index')
       console.log(e.currentTarget, 'e.currentTarget.getAttribute(index)')
-      if (this.ealf === 1) { // 联动框架需要执行的操作
-        console.log('enter this click event', this.select_index)
-        if (this.select_index) {
-          this.g_select_week = this.g_total_data[this.select_index].day
-          this.g_js_param.set_plan.origin_day = JSON.stringify(this.g_total_data[this.select_index].day)
-          this.new_set_time(this.select_index)
-        } else {
-          let index = "add"
-          this.g_select_week = [1, 1, 1, 1, 1, 1, 1]
-          this.new_set_time(index)
-        }
-      }
       this.set_out_time = e.currentTarget.getAttribute('time')
       this.$set(this.setTimePageObj, "show_page", 'attachmen_page')
       let week_new = []; //保存选中哪些日期值
+      let set_time_out_data // 设置的时间数据(联动框架需要使用)
       if (e.currentTarget.getAttribute('type') == 'add_time') {
         this.add_time_sign = true;
         this.select_index = this.time_format.length
@@ -572,7 +602,7 @@ export default {
           this.old_week = this.set_old_out_time.split("_")[2].split(".");
         }
         if (this.set_out_time) {
-          let set_time_out_data = this.set_out_time.split("_");
+          set_time_out_data = this.set_out_time.split("_");
           this.start_time = set_time_out_data[0] >= 10 ? set_time_out_data[0] : "0" + set_time_out_data[0];
           this.end_time = set_time_out_data[1] >= 10 ? set_time_out_data[1] : "0" + set_time_out_data[1];
           this.repeat_week = set_time_out_data[2] ? set_time_out_data[2].split(".") : [];
@@ -580,16 +610,7 @@ export default {
         if (this.add_time_sign) {
           this.repeat_week = ['0', '1', '2', '3', '4', '5', '6']
         }
-        let temp = eval(this.g_week_w);
-        if (temp.length == 7) {
-          let j = 0;
-          for (i = 0; i < temp.length; i++) {
-            if (temp[i]) {
-              week_new[j] = i;
-              j++;
-            }
-          }
-        }
+
       }
       this.$nextTick(function () {
         console.log('enter nextTick')
@@ -600,6 +621,28 @@ export default {
         }
         this.first_click[this.select_index] = false;
       })
+      if (this.ealf === 1) { // 联动框架需要执行的操作
+        console.log('enter this click event', this.select_index, this.g_total_data)
+        if (this.select_index) {
+          if (!this.g_total_data[this.select_index]) { // 如果选择的index不存在
+            console.log('enter this if')
+            let weekArrList = [0, 0, 0, 0, 0, 0, 0]
+            for (let weekIndex = 0; weekIndex < this.repeat_week.length; weekIndex++) {
+              let index = Number(this.repeat_week[weekIndex])
+              weekArrList[index] = 1
+            }
+            this.$set(this.g_total_data, this.select_index, { start: this.start_time, start_num: Number(set_time_out_data[0]), end: this.end_time, end_num: Number(set_time_out_data[1]), day: weekArrList })
+          }
+          console.log(this.g_total_data, 'g_total_data')
+          this.g_select_week = this.g_total_data[this.select_index].day
+          this.g_js_param.set_plan.origin_day = JSON.stringify(this.g_total_data[this.select_index].day)
+          this.new_set_time(this.select_index)
+        } else {
+          let index = "add"
+          this.g_select_week = [1, 1, 1, 1, 1, 1, 1]
+          this.new_set_time(index)
+        }
+      }
     },
     select_week_btn () { //选择星期
       this.$set(this.setTimePageObj, "show_page", 'week_page')
@@ -609,6 +652,7 @@ export default {
         this.week_select = this.repeat_week
     },
     back_btn () { //点击返回
+      console.log('点击返回')
       this.date_plugin_sign = ''
       if (this.setTimePageObj.show_page == 'week_page') {
         this.$set(this.setTimePageObj, "show_page", 'attachmen_page')
@@ -629,6 +673,7 @@ export default {
       }
     },
     set_time_func (type) { //修改时间结果
+    console.log('调用set_time_func')
       let time_select = [];
       let tmp_data = '';
       let index = -1;
@@ -781,6 +826,24 @@ export default {
         }
       }
 
+      // 联动框架
+      if (this.ealf === 1) {
+        let start_time = parseInt(this.publicFunc.mx("#start_time").innerHTML.split(":")[0])
+        let start_str = $("#start_time").text()
+        let end_time = parseInt(this.publicFunc.mx("#end_time").innerHTML.split(":")[0])
+        let end_str = $("#end_time").text()
+        // this.$set(this.time_format, this.select_index, {
+        //   start: start_str,
+        //   start_num: start_time,
+        //   end: end_str,
+        //   end_num: end_time,
+        // })
+        console.log(this.time_format, this.select_index, 'this.time_format')
+        this.time_format[this.select_index].start = start_str
+        this.time_format[this.select_index].start_num = start_time
+        this.time_format[this.select_index].end = end_str
+        this.time_format[this.select_index].end_num = end_time
+      }
       function stringToHex (data) {
         let val = "";
         let arr = [];
@@ -824,7 +887,7 @@ export default {
         let dev_name = this.g_js_param.set_plan.id  //附件名称 (motion、io、face_detect、and so on)
         let sche = []
         // return;
-        if ($("#at_home_btn").attr("type") === "false") {
+        if (document.getElementById("at_home_btn").checked === false) {
           if (dev_name === 'c_record') {    //持续录像设置录像开关和 计划表
             sche = { plan: [{ start: 0, end: 604800, flag: 0, index: 1, mode: "" }] }
             let info = { name: "oflag", enable: 0, dev: [] }
@@ -902,12 +965,13 @@ export default {
               start = this.time_format[commitIndex].start_time + '' + ':00'
             }
             if ((this.time_format[commitIndex].end_time + '').length < 2) {
-              start = '0' + (this.time_format[commitIndex].end_time + '') + ':00'
+              end = '0' + (this.time_format[commitIndex].end_time + '') + ':00'
             } else {
-              start = this.time_format[commitIndex].end_time + '' + ':00'
+              end = this.time_format[commitIndex].end_time + '' + ':00'
             }
             // 星期数组
-            let weekArr = [0,0,0,0,0,0,0]
+            let weekArr = [0, 0, 0, 0, 0, 0, 0]
+            console.log(this.time_format, commitIndex, 'this.time_format[commitIndex].week.length')
             for (let weekIndex = 0; weekIndex < this.time_format[commitIndex].week.length; weekIndex++) {
               let numberWeekIndex = Number(this.time_format[commitIndex].week[weekIndex])
               weekArr[numberWeekIndex] = 1
@@ -929,10 +993,11 @@ export default {
             let plan_item = commitArr[i]
             for (let j = 0; j < 7; j++) {
               if (plan_item.day[j] == 1) {
-                plan_temp.push({ day: j, start: plan_item.start_num, end: plan_item.end_num })
+                plan_temp.push({ day: j, start: plan_item.start_time, end: plan_item.end_time })
               }
             }
           }
+          console.log(plan_temp, 'plan_temp')
           function sortArr (a, b) {
             return a.day - b.day;
           }
@@ -1016,6 +1081,7 @@ export default {
           console.log(sche_form, 'frist_sche_form')
           let add_flag = this.g_set_record_alarm == 'alarm' ? 4 : 2
           let arr_flag_index = this.g_set_record_alarm == 'alarm' ? 1 : 2
+          console.log(add_flag, arr_flag_index, 'arr_flag_index')
           // console.log(plan_temp)
           for (let i = 0; i < sche_form.length; i++) {
             let h_arr_temp = sche_form[i]
@@ -1133,6 +1199,7 @@ export default {
         this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 })
         this.publicFunc.closeBufferPage()
         this.g_show = false
+        this.$emit("time_page_close")
         // this.create_right_page({ type: 'alarm_new', dom: this.publicFunc.mx("#create_setting_page_right") ? this.publicFunc.mx("#create_setting_page_right") : this.publicFunc.mx("#create_setting_page_new") })
       }
       else if (msg.result == "permission.denied") {
@@ -1144,7 +1211,7 @@ export default {
       }
     },
     new_set_alarm () { // 报警弹窗代码
-      console.log(this.g_js_param, "g_js_param")
+      console.log(this.g_js_param, "g_js_param", this.g_total_data)
       let _this = this
       let all_dev_name = [
         mcs_continuous_recording, //type=0  //持续录像
@@ -1191,285 +1258,11 @@ export default {
         all_dev_alarm_content[8] = all_dev_alarm_content[10] = mcs_move_record_detail         //type=8
       }
 
-      function new_alarm_set_plan_event () {
-        // console.log("进入报警的提交处理")
-
-        $("#set_time_add").click(function () {
-          let index = "add"
-          _this.g_select_week = [1, 1, 1, 1, 1, 1, 1]
-          new_set_time(index)
-        })
-        $("#submit_apply").click(function () {
-          _this.publicFunc.showBufferPage()
-
-          let sche = []
-          // return;
-          if ($("#at_home_btn").attr("type") === "false") {
-            if (dev_name == 'c_record') {    //持续录像设置录像开关和 计划表
-              sche = { plan: [{ start: 0, end: 604800, flag: 0, index: 1, mode: "" }] }
-              let info = { name: "oflag", enable: 0, dev: [] }
-              let info_iflag = { name: "iflag", enable: 0, dev: [] }
-              _this.$api.set.dev_action_set({
-                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-                info: info_iflag
-              }).then(res => {
-                if (res.result === '') {
-                  _this.$api.set.dev_action_set({
-                    sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-                    info: info
-                  }).then(res_second_action_set => {
-                    if (res_second_action_set.result === '') {
-                      _this.$api.set.plan_record_set({
-                        sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-                        sche: sche
-                      }).then(res_plan_record_set => {
-                        _this.sche_set_ack(res_plan_record_set)
-                      })
-                    } else {
-                      _this.publicFunc.msg_tips({ msg: msg.msg, type: "error", timeout: 3000, web_tips: 1 })
-                    }
-                  })
-                } else {
-                  _this.publicFunc.msg_tips({ msg: msg.msg, type: "error", timeout: 3000, web_tips: 1 })
-                }
-              })
-
-            } else {
-              let sche_form = this.g_js_param.set_plan.sche_form
-              let cut_flag = this.g_set_record_alarm == 'alarm' ? 4 : 2
-              let arr_flag_index = this.g_set_record_alarm == 'alarm' ? 1 : 2
-              // console.log(sche_form)
-              sche_form.forEach(function (item, index) {
-                let temp = item
-                for (let i = 0; i < temp.length; i++) {
-                  (function (i) {
-                    if (_this.change_string_to_four_bit_arr(temp[i])[arr_flag_index] == 1) {
-                      temp[i] -= cut_flag
-                    }
-                  })(i)
-                }
-              })
-              // console.log(sche_form)
-              if (_this.g_js_param.set_plan.id == 'motion') {
-                sche_form.forEach(function (item, index) {
-                  for (let i = 0; i < item.length; i++) {
-                    (function (i) {
-                      item[i] += 8
-                    })(i)
-                  }
-                })
-              }
-              let plan_sel = _this.sche_trans_to_second_format(sche_form)
-              let plan = _this.sche_add_action_name(plan_sel, g_js_param.set_plan.type)
-              sche = { all: 0, dev_name: g_js_param.set_plan.id, plan: plan }
-              _this.$api.set.alarm_sche_set({
-                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-                exdev_id: g_js_param.set_plan.id,
-                sche: sche
-              }).then(res => {
-                _this.sche_set_ack(res)
-              })
-            }
-          } else {
-            let plan_temp = []
-            // let plan_flag = flag
-            for (let i = 0; i < _this.g_total_data.length; i++) {
-              let plan_item = _this.g_total_data[i]
-              for (let j = 0; j < 7; j++) {
-                if (plan_item.day[j] == 1) {
-                  plan_temp.push({ day: j, start: plan_item.start_num, end: plan_item.end_num })
-
-                }
-              }
-            }
-            function sortArr (a, b) {
-              return a.day - b.day;
-            }
-
-            //该函数对具有相同日期的计划表进行整合
-            function plan_same_day_func (arr) {
-              function sortStart (a, b) {
-                return a.start - b.start;
-              }
-              let plan_start_arr = arr.sort(sortStart)
-              let start_min = plan_start_arr[0].start
-              let end_max = plan_start_arr[0].end
-              for (let i = 0; i < plan_start_arr.length; i++) {
-                let tmp = plan_start_arr[i]
-                if (i != plan_start_arr.length - 1) {
-                  let tmp2 = plan_start_arr[i + 1]
-                  if (tmp.end < tmp2.start) {
-                    day_select_combine.push(tmp)
-                    start_min = plan_start_arr[i].start
-                  } else {
-                    tmp2.end = tmp.end >= tmp2.end ? tmp.end : tmp2.end
-                  }
-                } else {
-                  if (tmp.start > plan_start_arr[i - 1].end) {
-                    day_select_combine.push(tmp)
-                  } else {
-                    tmp.start = start_min
-                    day_select_combine.push(tmp)
-                  }
-                }
-              }
-            }
-            let plan_info = []
-            let same_num = 0
-            let plan_deal_same = []
-            let day_select_combine = []
-            plan_temp = plan_temp.sort(sortArr)
-            for (let i = 0; i < plan_temp.length; i++) {
-              let tmp = plan_temp[i]
-              if (i != plan_temp.length - 1) {
-                let tmp2 = plan_temp[i + 1]
-                if (tmp.day == tmp2.day) {
-                  same_num++;
-                } else {
-                  if (same_num == 0) {
-                    day_select_combine.push(tmp)
-                  } else {
-                    let plan_same_tmp = plan_temp.slice(i - same_num, i + 1)
-                    plan_same_day_func(plan_same_tmp)
-                    same_num = 0
-                  }
-                }
-              } else {
-                if (same_num != 0) {
-                  let xx = plan_temp.slice(i - same_num, i + 1)
-                  plan_same_day_func(xx)
-                  same_num = 0;
-                } else {
-
-                  let day_select_final = day_select_combine[day_select_combine.length - 1] || []
-                  if (day_select_final.day < tmp.day || day_select_final.length == 0) {
-                    day_select_combine.push(tmp)
-                  } else {
-                    if (day_select_final.end < tmp.start) {
-                      day_select_combine.push(tmp)
-                    } else {
-                      if (day_select_final.start >= tmp.start && day_select_final.end <= tmp.end) {
-                        day_select_final = tmp
-                      } else if (day_select_final.start > tmp.end) {
-                        day_select_combine.push(tmp)
-                      } else if (day_select_final.end <= tmp.end && day_select_final.start <= tmp.start) {
-                        day_select_final.end = tmp.end
-                      } else if (day_select_final.start >= tmp.start && day_select_final.end >= tmp.end) {
-                        day_select_final.start = tmp.start
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            let sche_form = this.g_js_param.set_plan.sche_form
-            let add_flag = this.g_set_record_alarm == 'alarm' ? 4 : 2
-            let arr_flag_index = this.g_set_record_alarm == 'alarm' ? 1 : 2
-            // console.log(plan_temp)
-            for (let i = 0; i < sche_form.length; i++) {
-              let h_arr_temp = sche_form[i]
-              for (let j = 0; j < h_arr_temp.length; j++) {
-                (function (j) {
-                  if (_this.change_string_to_four_bit_arr(h_arr_temp[j])[arr_flag_index] == 1) {
-                    h_arr_temp[j] -= add_flag
-                  }
-                })(j)
-              }
-            }
-            //  //console.log(sche_form)
-            for (let i = 0; i < plan_temp.length; i++) {
-              let temp = plan_temp[i]
-              let day_arr = sche_form[temp.day]
-
-              for (let j = 0; j < day_arr.length; j++) {
-                (function (j) {
-                  if (j >= temp.start && j < temp.end) {
-                    if (_this.change_string_to_four_bit_arr(day_arr[j])[arr_flag_index] == 0) {
-                      day_arr[j] += add_flag
-                    }
-                    else {
-                      day_arr[j] += 0
-                    }
-                  }
-                })(j)
-              }
-              // console.log(day_arr)
-            }
-            // console.log(sche_form)
-            // return
-            if (g_js_param.set_plan.id == 'motion') {
-              sche_form.forEach(function (item, index) {
-                for (let i = 0; i < item.length; i++) {
-                  (function (i) {
-                    item[i] += 8
-                  })(i)
-                }
-              })
-            }
-            let plan_sel = _this.sche_trans_to_second_format(sche_form)
-            if (dev_name == "c_record") {    //持续录像设置计划表
-              // console.log(plan_sel)
-              plan_sel.forEach(function (item) {
-                if (item.index == 0) {
-                  item.action_name = [{ name: "record", times: 0, control_time: 8000, continue_time: 16000 }]
-                  item.flag = 2
-                }
-              })
-              sche = { plan: plan_sel }
-              let info = { name: "oflag", enable: 1, dev: [] }
-              let info_iflag = { name: "iflag", enable: 0, dev: [] }
-              _this.$api.set.dev_action_set({
-                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-                info: info_iflag
-              }).then(res => {
-                if (res.result === '') {
-                  _this.$api.set.dev_action_set({
-                    sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-                    info: info
-                  }).then(res_second_action_set => {
-                    if (res_second_action_set.result === '') {
-                      _this.$api.set.plan_record_set({
-                        sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-                        sche: sche
-                      }).then(res_plan_record_set => {
-                        _this.sche_set_ack(res_plan_record_set)
-                      })
-                    } else {
-                      _this.publicFunc.msg_tips({ msg: msg.msg, type: "error", timeout: 3000, web_tips: 1 })
-                    }
-                  })
-                } else {
-                  _this.publicFunc.msg_tips({ msg: msg.msg, type: "error", timeout: 3000, web_tips: 1 })
-                }
-              })
-            }
-            else {
-              plan_sel = _this.sche_add_action_name(plan_sel, g_js_param.set_plan.type)
-              sche = { all: 0, dev_name: dev_name, plan: plan_sel }
-              // console.log('调用该方法设置报警')
-              _this.$api.set.alarm_sche_set({
-                sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-                exdev_id: g_js_param.set_plan.id,
-                sche: sche
-              }).then(res => {
-                _this.sche_set_ack(res)
-              })
-            }
-          }
-          $("#delete_tips_box").css({
-            "border-radius": "0.6rem"
-          })
-          $("#delete_tips_content").css({
-            "margin-top": "1rem",
-            "margin-bottom": "1rem"
-          })
-        })
-      }
-
       function alarm_plan_log () {
         let alarm_main_info = _this.g_js_param.set_plan
-        console.log(alarm_main_info, 'alarm_main_info')
+        console.log(alarm_main_info, 'alarm_main_info', _this.g_total_data)
         if (_this.g_total_data == "") {
+          console.log('未g_total添加数据')
           _this.g_total_data = alarm_main_info.plan
         }
         else {
@@ -1484,13 +1277,10 @@ export default {
           _this.scene_data_out_sign = false
         }
         // 添加计划表中已有的数据
+        console.log(_this.g_total_data, 'g_total_data')
         for (let i = 0; i < _this.g_total_data.length; i++) {
           let temp = _this.g_total_data[i]
           let alarm_day_time = _this.alarm_timeArr_to_word(_this.g_total_data[i].day)
-          _this.$set(_this.time_format, i, {
-            start_time: temp.start.split(':00')[0],
-            end_time: temp.end.split(':00')[0]
-          })
           _this.$set(_this.week, i, alarm_day_time)
           // 存储week_num
           let week_num_arr = []
@@ -1501,6 +1291,11 @@ export default {
             }
           }
           _this.$set(_this.week_num, i, week_num_arr.join('.'))
+          _this.$set(_this.time_format, i, {
+            start_time: temp.start.split(':00')[0],
+            end_time: temp.end.split(':00')[0],
+            week: week_num_arr
+          })
           console.log(_this.week_num, 'week_num_arr')
         }
       }
@@ -1596,12 +1391,10 @@ export default {
 
       })
     },
-    new_set_time (index, arr) {
+    new_set_time (index, arr) { // 时间设置
       console.log('enter set time')
       let _this = this
       this.g_hide = this.g_js_param.hide_nav;
-      // console.log("进入新时间设置", g_js_param)
-      // call_native("send_title", "&title=" + mcs_Setting_time, "");
       let start_time = ""
       let end_time = ""
       let week_str = ""
@@ -1619,115 +1412,6 @@ export default {
           end_time = this.g_total_data[index].end.split(":")[0]
         }
       }
-      // this.$set(this.setTimePageObj, "show_page", 'attachmen_page')
-      // week_str = _this.alarm_timeArr_to_word(this.g_select_week)
-      // // console.log(week_str, "星期字符串")
-      // _this.publicFunc.mx("#add_device_page").innerHTML =
-
-      //   "<div id='attachmen_box'>"
-      //   + "<div class='record_box_top'><div id='record_back_box' class='record_back'><div id='record_return_img'></div><div class='record_back'>" + mcs_back + "</div></div><div class='record_edit_time'>" + mcs_edit_time + "</div></div>"
-      //   + "<div id='set_time_main_page'>"
-      //   + "<div class='set_time_list set_starttime_list'>"
-      //   + "<div class='set_time_list_left record_padding'>" + mcs_begin_time + "</div>"
-      //   + "<div class='set_time_list_right record_padding' id='start_time'>" + start_time + ":00</div>"
-      //   + "</div>"
-
-      //   + "<div style='height:2rem;background:#EFEFF4'></div>"
-      //   + "<div class='set_time_list set_endtime_list'>"
-      //   + "<div class='set_time_list_left record_padding'>" + mcs_end_time + "</div>"
-      //   + "<div class='set_time_list_right record_padding' id='end_time'>" + end_time + ":00</div>"
-      //   + "</div>"
-      //   + "<div class='select_time_box' id='datePlugin' style='visibility:hidden'>"
-      //   + "</div>"
-      //   + "<div class='select_week_box' id='alarm_day_select' style='overflow:hidden;width:660px;margin-top:30px;'>"
-      //   + "<div style='margin-left:1rem;float:left'>" + mcs_repeat + "</div>"
-      //   + "<div class='week_Box' style='float:right;width:400px;'>"
-      //   + "<div style='float: right;color: #323232;font-size: 1rem;margin-right:1rem'>" + week_str + "</div>"
-      //   + "<div id='click_arrow' class='right_arrow' style='margin-right:1.2rem;float:right'></div>"
-      //   + "</div>"
-
-      //   + "</div>"
-      //   // 时间点选择确定取消按钮
-      //   + "<div class='set_time_btn_line'>"
-      //   + "<div id='set_time_confirm_btn' class='set_submit_btn'>" + mcs_ok + "</div>"
-      //   + "<div id='set_time_delete_btn' class='set_del_btn'>" + mcs_delete + "</div>";
-      // + "</div>"
-
-      //   + "</div>"
-      //   + "</div>"
-      function set_time_event () {
-        // console.log("进入set_time_event")
-        $("#start_time").date({ theme: "datetime", h: start_time });
-        $("#end_time").date({ theme: "datetime", h: end_time });
-        $("#start_time").click(function () {
-          $("#datePlugin").css("visibility", "visible");
-        })
-
-        $("#end_time").click(function () {
-          $("#datePlugin").css("visibility", "visible");
-        })
-        if (_this.g_hide == 1) {
-          $("#title_name").text(mcs_edit_time)
-          _this.publicFunc.mx("#record_back_box").onclick = function () {
-            if (index != 'add') {
-              g_total_data[index].day = JSON.parse(g_js_param.set_plan.origin_day)
-            }
-            new_set_alarm();
-          }
-          _this.publicFunc.mx("#set_time_confirm_btn").onclick = function () {
-            let flag = ""
-            let start_time = parseInt($("#start_time").text().split(":")[0])
-            let start_str = $("#start_time").text()
-            let end_time = parseInt($("#end_time").text().split(":")[0])
-            let end_str = $("#end_time").text()
-            if (start_time >= end_time) {
-              _this.publicFunc.msg_tips({ msg: mcs_start_time_is_greater, type: "error", timeout: 3000, web_tips: 1 })
-              return;
-            }
-            else {
-              if (index == "add") {
-                g_total_data.push({
-                  start: start_str,
-                  start_num: start_time,
-                  end: end_str,
-                  end_num: end_time,
-                  day: _this.g_select_week
-                })
-              }
-              else {
-                g_total_data[index].day = _this.g_select_week
-                g_total_data[index].end = end_str
-                g_total_data[index].end_num = end_time
-                g_total_data[index].start = start_str
-                g_total_data[index].start_num = start_time
-              }
-            }
-            new_set_alarm();
-          }
-
-          _this.publicFunc.mx("#set_time_delete_btn").onclick = function () {
-            if (index != 'add') {
-              g_total_data.splice(index, 1)
-            }
-            new_set_alarm();
-          }
-        }
-        $("#alarm_day_select").click(function () {
-          let time_arr = {}
-          time_arr.start_time = $("#start_time").text().split(":")[0]
-          time_arr.end_time = $("#end_time").text().split(":")[0]
-          if (parseInt(time_arr.start_time) >= parseInt(time_arr.end_time)) {
-            _this.publicFunc.msg_tips({ msg: mcs_start_time_is_greater, type: "error", timeout: 3000, web_tips: 1 })
-            return;
-          }
-          else {
-            // console.log("是否调用了new_compile_week")
-            new_compile_week(index, time_arr)
-          }
-
-        })
-      }
-      // set_time_event()
     },
     // 公共计算方法
     alarm_timeArr_to_word (arr) {
@@ -1740,11 +1424,12 @@ export default {
           day_str_temp.push(week_standard[index])
         }
       })
-      if (day_str_temp.length == 7) {
-        day_str = mcs_every_day
-      } else {
-        day_str = day_str_temp.join("、")
-      }
+      day_str = day_str_temp.join("、")
+      // if (day_str_temp.length == 7) { // 每天
+      //   day_str = mcs_every_day
+      // } else {
+      //   day_str = day_str_temp.join("、")
+      // }
       return day_str;
     },
     time_deal (arr) {
@@ -1830,11 +1515,12 @@ export default {
         alarm_plan_temp.start_num = parseInt(alarm_plan_temp.start)
         alarm_plan_temp.end = temp.split(",")[1]
         alarm_plan_temp.end_num = parseInt(alarm_plan_temp.end)
-        if (day_str[i].split("、").length == 7) {
-          alarm_plan_temp.day = mcs_every_day
-        } else {
-          alarm_plan_temp.day = day_str[i]
-        }
+        alarm_plan_temp.day = day_str[i]
+        // if (day_str[i].split("、").length == 7) { // 每天
+        //   alarm_plan_temp.day = mcs_every_day
+        // } else {
+        //   alarm_plan_temp.day = day_str[i]
+        // }
         alarm_plan.push(alarm_plan_temp)
       }
       // console.log(alarm_plan)
@@ -1954,40 +1640,42 @@ export default {
     repeat_week (val) {
       this.$nextTick(() => {
         let week_dom = document.getElementsByClassName('week_list')
-        let last_week_dom = week_dom[week_dom.length - 1]
-        last_week_dom.children[0].style.display = 'none'
-        this.week[this.select_index] = '';
-        this.week_num[this.select_index] = '';
-        if (val.indexOf('0') > -1) {
-          this.week[this.select_index] += mcs_Sunday_and + "、";
-          this.week_num[this.select_index] += "0.";
+        if (week_dom.length > 0) {
+          let last_week_dom = week_dom[week_dom.length - 1]
+          last_week_dom.children[0].style.display = 'none'
+          this.week[this.select_index] = '';
+          this.week_num[this.select_index] = '';
+          if (val.indexOf('0') > -1) {
+            this.week[this.select_index] += mcs_Sunday_and + "、";
+            this.week_num[this.select_index] += "0.";
+          }
+          if (val.indexOf('1') > -1) {
+            this.week[this.select_index] += mcs_Monday_and + "、";
+            this.week_num[this.select_index] += "1.";
+          }
+          if (val.indexOf('2') > -1) {
+            this.week[this.select_index] += mcs_Tuesday_and + "、";
+            this.week_num[this.select_index] += "2.";
+          }
+          if (val.indexOf('3') > -1) {
+            this.week[this.select_index] += mcs_Wednesday_and + "、";
+            this.week_num[this.select_index] += "3.";
+          }
+          if (val.indexOf('4') > -1) {
+            this.week[this.select_index] += mcs_Thursday_and + "、";
+            this.week_num[this.select_index] += "4.";
+          }
+          if (val.indexOf('5') > -1) {
+            this.week[this.select_index] += mcs_Friday_and + "、";
+            this.week_num[this.select_index] += "5.";
+          }
+          if (val.indexOf('6') > -1) {
+            this.week[this.select_index] += mcs_Saturday_and + "、";
+            this.week_num[this.select_index] += "6.";
+          }
+          this.week[this.select_index] = this.week[this.select_index].substring(0, this.week[this.select_index].length - 1)
+          this.week_num[this.select_index] = this.week_num[this.select_index].substring(0, this.week_num[this.select_index].length - 1)
         }
-        if (val.indexOf('1') > -1) {
-          this.week[this.select_index] += mcs_Monday_and + "、";
-          this.week_num[this.select_index] += "1.";
-        }
-        if (val.indexOf('2') > -1) {
-          this.week[this.select_index] += mcs_Tuesday_and + "、";
-          this.week_num[this.select_index] += "2.";
-        }
-        if (val.indexOf('3') > -1) {
-          this.week[this.select_index] += mcs_Wednesday_and + "、";
-          this.week_num[this.select_index] += "3.";
-        }
-        if (val.indexOf('4') > -1) {
-          this.week[this.select_index] += mcs_Thursday_and + "、";
-          this.week_num[this.select_index] += "4.";
-        }
-        if (val.indexOf('5') > -1) {
-          this.week[this.select_index] += mcs_Friday_and + "、";
-          this.week_num[this.select_index] += "5.";
-        }
-        if (val.indexOf('6') > -1) {
-          this.week[this.select_index] += mcs_Saturday_and + "、";
-          this.week_num[this.select_index] += "6.";
-        }
-        this.week[this.select_index] = this.week[this.select_index].substring(0, this.week[this.select_index].length - 1)
-        this.week_num[this.select_index] = this.week_num[this.select_index].substring(0, this.week_num[this.select_index].length - 1)
       })
     },
     time_format (val) {

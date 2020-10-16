@@ -21,17 +21,17 @@
                 //多国语言
                 mcs_motion_detection: mcs_motion_detection,
 
-                setScenePage:false, //控制弹窗是否显示
-                setScenePageObj:{},//控制弹窗展示对象
+                setScenePage: false, //控制弹窗是否显示
+                setScenePageObj: {}, //控制弹窗展示对象
             }
         },
         methods: {
             motion_detect_btn() { //点击移动侦测
                 this.setScenePage = true;
-                this.$set(this.setScenePageObj,'detailPageFlag','motionDetectPage')
+                this.$set(this.setScenePageObj, 'detailPageFlag', 'motionDetectPage')
                 this.$set(this.setScenePageObj, 'devType', 1)
             },
-            scene_page_close(){//关闭弹窗
+            scene_page_close() { //关闭弹窗
                 this.setScenePage = false;
             }
         },
@@ -40,7 +40,7 @@
                 this.$store.dispatch('setMotionTrack', res.motion_track)
             })
         },
-        components:{
+        components: {
             scenePage
         }
     }

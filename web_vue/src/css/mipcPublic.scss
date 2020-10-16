@@ -1090,14 +1090,14 @@ input[type="number"]{
 	margin-left: 15px;
 	width:300px;
 }
-#playback_download_path_box{
-	width:300px;
-	height:150px;
-	background: #fff;
-	border-radius: 5px;
-	position: absolute;
-	display: none;
-}
+// #playback_download_path_box{
+// 	width:300px;
+// 	height:150px;
+// 	background: #fff;
+// 	border-radius: 5px;
+// 	position: absolute;
+// 	display: none;
+// }
 #playback_download_path_input{
 	margin-left:10px;
 	padding-left:10px;
@@ -2817,14 +2817,14 @@ div.ibutton-label-on {
 	font-size: 16px;
 	cursor: pointer;
 }
-.list_info input{
-	width: 200px;
-    height: 34px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    color: $projectColor;
-    font-size: 16px;
-}
+// .list_info input{
+// 	width: 200px;
+//     height: 34px;
+//     border: 1px solid #ccc;
+//     border-radius: 4px;
+//     color: $projectColor;
+//     font-size: 16px;
+// }
 div.ibutton-label-off span{
 	display: block;
     float: right;
@@ -3260,14 +3260,14 @@ div.ibutton-label-on{
 	line-height: 28px;
 	cursor: pointer;
 }
-.week_list{
-	float: left;
-    color: #323232;
-    /* width: 10%; */
-    /* text-align: center; */
-    font-size: 1rem;
-    display: none;
-}
+// .week_list{
+// 	float: left;
+//     color: #323232;
+//     /* width: 10%; */
+//     /* text-align: center; */
+//     font-size: 1rem;
+//     display: none;
+// }
 #delete_set_record{
 	/*g 5.6.1*/
 	float:right;
@@ -4132,12 +4132,12 @@ line-height: 30px;
 #start_time, #end_time{
 	cursor: pointer;
 }
-.week_list{
-    float:left;
-    color:#323232;
-    font-size: 1rem;
-    display:none ;
-}
+// .week_list{
+//     float:left;
+//     color:#323232;
+//     font-size: 1rem;
+//     display:none ;
+// }
 .week_every_imgbox{
 	float:right;
 }

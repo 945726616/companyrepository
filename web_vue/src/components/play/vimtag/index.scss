@@ -232,6 +232,24 @@
 	left:127px;
 	top:256px;
 }
+.right_key {
+	background: url(~@/assets/device/vimtag_img.png) no-repeat -61px -457px;
+	width: 40px;
+	height: 40px;
+	margin-top: -20px;
+	position: absolute;
+	top:50%;
+	right: 20px;
+}
+.down_key {
+	margin-left: -20px;
+	position: absolute;
+	left:50%;
+	bottom: 20px;
+	background: url(~@/assets/device/vimtag_img.png) no-repeat -5px -457px;
+	width: 40px;
+	height: 40px;
+}
 .video_off_picture {
 	width: 61px;
 	height: 59px;

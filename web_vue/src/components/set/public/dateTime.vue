@@ -248,6 +248,7 @@
 
     #time_zone_selevt {
         color: $projectColor;
+        border: 1px solid $projectColor;
         height: 34px;
         width: 200px;
         padding-left: 73px;

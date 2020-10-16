@@ -2,7 +2,7 @@
     <div id='accessory' class='list_right_box'>
         <div v-if='scene_list_add_page == "initial"'>
             <div v-for='(item,index) in accessory_data' :key='index'>
-                <div v-if='item.weather_show' class='option_scene_list option_scene_list_btn' :attachmen_id='item.dev_id' :attachmen_type='item.dev_type' :attachmen_class='item.scene_class' :attachmen_nick='item.dev_nick' @click='accessory_btn'>
+                <div v-if='item.weather_show && item.dev_type != 10' class='option_scene_list option_scene_list_btn' :attachmen_id='item.dev_id' :attachmen_type='item.dev_type' :attachmen_class='item.scene_class' :attachmen_nick='item.dev_nick' @click='accessory_btn'>
                     <div :class='"scene_list_img " + item.scene_class'></div>
                     <div class='option_scene_list_right'>
                         <div class='option_scene_list_text'>
@@ -113,7 +113,7 @@
                 accessory_data: [],
                 setScenePage: false, //控制弹窗是否显示
                 setScenePageObj: {}, //控制弹窗展示对象
-                scene_list_add_sign: true, //是否显示添加外设
+                scene_list_add_sign: false, //是否显示添加外设
                 scene_list_add_page: 'initial', //添加外设跳转页
                 content_tips: '', //添加外设文本
                 demo_img_url: '', //添加外设图片
