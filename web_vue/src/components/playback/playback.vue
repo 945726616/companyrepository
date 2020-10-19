@@ -21,7 +21,6 @@
         <!-- 播放菜单控制 -->
         <div id="playback_menu_box">
           <div id="play_menu_left">
-            "
             <div
               id="video_play"
               class="video_play_start"

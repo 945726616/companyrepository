@@ -270,6 +270,9 @@ export default {
     new_process () { // 新版流程(ealf===1, 支持联动框架 报警/录像时间设置可以分别设置)
       console.log(this.setTimePageObj, 'enter new_process')
       this.g_js_param = this.setTimePageObj
+      if (this.setTimePageObj.accessory_mode === 'record') {
+        this.g_set_record_alarm = 'record'
+      }
       this.new_set_alarm()
     },
     old_process () { // // 旧版流程(ealf===0,不支持联动框架 报警/录像时间设置只能同步设置)
@@ -840,10 +843,6 @@ export default {
           week: this.repeat_week
         })
         console.log(this.time_format, this.select_index, 'this.time_format')
-        // this.time_format[this.select_index].start = start_str
-        // this.time_format[this.select_index].start_time = start_time
-        // this.time_format[this.select_index].end = end_str
-        // this.time_format[this.select_index].end_time = end_time
       }
       function stringToHex (data) {
         let val = "";
@@ -1127,6 +1126,8 @@ export default {
           console.log(sche_form, 'sche_form')
           let plan_sel = this.sche_trans_to_second_format(sche_form)
           console.log(plan_sel, 'plan_sel')
+
+          console.log('dev_name内容', dev_name)
           if (dev_name == "c_record") {    //持续录像设置计划表
             // console.log(plan_sel)
             plan_sel.forEach(function (item) {
@@ -1147,6 +1148,7 @@ export default {
                   sn: this.$store.state.jumpPageData.selectDeviceIpc,
                   info: info
                 }).then(res_second_action_set => {
+                  console.log(sche, 'sche')
                   if (res_second_action_set.result === '') {
                     this.$api.set.plan_record_set({
                       sn: this.$store.state.jumpPageData.selectDeviceIpc,

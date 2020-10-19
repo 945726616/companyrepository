@@ -218,14 +218,16 @@ export default {
         this.get_definition() // 获取窗口大小并绘制播放内容
       })
       // 视频播放控制区域设置
-      let l_dom_play_view_width = this.$refs.play_view.offsetWidth
-      let l_dom_play_view_height = this.$refs.play_view.offsetHeight
-      let l_dom_play_view_top = this.$refs.play_view.offsetTop
-      let l_dom_play_view_left = this.$refs.play_view.offsetLeft
-      this.$refs.ptz_control.style.width = l_dom_play_view_width + "px"
-      this.$refs.ptz_control.style.height = l_dom_play_view_height - 40 + "px"
-      this.$refs.ptz_control.style.top = l_dom_play_view_top + "px"
-      this.$refs.ptz_control.style.left = l_dom_play_view_left + "px"
+      this.$nextTick(function(){
+        let l_dom_play_view_width = this.$refs.play_view.offsetWidth
+        let l_dom_play_view_height = this.$refs.play_view.offsetHeight
+        let l_dom_play_view_top = this.$refs.play_view.offsetTop
+        let l_dom_play_view_left = this.$refs.play_view.offsetLeft
+        this.$refs.ptz_control.style.width = l_dom_play_view_width + "px"
+        this.$refs.ptz_control.style.height = l_dom_play_view_height - 80 + "px"
+        this.$refs.ptz_control.style.top = l_dom_play_view_top + "px"
+        this.$refs.ptz_control.style.left = l_dom_play_view_left + "px"
+      })
       // 视频播放控制区域设置 结束
       // 创建暂停画面以及暂停图标
       if (this.$store.state.jumpPageData.localFlag) {
@@ -275,40 +277,10 @@ export default {
         dom_right = $(".right_button")[0],
         dom_out_box = $(".adjust_out_box"),
         dom_in_box = $(".adjust_in_box"),
-        values_flag = [false, false, false, false],
         l_cam_conf_reset = [6, 60, 70, 50],//锐度，对比度，饱和度，亮度
         dom_circle = $(".adjust_circle"),
         l_cam_conf, outX, left, top, mouseX, i, evt;
 
-      function change_cam_mode (obj) {
-        switch (obj) {
-          case "auto":
-            {
-              l_dom_adjust_mode_auto.className = "mode_cha_active";
-              l_dom_adjust_mode_daytime.className = "mode_cha";
-              l_dom_adjust_mode_night.className = "mode_cha";
-              break;
-            }
-          case "day":
-            {
-              l_dom_adjust_mode_auto.className = "mode_cha";
-              l_dom_adjust_mode_daytime.className = "mode_cha_active";
-              l_dom_adjust_mode_night.className = "mode_cha";
-              break;
-            }
-          case "night":
-            {
-              l_dom_adjust_mode_auto.className = "mode_cha";
-              l_dom_adjust_mode_daytime.className = "mode_cha";
-              l_dom_adjust_mode_night.className = "mode_cha_active";
-              break;
-            }
-          default:
-            l_dom_adjust_mode_auto.className = "mode_cha_active";
-            l_dom_adjust_mode_daytime.className = "mode_cha";
-            l_dom_adjust_mode_night.className = "mode_cha";
-        }
-      }
       function change_cam_light_mode (obj) {
         switch (obj) {
           case "red":
@@ -555,10 +527,22 @@ export default {
       }
     },
     clickAdjust (event) { // 点击设备调整按钮
+      let dom_out_box = $(".adjust_out_box");
+      let dom_in_box = $(".adjust_in_box");
+      let dom_circle = $(".adjust_circle");
+      let l_dom_adjust_mode_night = this.publicFunc.mx("#adjust_mode_night");
+      let l_dom_adjust_mode_daytime = this.publicFunc.mx("#adjust_mode_daytime");
+      let l_dom_adjust_mode_auto = this.publicFunc.mx("#adjust_mode_auto");
+      let l_dom_adjust_mode_white_light = this.publicFunc.mx("#adjust_mode_white_light");
+      let l_dom_adjust_mode_infrared_light = this.publicFunc.mx("#adjust_mode_infrared_light");
+      let l_dom_adjust_mode_smart_light = this.publicFunc.mx("#adjust_mode_smart_light");
+      let l_dom_adjust_reset = this.publicFunc.mx("#adjust_reset");
+      let l_cam_conf;
+      let values_flag = [false, false, false, false];
+      let _this = this;
       function adjust_get_ack (data) {
-        let dom_out_box = $(".adjust_out_box")
         l_cam_conf = data;
-        l_cam_conf.sn = this.$store.state.jumpPageData.selectDeviceIpc;
+        l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
         if (l_cam_conf.day) {
           //night,white;night,auto,1;auto,2,white;auto,2,auto,1
           if ((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1) || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1)) {
@@ -593,7 +577,7 @@ export default {
           dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
         }
         change_cam_mode(l_cam_conf.day_night);
-        if (this.whiteLight) {
+        if (_this.whiteLight) {
           change_cam_light_mode(l_cam_conf.light_mode);
         }
       }
@@ -628,7 +612,7 @@ export default {
           }
         });
         document.onmousemove = (function (e) {
-          evt = window.event || e;
+          let evt = window.event || e;
           if (values_flag[0] || values_flag[1] || values_flag[2] || values_flag[3]) {
             mouseX = evt.clientX - getLeft($("#adjust_setting")[0]);
             let value = mouseX - outX;
@@ -859,6 +843,35 @@ export default {
           this.$api.play.adjust_set({ conf: l_cam_conf });
         };
       }
+      function change_cam_mode (obj) {
+        switch (obj) {
+          case "auto":
+            {
+              l_dom_adjust_mode_auto.className = "mode_cha_active";
+              l_dom_adjust_mode_daytime.className = "mode_cha";
+              l_dom_adjust_mode_night.className = "mode_cha";
+              break;
+            }
+          case "day":
+            {
+              l_dom_adjust_mode_auto.className = "mode_cha";
+              l_dom_adjust_mode_daytime.className = "mode_cha_active";
+              l_dom_adjust_mode_night.className = "mode_cha";
+              break;
+            }
+          case "night":
+            {
+              l_dom_adjust_mode_auto.className = "mode_cha";
+              l_dom_adjust_mode_daytime.className = "mode_cha";
+              l_dom_adjust_mode_night.className = "mode_cha_active";
+              break;
+            }
+          default:
+            l_dom_adjust_mode_auto.className = "mode_cha_active";
+            l_dom_adjust_mode_daytime.className = "mode_cha";
+            l_dom_adjust_mode_night.className = "mode_cha";
+        }
+      }
       if (event.target.className === "adjust_off_picture") {
         event.target.className = "adjust_on_picture";
         this.$api.play.adjust_get({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
@@ -922,6 +935,11 @@ export default {
     await this.mipcPlay(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
     // window.mipcPlay = this.mipcPlay
+  },
+  watch:{
+    '$store.state.jumpPageData.selectDeviceIpc'(val) {
+      this.mipcPlay()
+    }
   }
 }
 </script>

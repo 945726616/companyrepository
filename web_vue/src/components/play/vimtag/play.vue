@@ -67,7 +67,7 @@
                     <div id='video_off_pic' class='video_off_picture' v-show="recordFlag" @click="clickRecordVideo($event)"></div>
                     <div id='camera_off_pic' class='camera_off_picture' @click="clickScreenShot"></div>
                     <div id='talkback_off_pic' class='talkback_off_picture' v-show="talkbackFlag" @click="clickTalkback($event)"></div>
-                    <div id='adjust_off_pic' class='adjust_off_picture' @click="clickAdjust($event)"></div>
+                    <div id='adjust_off_pic' :class='adjustSettingFlag?"adjust_on_picture":"adjust_off_picture"' @click="clickAdjust($event)"></div>
                   </div>
                   <!-- 弹出控制选项按钮 结束-->
                 </div>
@@ -83,7 +83,7 @@
               <!-- 摄像头设置弹窗 -->
               <div id='adjust_setting' v-show="adjustSettingFlag">
                 <div class='adjust_line'>
-                  <div id='delete_adjust_page' class='delete_adjust_page' style='float:right;margin-top:12px;' @click="clickAdjustClose($event)"></div>
+                  <div id='delete_adjust_page' class='delete_adjust_page' style='float:right;margin-top:12px;' @click="clickAdjustClose()"></div>
                 </div>
                 <div class='adjust_line'>
                   <div class='adjust_cha'>{{mcs_mode}}</div>
@@ -929,48 +929,6 @@ export default {
         // }
       }
       let _timerflag = {};  //Resolve multiple clicks
-      function change_cam_mode (obj) {
-        l_dom_mode_auto.style.background = "#ffffff";
-        l_dom_mode_daytime.style.background = "#ffffff";
-        l_dom_mode_night.style.background = "#ffffff";
-        switch (obj) {
-          case "auto": {
-            l_dom_mode_auto.style.background = "#00a6ba";
-            break;
-          }
-          case "day": {
-            l_dom_mode_daytime.style.background = "#00a6ba";
-            break;
-          }
-          case "night": {
-            l_dom_mode_night.style.background = "#00a6ba";
-            break;
-          }
-          default:
-            l_dom_mode_auto.style.background = "#00a6ba";
-        }
-      }
-      function change_cam_light_mode (obj) {
-        l_dom_mode_white.style.background = "#ffffff";//白光
-        l_dom_mode_infrared.style.background = "#ffffff";//红外
-        l_dom_mode_smart.style.background = "#ffffff";//智能
-        switch (obj) {
-          case "white": {
-            l_dom_mode_white.style.background = "#00a6ba";
-            break;
-          }
-          case "red": {
-            l_dom_mode_infrared.style.background = "#00a6ba";
-            break;
-          }
-          case "auto": {
-            l_dom_mode_smart.style.background = "#00a6ba";
-            break;
-          }
-          default:
-            l_dom_mode_auto.style.background = "#00a6ba";
-        }
-      }
       function adjust_get_ack (data) {
         l_cam_conf = data;
         l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
@@ -1027,9 +985,9 @@ export default {
           dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
           dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
         }
-        change_cam_mode(l_cam_conf.day_night);
+        this.change_cam_mode(l_cam_conf.day_night);
         if (l_white_light) {
-          change_cam_light_mode(l_cam_conf.light_mode)
+          this.change_cam_light_mode(l_cam_conf.light_mode)
         }
       }
       function set_event () {
@@ -1179,7 +1137,7 @@ export default {
             dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
             dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
           }
-          change_cam_mode("auto");
+          _this.change_cam_mode("auto");
           l_cam_conf.day_night = "auto";
           l_cam_conf.is_white_light = l_white_light;
           l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
@@ -1202,7 +1160,7 @@ export default {
             dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
             dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
           }
-          change_cam_mode("day");
+          _this.change_cam_mode("day");
           l_cam_conf.day_night = "day";
           l_cam_conf.is_white_light = l_white_light;
           _this.$api.play.adjust_set({ conf: l_cam_conf })
@@ -1235,7 +1193,7 @@ export default {
             dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
             dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
           }
-          change_cam_mode("night");
+          _this.change_cam_mode("night");
           l_cam_conf.day_night = "night";
           l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
           l_cam_conf.is_white_light = l_white_light;
@@ -1264,7 +1222,7 @@ export default {
             }
             l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
             l_cam_conf.is_white_light = l_white_light;
-            change_cam_light_mode("white");
+            _this.change_cam_light_mode("white");
             l_cam_conf.light_mode = "white";
             _this.$api.play.adjust_set({ conf: l_cam_conf })
           };
@@ -1289,7 +1247,7 @@ export default {
             }
             l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
             l_cam_conf.is_white_light = l_white_light;
-            change_cam_light_mode("red");
+            _this.change_cam_light_mode("red");
             l_cam_conf.light_mode = "red";
             _this.$api.play.adjust_set({ conf: l_cam_conf })
           };
@@ -1329,7 +1287,7 @@ export default {
             }
             l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
             l_cam_conf.is_white_light = l_white_light;
-            change_cam_light_mode("auto");
+            _this.change_cam_light_mode("auto");
             l_cam_conf.light_mode = "auto";
             _this.$api.play.adjust_set({ conf: l_cam_conf })
           };
@@ -1341,9 +1299,9 @@ export default {
             dom_circle[i].style.left = dom_out_box[i].offsetLeft + dom_in_box[i].offsetWidth + "px";
             //  console.log(dom_in_box[i].style.width)
           }
-          change_cam_mode("auto");
+          _this.change_cam_mode("auto");
           if (l_white_light) {
-            change_cam_light_mode("auto")
+            _this.change_cam_light_mode("auto")
           }
           if (l_cam_conf.day) {
             l_cam_conf.day.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
@@ -1571,9 +1529,23 @@ export default {
       }
     },
     clickAdjust (event) { // 点击设备调整按钮
+      let dom_out_box = $(".adjust_out_box");
+      let dom_in_box = $(".adjust_in_box");
+      let dom_circle = $(".adjust_circle");
+      let l_dom_adjust_mode_auto = this.publicFunc.mx("#adjust_mode_auto");
+      let l_dom_adjust_mode_night = this.publicFunc.mx("#adjust_mode_night");
+      let l_dom_adjust_mode_daytime = this.publicFunc.mx("#adjust_mode_daytime");
+      let l_dom_adjust_mode_white = this.publicFunc.mx("#adjust_mode_white");
+      let l_dom_adjust_mode_infrared = this.publicFunc.mx("#adjust_mode_infrared");
+      let l_dom_adjust_mode_smart = this.publicFunc.mx("#adjust_mode_smart");
+      let l_dom_adjust_reset = this.publicFunc.mx("#adjust_reset");
+      let l_dom_adjust_mode_white_light = this.publicFunc.mx("#adjust_mode_white_light");
+      let values_flag = [false, false, false, false];
+      let l_cam_conf;
+      let _this = this;
       function adjust_get_ack (data) {
         l_cam_conf = data;
-        l_cam_conf.sn = this.$store.state.jumpPageData.selectDeviceIpc;
+        l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
         if (l_cam_conf.day) {
           //night,white;night,auto,1;auto,2,white;auto,2,auto,1
           if ((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1) || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1)) {
@@ -1607,9 +1579,9 @@ export default {
           dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
           dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
         }
-        change_cam_mode(l_cam_conf.day_night);
-        if (this.whiteLight) {
-          change_cam_light_mode(l_cam_conf.light_mode);
+        _this.change_cam_mode(l_cam_conf.day_night);
+        if (_this.whiteLight) {
+          _this.change_cam_light_mode(l_cam_conf.light_mode);
         }
       }
       function set_event () {
@@ -1621,13 +1593,13 @@ export default {
         let dom_out_box = $(".adjust_out_box")
         dom_out_box.mousedown(function (e) {
           for (i = 0; i < 4; i++) {
-            if (this == dom_out_box[i]) {
+            if (_this == dom_out_box[i]) {
               values_flag[i] = true;
               break;
             }
           }
           evt = window.event || e;
-          outX = this.offsetLeft;
+          outX = _this.offsetLeft;
           mouseX = evt.clientX - getLeft($("#adjust_setting")[0]);
           let value = mouseX - outX;
           if (value > 200) {
@@ -1644,7 +1616,7 @@ export default {
           }
         });
         document.onmousemove = (function (e) {
-          evt = window.event || e;
+          let evt = window.event || e;
           if (values_flag[0] || values_flag[1] || values_flag[2] || values_flag[3]) {
             mouseX = evt.clientX - getLeft($("#adjust_setting")[0]);
             let value = mouseX - outX;
@@ -1667,7 +1639,7 @@ export default {
             if (l_cam_conf.day) {
               //night,white;night,auto,1;auto,2,white;auto,2,auto,1
               if ((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1) || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1)) {
-                l_cam_conf.is_white_light = this.whiteLight;
+                l_cam_conf.is_white_light = _this.whiteLight;
                 l_cam_conf.white_light.sharpness = parseInt(dom_in_box[0].offsetWidth / 2);
                 l_cam_conf.white_light.contrast = parseInt(dom_in_box[1].offsetWidth / 2);
                 l_cam_conf.white_light.color_saturation = parseInt(dom_in_box[2].offsetWidth / 2);
@@ -1693,7 +1665,7 @@ export default {
               l_cam_conf.color_saturation = parseInt(dom_in_box[2].offsetWidth / 2);
               l_cam_conf.brightness = parseInt(dom_in_box[3].offsetWidth / 2);
             }
-            this.$api.play.adjust_set({ conf: l_cam_conf });
+            _this.$api.play.adjust_set({ conf: l_cam_conf });
             values_flag = [false, false, false, false];
           }
         });
@@ -1730,13 +1702,12 @@ export default {
             dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
             dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
           }
-          change_cam_mode("auto");
+          _this.change_cam_mode("auto");
           l_cam_conf.day_night = "auto";
-          l_cam_conf.is_white_light = this.whiteLight;
-          l_cam_conf.sn = this.$store.state.jumpPageData.selectDeviceIpc;
-          this.$api.play.adjust_set({ conf: l_cam_conf });
+          l_cam_conf.is_white_light = _this.whiteLight;
+          l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
+          _this.$api.play.adjust_set({ conf: l_cam_conf });
         };
-
         l_dom_adjust_mode_daytime.onclick = function () {
           if (l_cam_conf.day) {
             dom_in_box[0].style.width = parseInt(l_cam_conf.day.sharpness * 2) + "px";
@@ -1748,10 +1719,10 @@ export default {
             dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
             dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
           }
-          change_cam_mode("day");
+          _this.change_cam_mode("day");
           l_cam_conf.day_night = "day";
-          l_cam_conf.is_white_light = this.whiteLight;
-          this.$api.play.adjust_set({ conf: l_cam_conf });
+          l_cam_conf.is_white_light = _this.whiteLight;
+          _this.$api.play.adjust_set({ conf: l_cam_conf });
         };
 
         l_dom_adjust_mode_night.onclick = function () {
@@ -1771,11 +1742,11 @@ export default {
             dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
             dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
           }
-          change_cam_mode("night");
+          _this.change_cam_mode("night");
           l_cam_conf.day_night = "night";
-          l_cam_conf.sn = this.$store.state.jumpPageData.selectDeviceIpc;
-          l_cam_conf.is_white_light = this.whiteLight;
-          this.$api.play.adjust_set({ conf: l_cam_conf });
+          l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
+          l_cam_conf.is_white_light = _this.whiteLight;
+          _this.$api.play.adjust_set({ conf: l_cam_conf });
         };
         if (l_dom_adjust_mode_white_light) {
           l_dom_adjust_mode_white_light.onclick = function () {
@@ -1791,11 +1762,11 @@ export default {
                 dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
               }
             }
-            l_cam_conf.sn = this.$store.state.jumpPageData.selectDeviceIpc;
-            l_cam_conf.is_white_light = this.whiteLight;
-            change_cam_light_mode("white");
+            l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
+            l_cam_conf.is_white_light = _this.whiteLight;
+            _this.change_cam_light_mode("white");
             l_cam_conf.light_mode = "white";
-            this.$api.play.adjust_set({ conf: l_cam_conf });
+            _this.$api.play.adjust_set({ conf: l_cam_conf });
           };
           l_dom_adjust_mode_infrared_light.onclick = function () {
             if (l_cam_conf.day_night == "night") {
@@ -1811,11 +1782,11 @@ export default {
                 dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
               }
             }
-            l_cam_conf.sn = this.$store.state.jumpPageData.selectDeviceIpc;
-            l_cam_conf.is_white_light = this.whiteLight;
-            change_cam_light_mode("red");
+            l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
+            l_cam_conf.is_white_light = _this.whiteLight;
+            _this.change_cam_light_mode("red");
             l_cam_conf.light_mode = "red";
-            this.$api.play.adjust_set({ conf: l_cam_conf });
+            _this.$api.play.adjust_set({ conf: l_cam_conf });
           }
           l_dom_adjust_mode_smart_light.onclick = function () {
             if (l_cam_conf.day_night == "night") {
@@ -1831,11 +1802,11 @@ export default {
                 dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
               }
             }
-            l_cam_conf.sn = this.$store.state.jumpPageData.selectDeviceIpc;
-            l_cam_conf.is_white_light = this.whiteLight;
-            change_cam_light_mode("smart");
+            l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
+            l_cam_conf.is_white_light = _this.whiteLight;
+            _this.change_cam_light_mode("smart");
             l_cam_conf.light_mode = "auto";
-            this.$api.play.adjust_set({ conf: l_cam_conf });
+            _this.$api.play.adjust_set({ conf: l_cam_conf });
           }
         }
         l_dom_adjust_reset.onclick = function () {
@@ -1843,9 +1814,9 @@ export default {
             dom_in_box[i].style.width = l_cam_conf_reset[i] * 2 + "px";
             dom_circle[i].style.left = dom_out_box[i].offsetLeft + dom_in_box[i].offsetWidth + "px";
           }
-          change_cam_mode("auto");
-          if (this.whiteLight) {
-            change_cam_light_mode("auto")
+          _this.change_cam_mode("auto");
+          if (_this.whiteLight) {
+            _this.change_cam_light_mode("auto")
           }
           if (l_cam_conf.day) {
             l_cam_conf.day.sharpness = parseInt(dom_in_box[0].offsetWidth / 2);
@@ -1858,7 +1829,7 @@ export default {
             l_cam_conf.night.color_saturation = parseInt(dom_in_box[2].offsetWidth / 2);
             l_cam_conf.night.brightness = parseInt(dom_in_box[3].offsetWidth / 2);
             if (l_cam_conf.white_light) {
-              l_cam_conf.is_white_light = this.whiteLight;
+              l_cam_conf.is_white_light = _this.whiteLight;
               l_cam_conf.white_light.sharpness = parseInt(dom_in_box[0].offsetWidth / 2);
               l_cam_conf.white_light.contrast = parseInt(dom_in_box[1].offsetWidth / 2);
               l_cam_conf.white_light.color_saturation = parseInt(dom_in_box[2].offsetWidth / 2);
@@ -1872,7 +1843,7 @@ export default {
           }
           l_cam_conf.day_night = "auto";
           l_cam_conf.light_mode = "auto";
-          this.$api.play.adjust_set({ conf: l_cam_conf });
+          _this.$api.play.adjust_set({ conf: l_cam_conf });
         };
       }
       if (event.target.className === "adjust_off_picture") {
@@ -1887,9 +1858,8 @@ export default {
       }
       set_event()
     },
-    clickAdjustClose (event) { // 点击关闭设置弹窗
+    clickAdjustClose () { // 点击关闭设置弹窗
       this.adjustSettingFlag = false
-      event.target.className = "adjust_off_picture"
     },
     turnCamera (action, direction) { // 摄像头转向方法调用
       this.$api.play.play_ptz_turn({ // 摄像头转向控制
@@ -1927,6 +1897,54 @@ export default {
       }
     },
     // 按钮点击事件 结束
+    change_cam_mode (obj) { //更改模式
+      let l_dom_mode_auto = this.publicFunc.mx("#mode_auto");
+      let l_dom_mode_daytime = this.publicFunc.mx("#mode_daytime");
+      let l_dom_mode_night = this.publicFunc.mx("#mode_night");
+        l_dom_mode_auto.style.background = "#ffffff";
+        l_dom_mode_daytime.style.background = "#ffffff";
+        l_dom_mode_night.style.background = "#ffffff";
+        switch (obj) {
+          case "auto": {
+            l_dom_mode_auto.style.background = "#00a6ba";
+            break;
+          }
+          case "day": {
+            l_dom_mode_daytime.style.background = "#00a6ba";
+            break;
+          }
+          case "night": {
+            l_dom_mode_night.style.background = "#00a6ba";
+            break;
+          }
+          default:
+            l_dom_mode_auto.style.background = "#00a6ba";
+        }
+      },
+      change_cam_light_mode (obj) { //更改灯光模式
+        let l_dom_mode_white = this.publicFunc.mx("#mode_white");//白光
+        let l_dom_mode_infrared = this.publicFunc.mx("#mode_infrared");//红外
+        let l_dom_mode_smart = this.publicFunc.mx("#mode_smart");//智能
+        l_dom_mode_white.style.background = "#ffffff";
+        l_dom_mode_infrared.style.background = "#ffffff";
+        l_dom_mode_smart.style.background = "#ffffff";
+        switch (obj) {
+          case "white": {
+            l_dom_mode_white.style.background = "#00a6ba";
+            break;
+          }
+          case "red": {
+            l_dom_mode_infrared.style.background = "#00a6ba";
+            break;
+          }
+          case "auto": {
+            l_dom_mode_smart.style.background = "#00a6ba";
+            break;
+          }
+          default:
+            l_dom_mode_auto.style.background = "#00a6ba";
+        }
+      }
   },
   async mounted () {
     await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)

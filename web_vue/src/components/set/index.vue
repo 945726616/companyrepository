@@ -10617,7 +10617,7 @@ export default {
               _this.publicFunc.closeBufferPage()
               return;
             }
-            // console.log(record_plan_continue, "获取持续计划表后record_plan_continue内容")
+            console.log(record_plan_continue, "获取持续计划表后record_plan_continue内容")
             _this.$api.set.dev_action_get({
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
               action_name: "oflag"
@@ -10816,7 +10816,7 @@ export default {
                     })
                   }
                 } else {
-                  console.log('submit enter this if')
+                  console.log('submit enter this if', g_total_data)
                   let plan_temp = []
                   // let plan_flag = flag
                   for (let i = 0; i < g_total_data.length; i++) {
@@ -10828,6 +10828,7 @@ export default {
                       }
                     }
                   }
+                  console.log(plan_temp, 'plan_temp')
                   function sortArr (a, b) {
                     return a.day - b.day;
                   }
@@ -10909,8 +10910,10 @@ export default {
                     }
                   }
                   let sche_form = g_js_param.set_plan.sche_form
+                  console.log(sche_form, 'frist_sche_form')
                   let add_flag = g_set_record_alarm == 'alarm' ? 4 : 2
                   let arr_flag_index = g_set_record_alarm == 'alarm' ? 1 : 2
+                  console.log(add_flag, arr_flag_index, 'arr_flag_index')
                   // console.log(plan_temp)
                   for (let i = 0; i < sche_form.length; i++) {
                     let h_arr_temp = sche_form[i]
@@ -10952,7 +10955,9 @@ export default {
                       }
                     })
                   }
+                  console.log(sche_form, 'sche_form')
                   let plan_sel = _this.sche_trans_to_second_format(sche_form)
+                  console.log(plan_sel, 'plan_sel')
                   if (dev_name == "c_record") {    //持续录像设置计划表
                     // console.log(plan_sel)
                     plan_sel.forEach(function (item) {
@@ -10973,6 +10978,7 @@ export default {
                           sn: _this.$store.state.jumpPageData.selectDeviceIpc,
                           info: info
                         }).then(res_second_action_set => {
+                          console.log(sche, 'sche')
                           if (res_second_action_set.result === '') {
                             _this.$api.set.plan_record_set({
                               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -14677,7 +14683,6 @@ function schedule_time_format (arr) {
       }
       let f_str = add_zero_string + b_str
       let arr = f_str.split('').map(Number)
-      console.log(arr, 'change_string_to_four_bit_arr')
       return arr;
     },
 

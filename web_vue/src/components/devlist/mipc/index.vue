@@ -137,7 +137,7 @@ export default {
           // this.deviceArr.push(msg[i])
         }
       }
-      for(let setIndex = 0; setIndex < listArr.length; setIndex++) {
+      for (let setIndex = 0; setIndex < listArr.length; setIndex++) {
         this.$set(this.deviceArr, setIndex, listArr[setIndex])
       }
       // this.$set(this.deviceArr, listArr)
@@ -148,7 +148,7 @@ export default {
     get_device_img () { // 获取设备图片
       // 保持原有的图片获取方式后续将该接口改写 不在需要统一获取imgUrl
       let length = this.publicFunc.mx(".dev_list").length
-      console.log(this.publicFunc.mx(".dev_list"),'dev_list')
+      console.log(this.publicFunc.mx(".dev_list"), 'dev_list')
       for (let i = 0; i < length; i++) {
         this.$api.devlist.load_noid_img({
           refresh: this.imgRefresh ? 1 : 0,
@@ -179,12 +179,12 @@ export default {
     },
     // 点击事件
     chooseDeviceItem (item, index) { // 点击设备 (未认证的设备弹窗内容未更改完成)
-      console.log('device被点击')
+      console.log('device被点击', item, index)
       this.$nextTick(function () { // 使用this.$nextTick进行更新解决dom未加载完成时导致的报错
         let sn = item.sn
         let type = item.type
         let state = item.stat
-        // console.log('执行', state, type, this.$store.state.jumpPageData.selectDeviceIpc, sn)
+        console.log('执行', state, type, this.$store.state.jumpPageData.selectDeviceIpc, sn)
         if (sn === this.$store.state.jumpPageData.selectDeviceIpc) {
           this.publicFunc.mx("#active_dev_li").style.top = (154 * index) + "px" // 154为固定的active高度
           this.publicFunc.mx(".dev_list")[index].className = "dev_list dev_list_active"
@@ -206,14 +206,10 @@ export default {
           this.publicFunc.mx(".dev_list")[index].className = "dev_list"
           this.publicFunc.mx(".dev_list")[index].className = "dev_list dev_list_active"
           if (type === 'IPC') {
-            if (this.$route.name !== 'play') {
-              this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
-            } else {
-              this.$router.push({ name: 'boxlist', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
-            }
+            this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
           } else if (type === "BOX") {
-              this.$router.push({ name: 'boxlist'})
-            }
+            this.$router.push({ name: 'boxlist' })
+          }
         } else if (state === "InvalidAuth") { // 展示弹窗
           this.addDeviceModel = true
           this.add_device_input_id = this.$store.state.jumpPageData.selectDeviceIpc
