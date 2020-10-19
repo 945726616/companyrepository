@@ -10,7 +10,7 @@ const devlist = () => import(/* webpackChunkName: "group-Mipc" */'@/components/d
 const boxlist = () => import(/* webpackChunkName: "group-Mipc" */'@/components/boxlist/boxlist')
 const play = () => import(/* webpackChunkName: "group-Mipc" */'@/components/play/mipc/play')
 const history = () => import(/* webpackChunkName: "group-Mipc" */'@/components/history/mipc/history')
-const set = () => import(/* webpackChunkName: "group-Mipc" */'@/components/set')
+const set = () => import(/* webpackChunkName: "group-Mipc" */'@/components/set/set')
 const playback = () => import(/* webpackChunkName: "group-Mipc" */'@/components/playback')
 const my = () => import(/* webpackChunkName: "group-Mipc" */'@/components/my/mipc/my')
 const download = () => import(/* webpackChunkName: "group-Mipc" */'@/components/download/download')

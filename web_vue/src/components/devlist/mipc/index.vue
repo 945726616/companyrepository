@@ -48,7 +48,7 @@
       <!-- 右侧详情内容 -->
       <div id='dev_main_right'>
         <!-- 采用子路由展示右侧详情渲染播放页面/云盒子列表 -->
-        <router-view></router-view>
+        <router-view :key="$route.query.t"></router-view>
       </div>
       <!-- 右侧详情内容 结束 -->
     </div>
@@ -189,9 +189,9 @@ export default {
           this.publicFunc.mx("#active_dev_li").style.top = (154 * index) + "px" // 154为固定的active高度
           this.publicFunc.mx(".dev_list")[index].className = "dev_list dev_list_active"
           if (type === 'IPC') {
-            this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
+            this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" }, query:{t: Date.now()} })
           } else if (type === "BOX") {
-            this.$router.push({ name: 'boxlist', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
+            this.$router.push({ name: 'boxlist', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" }, query:{t: Date.now()} })
           }
         }
         if (state === "Online") {
@@ -206,9 +206,9 @@ export default {
           this.publicFunc.mx(".dev_list")[index].className = "dev_list"
           this.publicFunc.mx(".dev_list")[index].className = "dev_list dev_list_active"
           if (type === 'IPC') {
-            this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" } })
+            this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" }, query:{t: Date.now()} })
           } else if (type === "BOX") {
-            this.$router.push({ name: 'boxlist' })
+            this.$router.push({ name: 'boxlist', query:{t: Date.now()} })
           }
         } else if (state === "InvalidAuth") { // 展示弹窗
           this.addDeviceModel = true
