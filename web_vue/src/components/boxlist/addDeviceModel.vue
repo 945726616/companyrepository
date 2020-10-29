@@ -152,15 +152,15 @@
                 }
             },
             checkIp(data) { //检查ip地址是否规范  
-                var exp = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
-                var reg = this.ip_val.match(exp);
+                let exp = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+                let reg = this.ip_val.match(exp);
                 if (reg == null) {
                     this.publicFunc.msg_tips({ msg: mrs_ip_illegal, type: "error", timeout: 3000 }); // IP地址不合法
                     this.ip_val = "";
                 }
             },
             checkPort(data) { //检查端口号是否规范
-                var parten = /^(\d)+$/g;
+                let parten = /^(\d)+$/g;
                 if (parten.test(this.port_val) && parseInt(this.port_val) <= 65535 && parseInt(this.port_val) >= 0) {
                     return true;
                 } else {

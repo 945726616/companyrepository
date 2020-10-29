@@ -268,7 +268,7 @@ const playback = {
                 returnItem = l_speed
               }
             }
-            // console.log(returnItem, 'download_return')
+            console.log(returnItem, 'download_return1')
           }, 1000)
         } else {
           // 浏览器执行 l_plug_type = flash 由于不显示进度条所以直接传递null值
@@ -331,7 +331,9 @@ const playback = {
         // msdk_ctrl({ type: "play_video_stop", data: { dom: l_dom_playback_screen, func: create_preview } });
       }
       if (first) {
-        progress = Number(progress) - Number(progress2) + Number(publicFunc.mx("#playback_progressbar").value);
+        if (publicFunc.mx("#playback_progressbar")) { // 进度条报错(客户端)
+          progress = Number(progress) - Number(progress2) + Number(publicFunc.mx("#playback_progressbar").value);
+        }
         let play_progress_time_stamp = sessionStorage.getItem("play_progress_time_stamp");
         let get_drag_duration = sessionStorage.getItem("duration");
         let drag_start_time = parseInt(play_progress_time_stamp) + parseInt(get_drag_duration);
@@ -351,9 +353,11 @@ const playback = {
       }
       if(!data)data = null
       publicFunc.mx("#playback_buffer_ret").innerHTML = data;
-      fdSliderController.increment("playback_progressbar", progress - publicFunc.mx("#playback_progressbar").value);
+      if (publicFunc.mx("#playback_progressbar")) { // 进度条报错(客户端)
+        fdSliderController.increment("playback_progressbar", progress - publicFunc.mx("#playback_progressbar").value);
+      }
     }
-    console.log(returnItem, 'download_return')
+    console.log(returnItem, 'download_return2')
     return returnItem
   },
   /*

@@ -29,18 +29,18 @@
 	color:$projectColor;
 }
 #back:hover #main_title_box_return_img{
-	background: url(../assets/device/choose-back.png) no-repeat 0 22px;
+	background: url(~@/assets/device/choose-back.png) no-repeat 0 22px;
 }
 #main_title_box_return_img{
 	/*6.1.2*/
 	/*width: 11px;
 	height: 21px;
 	float: left;
-	background: url(../assets/device/back.png) no-repeat 0 3px;*/
+	background: url(~@/assets/device/back.png) no-repeat 0 3px;*/
 	width: 14px;
 	height: 58px;
 	float: left;
-	background: url(../assets/device/back.png) no-repeat 0 22px;
+	background: url(~@/assets/device/back.png) no-repeat 0 22px;
 }
 #playback_view{
 	width:80%;
@@ -75,7 +75,7 @@
 	top: 40%;
 	width: 80px;
 	height: 80px;
-	background: url(../assets/device/vimtag_img.png) -15px -273px no-repeat;
+	background: url(~@/assets/device/vimtag_img.png) -15px -273px no-repeat;
 }
 #playback_menu_box{
 	height:44px;
@@ -91,10 +91,10 @@
 	margin-top:12px;
 	margin-left:24px;
 	cursor: pointer;
-	background:url("../assets/device/pause.png") no-repeat;
+	background:url("~@/assets/device/pause.png") no-repeat;
 }
 .video_play_start:hover{
-	background:url("../assets/device/choose-pause.png") no-repeat;
+	background:url("~@/assets/device/choose-pause.png") no-repeat;
 }
 #playback_start_time{
 	color:$projectColor;
@@ -120,7 +120,7 @@
 	margin-right:24px;
 	cursor:pointer;
 	float:right;
-	background: url(../assets/device/file.png) no-repeat;
+	background: url(~@/assets/device/file.png) no-repeat;
 	/*background-size: 100% 100%;*/
 }
 #playback_voice_close{
@@ -142,7 +142,8 @@
 	height:150px;
 	background: #fff;
 	border-radius: 5px;
-	position: absolute;
+  position: absolute;
+  display: none;
 }
 #playback_download_path_main{
 	text-align: center;

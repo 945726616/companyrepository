@@ -219,28 +219,6 @@
                             // { name: mcs_delete_device, type: "delete_device" }
                         ]
                         break;
-
-                    case 5:
-                        this.menu_data = [
-                            { name: mcs_about, type: "about" },
-                            { name: mcs_nickname, type: "nickname" },
-                            { name: mcs_admin_password, type: "admin_password" },
-                            { name: mcs_guest_password, type: "guest_password" },
-                            { name: mcs_network, type: "network" },
-                            { name: mcs_sdcord, type: "sdcord" },
-                            { name: mcs_storage_device, type: "storage_device" },
-                            // {name:mcs_scenes,type:"scenes"}, //g 情景
-                            { name: mcs_w_s, type: "accessory" },
-                            { name: mcs_record, type: "record" },
-                            { name: mcs_motion_notification, type: "alarm_device_tips" },
-                            { name: mcs_date_time, type: "date_time" },
-                            { name: mcs_system, type: "system" },
-                            { name: mcs_others, type: "others" },
-                            { name: mcs_motion, type: "motion_detect" }, //新加移动侦测
-                            { name: mcs_light_mode, type: "lighting" },
-                            // { name: mcs_delete_device, type: "delete_device" }
-                        ]
-                        break;
                 }
                 this.$api.set.dev_info({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
                     if (res && res.result === "") {

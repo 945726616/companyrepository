@@ -229,7 +229,8 @@ export default {
           this.set_record_alarm_content = mcs_send_alarm_notification;
           break;
         case '8':
-          this.set_record_alarm_content = mcs_move_record_detail;
+        case '10':
+          this.set_record_alarm_content = mcs_move_alarm_detail;
           break;
         case '9':
           this.set_record_alarm_content = mrs_open_switch_check_abnormal_noise_alarm;
@@ -251,6 +252,7 @@ export default {
           this.set_record_alarm_content = mcs_door_record_detail;
           break;
         case '8':
+        case '10':
           this.set_record_alarm_content = mcs_move_record_detail;
           break;
         case '9':

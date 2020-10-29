@@ -83,87 +83,67 @@
               <!-- 摄像头设置弹窗 -->
               <div id='adjust_setting' v-show="adjustSettingFlag">
                 <div class='adjust_line'>
-                  <div id='delete_adjust_page' class='delete_adjust_page' style='float:right;margin-top:12px;' @click="clickAdjustClose()"></div>
+                                    <div id='delete_adjust_page' class='delete_adjust_page' @click="clickAdjustClose()"></div>
                 </div>
                 <div class='adjust_line'>
                   <div class='adjust_cha'>{{mcs_mode}}</div>
                   <div class='adjust_mode_cha'>
-                    <div style='width:100px;'>
+                                        <label class='adjust_mode'>
+                                            <input type='radio' v-model='mode' value='auto' />
                       <div id='adjust_mode_auto' class='mode_cha'>{{mcs_auto}}</div>
-                      <div id='mode_auto' class='adjust_mode_circle'></div>
-                    </div>
-                    <div style='width:100px;'>
+                                        </label>
+                                        <label class='adjust_mode'>
+                                            <input type='radio' v-model='mode' value='day' />
                       <div id='adjust_mode_daytime' class='mode_cha'>{{mcs_daytime}}</div>
-                      <div id='mode_daytime' class='adjust_mode_circle'></div>
-                    </div>
-                    <div style='width:100px;'>
+                                        </label>
+                                        <label class='adjust_mode'>
+                                            <input type='radio' v-model='mode' value='night' />
                       <div id='adjust_mode_night' class='mode_cha'>{{mcs_night}}</div>
-                      <div id='mode_night' class='adjust_mode_circle'></div>
+                                        </label>
                     </div>
                   </div>
-                </div>
-                <!-- 白光时设置框内容 -->
-                <div class='adjust_line'>
+                <!-- 白光时设置框内容  v-if="whiteLight"-->
+                                <div class='adjust_line' v-if="whiteLight">
                   <div class='adjust_cha'>{{mcs_light_mode}}</div>
                   <div class='adjust_mode_cha'>
-                    <div style='width:100px;'>
+                                        <label class='adjust_mode'>
+                                            <div id='mode_smart' class='adjust_mode_circle'></div>
+                                            <input type='radio' v-model='light_mode' value='auto' />
                       <div id='adjust_mode_smart' class='mode_cha'>{{mcs_light_smart}}</div>
-                      <div id='mode_smart' class='adjust_mode_circle'></div>
-                    </div>
-                    <div style='width:100px;'>
+                                        </label>
+                                        <label class='adjust_mode'>
+                                            <input type='radio' v-model='light_mode' value='red' />
                       <div id='adjust_mode_infrared' class='mode_cha'>{{mcs_light_infrared}}</div>
-                      <div id='mode_infrared' class='adjust_mode_circle'></div>
-                    </div>
-                    <div style='width:100px;'>
+                                        </label>
+                                        <label class='adjust_mode'>
+                                            <input type='radio' v-model='light_mode' value='white' />
                       <div id='adjust_mode_white' class='mode_cha'>{{mcs_light_white}}</div>
-                      <div id='mode_white' class='adjust_mode_circle'></div>
+                                        </label>
                     </div>
                   </div>
-                </div>
                 <!-- 白光时设置框内容 结束 -->
-                <div style='clear:both'></div>
                 <div class='adjust_line'>
                   <div class='adjust_cha'>{{mcs_sharpness}}</div>
-                  <div style='width:187px;float:right;'>
-                    <div id='brightness_value' class='adjust_show_value'></div>
-                    <div class='adjust_out_box'>
-                      <div class='adjust_in_box'></div>
-                      <div class='adjust_circle' style='margin-top:-5px;'></div>"
+                                    <input type='range' v-model='sharpness_value' min='0' max='100' ref='sharpness' @mouseup="adjust_set" />
+                                    <div id='brightness_value' class='adjust_show_value'>{{sharpness_value}}</div>
                     </div>
-                  </div>
-                </div>
                 <div class='adjust_line'>
                   <div class='adjust_cha'>{{mcs_contrast}}</div>
-                  <div style='width:187px;float:right;'>
-                    <div id='contrast_value' class='adjust_show_value'></div>
-                    <div class='adjust_out_box'>
-                      <div class='adjust_in_box'></div>
-                      <div class='adjust_circle' style='margin-top:-5px;'></div>
+                                    <input type='range' v-model='contrast_value' min='0' max='100' ref='contrast' @mouseup="adjust_set" />
+                                    <div id='contrast_value' class='adjust_show_value'>{{contrast_value}}</div>
                     </div>
-                  </div>
-                </div>
                 <div class='adjust_line'>
                   <div class='adjust_cha'>{{mcs_color_saturation}}</div>
-                  <div style='width:187px;float:right;'>
-                    <div id='saturation_value' class='adjust_show_value'></div>
-                    <div class='adjust_out_box'>
-                      <div class='adjust_in_box'></div>
-                      <div class='adjust_circle' style='margin-top:-5px;'></div>
+                                    <input type='range' v-model='color_saturation_value' min='0' max='100' ref='color_saturation' @mouseup="adjust_set" />
+                                    <div id='saturation_value' class='adjust_show_value'>{{color_saturation_value}}</div>
                     </div>
-                  </div>
-                </div>
                 <div class='adjust_line'>
                   <div class='adjust_cha'>{{mcs_brightness}}</div>
-                  <div style='width:187px;float:right;'>
-                    <div id='sharpness_value' class='adjust_show_value'></div>
-                    <div class='adjust_out_box'>
-                      <div class='adjust_in_box'></div>
-                      <div class='adjust_circle' style='margin-top:-5px;'></div>
+                                    <input type='range' v-model='brightness_value' min='0' max='100' ref='brightness' @mouseup="adjust_set" />
+                                    <div id='sharpness_value' class='adjust_show_value'>{{brightness_value}}</div>
                     </div>
+                                <div id='adjust_reset' @click='adjust_reset'>{{mcs_reset}}</div>
                   </div>
-                </div>
-                <div id='adjust_reset'>{{mcs_reset}}</div>
-              </div>
               <!-- 摄像头设置弹窗 结束 -->
             </div>
           </div>
@@ -179,7 +159,9 @@
       <!-- 截图弹窗 -->
       <div id='snapshot_preview_div' v-show="snapshotFlag">
         <div id='snapshot_preview_inner'>
-          <a id='snapshot_preview_url' :download="snapshotDownloadName" :href="snapshotUrl"><img id='snapshot_preview_content' :src="snapshotUrl"></a>
+          <a id='snapshot_preview_url' :download="snapshotDownloadName" :href="snapshotUrl"><img id='snapshot_preview_content' :src="snapshotUrl">
+            <div id='snapshot_img_page_download'></div>
+          </a>
         </div>
         <div id='snapshot_preview_close' @click="snapshotFlag = false"></div>
       </div>
@@ -187,7 +169,7 @@
     </div>
   </div>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 @import './index.scss';
 </style>
 <script>
@@ -246,6 +228,13 @@ export default {
       playViewWidth: null, // 播放器宽度数值
       playViewTop: null, // 播放器顶部偏移数值
       playListHeight: null, // 播放列表高度数值
+                mode: '', //控制模式（自动，白天，夜间）
+                light_mode: '', //控制灯光模式（智能，白光，红外）
+                sharpness_value: '', //锐度
+                contrast_value: '', //对比度
+                color_saturation_value: '', //饱和度
+                brightness_value: '', //亮度
+                cam_conf: '', //保存设备模式亮度等数据
     }
   },
   methods: {
@@ -253,22 +242,7 @@ export default {
       let _this = this
       this.vimtagPlayObj = obj // 暂存调用的obj内容
       // console.log("传递过来的数据", obj)
-      let l_dom_delete_adjust_page,
-        l_white_light,
-        l_dom_mode_auto,
-        l_dom_mode_daytime,
-        l_dom_mode_night,
-        l_dom_mode_white,
-        l_dom_mode_infrared,
-        l_dom_mode_smart,
-        l_dom_adjust_mode_night,
-        l_dom_adjust_mode_daytime,
-        l_dom_adjust_mode_auto,
-        l_dom_adjust_mode_white,
-        l_dom_adjust_mode_infrared,
-        l_dom_adjust_mode_smart,
-        l_dom_adjust_reset,
-        l_dom_ptz_control_bottom_center,
+                let l_dom_ptz_control_bottom_center,
         l_dom_ptz_control_left,
         l_dom_ptz_control_right,
         l_dom_ptz_control_up,
@@ -302,7 +276,27 @@ export default {
 
       _this.publicFunc.mx("#play_dev_list").setAttribute("style", "width:234px;float:left;background:#ebebeb;display:block;overflow:hidden;position: relative;");
       l_dom_play_buffer_ret.style.display = "none";
+      // if (window.fujikam == "fujikam") {
+      //   l_dom_play_buffer_ret.style.display = "block";
+      //   l_dom_play_box.style.width = "1200px";
+      //   this.publicFunc.mx("#page_top_menu").setAttribute("style", "margin-top:10px;padding-left:0px;margin-bottom:0px;");
+      //   l_dom_play_view.style.width = (1200 - (parseInt($("#play_dev_list").css("width")) + 20)) + "px";
+      //   console.log(1200 - (parseInt($("#play_dev_list").css("width")) + 20), '播放框大小')
+      //   // l_dom_play_view.style.width ="1042px";
+      //   // play_content_box    width=1276px; margin:0 auto; overflow :hidden
+      //   // play_screen         background:black
 
+      //   l_dom_play_view.style.height = "586px";
+      //   this.publicFunc.mx("#device_list_sidebar_center").style.height = "586px";
+      //   l_dom_play_view.style.marginLeft = "0px";
+      //   $("#play_screen").css('height', '100%')
+      //   $("#play_screen").css('width', '100%')
+      //   l_dom_play_buffer_ret.style.width = '934px';
+      //   this.publicFunc.mx("#play_dev_list").setAttribute("style", "width:234px;float:left;background:#ebebeb;display:block;");
+      //   // if (pc_is_offline == 1) {
+      //   //   _this.publicFunc.mx("#play_dev_list").setAttribute("style", "display:none;");
+      //   // }
+      // }
       // 动态设置播放器大小
       this.playViewWidth = (document.documentElement.clientWidth - 17 - 100) - (parseInt($("#play_dev_list").css("width")) + 20)
       this.playViewHeight = this.playViewWidth / 16 * 9 + 44
@@ -310,33 +304,22 @@ export default {
       this.playListHeight = this.playViewHeight - document.getElementById('device_list_sidebar_up').offsetHeight
       this.playViewTop = document.getElementById('play_view').offsetTop
       // 动态设置播放器大小 结束
-
-      if (window.fujikam == "fujikam") {
-        l_dom_play_buffer_ret.style.display = "block";
-        l_dom_play_box.style.width = "1200px";
-        _this.publicFunc.mx("#page_top_menu").setAttribute("style", "margin-top:10px;padding-left:0px;margin-bottom:0px;");
-        l_dom_play_view.style.width = (1200 - l_list_width) + "px";
-        // l_dom_play_view.style.width ="1042px";
-        // play_content_box    width=1276px; margin:0 auto; overflow :hidden
-        // play_screen         background:black
-
-        l_dom_play_view.style.height = "586px";
-        this.publicFunc.mx("#device_list_sidebar_center").style.height = "586px";
-        l_dom_play_view.style.marginLeft = "0px";
-        $("#play_screen").css('height', '100%')
-        $("#play_screen").css('width', '100%')
-        l_dom_play_buffer_ret.style.width = '934px';
-        _this.publicFunc.mx("#play_dev_list").setAttribute("style", "width:234px;float:left;background:#ebebeb;display:block;");
-        // if (pc_is_offline == 1) {
-        //   _this.publicFunc.mx("#play_dev_list").setAttribute("style", "display:none;");
-        // }
-      }
+                if (_this.$store.state.jumpPageData.localFlag) {
+                    $("#enter_history_img").hide();
+                    $("#enter_set_img").hide();
+                } else if (_this.$store.state.jumpPageData.experienceFlag) {
+                    $("#enter_set_img").hide();
+                } else if (obj.box_ipc == 1) { // obj.box_ipc==1如果云盒子实时视频播放
+                    $("#enter_set_img").hide();
+                    $("#enter_set_img").next().hide(); //竖线
+                }
       this.play_menu_control({ parent: l_dom_play_menu_box })
       if (!_this.$store.state.jumpPageData.localFlag) {
         // if (_this.$store.state.jumpPageData.localFlag) {//本地
         this.device_list_box_sidebar({ parent: this.publicFunc.mx("#device_list_sidebar_center") })
         this.play_view_control({ parent: l_dom_play_view_control })
       }
+
       function create_preview (data) {
         let profile_token = sessionStorage.getItem("PlayProfile") ? sessionStorage.getItem("PlayProfile") : "p0";
         if (_this.$store.state.jumpPageData.localFlag) {
@@ -390,6 +373,7 @@ export default {
         }).then(res => {
           l_dev_time_get_ack(res)
         })
+
         function l_dev_time_get_ack (data) {
           if (data.day === nowDate.getDate() && data.hour === nowDate.getHours() && data.min === nowDate.getMinutes()) {
             _this.$api.play.set_date_time({ // 调用设置时间
@@ -410,6 +394,7 @@ export default {
           } else {
             _this.publicFunc.delete_tips({ content: "您当前的时间与设置的时间不符确定要设置吗?", func: device_set_time }); // 时间设定询问窗
           }
+
           function device_set_time () { // 设置时间询问框回调
             _this.$api.play.set_date_time({ // 调用设置时间
               sn: _this.$store.state.jumpPageData.selectDeviceIpc,
@@ -457,10 +442,11 @@ export default {
         sn: this.$store.state.jumpPageData.selectDeviceIpc
       }).then(res => {
         dev_info_get_ack(res)
+
         function dev_info_get_ack (msg) {
           // console.log(msg, 'dev_info_get_ack_msg')
           if (msg && msg.white_light)
-            l_white_light = msg.white_light;
+                            _this.whiteLight = msg.white_light;
           _this.play_view_control({ parent: _this.publicFunc.mx("#play_view_control") })
           if (obj.box_ipc == 1) {//如果云盒子实时播放页面
             $("#resolute_choice").text(mcs_new_hd);//云盒子实时播放不能切换分辩率，显示高清
@@ -633,6 +619,7 @@ export default {
       } else {
         sendAsk()
       }
+
       function sendAsk () {
         let lis = $('#device_list_sidebar_center').find(".device_list_sidebar_img");
         //swHeight=滚动的高度+窗体的高度；当li的offset高度<=swHeight,那么说明当前li显示在可视区域了
@@ -856,20 +843,6 @@ export default {
     },
     // 摇头机镜头控制
     play_view_control (data) {
-      let l_dom_delete_adjust_page = this.publicFunc.mx("#delete_adjust_page");
-      let l_dom_mode_auto = this.publicFunc.mx("#mode_auto");
-      let l_dom_mode_daytime = this.publicFunc.mx("#mode_daytime");
-      let l_dom_mode_night = this.publicFunc.mx("#mode_night");
-      let l_dom_mode_white = this.publicFunc.mx("#mode_white");//白光
-      let l_dom_mode_infrared = this.publicFunc.mx("#mode_infrared");//红外
-      let l_dom_mode_smart = this.publicFunc.mx("#mode_smart");//智能
-      let l_dom_adjust_mode_night = this.publicFunc.mx("#adjust_mode_night");
-      let l_dom_adjust_mode_daytime = this.publicFunc.mx("#adjust_mode_daytime");
-      let l_dom_adjust_mode_auto = this.publicFunc.mx("#adjust_mode_auto");
-      let l_dom_adjust_mode_white = this.publicFunc.mx("#adjust_mode_white");
-      let l_dom_adjust_mode_infrared = this.publicFunc.mx("#adjust_mode_infrared");
-      let l_dom_adjust_mode_smart = this.publicFunc.mx("#adjust_mode_smart");
-      let l_dom_adjust_reset = this.publicFunc.mx("#adjust_reset");
       let l_dom_ptz_control_left = this.publicFunc.mx("#ptz_control_left");
       let l_dom_ptz_control_right = this.publicFunc.mx("#ptz_control_right");
       let l_dom_ptz_control_up = this.publicFunc.mx("#ptz_control_up");
@@ -906,12 +879,6 @@ export default {
       let dom_left = $(".left_button")[0],
         dom_center = $(".center_button")[0],
         dom_right = $(".right_button")[0],
-        dom_out_box = $(".adjust_out_box"),
-        dom_in_box = $(".adjust_in_box"),
-        values_flag = [false, false, false, false],
-        l_cam_conf_reset = [6, 60, 70, 50],
-        dom_circle = $(".adjust_circle"),
-        dom_value = $(".adjust_show_value"),
         l_cam_conf, outX, left, top, mouseX, i, evt;
 
       // 鼠标点击视频中间窗口弹出菜单
@@ -929,412 +896,6 @@ export default {
         // }
       }
       let _timerflag = {};  //Resolve multiple clicks
-      function adjust_get_ack (data) {
-        l_cam_conf = data;
-        l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-        if (l_cam_conf.day) {
-          //night,white;night,auto,1;auto,2,white;auto,2,auto,1
-          if ((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1) || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1)) {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.white_light.sharpness * 1.59) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.white_light.color_saturation * 1.59) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.white_light.contrast * 1.59) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.white_light.brightness * 1.59) + "px";
-
-            dom_value[3].innerHTML = parseInt(l_cam_conf.white_light.brightness);
-            dom_value[1].innerHTML = parseInt(l_cam_conf.white_light.contrast);
-            dom_value[2].innerHTML = parseInt(l_cam_conf.white_light.color_saturation);
-            dom_value[0].innerHTML = parseInt(l_cam_conf.white_light.sharpness);
-          }
-          //night,red;night,auto,0;auto,2,red;auto,2,auto,0 
-          else if ((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "red") || (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 0) || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "red") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 0)) {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.night.sharpness * 1.59) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.night.color_saturation * 1.59) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.night.contrast * 1.59) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.night.brightness * 1.59) + "px";
-
-            dom_value[3].innerHTML = parseInt(l_cam_conf.night.brightness);
-            dom_value[1].innerHTML = parseInt(l_cam_conf.night.contrast);
-            dom_value[2].innerHTML = parseInt(l_cam_conf.night.color_saturation);
-            dom_value[0].innerHTML = parseInt(l_cam_conf.night.sharpness);
-          }
-          //day;auto,1
-          else if (l_cam_conf.day_night == "day" || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 1)) {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.day.sharpness * 1.59) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.day.color_saturation * 1.59) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.day.contrast * 1.59) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.day.brightness * 1.59) + "px";
-
-            dom_value[3].innerHTML = parseInt(l_cam_conf.day.brightness);
-            dom_value[1].innerHTML = parseInt(l_cam_conf.day.contrast);
-            dom_value[2].innerHTML = parseInt(l_cam_conf.day.color_saturation);
-            dom_value[0].innerHTML = parseInt(l_cam_conf.day.sharpness);
-          }
-        } else {
-          dom_in_box[0].style.width = parseInt(l_cam_conf.sharpness * 1.59) + "px";
-          dom_in_box[2].style.width = parseInt(l_cam_conf.color_saturation * 1.59) + "px";
-          dom_in_box[1].style.width = parseInt(l_cam_conf.contrast * 1.59) + "px";
-          dom_in_box[3].style.width = parseInt(l_cam_conf.brightness * 1.59) + "px";
-
-          dom_value[3].innerHTML = parseInt(l_cam_conf.brightness);
-          dom_value[1].innerHTML = parseInt(l_cam_conf.contrast);
-          dom_value[2].innerHTML = parseInt(l_cam_conf.color_saturation);
-          dom_value[0].innerHTML = parseInt(l_cam_conf.sharpness);
-        }
-
-        for (let j = 0; j < 4; j++) {
-          dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-          dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-        }
-        this.change_cam_mode(l_cam_conf.day_night);
-        if (l_white_light) {
-          this.change_cam_light_mode(l_cam_conf.light_mode)
-        }
-      }
-      function set_event () {
-        function getLeft (e) {
-          let offset = e.offsetLeft;
-          if (e.offsetParent != null) offset += getLeft(e.offsetParent);
-          return offset;
-        }
-        let dom_out_box = $(".adjust_out_box")
-        dom_out_box.mousedown(function (e) {
-          for (i = 0; i < 4; i++) {
-            if (this == dom_out_box[i]) {
-              values_flag[i] = true;
-              break;
-            }
-          }
-          evt = window.event || e;
-          outX = this.offsetLeft;
-          mouseX = evt.clientX - getLeft($("#adjust_setting")[0]);
-          let value = mouseX - outX;
-          if (value > 160) {
-            dom_in_box[i].style.width = "160px";
-            dom_circle[i].style.left = outX + 160 + "px";
-          } else if (value <= 0) {
-            dom_in_box[i].style.width = "0";
-            dom_circle[i].style.left = outX + "px";
-          } else {
-            dom_in_box[i].style.width = value + "px";
-            dom_circle[i].style.left = mouseX + "px";
-          }
-          dom_value[i].style.display = "block";
-          dom_value[i].innerHTML = parseInt(dom_in_box[i].offsetWidth / 1.6);
-        });
-        document.onmousemove = (function (e) {
-          evt = window.event || e;
-          if (values_flag[0] || values_flag[1] || values_flag[2] || values_flag[3]) {
-            mouseX = evt.clientX - getLeft($("#adjust_setting")[0]);
-            let value = mouseX - outX;
-            //  console.log(mouseX)
-            if (value > 160) {
-              dom_in_box[i].style.width = "160px";
-              dom_circle[i].style.left = outX + 160 + "px";
-            } else if (value <= 0) {
-              dom_in_box[i].style.width = "0";
-              dom_circle[i].style.left = outX + "px";
-            } else {
-              dom_in_box[i].style.width = value + "px";
-              dom_circle[i].style.left = mouseX + "px";
-            }
-            dom_value[i].innerHTML = parseInt(dom_in_box[i].offsetWidth / 1.59);
-          }
-        });
-        document.onmouseup = (function (e) {
-          if (values_flag[0] || values_flag[1] || values_flag[2] || values_flag[3]) {
-            if (l_cam_conf.day) {
-              //night,white;night,auto,1;auto,2,white;auto,2,auto,1
-              if ((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1) || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1)) {
-                l_cam_conf.is_white_light = l_white_light;
-                l_cam_conf.white_light.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                l_cam_conf.white_light.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                l_cam_conf.white_light.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                l_cam_conf.white_light.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
-              }
-              //night,red;night,auto,0;auto,2,red;auto,2,auto,0 
-              else if ((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "red") || (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 0) || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "red") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 0)) {
-                l_cam_conf.night.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                l_cam_conf.night.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                l_cam_conf.night.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                l_cam_conf.night.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
-              }
-              //day;auto,1
-              else if (l_cam_conf.day_night == "day" || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 1)) {
-                l_cam_conf.day.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-                l_cam_conf.day.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-                l_cam_conf.day.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-                l_cam_conf.day.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
-              }
-            } else {
-              l_cam_conf.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-              l_cam_conf.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-              l_cam_conf.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-              l_cam_conf.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
-            }
-            _this.$api.play.adjust_set({ conf: l_cam_conf });
-            values_flag = [false, false, false, false];
-          }
-        });
-        l_dom_mode_night.onclick = function () {
-          l_dom_adjust_mode_night.click();
-        }
-        l_dom_mode_auto.onclick = function () {
-          l_dom_adjust_mode_auto.click();
-        }
-        l_dom_mode_daytime.onclick = function () {
-          l_dom_adjust_mode_daytime.click();
-        }
-        if (l_dom_mode_white) {
-          l_dom_mode_white.onclick = function () {
-            l_dom_adjust_mode_white.click();
-          }
-          l_dom_mode_infrared.onclick = function () {
-            l_dom_adjust_mode_infrared.click();
-          }
-          l_dom_mode_smart.onclick = function () {
-            l_dom_adjust_mode_smart.click();
-          }
-        }
-
-        l_dom_adjust_mode_auto.onclick = function () {
-          let sharpness = l_cam_conf.sharpness;
-          let color_saturation = l_cam_conf.color_saturation;
-          let contrast = l_cam_conf.contrast;
-          let brightness = l_cam_conf.brightness;
-          if (l_cam_conf.day) {
-            if (l_cam_conf.day_or_night == 1 || !l_cam_conf.day_or_night) {
-              sharpness = l_cam_conf.day.sharpness;
-              color_saturation = l_cam_conf.day.color_saturation;
-              contrast = l_cam_conf.day.contrast;
-              brightness = l_cam_conf.day.brightness;
-            } else if (l_cam_conf.day_or_night == 2) {
-              if (l_cam_conf.red_or_white == 0) {
-                sharpness = l_cam_conf.night.sharpness;
-                color_saturation = l_cam_conf.night.color_saturation;
-                contrast = l_cam_conf.night.contrast;
-                brightness = l_cam_conf.night.brightness;
-              } else if (l_cam_conf.red_or_white == 1) {
-                sharpness = l_cam_conf.white_light.sharpness;
-                color_saturation = l_cam_conf.white_light.color_saturation;
-                contrast = l_cam_conf.white_light.contrast;
-                brightness = l_cam_conf.niwhite_lightght.brightness;
-              }
-            }
-          }
-
-          dom_in_box[0].style.width = parseInt(sharpness * 1.59) + "px";
-          dom_in_box[2].style.width = parseInt(color_saturation * 1.59) + "px";
-          dom_in_box[1].style.width = parseInt(contrast * 1.59) + "px";
-          dom_in_box[3].style.width = parseInt(brightness * 1.59) + "px";
-
-
-          dom_value[3].innerHTML = parseInt(brightness);
-          dom_value[1].innerHTML = parseInt(contrast);
-          dom_value[2].innerHTML = parseInt(color_saturation);
-          dom_value[0].innerHTML = parseInt(sharpness);
-          for (let j = 0; j < 4; j++) {
-
-            dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-            dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-          }
-          _this.change_cam_mode("auto");
-          l_cam_conf.day_night = "auto";
-          l_cam_conf.is_white_light = l_white_light;
-          l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-          _this.$api.play.adjust_set({ conf: l_cam_conf })
-        };
-
-        l_dom_adjust_mode_daytime.onclick = function () {
-          if (l_cam_conf.day) {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.day.sharpness * 1.59) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.day.color_saturation * 1.59) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.day.contrast * 1.59) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.day.brightness * 1.59) + "px";
-
-            dom_value[3].innerHTML = parseInt(l_cam_conf.day.brightness);
-            dom_value[1].innerHTML = parseInt(l_cam_conf.day.contrast);
-            dom_value[2].innerHTML = parseInt(l_cam_conf.day.color_saturation);
-            dom_value[0].innerHTML = parseInt(l_cam_conf.day.sharpness);
-          }
-          for (let j = 0; j < 4; j++) {
-            dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-            dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-          }
-          _this.change_cam_mode("day");
-          l_cam_conf.day_night = "day";
-          l_cam_conf.is_white_light = l_white_light;
-          _this.$api.play.adjust_set({ conf: l_cam_conf })
-        };
-
-        l_dom_adjust_mode_night.onclick = function () {
-          if ((l_cam_conf.night && l_cam_conf.light_mode == "red") || (l_cam_conf.night && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 0)) {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.night.sharpness * 1.59) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.night.color_saturation * 1.59) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.night.contrast * 1.59) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.night.brightness * 1.59) + "px";
-
-            dom_value[3].innerHTML = parseInt(l_cam_conf.night.brightness);
-            dom_value[1].innerHTML = parseInt(l_cam_conf.night.contrast);
-            dom_value[2].innerHTML = parseInt(l_cam_conf.night.color_saturation);
-            dom_value[0].innerHTML = parseInt(l_cam_conf.night.sharpness);
-          } else if ((l_cam_conf.night && l_cam_conf.light_mode == "white") || (l_cam_conf.night && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1)) {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.white_light.sharpness * 1.59) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.white_light.color_saturation * 1.59) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.white_light.contrast * 1.59) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.white_light.brightness * 1.59) + "px";
-
-            dom_value[3].innerHTML = parseInt(l_cam_conf.white_light.brightness);
-            dom_value[1].innerHTML = parseInt(l_cam_conf.white_light.contrast);
-            dom_value[2].innerHTML = parseInt(l_cam_conf.white_light.color_saturation);
-            dom_value[0].innerHTML = parseInt(l_cam_conf.white_light.sharpness);
-          }
-
-          for (let j = 0; j < 4; j++) {
-            dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-            dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-          }
-          _this.change_cam_mode("night");
-          l_cam_conf.day_night = "night";
-          l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-          l_cam_conf.is_white_light = l_white_light;
-          _this.$api.play.adjust_set({ conf: l_cam_conf })
-        };
-
-        if (l_dom_adjust_mode_white) {
-          l_dom_adjust_mode_white.onclick = function () {//白光
-            if (l_cam_conf.day_night == "night") {
-              if (l_cam_conf.white_light) {
-                dom_in_box[0].style.width = parseInt(l_cam_conf.white_light.sharpness * 1.59) + "px";
-                dom_in_box[2].style.width = parseInt(l_cam_conf.white_light.color_saturation * 1.59) + "px";
-                dom_in_box[1].style.width = parseInt(l_cam_conf.white_light.contrast * 1.59) + "px";
-                dom_in_box[3].style.width = parseInt(l_cam_conf.white_light.brightness * 1.59) + "px";
-
-                dom_value[3].innerHTML = parseInt(l_cam_conf.white_light.brightness);
-                dom_value[1].innerHTML = parseInt(l_cam_conf.white_light.contrast);
-                dom_value[2].innerHTML = parseInt(l_cam_conf.white_light.color_saturation);
-                dom_value[0].innerHTML = parseInt(l_cam_conf.white_light.sharpness);
-              }
-
-              for (var j = 0; j < 4; j++) {
-                dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-                dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-              }
-            }
-            l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-            l_cam_conf.is_white_light = l_white_light;
-            _this.change_cam_light_mode("white");
-            l_cam_conf.light_mode = "white";
-            _this.$api.play.adjust_set({ conf: l_cam_conf })
-          };
-          l_dom_adjust_mode_infrared.onclick = function () {//红外
-            if (l_cam_conf.day_night == "night") {
-              if (l_cam_conf.night) {
-                dom_in_box[0].style.width = parseInt(l_cam_conf.night.sharpness * 1.59) + "px";
-                dom_in_box[2].style.width = parseInt(l_cam_conf.night.color_saturation * 1.59) + "px";
-                dom_in_box[1].style.width = parseInt(l_cam_conf.night.contrast * 1.59) + "px";
-                dom_in_box[3].style.width = parseInt(l_cam_conf.night.brightness * 1.59) + "px";
-
-                dom_value[3].innerHTML = parseInt(l_cam_conf.night.brightness);
-                dom_value[1].innerHTML = parseInt(l_cam_conf.night.contrast);
-                dom_value[2].innerHTML = parseInt(l_cam_conf.night.color_saturation);
-                dom_value[0].innerHTML = parseInt(l_cam_conf.night.sharpness);
-              }
-
-              for (var j = 0; j < 4; j++) {
-                dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-                dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-              }
-            }
-            l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-            l_cam_conf.is_white_light = l_white_light;
-            _this.change_cam_light_mode("red");
-            l_cam_conf.light_mode = "red";
-            _this.$api.play.adjust_set({ conf: l_cam_conf })
-          };
-          l_dom_adjust_mode_smart.onclick = function () {//智能
-            if (l_cam_conf.day_night == "night") {
-              var sharpness = l_cam_conf.sharpness;
-              var color_saturation = l_cam_conf.color_saturation;
-              var contrast = l_cam_conf.contrast;
-              var brightness = l_cam_conf.brightness;
-              if (l_cam_conf.night) {
-                if (l_cam_conf.red_or_white == 0) {
-                  sharpness = l_cam_conf.night.sharpness;
-                  color_saturation = l_cam_conf.night.color_saturation;
-                  contrast = l_cam_conf.night.contrast;
-                  brightness = l_cam_conf.night.brightness;
-                } else if (l_cam_conf.red_or_white == 1) {
-                  sharpness = l_cam_conf.white_light.sharpness;
-                  color_saturation = l_cam_conf.white_light.color_saturation;
-                  contrast = l_cam_conf.white_light.contrast;
-                  brightness = l_cam_conf.white_light.brightness;
-                }
-                dom_in_box[0].style.width = parseInt(sharpness * 1.59) + "px";
-                dom_in_box[2].style.width = parseInt(color_saturation * 1.59) + "px";
-                dom_in_box[1].style.width = parseInt(contrast * 1.59) + "px";
-                dom_in_box[3].style.width = parseInt(brightness * 1.59) + "px";
-
-                dom_value[3].innerHTML = parseInt(brightness);
-                dom_value[1].innerHTML = parseInt(contrast);
-                dom_value[2].innerHTML = parseInt(color_saturation);
-                dom_value[0].innerHTML = parseInt(sharpness);
-              }
-
-              for (var j = 0; j < 4; j++) {
-                dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-                dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-              }
-            }
-            l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-            l_cam_conf.is_white_light = l_white_light;
-            _this.change_cam_light_mode("auto");
-            l_cam_conf.light_mode = "auto";
-            _this.$api.play.adjust_set({ conf: l_cam_conf })
-          };
-        }
-
-        l_dom_adjust_reset.onclick = function () {
-          for (var i = 0; i < 4; i++) {
-            dom_in_box[i].style.width = l_cam_conf_reset[i] * 1.6 + "px";
-            dom_circle[i].style.left = dom_out_box[i].offsetLeft + dom_in_box[i].offsetWidth + "px";
-            //  console.log(dom_in_box[i].style.width)
-          }
-          _this.change_cam_mode("auto");
-          if (l_white_light) {
-            _this.change_cam_light_mode("auto")
-          }
-          if (l_cam_conf.day) {
-            l_cam_conf.day.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-            l_cam_conf.day.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-            l_cam_conf.day.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-            l_cam_conf.day.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
-
-            l_cam_conf.night.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-            l_cam_conf.night.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-            l_cam_conf.night.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-            l_cam_conf.night.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
-            if (l_cam_conf.white_light) {
-              l_cam_conf.is_white_light = l_white_light;
-              l_cam_conf.white_light.sharpness = parseInt(dom_in_box[0].offsetWidth / 1.59);
-              l_cam_conf.white_light.contrast = parseInt(dom_in_box[1].offsetWidth / 1.59);
-              l_cam_conf.white_light.color_saturation = parseInt(dom_in_box[2].offsetWidth / 1.59);
-              l_cam_conf.white_light.brightness = parseInt(dom_in_box[3].offsetWidth / 1.59);
-            }
-          } else {
-            l_cam_conf.sharpness = l_cam_conf_reset[0];
-            l_cam_conf.color_saturation = l_cam_conf_reset[2];
-            l_cam_conf.contrast = l_cam_conf_reset[1];
-            l_cam_conf.brightness = l_cam_conf_reset[3];
-          }
-          dom_value[3].innerHTML = l_cam_conf_reset[3];
-          dom_value[2].innerHTML = l_cam_conf_reset[2];
-          dom_value[1].innerHTML = l_cam_conf_reset[1];
-          dom_value[0].innerHTML = l_cam_conf_reset[0];
-          l_cam_conf.day_night = "auto";
-          l_cam_conf.light_mode = "auto";
-          _this.$api.play.adjust_set({ conf: l_cam_conf })
-        };
-      }
     },
     // 获取设备列表信息 结束
     // 按钮点击事件
@@ -1456,10 +1017,7 @@ export default {
         this.publicFunc.closeBufferPage()
         let jumpData
         if (res.result == "") {
-          if (res.fisheye) {
-            jumpData = { parent: $("#page"), back_page: "play", type: 5, addr: obj.addr, web_name: "mipc" }
-            this.$router.push({ name: 'set', params: jumpData })
-          } else if (res.oscene) {
+                        if (res.oscene) {
             jumpData = { parent: $("#page"), back_page: "play", type: 1, addr: obj.addr, web_name: "mipc" }
             this.$router.push({ name: 'set', params: jumpData })
           } else {
@@ -1496,8 +1054,7 @@ export default {
           recording: 1,
           sn: this.$store.state.jumpPageData.selectDeviceIpc
         })
-      }
-      else {
+                } else {
         event.target.className = "video_on_picture"
         this.$api.play.play_record({
           recording: 0,
@@ -1529,334 +1086,50 @@ export default {
       }
     },
     clickAdjust (event) { // 点击设备调整按钮
-      let dom_out_box = $(".adjust_out_box");
-      let dom_in_box = $(".adjust_in_box");
-      let dom_circle = $(".adjust_circle");
-      let l_dom_adjust_mode_auto = this.publicFunc.mx("#adjust_mode_auto");
-      let l_dom_adjust_mode_night = this.publicFunc.mx("#adjust_mode_night");
-      let l_dom_adjust_mode_daytime = this.publicFunc.mx("#adjust_mode_daytime");
-      let l_dom_adjust_mode_white = this.publicFunc.mx("#adjust_mode_white");
-      let l_dom_adjust_mode_infrared = this.publicFunc.mx("#adjust_mode_infrared");
-      let l_dom_adjust_mode_smart = this.publicFunc.mx("#adjust_mode_smart");
-      let l_dom_adjust_reset = this.publicFunc.mx("#adjust_reset");
-      let l_dom_adjust_mode_white_light = this.publicFunc.mx("#adjust_mode_white_light");
-      let values_flag = [false, false, false, false];
-      let l_cam_conf;
-      let _this = this;
-      function adjust_get_ack (data) {
-        l_cam_conf = data;
-        l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-        if (l_cam_conf.day) {
+                if (event.target.className === "adjust_off_picture") {
+                    event.target.className = "adjust_on_picture";
+                    this.$api.play.adjust_get({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
+                        this.cam_conf = res;
+                        this.cam_conf.sn = this.$store.state.jumpPageData.selectDeviceIpc;
+                        if (this.cam_conf.day) {
           //night,white;night,auto,1;auto,2,white;auto,2,auto,1
-          if ((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1) || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1)) {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.white_light.sharpness * 2) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.white_light.contrast * 2) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.white_light.color_saturation * 2) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.white_light.brightness * 2) + "px";
+                            if ((this.cam_conf.day_night == "night" && this.cam_conf.light_mode == "white") || (this.cam_conf.day_night == "night" && this.cam_conf.light_mode == "auto" && this.cam_conf.red_or_white == 1) || (this.cam_conf.day_night == "auto" && this.cam_conf.day_or_night == 2 && this.cam_conf.light_mode == "white") || (this.cam_conf.day_night == "auto" && this.cam_conf.day_or_night == 2 && this.cam_conf.light_mode == "auto" && this.cam_conf.red_or_white == 1)) {
+                                this.sharpness_value = parseInt(this.cam_conf.white_light.sharpness)
+                                this.contrast_value = parseInt(this.cam_conf.white_light.contrast)
+                                this.color_saturation_value = parseInt(this.cam_conf.white_light.color_saturation)
+                                this.brightness_value = parseInt(this.cam_conf.white_light.brightness)
           }
-          //night,red;night,auto,0;auto,2,red;auto,2,auto,0 
-          else if ((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "red") || (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 0) || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "red") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 0)) {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.night.sharpness * 2) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.night.contrast * 2) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.night.color_saturation * 2) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.night.brightness * 2) + "px";
+          //night,red;night,auto,0;auto,2,red;auto,2,auto,0
+                            else if ((this.cam_conf.day_night == "night" && this.cam_conf.light_mode == "red") || (this.cam_conf.day_night == "night" && this.cam_conf.light_mode == "auto" && this.cam_conf.red_or_white == 0) || (this.cam_conf.day_night == "auto" && this.cam_conf.day_or_night == 2 && this.cam_conf.light_mode == "red") || (this.cam_conf.day_night == "auto" && this.cam_conf.day_or_night == 2 && this.cam_conf.light_mode == "auto" && this.cam_conf.red_or_white == 0)) {
+                                this.sharpness_value = parseInt(this.cam_conf.night.sharpness)
+                                this.contrast_value = parseInt(this.cam_conf.night.contrast)
+                                this.color_saturation_value = parseInt(this.cam_conf.night.color_saturation)
+                                this.brightness_value = parseInt(this.cam_conf.night.brightness)
           }
           //day;auto,1
-          else if (l_cam_conf.day_night == "day" || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 1)) {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.day.sharpness * 2) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.day.contrast * 2) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.day.color_saturation * 2) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.day.brightness * 2) + "px";
+                            else if (this.cam_conf.day_night == "day" || (this.cam_conf.day_night == "auto" && this.cam_conf.day_or_night == 1)) {
+                                this.sharpness_value = parseInt(this.cam_conf.day.sharpness)
+                                this.contrast_value = parseInt(this.cam_conf.day.contrast)
+                                this.color_saturation_value = parseInt(this.cam_conf.day.color_saturation)
+                                this.brightness_value = parseInt(this.cam_conf.day.brightness)
           }
         } else {
-          dom_in_box[0].style.width = parseInt(l_cam_conf.sharpness * 2) + "px";
-          dom_in_box[1].style.width = parseInt(l_cam_conf.contrast * 2) + "px";
-          dom_in_box[2].style.width = parseInt(l_cam_conf.color_saturation * 2) + "px";
-          dom_in_box[3].style.width = parseInt(l_cam_conf.brightness * 2) + "px";
+                            this.sharpness_value = parseInt(this.cam_conf.sharpness)
+                            this.contrast_value = parseInt(this.cam_conf.contrast)
+                            this.color_saturation_value = parseInt(this.cam_conf.color_saturation)
+                            this.brightness_value = parseInt(this.cam_conf.brightness)
         }
 
-        for (let j = 0; j < 4; j++) {
-          dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-          dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
+                        this.mode = this.cam_conf.day_night;
+                        if (this.whiteLight) {
+                            this.light_mode = this.cam_conf.light_mode;
         }
-        _this.change_cam_mode(l_cam_conf.day_night);
-        if (_this.whiteLight) {
-          _this.change_cam_light_mode(l_cam_conf.light_mode);
-        }
-      }
-      function set_event () {
-        function getLeft (e) {
-          let offset = e.offsetLeft;
-          if (e.offsetParent != null) offset += getLeft(e.offsetParent);
-          return offset;
-        }
-        let dom_out_box = $(".adjust_out_box")
-        dom_out_box.mousedown(function (e) {
-          for (i = 0; i < 4; i++) {
-            if (_this == dom_out_box[i]) {
-              values_flag[i] = true;
-              break;
-            }
-          }
-          evt = window.event || e;
-          outX = _this.offsetLeft;
-          mouseX = evt.clientX - getLeft($("#adjust_setting")[0]);
-          let value = mouseX - outX;
-          if (value > 200) {
-            dom_in_box[i].style.width = "200px";
-            dom_circle[i].style.left = outX + 200 + "px";
-          }
-          else if (value <= 0) {
-            dom_in_box[i].style.width = "0";
-            dom_circle[i].style.left = outX + "px";
-          }
-          else {
-            dom_in_box[i].style.width = value + "px";
-            dom_circle[i].style.left = mouseX + "px";
-          }
-        });
-        document.onmousemove = (function (e) {
-          let evt = window.event || e;
-          if (values_flag[0] || values_flag[1] || values_flag[2] || values_flag[3]) {
-            mouseX = evt.clientX - getLeft($("#adjust_setting")[0]);
-            let value = mouseX - outX;
-            if (value > 200) {
-              dom_in_box[i].style.width = "200px";
-              dom_circle[i].style.left = outX + 200 + "px";
-            }
-            else if (value <= 0) {
-              dom_in_box[i].style.width = "0";
-              dom_circle[i].style.left = outX + "px";
-            }
-            else {
-              dom_in_box[i].style.width = value + "px";
-              dom_circle[i].style.left = mouseX + "px";
-            }
-          }
-        });
-        document.onmouseup = (function (e) {
-          if (values_flag[0] || values_flag[1] || values_flag[2] || values_flag[3]) {
-            if (l_cam_conf.day) {
-              //night,white;night,auto,1;auto,2,white;auto,2,auto,1
-              if ((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1) || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "white") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1)) {
-                l_cam_conf.is_white_light = _this.whiteLight;
-                l_cam_conf.white_light.sharpness = parseInt(dom_in_box[0].offsetWidth / 2);
-                l_cam_conf.white_light.contrast = parseInt(dom_in_box[1].offsetWidth / 2);
-                l_cam_conf.white_light.color_saturation = parseInt(dom_in_box[2].offsetWidth / 2);
-                l_cam_conf.white_light.brightness = parseInt(dom_in_box[3].offsetWidth / 2);
-              }
-              //night,red;night,auto,0;auto,2,red;auto,2,auto,0 
-              else if ((l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "red") || (l_cam_conf.day_night == "night" && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 0) || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "red") || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 2 && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 0)) {
-                l_cam_conf.night.sharpness = parseInt(dom_in_box[0].offsetWidth / 2);
-                l_cam_conf.night.contrast = parseInt(dom_in_box[1].offsetWidth / 2);
-                l_cam_conf.night.color_saturation = parseInt(dom_in_box[2].offsetWidth / 2);
-                l_cam_conf.night.brightness = parseInt(dom_in_box[3].offsetWidth / 2);
-              }
-              //day;auto,1
-              else if (l_cam_conf.day_night == "day" || (l_cam_conf.day_night == "auto" && l_cam_conf.day_or_night == 1)) {
-                l_cam_conf.day.sharpness = parseInt(dom_in_box[0].offsetWidth / 2);
-                l_cam_conf.day.contrast = parseInt(dom_in_box[1].offsetWidth / 2);
-                l_cam_conf.day.color_saturation = parseInt(dom_in_box[2].offsetWidth / 2);
-                l_cam_conf.day.brightness = parseInt(dom_in_box[3].offsetWidth / 2);
-              }
-            } else {
-              l_cam_conf.sharpness = parseInt(dom_in_box[0].offsetWidth / 2);
-              l_cam_conf.contrast = parseInt(dom_in_box[1].offsetWidth / 2);
-              l_cam_conf.color_saturation = parseInt(dom_in_box[2].offsetWidth / 2);
-              l_cam_conf.brightness = parseInt(dom_in_box[3].offsetWidth / 2);
-            }
-            _this.$api.play.adjust_set({ conf: l_cam_conf });
-            values_flag = [false, false, false, false];
-          }
-        });
-        l_dom_adjust_mode_auto.onclick = function () {
-          let sharpness = l_cam_conf.sharpness;
-          let color_saturation = l_cam_conf.color_saturation;
-          let contrast = l_cam_conf.contrast;
-          let brightness = l_cam_conf.brightness;
-          if (l_cam_conf.day) {
-            if (l_cam_conf.day_or_night == 1 || !l_cam_conf.day_or_night) {
-              sharpness = l_cam_conf.day.sharpness;
-              color_saturation = l_cam_conf.day.color_saturation;
-              contrast = l_cam_conf.day.contrast;
-              brightness = l_cam_conf.day.brightness;
-            } else if (l_cam_conf.day_or_night == 2) {
-              if (l_cam_conf.red_or_white == 0) {
-                sharpness = l_cam_conf.night.sharpness;
-                color_saturation = l_cam_conf.night.color_saturation;
-                contrast = l_cam_conf.night.contrast;
-                brightness = l_cam_conf.night.brightness;
-              } else if (l_cam_conf.red_or_white == 1) {
-                sharpness = l_cam_conf.white_light.sharpness;
-                color_saturation = l_cam_conf.white_light.color_saturation;
-                contrast = l_cam_conf.white_light.contrast;
-                brightness = l_cam_conf.niwhite_lightght.brightness;
-              }
-            }
-          }
-          dom_in_box[0].style.width = parseInt(sharpness * 2) + "px";
-          dom_in_box[1].style.width = parseInt(contrast * 2) + "px";
-          dom_in_box[2].style.width = parseInt(color_saturation * 2) + "px";
-          dom_in_box[3].style.width = parseInt(brightness * 2) + "px";
-          for (let j = 0; j < 4; j++) {
-            dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-            dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-          }
-          _this.change_cam_mode("auto");
-          l_cam_conf.day_night = "auto";
-          l_cam_conf.is_white_light = _this.whiteLight;
-          l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-          _this.$api.play.adjust_set({ conf: l_cam_conf });
-        };
-        l_dom_adjust_mode_daytime.onclick = function () {
-          if (l_cam_conf.day) {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.day.sharpness * 2) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.day.contrast * 2) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.day.color_saturation * 2) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.day.brightness * 2) + "px";
-          }
-          for (let j = 0; j < 4; j++) {
-            dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-            dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-          }
-          _this.change_cam_mode("day");
-          l_cam_conf.day_night = "day";
-          l_cam_conf.is_white_light = _this.whiteLight;
-          _this.$api.play.adjust_set({ conf: l_cam_conf });
-        };
-
-        l_dom_adjust_mode_night.onclick = function () {
-          if ((l_cam_conf.night && l_cam_conf.light_mode == "red") || (l_cam_conf.night && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 0)) {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.night.sharpness * 2) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.night.contrast * 2) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.night.color_saturation * 2) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.night.brightness * 2) + "px";
-          } else if ((l_cam_conf.night && l_cam_conf.light_mode == "white") || (l_cam_conf.night && l_cam_conf.light_mode == "auto" && l_cam_conf.red_or_white == 1)) {
-            dom_in_box[0].style.width = parseInt(l_cam_conf.white_light.sharpness * 2) + "px";
-            dom_in_box[1].style.width = parseInt(l_cam_conf.white_light.contrast * 2) + "px";
-            dom_in_box[2].style.width = parseInt(l_cam_conf.white_light.color_saturation * 2) + "px";
-            dom_in_box[3].style.width = parseInt(l_cam_conf.white_light.brightness * 2) + "px";
-          }
-
-          for (let j = 0; j < 4; j++) {
-            dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-            dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-          }
-          _this.change_cam_mode("night");
-          l_cam_conf.day_night = "night";
-          l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-          l_cam_conf.is_white_light = _this.whiteLight;
-          _this.$api.play.adjust_set({ conf: l_cam_conf });
-        };
-        if (l_dom_adjust_mode_white_light) {
-          l_dom_adjust_mode_white_light.onclick = function () {
-            if (l_cam_conf.day_night == "night") {
-              if (l_cam_conf.white_light) {
-                dom_in_box[0].style.width = parseInt(l_cam_conf.white_light.sharpness * 2) + "px";
-                dom_in_box[2].style.width = parseInt(l_cam_conf.white_light.color_saturation * 2) + "px";
-                dom_in_box[1].style.width = parseInt(l_cam_conf.white_light.contrast * 2) + "px";
-                dom_in_box[3].style.width = parseInt(l_cam_conf.white_light.brightness * 2) + "px";
-              }
-              for (let j = 0; j < 4; j++) {
-                dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-                dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-              }
-            }
-            l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-            l_cam_conf.is_white_light = _this.whiteLight;
-            _this.change_cam_light_mode("white");
-            l_cam_conf.light_mode = "white";
-            _this.$api.play.adjust_set({ conf: l_cam_conf });
-          };
-          l_dom_adjust_mode_infrared_light.onclick = function () {
-            if (l_cam_conf.day_night == "night") {
-              if (l_cam_conf.night) {
-                dom_in_box[0].style.width = parseInt(l_cam_conf.night.sharpness * 2) + "px";
-                dom_in_box[2].style.width = parseInt(l_cam_conf.night.color_saturation * 2) + "px";
-                dom_in_box[1].style.width = parseInt(l_cam_conf.night.contrast * 2) + "px";
-                dom_in_box[3].style.width = parseInt(l_cam_conf.night.brightness * 2) + "px";
-              }
-
-              for (let j = 0; j < 4; j++) {
-                dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-                dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-              }
-            }
-            l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-            l_cam_conf.is_white_light = _this.whiteLight;
-            _this.change_cam_light_mode("red");
-            l_cam_conf.light_mode = "red";
-            _this.$api.play.adjust_set({ conf: l_cam_conf });
-          }
-          l_dom_adjust_mode_smart_light.onclick = function () {
-            if (l_cam_conf.day_night == "night") {
-              if (l_cam_conf.night) {
-                dom_in_box[0].style.width = parseInt(l_cam_conf.night.sharpness * 2) + "px";
-                dom_in_box[2].style.width = parseInt(l_cam_conf.night.color_saturation * 2) + "px";
-                dom_in_box[1].style.width = parseInt(l_cam_conf.night.contrast * 2) + "px";
-                dom_in_box[3].style.width = parseInt(l_cam_conf.night.brightness * 2) + "px";
-              }
-
-              for (let j = 0; j < 4; j++) {
-                dom_circle[j].style.left = dom_out_box[j].offsetLeft + dom_in_box[j].offsetWidth + "px";
-                dom_circle[j].style.top = dom_out_box[j].offsetTop + "px";
-              }
-            }
-            l_cam_conf.sn = _this.$store.state.jumpPageData.selectDeviceIpc;
-            l_cam_conf.is_white_light = _this.whiteLight;
-            _this.change_cam_light_mode("smart");
-            l_cam_conf.light_mode = "auto";
-            _this.$api.play.adjust_set({ conf: l_cam_conf });
-          }
-        }
-        l_dom_adjust_reset.onclick = function () {
-          for (let i = 0; i < 4; i++) {
-            dom_in_box[i].style.width = l_cam_conf_reset[i] * 2 + "px";
-            dom_circle[i].style.left = dom_out_box[i].offsetLeft + dom_in_box[i].offsetWidth + "px";
-          }
-          _this.change_cam_mode("auto");
-          if (_this.whiteLight) {
-            _this.change_cam_light_mode("auto")
-          }
-          if (l_cam_conf.day) {
-            l_cam_conf.day.sharpness = parseInt(dom_in_box[0].offsetWidth / 2);
-            l_cam_conf.day.contrast = parseInt(dom_in_box[1].offsetWidth / 2);
-            l_cam_conf.day.color_saturation = parseInt(dom_in_box[2].offsetWidth / 2);
-            l_cam_conf.day.brightness = parseInt(dom_in_box[3].offsetWidth / 2);
-
-            l_cam_conf.night.sharpness = parseInt(dom_in_box[0].offsetWidth / 2);
-            l_cam_conf.night.contrast = parseInt(dom_in_box[1].offsetWidth / 2);
-            l_cam_conf.night.color_saturation = parseInt(dom_in_box[2].offsetWidth / 2);
-            l_cam_conf.night.brightness = parseInt(dom_in_box[3].offsetWidth / 2);
-            if (l_cam_conf.white_light) {
-              l_cam_conf.is_white_light = _this.whiteLight;
-              l_cam_conf.white_light.sharpness = parseInt(dom_in_box[0].offsetWidth / 2);
-              l_cam_conf.white_light.contrast = parseInt(dom_in_box[1].offsetWidth / 2);
-              l_cam_conf.white_light.color_saturation = parseInt(dom_in_box[2].offsetWidth / 2);
-              l_cam_conf.white_light.brightness = parseInt(dom_in_box[3].offsetWidth / 2);
-            }
-          } else {
-            l_cam_conf.sharpness = l_cam_conf_reset[0];
-            l_cam_conf.color_saturation = l_cam_conf_reset[2];
-            l_cam_conf.contrast = l_cam_conf_reset[1];
-            l_cam_conf.brightness = l_cam_conf_reset[3];
-          }
-          l_cam_conf.day_night = "auto";
-          l_cam_conf.light_mode = "auto";
-          _this.$api.play.adjust_set({ conf: l_cam_conf });
-        };
-      }
-      if (event.target.className === "adjust_off_picture") {
-        event.target.className = "adjust_on_picture";
-        this.$api.play.adjust_get({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
-          adjust_get_ack(res)
         })
         this.adjustSettingFlag = true
       } else {
         event.target.className = "adjust_off_picture"
         this.adjustSettingFlag = false
       }
-      set_event()
     },
     clickAdjustClose () { // 点击关闭设置弹窗
       this.adjustSettingFlag = false
@@ -1897,58 +1170,74 @@ export default {
       }
     },
     // 按钮点击事件 结束
-    change_cam_mode (obj) { //更改模式
-      let l_dom_mode_auto = this.publicFunc.mx("#mode_auto");
-      let l_dom_mode_daytime = this.publicFunc.mx("#mode_daytime");
-      let l_dom_mode_night = this.publicFunc.mx("#mode_night");
-        l_dom_mode_auto.style.background = "#ffffff";
-        l_dom_mode_daytime.style.background = "#ffffff";
-        l_dom_mode_night.style.background = "#ffffff";
-        switch (obj) {
-          case "auto": {
-            l_dom_mode_auto.style.background = "#00a6ba";
-            break;
-          }
-          case "day": {
-            l_dom_mode_daytime.style.background = "#00a6ba";
-            break;
-          }
-          case "night": {
-            l_dom_mode_night.style.background = "#00a6ba";
-            break;
-          }
-          default:
-            l_dom_mode_auto.style.background = "#00a6ba";
+
+            adjust_set() { //调整亮度等参数
+                if (this.cam_conf.day) {
+                    //night,white;night,auto,1;auto,2,white;auto,2,auto,1
+                    if ((this.cam_conf.day_night == "night" && this.cam_conf.light_mode == "white") || (this.cam_conf.day_night == "night" && this.cam_conf.light_mode == "auto" && this.cam_conf.red_or_white == 1) || (this.cam_conf.day_night == "auto" && this.cam_conf.day_or_night == 2 && this.cam_conf.light_mode == "white") || (this.cam_conf.day_night == "auto" && this.cam_conf.day_or_night == 2 && this.cam_conf.light_mode == "auto" && this.cam_conf.red_or_white == 1)) {
+                        this.cam_conf.is_white_light = this.whiteLight;
+                        this.cam_conf.white_light.sharpness = this.sharpness_value;
+                        this.cam_conf.white_light.contrast = this.contrast_value;
+                        this.cam_conf.white_light.color_saturation = this.color_saturation_value;
+                        this.cam_conf.white_light.brightness = this.brightness_value;
         }
-      },
-      change_cam_light_mode (obj) { //更改灯光模式
-        let l_dom_mode_white = this.publicFunc.mx("#mode_white");//白光
-        let l_dom_mode_infrared = this.publicFunc.mx("#mode_infrared");//红外
-        let l_dom_mode_smart = this.publicFunc.mx("#mode_smart");//智能
-        l_dom_mode_white.style.background = "#ffffff";
-        l_dom_mode_infrared.style.background = "#ffffff";
-        l_dom_mode_smart.style.background = "#ffffff";
-        switch (obj) {
-          case "white": {
-            l_dom_mode_white.style.background = "#00a6ba";
-            break;
-          }
-          case "red": {
-            l_dom_mode_infrared.style.background = "#00a6ba";
-            break;
-          }
-          case "auto": {
-            l_dom_mode_smart.style.background = "#00a6ba";
-            break;
-          }
-          default:
-            l_dom_mode_auto.style.background = "#00a6ba";
+                    //night,red;night,auto,0;auto,2,red;auto,2,auto,0 
+                    else if ((this.cam_conf.day_night == "night" && this.cam_conf.light_mode == "red") || (this.cam_conf.day_night == "night" && this.cam_conf.light_mode == "auto" && this.cam_conf.red_or_white == 0) || (this.cam_conf.day_night == "auto" && this.cam_conf.day_or_night == 2 && this.cam_conf.light_mode == "red") || (this.cam_conf.day_night == "auto" && this.cam_conf.day_or_night == 2 && this.cam_conf.light_mode == "auto" && this.cam_conf.red_or_white == 0)) {
+                        this.cam_conf.night.sharpness = this.sharpness_value;
+                        this.cam_conf.night.contrast = this.contrast_value;
+                        this.cam_conf.night.color_saturation = this.color_saturation_value;
+                        this.cam_conf.night.brightness = this.brightness_value;
+        }
+                    //day;auto,1
+                    else if (this.cam_conf.day_night == "day" || (this.cam_conf.day_night == "auto" && this.cam_conf.day_or_night == 1)) {
+                        this.cam_conf.day.sharpness = this.sharpness_value;
+                        this.cam_conf.day.contrast = this.contrast_value;
+                        this.cam_conf.day.color_saturation = this.color_saturation_value;
+                        this.cam_conf.day.brightness = this.brightness_value;
+        }
+                } else {
+                    this.cam_conf.sharpness = this.sharpness_value;
+                    this.cam_conf.contrast = this.contrast_value;
+                    this.cam_conf.color_saturation = this.color_saturation_value;
+                    this.cam_conf.brightness = this.brightness_value;
+      }
+    },
+            adjust_reset() { //点击重置
+                this.mode = "auto";
+                if (this.whiteLight) {
+                    this.light_mode = "auto";
+        }
+                this.sharpness_value = 6;
+                this.contrast_value = 60;
+                this.color_saturation_value = 70;
+                this.brightness_value = 50;
+                if (this.cam_conf.day) {
+                    if (this.cam_conf.white_light) {
+                        this.cam_conf.is_white_light = this.whiteLight;
+                        this.cam_conf.white_light.sharpness = this.sharpness_value;
+                        this.cam_conf.white_light.contrast = this.contrast_value;
+                        this.cam_conf.white_light.color_saturation = this.color_saturation_value;
+                        this.cam_conf.white_light.brightness = this.brightness_value;
+        }
+                    this.cam_conf.night.sharpness = this.sharpness_value;
+                    this.cam_conf.night.contrast = this.contrast_value;
+                    this.cam_conf.night.color_saturation = this.color_saturation_value;
+                    this.cam_conf.night.brightness = this.brightness_value;
+
+                    this.cam_conf.day.sharpness = this.sharpness_value;
+                    this.cam_conf.day.contrast = this.contrast_value;
+                    this.cam_conf.day.color_saturation = this.color_saturation_value;
+                    this.cam_conf.day.brightness = this.brightness_value;
+                } else {
+                    this.cam_conf.sharpness = this.sharpness_value;
+                    this.cam_conf.contrast = this.contrast_value;
+                    this.cam_conf.color_saturation = this.color_saturation_value;
+                    this.cam_conf.brightness = this.brightness_value;
         }
       }
   },
   async mounted () {
     await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
-    console.log(this.$refs.resolute_choice.offsetTop, 'this.$refs.resolute_choice.offsetTop')
     if (this.$refs.resolute_choice.offsetTop) {
       this.definitionTop = (this.$refs.resolute_choice.offsetTop - 113) + 'px'
     }
@@ -1965,7 +1254,46 @@ export default {
     // console.log(pageData,"pageData")
     await this.vimtagPlay(pageData) // 进入页面后加载
     await this.publicFunc.importCss('Public.scss') // 动态引入css样式 页面加载完成后加载样式(如果加载过早则会无法改变jq填充的dom)
-    // window.mipcPlay = this.mipcPlay
+        },
+        watch: {
+            sharpness_value(val) {
+                if (val) {
+                    this.$refs.sharpness.style.backgroundSize = val + '%';
   }
+            },
+            contrast_value(val) {
+                if (val) {
+                    this.$refs.contrast.style.backgroundSize = val + '%';
 }
+            },
+            color_saturation_value(val) {
+                if (val) {
+                    this.$refs.color_saturation.style.backgroundSize = val + '%';
+                }
+            },
+            brightness_value(val) {
+                if (val) {
+                    this.$refs.brightness.style.backgroundSize = val + '%';
+                }
+            },
+            mode(val) {
+                if (val) {
+                    this.cam_conf.day_night = val;
+                }
+            },
+            light_mode(val) {
+                if (val) {
+                    this.cam_conf.light_mode = val;
+                }
+            },
+            cam_conf: {
+                handler(val) {
+                    if (val) {
+                        this.$api.play.adjust_set({ conf: this.cam_conf });
+                    }
+                },
+                deep: true
+            }
+        }
+    }
 </script>
