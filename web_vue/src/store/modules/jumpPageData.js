@@ -19,14 +19,14 @@ const jumpPageData = {
     flashIsPlay: null, // flash自动播放
     playInfo: '', // 播放相关详情
     webClientV: "0.0.0",//版本号
-    hostname: "",
+    hostname: '',
     kbwin: 0, //定义全局变量查看app是否为定制kbwin  5.11.3
     historyData: null, //历史数据
     serverDevice: '', // get_req接口请求回的服务器地址
     boxDeviceData: [],// 定义的全局变量，初始化 ,标记实时播放列表显示,解决修改g_device_data 从云盒子返回设备列表页出错问题
     networkEnviron: '', // 代表内部网络访问或外部网络访问直接连接之间的区别非直接连接
     systemStopWait: null, // 系统停止等待
-    loginStatus:'',//Keeping the login is ipc or user
+    loginStatus: '',// Keeping the login is ipc or user
   },
   mutations: {
     SET_PAGE_DOM: (state, pageDom) => {

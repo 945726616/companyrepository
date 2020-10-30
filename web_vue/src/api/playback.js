@@ -44,6 +44,7 @@ const playback = {
   ** 播放总接口(不包含回放下载功能)
   */
   async play (data) {
+    let _this = this
     let returnItem
     let judge_enable_native_plug = true;
     let judge_enable_flash_plug = false;
@@ -73,34 +74,24 @@ const playback = {
       ref_obj.inner_window_info.mme = await new mme(mme_params);
     }
     store.dispatch('setPlayInfo', ref_obj)
-    function flash_play (i) {
-      let profile_token_choice = get_profile_token_choice(data.profile_token);
-      let urls;
-      if (!playback) {
-        if (process.env.NODE_ENV === 'production') {
-          urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
-        } else {
-          urls = "http://45.113.201.4:7080/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
-        }
-      } else {
-        let pic_token = data.token[i];
-        if (process.env.NODE_ENV === 'production') {
-          urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + pic_token;
-        } else {
-          urls = "http://localhost:8080/api/ccm/ccm_pic_get.jpg?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + pic_token + "&dflag=2";
-        }
-      }
-      data.dom.html("<img id='flash_img' width='1px' src='" + urls + "'>")
-      if (publicFunc.mx("#flash_img")) {
-        publicFunc.mx("#flash_img").onload = function () {
-          data.dom.css('backgroundImage', "url(" + this.src + ")")
-          data.dom.css('backgroundSize', "100% 100%")
-        }
-      } else {
-        clearInterval(flash_isplay)
-      }
+    function create_play_ipc (obj) { // 整理传递的数据(用于创建mme实例)
+      obj.protocol = "auto";
+      obj.videoSize = obj.videoSize ? obj.videoSize : 0;
+      obj.localPath = obj.download_path ? obj.download_path : null;
+      obj.isDownload = obj.isDownload ? 1 : 0;
+      obj.inner_window_info = {
+        dom_id: ("play_screen"),
+        index: 1,
+        video_chls: null,
+        audio_chls: null,
+        mme: null,
+        ipc_state: "",
+        node_sn: obj.sn,
+        profile_token: obj.profile_token
+      };
+      return obj;
     }
-    async function on_plug_event (obj) {
+    async function on_plug_event (obj) { // 调用创建mme插件事件
       // console.log(obj, 'on_plug_event_obj')
       sessionStorage.setItem("type_tip", obj.type);
       sessionStorage.setItem("code_tip", obj.code);
@@ -186,7 +177,8 @@ const playback = {
         }
       }
     }
-    async function play_ack (msg, ref) {
+    async function play_ack (msg, ref) { // 点击播放(网页端)
+      console.log('进入play_ack')
       // console.log(msg, ref, 'play_ack_ref_msg')
       if (msg.result == "") {
         await chl_video_create({ type: msg.type, uri: msg.url, inner_window_info: ref.inner_window_info, localPath: ref.localPath, isDownload: ref.isDownload });
@@ -200,7 +192,8 @@ const playback = {
         }
       }
     }
-    async function chl_video_create (obj) {
+    async function chl_video_create (obj) { // 创建播放器
+      console.log('进入chl_video_create')
       let uri = obj.uri,
         chl_params = (obj.type == "publish") ? "" : ",thread:\"istream\", jitter:{max:3000}"/* for old version's mme plugin */,
         trans_params = (obj.type == "play") ? ",trans:[{flow_ctrl:\"jitter\",thread:\"istream\"}]" :
@@ -226,7 +219,7 @@ const playback = {
         if (l_ipc_speed_time) {
           clearInterval(l_ipc_speed_time);
         }
-        if (l_plug_type !== "flash") { // 该判断条件中需要添加!此为客户端逻辑(去掉!用于在浏览器中测试使用)
+        if (l_plug_type === "flash") { // 该判断条件中需要添加!此为客户端逻辑(去掉!用于在浏览器中测试使用)
           l_ipc_speed_time = setInterval(function () {
             let string_speed = obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "query", "{}");
             // console.log(string_speed, 'download_string_speed', obj, 'download_obj')
@@ -279,30 +272,42 @@ const playback = {
         setTimeout(function () { play_ipc(obj) }, 1000)
       }
     }
-    function play_ipc (obj) {
+    function play_ipc (obj) { // 播放Ipc
+      console.log('进入play_ipc')
       obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "play", "");
       obj.inner_window_info.playback_state = "play";
       return 0;
     }
-    function create_play_ipc (obj) {
-      obj.protocol = "auto";
-      obj.videoSize = obj.videoSize ? obj.videoSize : 0;
-      obj.localPath = obj.download_path ? obj.download_path : null;
-      obj.isDownload = obj.isDownload ? 1 : 0;
-      obj.inner_window_info = {
-        dom_id: ("play_screen"),
-        index: 1,
-        video_chls: null,
-        audio_chls: null,
-        mme: null,
-        ipc_state: "",
-        node_sn: obj.sn,
-        profile_token: obj.profile_token
-      };
-      return obj;
+    function flash_play (i) {
+      console.log('进入flash_play')
+      let profile_token_choice = get_profile_token_choice(data.profile_token);
+      let urls;
+      if (!playback) {
+        if (process.env.NODE_ENV === 'production') {
+          urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
+        } else {
+          urls = "http://45.113.201.4:7080/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
+        }
+      } else {
+        let pic_token = data.token[i];
+        if (process.env.NODE_ENV === 'production') {
+          urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + pic_token;
+        } else {
+          urls = "http://localhost:8080/api/ccm/ccm_pic_get.jpg?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + pic_token + "&dflag=2";
+        }
+      }
+      data.dom.html("<img id='flash_img' width='1px' src='" + urls + "'>")
+      if (publicFunc.mx("#flash_img")) {
+        publicFunc.mx("#flash_img").onload = function () {
+          data.dom.css('backgroundImage', "url(" + this.src + ")")
+          data.dom.css('backgroundSize', "100% 100%")
+        }
+      } else {
+        clearInterval(flash_isplay)
+      }
     }
     function playback_speed (data, progress, record_played_duration) { // 客户端回放进度条
-      console.log('enter Play_speed')
+      console.log('进入playback_speed')
       let progress2 = sessionStorage.getItem("aaa")
       sessionStorage.setItem("aaa", progress);
       let bo_type = sessionStorage.getItem('bo_type')
@@ -310,6 +315,8 @@ const playback = {
       let end_time = JSON.parse(sessionStorage.getItem('play_back_endTime'))
       let b_start_time = JSON.parse(sessionStorage.getItem('b_start_time'))
       let first = sessionStorage.getItem('play_first')
+      let percent = sessionStorage.getItem('playBackPercent') // 获取播放百分比
+      console.log(percent, 'playBackPercent')
       if (bo_type) {
         start_time = b_start_time;
         bo_type = false;
@@ -321,9 +328,10 @@ const playback = {
       $("#playback_start_time").html(play_start_time);
       let play_end_time_stop = new Date(end_time).format("yyyy-MM-dd hh:mm:ss");
       let play_end_time = new Date(end_time).format("hh:mm:ss");
+      console.log(_this.playback)
       if (play_start_time_stop >= play_end_time_stop) {
-        $("#playback_start_time").html(play_end_time);
-        this.play.video_stop({
+        $("#playback_start_time").html(play_end_time)
+        _this.playback.video_stop({
             dom: $("#playback_screen")
           }).then(res => {
             create_preview(res)
@@ -344,7 +352,7 @@ const playback = {
         let play_end_time_stop = new Date(end_time).format("yyyy-MM-dd hh:mm:ss");
         if (play_start_time_stop >= play_end_time_stop) {
           $("#playback_start_time").html(play_end_time);
-          play.video_stop({
+          _this.playback.video_stop({
             dom: $("#playback_screen")
           }).then(res => {
             create_preview(res)
@@ -357,8 +365,7 @@ const playback = {
         fdSliderController.increment("playback_progressbar", progress - publicFunc.mx("#playback_progressbar").value);
       }
     }
-    console.log(returnItem, 'download_return2')
-    return returnItem
+    // return returnItem
   },
   /*
    ** 客户端回放下载功能

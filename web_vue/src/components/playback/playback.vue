@@ -13,6 +13,13 @@
         <div id="playback_buffer_ret"></div>
         <!-- 回放视频播放 -->
         <div id="playback_screen">
+          <!-- 下载弹窗 -->
+          <div id='download_info_box' v-if="downloadBufferFlag">
+            <div id='download_progress'></div>
+            <div id='download_stop' @click="clickDownloadStop">{{mcs_stop}}</div>
+            <div id='download_pause' @click="clickDownloadPause">{{mcs_pause}}</div>
+          </div>
+          <!-- 下载弹窗结束 -->
           <div id="play_view_box" @click="clickPlayViewBox">
             <div id="play_pause_pic"></div>
           </div>
@@ -28,25 +35,25 @@
           </div>
           <!-- 进度条展示 -->
           <div id="playback_progress_bar" v-if="clientFlag">
-            <input name="slider" type="text" id="playback_progressbar" class="fd_tween fd_classname_extraclass fd_hide_input fd_slider_cb_create_ms.TT-init fd_slider_cb_update_ms.TT-update fd_slider_cb_move_ms.TT-update" value="0%" />
+            <progress-bar :percent="percent" @percentChange="setProgress"></progress-bar> <!-- 进度条组件(传递进度百分比) -->
           </div>
           <!-- 进度条展示 结束 -->
-          <div id="play_menu_right">
-            <div id="playback_download_img"></div>
-            <div id="playback_voice_close" class="voice_close_open" v-if="clientFlag"></div>
-            <div id="playback_end_time" v-if="clientFlag">
+          <div id="play_menu_right" v-if="clientFlag">
+            <div id="playback_download_img" @click="downloadBoxFlag = true"></div>
+            <!-- <div id="playback_voice_close" class="voice_close_open"></div> 声音开关暂且注释-->
+            <div id="playback_end_time">
               {{ end_time_show }}
             </div>
           </div>
         </div>
         <!-- 播放菜单控制 结束 -->
-        <div id="playback_download_path_box">
+        <div id="playback_download_path_box" v-show="downloadBoxFlag">
           <div id="playback_download_path_main">
             <span>{{ mcs_input_download_path }}</span>
             <input id="playback_download_path_input" value="" type="text" />
           </div>
-          <div id="playback_download_path_cancel">{{ mcs_cancel }}</div>
-          <div id="playback_download_path_submit">{{ mcs_ok }}</div>
+          <div id="playback_download_path_cancel" @click="downloadBoxFlag = false">{{ mcs_cancel }}</div>
+          <div id="playback_download_path_submit" @click="clickDownloadSubmit">{{ mcs_ok }}</div>
         </div>
       </div>
     </div>
@@ -59,7 +66,11 @@
 import "@/lib/plugins/slider.js"
 import fdSliderController from "../../util/fdSliderController"
 import languageSelect from "../../lib/exportModule/languageSelect.js"
+import progressBar from './playBackSlider'
 export default {
+  components: {
+    progressBar,
+  },
   data () {
     return {
       //多国语言
@@ -71,7 +82,7 @@ export default {
       mcs_pause: mcs_pause,
       // 多国语言 结束
       createPlaybackObj: null, // 页面使用的obj
-      vedio_flag_arr: [], // 移动侦测标记集合
+      video_flag_arr: [], // 移动侦测标记集合
       start_time: null, // 视频开始时间(时间戳)
       start_time_show: null, // 视频当前时间/开始时间(展示值)
       end_time: null, // 视频结束时间
@@ -82,104 +93,81 @@ export default {
       bo_type: sessionStorage.getItem('bo_type') ? sessionStorage.getItem('bo_type') : false, // 播放类型
       play_back_token: null, // 回放token
       b_start_time: null, // b开始时间
-      clientFlag: false, // window.fujikam === 'fujikam' ? true : false (暂时调成false 后续自行编写进度条插件)
+      clientFlag: true, // window.fujikam === 'fujikam' ? true : false // 客户端判别标识(true: 客户端, false: 网页端)
+      play_progress: null, // 回放进度条参数
+      percent: 0,
+      downloadBoxFlag: false, // 下载提示框标识
+      downloadBufferFlag: false, // 下载进度弹窗标识
     }
   },
   methods: {
     create_playback_page (obj) {
-      console.log(window.fujikam === 'fujikam', "Window.fujikam === 'fujikam'")
-      if (window.fujikam !== 'fujikam') {
-        this.publicFunc.mx('#playback_download_img').style.display = 'none'
-      }
       let _this = this
       this.createPlaybackObj = obj // 存储调用时的obj内容
-      let play_progress;
-      if (obj.data) {
+      if (obj.data) { // 移动侦测标识数组
         for (let j = 0; j < obj.data.length; j++) {
-          this.vedio_flag_arr.push(obj.data[j].f)
+          this.video_flag_arr.push(obj.data[j].f)
         }
       }
-      if (_this.publicFunc.mx("#playback_download_path_input"))
-        _this.publicFunc.mx("#playback_download_path_input").value = (navigator.platform.indexOf("Win") > -1 ? ('c:/downloads/') : ('/Users/Shared/'));
-      let l_dom_playback_view = _this.publicFunc.mx("#playback_view");
-      let l_dom_playback_screen = _this.publicFunc.mx("#playback_screen");
-      let l_dom_playback_menu_box = _this.publicFunc.mx("#playback_menu_box");
-      let l_dom_playback_download_path_box = _this.publicFunc.mx("#playback_download_path_box");
-      let l_height = _this.publicFunc.mx("#top").offsetWidth * 0.4 + 11;
-      let l_download_path_box_top = _this.publicFunc.mx("#playback_box").offsetTop + 200;
-      let l_download_path_box_left = _this.publicFunc.mx("#playback_box").offsetLeft + 430;
-      let l_playback_menu_box_height = l_dom_playback_menu_box.offsetHeight - 1;
-      l_dom_playback_view.style.height = l_height + "px";
-      l_dom_playback_screen.style.height = (l_height - l_playback_menu_box_height) + "px";
-      l_dom_playback_download_path_box.style.top = l_download_path_box_top + "px";
-      l_dom_playback_download_path_box.style.left = l_download_path_box_left + "px";
-      _this.publicFunc.mx("#playback_buffer_ret").style.left = (l_dom_playback_screen.offsetLeft + l_dom_playback_screen.offsetWidth - 50) + "px";
-      this.play_menu_control({ parent: l_dom_playback_menu_box })
-      this.create_preview({ parent: $("#playback_screen") })
+      console.log(this.video_flag_arr, 'video_flag_arr')
 
-      function download_info (data) {
-        // console.log(data, 'download_info_data')
-        let data_num = data.substring(0, data.length - 1);
-        if (_this.publicFunc.mx("#download_progress")) {
-          _this.publicFunc.mx("#download_progress").innerHTML = data;
-        }
-        if (data_num == 100) {
-          _this.$api.playback.video_stop({
-            dom: $("#playback_screen"),
-            isDownload: 1 // 是否下载中特殊标记
-          }).then(res => {
-            _this.create_preview(res)
-          })
-        }
+      if (this.publicFunc.mx("#playback_download_path_input")) { // 下载地址填充(windos: c:/downloads/  其他(mac): /Users/Shared/)
+        this.publicFunc.mx("#playback_download_path_input").value = (navigator.platform.indexOf("Win") > -1 ? ('c:/downloads/') : ('/Users/Shared/'))
       }
-      //get start_time
-      obj.start_time = parseInt(obj.start_time)
+      // 回放页面相关尺寸设置
+      let l_dom_playback_view = this.publicFunc.mx("#playback_view")
+      let l_dom_playback_screen = this.publicFunc.mx("#playback_screen")
+      let l_dom_playback_menu_box = this.publicFunc.mx("#playback_menu_box")
+      let l_dom_playback_download_path_box = this.publicFunc.mx("#playback_download_path_box")
+      let l_height = this.publicFunc.mx("#top").offsetWidth * 0.4 + 11
+      let l_download_path_box_top = this.publicFunc.mx("#playback_box").offsetTop + 200
+      let l_download_path_box_left = this.publicFunc.mx("#playback_box").offsetLeft + 430
+      let l_playback_menu_box_height = l_dom_playback_menu_box.offsetHeight - 1
+      l_dom_playback_view.style.height = l_height + "px" // 回放页面高度设置
+      l_dom_playback_screen.style.height = (l_height - l_playback_menu_box_height) + "px" // 播放器高度设置
+      l_dom_playback_download_path_box.style.top = l_download_path_box_top + "px" // 下载弹窗高度偏移量设置
+      l_dom_playback_download_path_box.style.left = l_download_path_box_left + "px" // 下载弹窗左侧偏移量设置
+      this.publicFunc.mx("#playback_buffer_ret").style.left = (l_dom_playback_screen.offsetLeft + l_dom_playback_screen.offsetWidth - 50) + "px" // 下载进度偏移量设置
+      // 回放页面相关尺寸设置 结束
+      // 获取回放开始时间戳
+      this.createPlaybackObj.start_time = parseInt(this.createPlaybackObj.start_time) // 将存储的obj中开始时间
       this.start_time = obj.start_time
       sessionStorage.setItem('play_back_startTime', JSON.stringify(this.start_time)) // 存储开始时间(playback.js中使用)
-      //get end_time
-      obj.end_time = parseInt(obj.end_time)
-      this.end_time = obj.end_time
-      // 存储展示时间
-      this.start_time_show = new Date(this.start_time).format('hh:mm:ss')
-      this.end_time_show = new Date(this.end_time).format('hh:mm:ss')
-      sessionStorage.setItem('play_back_endTime', JSON.stringify(this.end_time)) // 存储结束时间(playback.js中使用)
+      // 存储初始开始时间 (后期会对start_time进行赋值,但不会更改b_start_time)
       this.b_start_time = obj.start_time;
       sessionStorage.setItem('b_start_time', JSON.stringify(this.b_start_time))
-      window.onresize = function () { }
+      // 获取回放结束时间戳
+      this.createPlaybackObj.end_time = parseInt(this.createPlaybackObj.end_time)
+      this.end_time = obj.end_time
+      sessionStorage.setItem('play_back_endTime', JSON.stringify(this.end_time)) // 存储结束时间(playback.js中使用)
+      // 存储页面展示时间(格式: 小时:分钟:秒)
+      this.start_time_show = new Date(this.start_time).format('hh:mm:ss')
+      this.end_time_show = new Date(this.end_time).format('hh:mm:ss')
+      // 时间相关赋值结束
+      this.play_menu_control({ parent: l_dom_playback_menu_box }) // 调用播放器控制菜单渲染
+      this.create_preview({ parent: $("#playback_screen") }) // 创建暂停遮罩层渲染
+      window.onresize = function () { // 更改页面大小时重新设置相应高度
+        _this.create_playback_page(obj)
+      }
     },
     play_menu_control (data) { // 播放控制菜单
       let _this = this
-      this.createPlaybackObj.start_time = parseInt(this.createPlaybackObj.start_time)
-      this.createPlaybackObj.end_time = parseInt(this.createPlaybackObj.end_time)
-      this.videoSize = this.createPlaybackObj.end_time - this.createPlaybackObj.start_time
-      // this.start_time = new Date(this.createPlaybackObj.start_time).format("hh:mm:ss")
-      // this.end_time = new Date(this.createPlaybackObj.end_time).format("hh:mm:ss")
-      // console.log(this.start_time, this.end_time, 'start/end time')
-      let data_length = this.createPlaybackObj.data.length
-      let l_video_start_time_stamp = this.createPlaybackObj.start_time
-      let l_video_end_time_stamp = this.createPlaybackObj.end_time
-      let l_video_time = l_video_end_time_stamp - l_video_start_time_stamp
+      this.videoSize = this.end_time - this.start_time // 视频长度
 
-      if (this.$store.state.jumpPageData.localFlag) {
-        $("#playback_download_img").hide()
+      if (this.$store.state.jumpPageData.localFlag) { // 本地模式下隐藏下载功能
+        this.clientFlag = false
       }
-      if (window.fujikam === "fujikam") { // 浏览器不显示进度条和下载功能
-        $("#playback_download_img").css("background-size", "100% 100%")
-        $("#play_menu_right").show()
+      if (this.publicFunc.mx("#playback_progress_bar")) { // 进度条相关参数获取
+        let l_width = this.publicFunc.mx("#play_menu_left").offsetWidth
+        let r_width = this.publicFunc.mx("#play_menu_right") ? this.publicFunc.mx("#play_menu_right").offsetWidth : null
+        let box_width = this.publicFunc.mx("#playback_menu_box").offsetWidth
+        this.publicFunc.mx("#playback_progress_bar").style.width = (box_width - l_width - r_width - 180) + "px"
+        console.log(box_width, l_width, r_width, 'style_null')
       }
-
-      let l_width = this.publicFunc.mx("#play_menu_left").offsetWidth;
-      let r_width = this.publicFunc.mx("#play_menu_right").offsetWidth;
-      // let r_width = parseInt($("#play_menu_right").css("width"));
-      let box_width = this.publicFunc.mx("#playback_menu_box").offsetWidth;
-      console.log(box_width, l_width, r_width, 'style_null')
-      if (this.publicFunc.mx("#playback_progress_bar")) { // 进度条相关报错
-        this.publicFunc.mx("#playback_progress_bar").style.width = (box_width - l_width - r_width - 180) + "px";
-        fdSliderController.create()
-      }
+      // 添加移动侦测进度条标识
       function create_flag_item (msg) {
         for (let i = 0; i < msg.length; i++) {
-          if (msg[i] != "0") {
+          if (msg[i] !== "0") {
             let process_flag = document.createElement("span");
             process_flag.setAttribute("class", "flag_item");
             process_flag.style.width = (1 / msg.length * 100 + "%");
@@ -194,104 +182,12 @@ export default {
       }
       let process_flag_dom = document.createElement("span")
       process_flag_dom.setAttribute("class", "fd_slider_flag")
-      if (document.getElementById("fd-slider-playback_progressbar")) { // 进度条相关报错
-        document.getElementById("fd-slider-playback_progressbar").appendChild(process_flag_dom)
+      console.log(document.getElementById('barProgress'), 'progress_extend')
+      if (document.getElementById('barProgress')) { // 进度条相关报错
+        document.getElementById('barProgress').appendChild(process_flag_dom)
       }
-      create_flag_item(this.vedio_flag_arr)
-      if (this.publicFunc.mx("#playback_progress_bar")) { // 进度条相关报错
-        fdSliderController.addEvent(this.publicFunc.mx("#playback_progress_bar"), "mouseup", playback_event_mouseup) // 监听鼠标点击事件
-      }
-
-      function playback_event_mouseup () {
-        _this.first = true
-        sessionStorage.setItem('play_first', true)
-        play_progress = _this.publicFunc.mx("#playback_progressbar").value / 100
-        let new_token = parseInt(data_length * play_progress)
-        _this.play_back_token = obj.data[new_token].token
-        let play_progress_time_stamp = l_video_start_time_stamp + (l_video_time * play_progress)
-        let play_progress_time = new Date(play_progress_time_stamp).format("hh:mm:ss")
-        sessionStorage.setItem("play_progress_time_stamp", play_progress_time_stamp)
-        //拖动时显示对应的时间
-        $("#playback_start_time").html(play_progress_time)
-        // moveProgressBar
-        if (_this.is_playing) {
-          _this.$api.play.video_stop({
-            dom: $("#playback_screen")
-          }).then(() => { // 原函数中是存在返回值调用至函数的情况
-            _this.$api.playback.play({ // 原playback接口
-              agent: obj.agent,
-              dom: $("#playback_screen"),
-              sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-              videoSize: _this.videoSize,
-              token: _this.play_back_token,
-              playback: 1 // 此处额外添加参数
-            }).then(res => {
-              console.log(res, 'playBack_playSpeed1')
-              if (res && res.length > 2) {
-                _this.playback_speed(res[0], res[1], res[2])
-              } else {
-                _this.playback_speed(res)
-              }
-            })
-          })
-        }
-      }
-
-
-      this.publicFunc.mx("#playback_download_img").onclick = function () {
-        $("#playback_download_path_box").show()
-      }
-      this.publicFunc.mx("#playback_download_path_cancel").onclick = function () {
-        $("#playback_download_path_box").hide()
-      }
-      this.publicFunc.mx("#playback_download_path_submit").onclick = function () { // 下载部分函数
-        let download_path = _this.publicFunc.mx("#playback_download_path_input").value; //下载路径
-        $("#playback_download_path_box").hide();
-        _this.publicFunc.mx("#playback_screen").style.background = "#000";
-        _this.publicFunc.mx("#playback_screen").innerHTML = "<div id='download_info_box'>"
-          + "<div id='download_progress'></div>"
-          + "<div id='download_stop'>" + mcs_stop + "</div>"
-          + "<div id='download_pause'>" + mcs_pause + "</div>"
-          + "</div>";
-        _this.publicFunc.mx("#download_pause").onclick = function () {
-          if (_this.publicFunc.mx("#download_pause").innerHTML == mcs_pause) {
-            _this.$api.playback.pause_ipc().then($("#download_pause").html(mcs_continue))
-          } else {
-            _this.$api.playback.play_download_continue().then($("#download_pause").html(mcs_pause))
-          }
-        }
-        _this.publicFunc.mx("#download_stop").onclick = function () {
-          _this.$api.playback.video_stop({
-            dom: $("#playback_screen"),
-            isDownload: 1 // 是否下载中特殊标记
-          }).then(res => {
-            _this.create_preview(res)
-          })
-        }
-        if (_this.$store.state.jumpPageData.projectName === "vimtag") {
-          _this.$api.playback.replay_download({ // 原play_back_download接口
-            agent: _this.createPlaybackObj.agent,
-            dom: $("#playback_screen"),
-            sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-            videoSize: _this.videoSize,
-            token: _this.createPlaybackObj.download_token,
-            download_path: download_path,
-            playback: 1, // 此处额外添加参数
-            isDownload: 1 // 此处额外添加参数
-          })
-        } else {
-          _this.$api.playback.replay_download({ // 原play_back_download接口
-            agent: _this.createPlaybackObj.agent,
-            dom: $("#playback_screen"),
-            sn: _this.$store.state.jumpPageData.selectDeviceIpc,
-            videoSize: _this.videoSize,
-            token: _this.createPlaybackObj.token,
-            download_path: download_path,
-            playback: 1, // 此处额外添加参数
-            isDownload: 1 // 此处额外添加参数
-          })
-        }
-      }
+      create_flag_item(this.video_flag_arr)
+      // 添加移动侦测进度条标识 结束
     },
     create_preview (data) { // 创建暂停遮罩层
       sessionStorage.setItem("pause_start_time", this.start_time)
@@ -305,7 +201,7 @@ export default {
     playback_speed (data, progress, record_played_duration) { // 视频播放速度
       console.log('enter Play_speed')
       let progress2 = sessionStorage.getItem("aaa")
-      sessionStorage.setItem("aaa", progress);
+      sessionStorage.setItem("aaa", progress)
       if (this.bo_type) {
         this.start_time = this.b_start_time;
         sessionStorage.setItem('bo_type', false)
@@ -313,43 +209,53 @@ export default {
       } else {
         this.start_time = this.start_time + record_played_duration;
       }
-      let play_start_time_stop = new Date(this.start_time).format("yyyy-MM-dd hh:mm:ss");
-      let play_start_time = new Date(this.start_time).format("hh:mm:ss");
+      let play_start_time_stop = new Date(this.start_time).format("yyyy-MM-dd hh:mm:ss")
+      let play_start_time = new Date(this.start_time).format("hh:mm:ss")
       this.start_time_show = play_start_time // 展示时间赋值
-      let play_end_time_stop = new Date(this.end_time).format("yyyy-MM-dd hh:mm:ss");
-      let play_end_time = new Date(this.end_time).format("hh:mm:ss");
+      let play_end_time_stop = new Date(this.end_time).format("yyyy-MM-dd hh:mm:ss")
+      let play_end_time = new Date(this.end_time).format("hh:mm:ss")
       if (play_start_time_stop >= play_end_time_stop) {
-        $("#playback_start_time").html(play_end_time);
+        // $("#playback_start_time").html(play_end_time)
+        this.start_time_show = this.end_time_show
         this.$api.play.video_stop({
           dom: $("#playback_screen")
         }).then(res => {
           this.create_preview(res)
         })
       }
-      if (this.first) {
-        progress = Number(progress) - Number(progress2) + Number(this.publicFunc.mx("#playback_progressbar").value);
-        let play_progress_time_stamp = sessionStorage.getItem("play_progress_time_stamp");
-        let get_drag_duration = sessionStorage.getItem("duration");
-        let drag_start_time = parseInt(play_progress_time_stamp) + parseInt(get_drag_duration);
-        let play_start_time = new Date(drag_start_time).format("hh:mm:ss")
-        let play_start_time_stop = new Date(drag_start_time).format("yyyy-MM-dd hh:mm:ss")
-        $("#playback_start_time").html(play_start_time);
-        let play_end_time = new Date(end_time).format("hh:mm:ss");
-        let play_end_time_stop = new Date(end_time).format("yyyy-MM-dd hh:mm:ss");
-        if (play_start_time_stop >= play_end_time_stop) {
-          $("#playback_start_time").html(play_end_time);
-          this.$api.play.video_stop({
-            dom: $("#playback_screen")
-          }).then(res => {
-            this.create_preview(res)
-          })
-        }
-      }
+      // if (this.first) {
+      //   if (progress) {
+      //     progress = Number(progress) - Number(progress2) + Number(this.publicFunc.mx("#playback_progressbar").value)
+      //   }
+      //   let play_progress_time_stamp = sessionStorage.getItem("play_progress_time_stamp")
+      //   let get_drag_duration = sessionStorage.getItem("duration")
+      //   let drag_start_time = parseInt(play_progress_time_stamp) + parseInt(get_drag_duration)
+      //   let play_start_time = new Date(drag_start_time).format("hh:mm:ss")
+      //   let play_start_time_stop = new Date(drag_start_time).format("yyyy-MM-dd hh:mm:ss") // 对比用时间戳(开始时间)
+      //   // $("#playback_start_time").html(play_start_time);
+      //   console.log(play_start_time, 'play_start_time')
+      //   this.start_time_show = play_start_time // 赋值展示开始时间
+      //   let play_end_time = new Date(this.end_time).format("hh:mm:ss")
+      //   let play_end_time_stop = new Date(this.end_time).format("yyyy-MM-dd hh:mm:ss") // 对比用时间戳(结束时间)
+      //   if (play_start_time_stop >= play_end_time_stop) {
+      //     // $("#playback_start_time").html(play_end_time)
+      //     this.end_time_show = play_end_time // 赋值展示结束时间
+      //     this.$api.play.video_stop({
+      //       dom: $("#playback_screen")
+      //     }).then(res => {
+      //       this.create_preview(res)
+      //     })
+      //   }
+      // }
       if (!data) data = null
-      this.publicFunc.mx("#playback_buffer_ret").innerHTML = data;
-      if (this.publicFunc.mx("#playback_progress_bar")) { // 进度条相关报错
-        fdSliderController.increment("playback_progressbar", progress - this.publicFunc.mx("#playback_progressbar").value)
+      this.publicFunc.mx("#playback_buffer_ret").innerHTML = data
+      if (this.clientFlag) { // 是否含有进度条
+        console.log(progress, this.percent, '进度条')
+        // this.percent = 
       }
+      // if (this.publicFunc.mx("#playback_progress_bar")) { // 进度条相关报错
+      //   fdSliderController.increment("playback_progressbar", progress - this.publicFunc.mx("#playback_progressbar").value)
+      // }
     },
     // 点击事件
     clickPlay () { // 点击播放（客户端）
@@ -411,12 +317,15 @@ export default {
       for (let i = 0; i < this.createPlaybackObj.data.length; i++) {
         pic_token.push(this.createPlaybackObj.data[i].pic_token)
       }
-      this.is_playing = 1
-      if (!this.first) {
-        sessionStorage.setItem('bo_type', true)
-        this.bo_type = true;
-        let bof_start_time = new Date(this.b_start_time).format("hh:mm:ss");
-        $("#playback_start_time").html(bof_start_time);
+      this.is_playing = 1 // 是否播放标识
+      console.log(this.percent, 'set_percent')
+      sessionStorage.setItem('playBackPercent', this.percent)
+      if (this.first) { // 从开始处进行播放
+        sessionStorage.setItem('bo_type', true) // 存储播放状态(playback.js中使用)
+        this.bo_type = true
+        let bof_start_time = new Date(this.b_start_time).format("hh:mm:ss")
+        this.start_time_show = bof_start_time // 赋值回放开始时间
+        console.log('点击图片遮罩从此处进行调用')
         this.$api.playback.play({ // 原playback接口
           agent: this.createPlaybackObj.agent,
           dom: $("#playback_screen"),
@@ -424,11 +333,13 @@ export default {
           videoSize: this.videoSize,
           token: this.createPlaybackObj.token,
           playback: 1 // 此处额外添加参数
-        }).then(res => {
-          console.log(res, 'playBack_playSpeed5')
-          this.playback_speed(res)
         })
-      } else {
+        // .then(res => {
+        //   console.log(res, 'playBack_playSpeed5')
+        //   this.playback_speed(res)
+        // })
+      } else { // 非首次播放
+        console.log(this.play_back_token, 'this.play_back_token')
         this.$api.playback.play({ // 原playback接口
           agent: this.createPlaybackObj.agent,
           dom: $("#playback_screen"),
@@ -456,8 +367,114 @@ export default {
         let jumpData = { parent: this.createPlaybackObj.parent, dev_sn: this.createPlaybackObj.dev_sn, back_page: this.createPlaybackObj.back_page, agent: this.createPlaybackObj.agent, addr: this.createPlaybackObj.addr, a_start: this.createPlaybackObj.a_start, b_end: this.createPlaybackObj.b_end, backplay_flag: 4 };
         this.$router.push({ name: 'history', params: jumpData });
       }
-    }
+    },
+    clickProgress () { // 点击进度条
+      this.first = true
+      sessionStorage.setItem('play_first', true)
+      this.play_progress = this.percent
+      let new_token = parseInt(this.createPlaybackObj.data.length * this.play_progress)
+      this.play_back_token = this.createPlaybackObj.data[new_token].token
+      let play_progress_time_stamp = this.b_start_time + (this.videoSize * this.percent)
+      let play_progress_time = new Date(play_progress_time_stamp).format("hh:mm:ss")
+      sessionStorage.setItem("play_progress_time_stamp", play_progress_time_stamp)
+      //拖动时显示对应的时间
+      this.start_time_show = play_progress_time
+      // $("#playback_start_time").html(play_progress_time)
+      // moveProgressBar
+      if (this.is_playing) {
+        this.$api.play.video_stop({
+          dom: $("#playback_screen")
+        }).then(() => { // 原函数中是存在返回值调用至函数的情况
+          this.$api.playback.play({ // 原playback接口
+            agent: this.createPlaybackObj.agent,
+            dom: $("#playback_screen"),
+            sn: this.$store.state.jumpPageData.selectDeviceIpc,
+            videoSize: this.videoSize,
+            token: this.play_back_token,
+            playback: 1 // 此处额外添加参数
+          }).then(res => {
+            console.log(res, 'playBack_playSpeed1')
+            if (res && res.length > 2) {
+              this.playback_speed(res[0], res[1], res[2])
+            } else {
+              this.playback_speed(res)
+            }
+          })
+        })
+      }
+    },
+    clickDownloadSubmit () { // 点击下载弹窗中确定事件
+      let download_path = this.publicFunc.mx("#playback_download_path_input").value //下载路径
+      this.downloadBoxFlag = false
+      // 添加下载弹窗内容
+      this.publicFunc.mx("#playback_screen").style.background = "#000" // 播放区域黑色背景
+      this.downloadBufferFlag = true // 下载进度弹出
+      if (this.$store.state.jumpPageData.projectName === "vimtag") {
+        this.$api.playback.replay_download({ // 原play_back_download接口
+          agent: this.createPlaybackObj.agent,
+          dom: $("#playback_screen"),
+          sn: this.$store.state.jumpPageData.selectDeviceIpc,
+          videoSize: this.videoSize,
+          token: this.createPlaybackObj.download_token,
+          download_path: download_path,
+          playback: 1, // 此处额外添加参数
+          isDownload: 1 // 此处额外添加参数
+        })
+      } else {
+        this.$api.playback.replay_download({ // 原play_back_download接口
+          agent: this.createPlaybackObj.agent,
+          dom: $("#playback_screen"),
+          sn: this.$store.state.jumpPageData.selectDeviceIpc,
+          videoSize: this.videoSize,
+          token: this.createPlaybackObj.token,
+          download_path: download_path,
+          playback: 1, // 此处额外添加参数
+          isDownload: 1 // 此处额外添加参数
+        })
+      }
+    },
+    clickDownloadPause () { // 点击下载暂停
+      if (this.publicFunc.mx("#download_pause").innerHTML === mcs_pause) {
+        this.$api.playback.pause_ipc().then($("#download_pause").html(mcs_continue))
+      } else {
+        this.$api.playback.play_download_continue().then($("#download_pause").html(mcs_pause))
+      }
+    },
+    clickDownloadStop () { // 点击下载终止
+      this.$api.playback.video_stop({
+        dom: $("#playback_screen"),
+        isDownload: 1 // 是否下载中特殊标记
+      }).then(res => {
+        this.create_preview(res)
+      })
+    },
     // 点击事件 结束
+    // 进度条相关
+    setProgress (percent) { // 设置进度
+      // console.log(percent, 'setProgressPercent')
+      if (percent > 1 || percent < 0) {
+        return
+      }
+      this.percent = percent
+      // 计算当前播放时间
+      let nowTimeStamp = this.b_start_time + (this.videoSize * percent)
+      this.start_time_show = new Date(nowTimeStamp).format('hh:mm:ss')
+      // 计算当前播放时间 结束
+      this.clickProgress() // 调用点击进度条事件
+      // 根据子组件传过来的百分比设置播放进度
+      // this.$refs.audio.currentTime = this.currentSong.duration * percent
+      // // 拖动后设置歌曲播放
+      // if (!this.playing) {
+      //   this.togglePlaying()
+      // }
+    },
+    // percent() { // 计算百分比
+    //   // return Math.min(1, this.currentTime / this.currentSong.duration)
+    //   let returnPercent = Math.min(Number(1), Number(0.5))
+    //   console.log('returnPercent', returnPercent)
+    //   return returnPercent
+    // }
+    // 进度条 结束
   },
   async mounted () {
     await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)

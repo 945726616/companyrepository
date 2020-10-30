@@ -1084,12 +1084,12 @@ input[type="number"]{
 	margin-top:15px;
 	margin-right:15px;
 }
-#playback_progress_bar{
-	float: left;
-	margin-top: 15px;
-	margin-left: 15px;
-	width:300px;
-}
+// #playback_progress_bar{
+// 	float: left;
+// 	margin-top: 20px;
+// 	margin-left: 15px;
+// 	width:300px;
+// }
 // #playback_download_path_box{
 // 	width:300px;
 // 	height:150px;
@@ -2509,10 +2509,18 @@ div.ibutton-label-on {
 	width:100%;
 	height:100%;
 	left:0px;
-	top:0px;
+  top:0px;
 	background: #000;
 	color:#fff;
 	text-align: center;
+}
+#plugin_install_box{ 
+/*居中显示*/
+  height: 142px;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  margin-top: -71px;
 }
 #plugin_install_title{
 	font-size: 30px;
@@ -2557,10 +2565,6 @@ div.ibutton-label-on {
 }
 #playback_screen{
 	position: relative;
-}
-#plugin_install_tips{
-	text-align: center;
-	margin-top:20px;
 }
 #version_updata_tips_page{
     width:100%;
@@ -2626,13 +2630,8 @@ div.ibutton-label-on {
 }
 #plugin_install_tips{
 	text-align: center;
-	margin-top:20px;
-}
-#plugin_install_tips{
-	text-align: center;
 	font-size: 16px;
 	color:#fff;
-	margin-top:220px;
 }
 #plugin_install_download{
 	/*width:145px;*/
@@ -4074,34 +4073,34 @@ line-height: 30px;
     letter-spacing: 1px;
     color:#646464;
 }
-.fd_slider_flag{
-	cursor: pointer;
-	position: absolute;
-	display: block;
-	z-index: 3;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	line-height: 5px;
-	top: 8px;
-	bottom: none;
-	left: 10px;
-	right: 10px;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-}
-.no_flag_item{
-	display: block;
-	float:left;
-	background: #c0c0c0;
-	height:4px;
-}
-.flag_item{
-	display: block;
-	float:left;
-	background: rgba(255,0,0,.5);
-	height: 5px;
-}
+// .fd_slider_flag{
+// 	cursor: pointer;
+// 	position: absolute;
+// 	display: block;
+// 	z-index: 3;
+// 	margin: 0;
+// 	padding: 0;
+// 	overflow: hidden;
+// 	line-height: 5px;
+// 	// top: 8px;
+// 	// bottom: none;
+// 	left: 10px;
+// 	right: 10px;
+// 	border-radius: 3px;
+// 	-moz-border-radius: 3px;
+// }
+// .no_flag_item{
+// 	display: block;
+// 	float:left;
+// 	background: #c0c0c0;
+// 	height:4px;
+// }
+// .flag_item{
+// 	display: block;
+// 	float:left;
+// 	background: rgba(255,0,0,.5);
+// 	height: 5px;
+// }
 /* 报警/录像新增样式 */
 .set_submit_btn{
     width:20%;
