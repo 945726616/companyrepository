@@ -27,7 +27,7 @@
 }
 
 #back:hover {
-    color: $projectColor;
+    color: #00a6ba;
 }
 
 #back:hover #main_title_box_return_img {
@@ -218,7 +218,7 @@
     height: 30px;
     width: 120px;
     border: 0;
-    background: $projectColor;
+    background-color: $projectColor;
     cursor: pointer;
     font-size: 15px;
     color: #ffffff;

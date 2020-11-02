@@ -316,7 +316,7 @@ const playback = {
       let start_time = JSON.parse(sessionStorage.getItem('play_back_startTime'))
       let end_time = JSON.parse(sessionStorage.getItem('play_back_endTime'))
       let b_start_time = JSON.parse(sessionStorage.getItem('b_start_time'))
-      let first = sessionStorage.getItem('play_first')
+      let first = sessionStorage.getItem('play_first') // 进度条点击标识
       let percent = store.state.jumpPageData.percent // 获取播放百分比
       let playBackTime = end_time - b_start_time // 播放总时间 record_played_duration: 播放的时长
       console.log(percent, 'playBackPercent', bo_type)
@@ -325,20 +325,19 @@ const playback = {
         bo_type = false
         sessionStorage.setItem('bo_type', false)
       } else {
-        start_time = b_start_time + record_played_duration;
+        start_time = b_start_time + record_played_duration + (store.state.jumpPageData.playBackSavePercent * playBackTime) // 原始开始时间 + 播放经过时间 + 点击偏移百分比所经过的时间(偏移百分比默认为0) = 当前时间戳
       }
       sessionStorage.setItem('play_back_startTime', start_time)
-      let play_start_time_stop = new Date(start_time).format("yyyy-MM-dd hh:mm:ss");
-      // let play_start_time = new Date(start_time).format("hh:mm:ss");
-      // $("#playback_start_time").html(play_start_time);
-      let play_end_time_stop = new Date(end_time).format("yyyy-MM-dd hh:mm:ss");
+      let play_start_time_stop = new Date(start_time).format("yyyy-MM-dd hh:mm:ss") // 当前时间戳
+      let play_end_time_stop = new Date(end_time).format("yyyy-MM-dd hh:mm:ss") // 结束时间戳
       // let play_end_time = new Date(end_time).format("hh:mm:ss");
-      percent = record_played_duration / playBackTime
+      percent = (record_played_duration + (store.state.jumpPageData.playBackSavePercent * playBackTime)) / playBackTime
       store.dispatch('setPercent', percent) // 计算进度条百分比并赋值
       console.log(playback, 'playback', percent, playBackTime, record_played_duration)
       if (play_start_time_stop >= play_end_time_stop) {
         console.log('进入终止播放函数')
-        store.dispatch('setPercent', 1)
+        store.dispatch('setPlayBackSavePercent', 0) // 偏移百分比设置为0
+        store.dispatch('setPercent', 1) // 停止播放百分比设置1
         playback.video_stop({
           dom: $("#playback_screen")
         }).then(res => {

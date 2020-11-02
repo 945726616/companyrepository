@@ -481,10 +481,10 @@
     }
 
     #attachmen_btn_submit {
-        background: $projectColor;
+        background-color: $projectColor;
+        border: 1px solid $projectColor;
         float: right;
         color: #fff;
-        border: 1px solid $projectColor;
         border-radius: 5px;
         width: 120px;
         height: 30px;

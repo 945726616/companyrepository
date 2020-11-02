@@ -239,7 +239,8 @@ export default {
       addDeviceTime: '',
       tmpData: [],
       search_sort: [],
-      search_tree: []
+      search_tree: [],
+      device_offline_sign:false //判断点击关闭弹窗时当前设备是否离线
     }
   },
   methods: {
@@ -500,16 +501,17 @@ export default {
           this.device_list()
         })
       } else {
-        if (this.$store.state.jumpPageData.deviceData.length === 0 || type === 'refresh') {
-          //发送设备列表请求
-          this.$api.devlist.devs_refresh().then(res => {
-            // console.log(res, '获取设备列表数据')
-            this.devlist_get_ack(res)
-          })
-        } else {
-          this.devlist_get_ack(this.$store.state.jumpPageData.deviceData)
+        if(!this.device_offline_sign){
+          if (this.$store.state.jumpPageData.deviceData.length === 0 || type === 'refresh') {
+            //发送设备列表请求
+            this.$api.devlist.devs_refresh().then(res => {
+              // console.log(res, '获取设备列表数据')
+              this.devlist_get_ack(res)
+            })
+          } else {
+            this.devlist_get_ack(this.$store.state.jumpPageData.deviceData)
+          }
         }
-
       }
     },
     devlist_get_ack (data) { // 设备列表数据整理并存储
@@ -827,6 +829,11 @@ export default {
       })
     },
     closeModel () { // 子组件关闭弹窗
+      if(this.addDeviceModelObj.addDeviceBodyFlag === "offlineDeviceAlert"){
+        this.device_offline_sign = true;
+      }else{
+        this.device_offline_sign = false;
+      }
       this.addDeviceModel = false
       this.addDeviceModelObj = {}
       this.add_device_input_id = null

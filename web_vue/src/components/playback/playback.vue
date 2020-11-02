@@ -93,7 +93,7 @@ export default {
       bo_type: sessionStorage.getItem('bo_type') ? sessionStorage.getItem('bo_type') : false, // 播放类型
       play_back_token: null, // 回放token
       b_start_time: null, // b开始时间
-      clientFlag: true, // window.fujikam === 'fujikam' ? true : false // 客户端判别标识(true: 客户端, false: 网页端)
+      clientFlag: window.fujikam === 'fujikam' ? true : false, // window.fujikam === 'fujikam' ? true : false // 客户端判别标识(true: 客户端, false: 网页端)
       play_progress: null, // 回放进度条参数
       percent: 0,
       downloadBoxFlag: false, // 下载提示框标识
@@ -363,6 +363,7 @@ export default {
     },
     clickBack () { // 点击返回
       console.log(this.createPlaybackObj, 'createPlaybackObj')
+      this.$store.dispatch('setPlayBackSavePercent', 0) // 返回时偏移百分比重置为0
       if (this.createPlaybackObj.box_ipc == 1) { //如果从云盒子实时播放进来回放播放
         let jumpData = { parent: this.createPlaybackObj.parent, dev_sn: this.createPlaybackObj.dev_sn, back_page: this.createPlaybackObj.back_page, agent: this.createPlaybackObj.agent, addr: this.createPlaybackObj.addr, a_start: this.createPlaybackObj.a_start, b_end: this.createPlaybackObj.b_end, box_ipc: 1, ipc_sn: this.createPlaybackObj.ipc_sn, box_sn: this.createPlaybackObj.box_sn, box_live: 1, backplay_flag: 4, ipc_stat: this.createPlaybackObj.ipc_stat };
         this.$router.push({ name: 'history', params: jumpData });
@@ -374,6 +375,7 @@ export default {
     clickProgress () { // 点击进度条
       this.first = true
       sessionStorage.setItem('play_first', true)
+      this.$store.dispatch('setPlayBackSavePercent', this.percent)
       this.play_progress = this.percent
       let new_token = parseInt(this.createPlaybackObj.data.length * this.play_progress)
       this.play_back_token = this.createPlaybackObj.data[new_token].token

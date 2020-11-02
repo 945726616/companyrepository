@@ -77,7 +77,6 @@ input, button, select, textarea {
 // 	line-height:62px;
 // }
 .top_list_menu:hover{
-// 	color: #fff;
 	background-color: $projectColor;
 }
 // #top_box_right{
@@ -104,7 +103,6 @@ input, button, select, textarea {
 // 	border-radius: 3px;
 // }
 #top_menu_my:hover{
-// 	color:white;
 	background-color: $projectColor;
 }
 // #top_login_div{
@@ -130,16 +128,13 @@ input, button, select, textarea {
 // 	background: url(../assets/device/equipment.png) no-repeat;
 // }
 #top_login_div:hover{
-	// color:#fff;
 	background-color: $projectColor;
 }
 // #top_login_div:hover #top_login_div_ico{
 // 	background: url(../assets/device/equipment2.png) no-repeat;
 // }
 #top_login_span:hover{
-// 	color:#fff;
 	background-color: $projectColor;
-// 	height:62px;
 }
 //top-end
 // #login_page{
@@ -232,8 +227,6 @@ input, button, select, textarea {
 // 	background: url("../assets/device/vimtag_img.png") no-repeat -56px -95px;
 // }
 #keep_sign_in{
-// 	float: right;
-// 	margin-bottom: 10px;
 	color: $projectColor;
 }
 // #keep_sign_in_check{
@@ -242,35 +235,16 @@ input, button, select, textarea {
 // 	margin-right: 5px;
 // }
 .vimtag_btn{
-// 	color: #ffffff;
-// 	font-size: 16px;
-// 	width: 290px;
-// 	height: 44px;
-// 	margin-bottom: 16px;
-// 	cursor: pointer;
 	background-color: $projectColor;
-// 	border: 0px;
-// 	-webkit-border-radius: 4px;
-// 	-moz-border-radius: 4px;
-// 	border-radius: 4px;
 }
 #register_account{
 	color: $projectColor;
-// 	font-size: 14px;
-// 	cursor: pointer;
-// 	float: left;
 }
 #forget_pass{
 	color: $projectColor;
-// 	font-size: 14px;
-// 	cursor: pointer;
-// 	float: right;
 }
 #sign_account{
 	color: $projectColor;
-// 	font-size: 14px;
-// 	cursor: pointer;
-// 	text-align: center;
 }
 //login-end
 
@@ -525,39 +499,10 @@ input, button, select, textarea {
 	margin-top: 13px;
 }
 .attribute_value_text{
-	float: right;
-	font-size: 14px;
-	margin-top: 13px;
-	margin-right: 10px;
-	color: rgb(0, 166, 186);
+	color: $projectColor;
 }
 .list_right_input{
-	float: right;
-	height: 34px;
-	width: 200px;
-	border: 1px solid #ccc;
-	color:$projectColor;
-	text-align: right;
-	padding-right: 10px;
-	margin-top: 5px;
-	border-radius: 4px;
-}
-.list_right_button {
-	float: right;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	height: 30px;
-	width: 120px;
-	line-height: 30px;
-	text-align: center;
-	border: 0;
-	background-color: $projectColor;
-	margin-top: 20px;
-	margin-left: 20px;
-	cursor: pointer;
-	font-size: 15px;
-	color: #ffffff;
+	color: $projectColor;
 }
 .list_right_item_ex{
 	width: 520px;
@@ -575,9 +520,7 @@ input, button, select, textarea {
 	color:$projectColor;
 }
 .options_float_right input {
-	font-size: 15px;
 	color: $projectColor;
-    height: 34px;
 }
 .input_read_only{
 	width: 300px;
@@ -748,30 +691,10 @@ div.ibutton-label-on {
 	height:200px;
 }
 .list_right_button_ex {
-	float: right;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	height: 30px;
-	width: 120px;
-	border: 0;
-	background: rgb(0, 166, 186);
-	cursor: pointer;
-	font-size: 15px;
-	color: #ffffff;
+	background-color: $projectColor;
 }
 .label_sd {
-	width: 60px;
-	height: 12px;
-	background:$projectColor;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
-	position: relative;
-	float: right;
-	margin-top: 7px;
-	z-index: 1;
-	cursor: pointer;
+	background-color: $projectColor;
 }
 
 .label_img {
@@ -1952,18 +1875,7 @@ div.ibutton-label-on {
 // 	float: left;
 // }
 .filter_btn{
-// 	/*background-color: #efeff4; 6.1.2*/
-// 	color: #000000;
-// 	font-size: 14px;
-// 	/*width: 62px;6.4.1*/
-// 	height: 26px;
 	border-color: $projectColor;
-// 	margin-left: 20px;
-// 	border-width: 1px;
-// 	text-align: center;
-// 	line-height: 26px;
-// 	float:left;
-// 	cursor:pointer;
 }
 /*.filter_btn:hover{  6.1.2
 	color: #fff;
@@ -2063,14 +1975,7 @@ input[type=radio]{
 	box-shadow: 0 2px 30px #050505;
 }
 #binding_account_cancel_btn{
-	// float:right;
 	background-color:$projectColor;
-	// color:#fff;
-	// font-size:24px;
-	// cursor:pointer;
-	// height:24px;
-	// width:24px;
-	// line-height:24px;
 }
 .standard_inputs_normal {
 	color: #BDBDBD;
@@ -2668,16 +2573,7 @@ input[type=radio]{
 // 	margin-top:100px;
 // }
 #mp_btn{
-// 	float:right;
-// 	width:120px;
-// 	height:30px;
-// 	border-radius: 4px;
-// 	color:#fff;
 	background-color: $projectColor;
-// 	text-align:center;
-// 	line-height: 30px;
-// 	margin-top:60px;
-// 	cursor:pointer;
 }
 // #mp_updata_password{
 // 	color:#00A7BA;
@@ -2757,16 +2653,7 @@ input[type=radio]{
 // 	height:50px;
 // }
 #gp_btn{
-// 	float:right;
-// 	width:120px;
-// 	height:30px;
-// 	border-radius: 4px;
-// 	color:#fff;
 	background-color: $projectColor;
-// 	text-align:center;
-// 	line-height: 30px;
-// 	margin-top:60px;
-// 	cursor:pointer;
 }
 // #gp_updata_password{
 // 	color:#00A7BA;
@@ -2852,16 +2739,7 @@ input[type=radio]{
 // 	height:50px;
 // }
 #ae_btn{
-//     float:right;
-// 	width:120px;
-// 	height:30px;
-// 	border-radius: 4px;
-// 	color:#fff;
 	background-color: $projectColor;
-// 	text-align:center;
-// 	line-height: 30px;
-// 	margin-top:60px;
-// 	cursor:pointer;
 }
 // .ae_tips{
 // 	margin-top:100px;
@@ -2944,14 +2822,7 @@ input[type=radio]{
 // 	margin:0 auto;
 // }
 #export_success_icon {
-// 	line-height:36px;
-// 	padding-left:40px;
 	color:$projectColor;
-// 	height:36px;
-// 	background:url(../assets/device/over.png) no-repeat;
-// 	margin-left:110px;
-// 	margin-bottom:10px;
-// 	display:none;
 }
 // #notice_content {
 // 	color: #666;
@@ -2978,11 +2849,6 @@ input[type=radio]{
 // 	float:left;
 // }
 #progress_bar {
-// 	float: left;
-// 	line-height: 5px;
-// 	width: 0;
-// 	border-radius: 3px;
-// 	height: 5px;
 	background-color: $projectColor;
 }
 // #sd_export_path_show {
@@ -3008,17 +2874,7 @@ input[type=radio]{
 // 	font-size: 14px;
 // }
 #sd_export_submit {
-// 	width: 100px;
-// 	height: 30px;
-// 	line-height: 30px;
-// 	text-align: center;
-// 	cursor: pointer;
-// 	color: #fff;
 	background-color: $projectColor;
-// 	float: left;
-// 	margin-left: 220px;
-// 	margin-top: 20px;
-// 	font-size: 14px;
 }
 // #sd_export_submit_tip{
 // 	color:#f00;
@@ -3042,19 +2898,11 @@ input[type=radio]{
 //     line-height:60px;
 // }
 #logo_exit #exit_btn_img {
-// 	float:right;
 	border:1px solid $projectColor;
 	color:$projectColor;
-// 	font-size: 16px;
-// 	border-radius:2px;
-// 	text-align:center;
-// 	margin-right:128px;
-// 	margin-top:17px;
-// 	line-height:34px;
 }
 #logo_exit #exit_btn_img:hover{
 	background-color:$projectColor;
-// 	color:#fff;
 }
 // #feedback{
 // 	background: url(../assets/device/feedback_icon.png) no-repeat;
@@ -3214,7 +3062,7 @@ input[type=radio]{
   margin-top:15%;
   text-align: center;
   box-shadow:0 2px 30px #050505;
-  -webkit-box-Shadow:0 2px 30px #050505;
+  -webkit-box-shadow:0 2px 30px #050505;
   -moz-box-shadow:0 2px 30px #050505;
   -webkit-border-radius:10px;
   -moz-border-radius:10px;
@@ -3404,9 +3252,6 @@ input[type=radio]{
 	height: 13px;
 }
 .option_scene_list {
-	width: 520px;
-	padding: 20px 0;
-	float: left;
 	border-bottom: 1px solid $projectColor;
 }
 #to_scene_select{
@@ -3473,12 +3318,7 @@ input[type=radio]{
 	background: url(../assets/device/photo_ico.png) no-repeat 1px 3px;
 }
 #option_scene_list_add {
-	width: 520px;
-	padding: 20px 0;
-	float: left;
-	/*border-top: 1px solid $projectColor;*/
 	border-bottom: 1px solid $projectColor;
-	display: none;
 }
 .scene_list_add {
 	background: url("../assets/device/add_attachmen.png") no-repeat 16px 16px;
@@ -3653,17 +3493,8 @@ input[type=radio]{
 	margin-top: 30px;
 }
 #attachmen_btn_submit {
-	background: $projectColor;
-	float: right;
-	color: #fff;
+	background-color: $projectColor;
 	border: 1px solid $projectColor;
-	border-radius: 5px;
-	width: 120px;
-	height: 30px;
-	text-align: center;
-	line-height: 30px;
-	margin-left: 30px;
-	cursor: pointer;
 }
 #attachmen_btn_del {
 	background: #fff;
@@ -4512,11 +4343,9 @@ input[type=radio]{
 }
 .page_num_btn_no{
 	color: $projectColor;
-// 	background: #fff;
 }
 .page_num_btn_yes{
-	color: #fff;
-	background: $projectColor;
+	background-color: $projectColor;
 }
 // .system_new_version{
 // 	float: right;
@@ -4686,12 +4515,7 @@ input[type=radio]{
 	cursor: default;
 }
 .list_info{
-	float:right;
-	height:50px;
-	line-height: 50px;
-	color:$projectColor;
-	font-size: 16px;
-	cursor: pointer;
+	color: $projectColor;
 }
 // .list_info input{
 // 	width:200px;
@@ -5015,15 +4839,7 @@ input[type=radio]{
  border-bottom:1px solid #ccc;
 }
 #submit_apply{
-	text-align: center;
-    margin: 40px auto 0;
-    width: 120px;
-    height: 30px;
-    border-radius: 4px;
-    background: $projectColor;
-    color: #fff;
-	line-height: 28px;
-	cursor: pointer;
+	background-color: $projectColor;
  }
 #record_return_img{
 	width: 11px;
@@ -5056,14 +4872,7 @@ input[type=radio]{
 	cursor: default;
 }
 .vimtag_date{
-	width: 52px;
-    color: rgb(0, 166, 186);
-    height: 34px;
-    font-weight: 400;
-    background-color: white;
-    border-radius: 4px;
-    border: 1px solid #22aaaa;
-    text-align: center;
+	border: 1px solid $projectColor;
 }
 #date_year_span{
 	padding: 0 2px 0 2px;
@@ -5080,12 +4889,8 @@ input[type=radio]{
     background-color: white;
 }
 #time_zone_selevt{
-	color: rgb(0, 166, 186);
-    height: 34px;
-    width: 200px;
-    padding-left: 73px;
-    box-sizing: border-box;
-    border-radius: 4px;
+	color: $projectColor;
+    border: 1px solid $projectColor;
 }
 #reboot_left{
 	width: 100%;
@@ -5106,10 +4911,8 @@ input[type=radio]{
     overflow:hidden;
 }
 #power_fr{
-	width: 200px;
-    height: 34px;
-    color: $projectColor;
-    border-radius: 4px;
+	color: $projectColor;
+    border: 1px solid $projectColor;
 }
 #power_fr_div{
 	width:100%;
@@ -5120,9 +4923,7 @@ input[type=radio]{
 	color: #666;
 }
 #delete_set_record{
-	float:right;
-	color:$projectColor;
-	padding-right:10px;
+	color: $projectColor;
 }
 .start_time_active{
 	color:$projectColor;
@@ -5223,10 +5024,7 @@ line-height: 30px;
   border-bottom: 1px solid #ccc;
 }
 #screen_fr{
-	width: 200px; 
-    height: 34px;
-    color: $projectColor;
-    border-radius: 4px;
+	color: $projectColor;
 }
 #osd_info{
 	width: 520px;
@@ -5497,22 +5295,7 @@ line-height: 30px;
 	float:right;
 }
 #del_dev_button_setup{
-	float: right;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	height: 30px;
-	min-width: 120px;
-	padding: 5px 10px;
-    box-sizing: border-box;
-    margin-right: 100px;
-	border: 0;
 	background-color: $projectColor;
-	margin-top: 20px;
-	margin-left: 20px;
-	cursor: pointer;
-	font-size: 15px;
-	color: #ffffff;
 }
 #sd_describe{
 	font-size:14px;
@@ -5524,33 +5307,14 @@ line-height: 30px;
 	line-height:35px;
 }
 #sd_export_link{
-	font-size:14px;
-	color:$projectColor;
-	margin-top:15px;
-	height:40px;
-	line-height:40px;
-	cursor: default;
+	color: $projectColor;
 }
 #sd_export_link_content{
-	font-size:14px;
-	color:$projectColor;
-	margin-top:15px;
-	height:40px;
-	line-height:35px;
+	color: $projectColor;
 }
 /*6.1.2*/
 #empty_search_btn{
-	// border-radius: 4px;
-    // height: 34px;
-    // line-height: 34px;
-    // width: 120px;
-    // border: 0;
-    // font-size: 16px;
     background-color: $projectColor;
-    // color:#fff;
-    // /*110改为55*/
-    // margin:55px auto 0;
-    // text-align: center;
 }
 #box_per_ipc{
 	color:#323232;
@@ -5610,14 +5374,7 @@ line-height: 30px;
 //     display:none;
 // }
 #onvif_re_searching{
-	// width: 685px;
-    // margin: 0 auto;
-    // text-align: center;
-    // font-size: 16px;
     color: $projectColor;
-	// margin-top: 30px;
-	// cursor: default;
-    // display:none;
 }
 .box_onvif_unadd_img_box{
 	/*width:190px; 设计稿为190px 但一排显示3个 有空白*/
@@ -5648,15 +5405,8 @@ line-height: 30px;
 	font-size:14px;
 }
 .box_onvif_add_btn{
-	// margin:24px auto 0;
-	// width:76px;
-	// height:32px;
-	// font-size: 16px;
-	// line-height:32px;
-	// text-align:center;
 	color:$projectColor;
 	border:1px solid $projectColor;
-	// border-radius: 4px;
 }
 #add_onvif_devices_box{
     width:840px;
@@ -5693,10 +5443,7 @@ line-height: 30px;
 	font-size:15px;
 }
 .record_sd_calculate{
-	height:35px;
-	font-size: 14px;
-	line-height: 35px;
-	color:$projectColor;
+	color: $projectColor;
 }
 #history_play_box{
 	width:85%;
@@ -5757,38 +5504,38 @@ line-height: 30px;
     text-overflow: ellipsis;
 	overflow: hidden;
 }
-.fd_slider_flag{
-	cursor: pointer;
-	position: absolute;
-	display: block;
-	z-index: 3;
-	height: 3px;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	line-height: 4px;
-	top: 8px;
-	bottom: none;
-	left: 10px;
-	right: 10px;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	display: flex;
-	justify-content: space-between;
-	background:#c0c0c0;
-}
-.no_flag_item{
-	display: block;
-	float:left;
-	background: #c0c0c0;
-	height: 3px;
-}
-.flag_item{
-	display: block;
-	float:left;
-	background: rgba(255,0,0,.5);
-	height: 3px;
-}
+// .fd_slider_flag{
+// 	cursor: pointer;
+// 	position: absolute;
+// 	display: block;
+// 	z-index: 3;
+// 	height: 3px;
+// 	margin: 0;
+// 	padding: 0;
+// 	overflow: hidden;
+// 	line-height: 4px;
+// 	// top: 8px;
+// 	// bottom: none;
+// 	// left: 10px;
+// 	// right: 10px;
+// 	border-radius: 3px;
+// 	-moz-border-radius: 3px;
+// 	display: flex;
+// 	justify-content: space-between;
+// 	background:#c0c0c0;
+// }
+// .no_flag_item{
+// 	display: block;
+// 	float:left;
+// 	background: #c0c0c0;
+// 	height: 3px;
+// }
+// .flag_item{
+// 	display: block;
+// 	float:left;
+// 	background: rgba(255,0,0,.5);
+// 	height: 3px;
+// }
 /* 云盒子手动添加设备样式 */
 .vimtag_add_device_input_ip_box_ico{
 	width:16px;
@@ -6058,5 +5805,8 @@ input[type=radio]:checked:before {
 }
 #bottom_select_lang:hover {
   color: $projectColor;
+}
+input[type=range] {
+	background: -webkit-linear-gradient($projectColor, $projectColor) no-repeat, #c0c0c0;
 }
 // 样式颜色 结束

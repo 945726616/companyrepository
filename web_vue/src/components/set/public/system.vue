@@ -198,7 +198,8 @@
                 } else if (msg_status == "fail") {
                     this.publicFunc.msg_tips({ msg: mcs_fail + ":" + msg.remark, type: "error", timeout: 3000 })
                 } else if (msg_status != "free" && msg_status != "" && msg_status != "finish") {
-                    let str_div = document.getElementById("cl_str_div");
+                    let wait_div = this.publicFunc.mx("#system_wait_div");
+                    let str_div = this.publicFunc.mx("#cl_str_div");
                     let extra = "";
                     setTimeout(() => {
                         this.$api.set.upgrade_get({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {

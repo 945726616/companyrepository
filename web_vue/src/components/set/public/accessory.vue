@@ -471,7 +471,6 @@
         float: left;
         /*border-top: 1px solid $projectColor;*/
         border-bottom: 1px solid $projectColor;
-        // display: none;
     }
 
     .scene_list_add {

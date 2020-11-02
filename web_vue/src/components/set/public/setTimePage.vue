@@ -1768,7 +1768,7 @@ export default {
   width: 120px;
   height: 30px;
   border-radius: 4px;
-  background: $projectColor;
+  background-color: $projectColor;
   color: #fff;
   line-height: 28px;
   cursor: pointer;

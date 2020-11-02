@@ -168,8 +168,6 @@ $projectColor: #2988cc !global;
 // }
 
 #keep_sign_in {
-// 	float: right;
-// 	margin-bottom: 10px;
 	color: $projectColor;
 }
 
@@ -180,38 +178,19 @@ $projectColor: #2988cc !global;
 // }
 
 .mipc_btn {
-// 	color: #ffffff;
-// 	font-size: 14px;
-// 	width: 230px;
-// 	height: 34px;
-// 	margin-bottom: 16px;
-// 	cursor: pointer;
 	background-color: $projectColor;
-// 	border: 0px;
-// 	-webkit-border-radius: 2px;
-// 	-moz-border-radius: 2px;
-// 	border-radius: 2px;
 }
 
 #register_account {
 	color: $projectColor;
-// 	font-size: 14px;
-// 	cursor: pointer;
-// 	float: left;
 }
 
 #forget_pass {
 	color: $projectColor;
-// 	font-size: 14px;
-// 	cursor: pointer;
-// 	float: right;
 }
 
 #sign_account {
 	color: $projectColor;
-// 	font-size: 14px;
-// 	cursor: pointer;
-// 	text-align: center;
 }
 
 // #forget_pass_inner {
@@ -226,14 +205,7 @@ $projectColor: #2988cc !global;
 // }
 
 #binding_account_cancel_btn {
-// 	float: right;
 	background-color: $projectColor;
-// 	color: #fff;
-// 	font-size: 24px;
-// 	cursor: pointer;
-// 	height: 24px;
-// 	width: 24px;
-// 	line-height: 24px;
 }
 
 // .standard_inputs_normal {
@@ -246,44 +218,23 @@ $projectColor: #2988cc !global;
 // }
 
 #binding_account_next_btn {
-// 	width: 100%;
-// 	line-height: 34px;
-// 	height: 34px;
-// 	color: #fff;
-// 	border: none;
 	background-color: $projectColor;
 }
 
 #recovery_pass_ok_btn {
-// 	width: 100%;
-// 	line-height: 34px;
-// 	height: 34px;
-// 	color: #fff;
-// 	border: none;
 	background-color: $projectColor;
 }
 
 #forget_password_close_btn {
-// 	width: 100%;
-// 	line-height: 34px;
-// 	height: 34px;
-// 	color: #fff;
-// 	border: none;
 	background-color: $projectColor;
 }
 
 #input_email_page {
-// 	margin-top: 50px;
-// 	display: none;
 	color: $projectColor;
-// 	font-size: 14px;
 }
 
 #forget_password_page {
-// 	margin-top: 50px;
-// 	display: none;
 	color: $projectColor;
-// 	font-size: 14px;
 }
 
 // #select_lang_btn {
@@ -988,9 +939,6 @@ $projectColor: #2988cc !global;
 
 .select_filter_li_active {
 	color: $projectColor;
-	// margin-left: 20px;
-	// line-height: 30px;
-	// cursor: pointer;
 }
 
 .alarm_sign_ico {
@@ -1100,35 +1048,18 @@ $projectColor: #2988cc !global;
 }
 
 .page_num_btn {
-	// width: 30px;
-	// height: 30px;
-	// margin: 0 10px 0 10px;
-	// cursor: pointer;
 	border: 1px solid $projectColor;
-	// -moz-border-radius: 2px;
-	// -webkit-border-radius: 2px;
-	// border-radius: 2px;
-	// text-align: center;
-	// line-height: 30px;
-	// float: left;
-	// flex-shrink: 0;
 }
 
 .page_num_btn_no {
 	color: $projectColor;
-	// background: #fff;
 }
 
 .page_num_btn_yes {
-	// color: #fff;
 	background-color: $projectColor;
 }
 
 .page_jump_input {
-	// height: 28px;
-	// width: 40px;
-	// text-align: center;
-	// flex-shrink: 0;
 	border: 1px solid $projectColor;
     color: $projectColor;
 }
@@ -1143,13 +1074,7 @@ input[type="number"] {
 }
 
 .page_jump_btn {
-	// width: 75px;
-	// height: 30px;
-	// padding: 0 10px;
-	// margin: 0 10px;
-	// color: #fff;
 	background-color: $projectColor;
-	// flex-shrink: 0;
 }
 
 /*playback page*/
@@ -1356,11 +1281,9 @@ input[type="number"] {
 	font-size: 16px;
 }
 
-.list_idle_div_active {
-	background-color: #FFF;
-	color: #2988cc;
-	border-left: 4px solid #2988cc;
-	padding-left: 36px;
+.mipc_list_idle_div_active {
+	color: $projectColor;
+	border-left: 4px solid $projectColor;
 }
 
 .list_left_text {}
@@ -1377,29 +1300,11 @@ input[type="number"] {
 }
 
 .attribute_value_text {
-	float: right;
-	font-size: 14px;
-	margin-top: 13px;
-	margin-right: 10px;
-	color: #2988cc;
+	color: $projectColor;
 }
 
 .list_right_button {
-	float: right;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	height: 30px;
-	width: 120px;
-	border: 0;
-	background-color: #2988cc;
-	margin-top: 20px;
-	margin-left: 20px;
-	cursor: pointer;
-	font-size: 15px;
-	color: #ffffff;
-	line-height: 30px;
-	text-align: center;
+	background-color:$projectColor;
 }
 
 .list_right_box {
@@ -1408,9 +1313,7 @@ input[type="number"] {
 }
 
 .options_float_right {
-	height: auto;
-	float: right;
-	margin-top: 5px;
+	color: $projectColor;
 }
 
 .vimtag_options_float_left {
@@ -1474,17 +1377,7 @@ input[type="number"] {
 }
 
 .list_right_button_ex {
-	float: right;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	height: 30px;
-	width: 120px;
-	border: 0;
-	background-color: #2988cc;
-	cursor: pointer;
-	font-size: 15px;
-	color: #ffffff;
+	background-color: $projectColor;
 }
 
 .options_float_left {
@@ -1657,16 +1550,7 @@ input[type="number"] {
 // }
 
 #mp_btn {
-// 	float: left;
-// 	width: 100px;
-// 	height: 34px;
-// 	color: #fff;
 	background-color: $projectColor;
-// 	text-align: center;
-// 	line-height: 36px;
-// 	margin-top: 5px;
-// 	margin-left: 40px;
-// 	cursor: pointer;
 }
 
 // #mp_updata_password {
@@ -1757,16 +1641,7 @@ input[type="number"] {
 // }
 
 #gp_btn {
-// 	float: left;
-// 	width: 100px;
-// 	height: 34px;
-// 	color: #fff;
 	background-color: $projectColor;
-// 	text-align: center;
-// 	line-height: 36px;
-// 	margin-top: 5px;
-// 	margin-left: 40px;
-// 	cursor: pointer;
 }
 
 // #gp_updata_password {
@@ -1878,16 +1753,7 @@ input[type="number"] {
 // }
 
 #ae_btn {
-// 	float: left;
-// 	width: 100px;
-// 	height: 34px;
-// 	color: #fff;
 	background-color: $projectColor;
-// 	text-align: center;
-// 	line-height: 36px;
-// 	margin-top: 5px;
-// 	margin-left: 40px;
-// 	cursor: pointer;
 }
 
 // .ae_tips {
@@ -1978,14 +1844,7 @@ input[type="number"] {
 }
 
 #export_success_icon {
-	// line-height: 36px;
-	// padding-left: 40px;
 	color: $projectColor;
-	// height: 36px;
-	// /*background:url(../assets/device/over.png) no-repeat;*/
-	// margin-left: 110px;
-	// margin-bottom: 10px;
-	// display: none;
 }
 
 #notice_content {
@@ -2017,11 +1876,6 @@ input[type="number"] {
 }
 
 #progress_bar {
-	// float: left;
-	// line-height: 5px;
-	// width: 0;
-	// border-radius: 3px;
-	// height: 5px;
 	background-color: $projectColor;
 }
 
@@ -2050,17 +1904,7 @@ input[type="number"] {
 }
 
 #sd_export_submit {
-	// width: 100px;
-	// height: 30px;
-	// line-height: 30px;
-	// text-align: center;
-	// cursor: pointer;
-	// color: #fff;
 	background-color: $projectColor;
-	// float: left;
-	// margin-left: 220px;
-	// margin-top: 20px;
-	// font-size: 14px;
 }
 
 #sd_export_submit_tip {
@@ -2341,7 +2185,7 @@ input[type="number"] {
 	margin-top: 15%;
 	text-align: center;
 	box-shadow: 0 2px 30px #050505;
-	-webkit-box-Shadow: 0 2px 30px #050505;
+	-webkit-box-shadow: 0 2px 30px #050505;
 	-moz-box-shadow: 0 2px 30px #050505;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
@@ -2394,14 +2238,7 @@ input[type="number"] {
 // }
 
 .operation_manual {
-// 	float: left;
-// 	/*margin-left: -200px;*/
-// 	margin-left: -10px;
-// 	margin-top: 60px;
-// 	height: 30px;
-// 	font-size: 16px;
 	color: $projectColor;
-// 	line-height: 30px;
 }
 
 // #manual_box {
@@ -2410,10 +2247,7 @@ input[type="number"] {
 // }
 
 .user_guide_download_text {
-// 	font-size: 16px;
 	color: $projectColor;
-// 	/*margin-left: 180px;*/
-// 	margin-top: 10px;
 }
 
 // .user_guide_device_img {
@@ -2466,19 +2300,8 @@ input[type="number"] {
 // }
 
 .download_btn {
-// 	width: 100%;
-// 	height: 30px;
-// 	font-size: 13px;
 	color: $projectColor;
-// 	background-color: #FFF;
-// 	margin-top: 11px;
-// 	cursor: pointer;
 	border: 1px solid $projectColor;
-// 	-webkit-border-radius: 2px;
-// 	-moz-border-radius: 2px;
-// 	border-radius: 2px;
-// 	text-align: center;
-// 	line-height: 30px;
 }
 
 /*add_device*/
@@ -2870,15 +2693,7 @@ input[type="number"] {
 }
 
 .vimtag_date {
-	font-size: 14px;
-	height: 16px;
-	width: 50px;
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
-	border-radius: 8px;
-	border: 1px solid #22aaaa;
-	text-align: center;
-	line-height: 16px;
+	border: 1px solid $projectColor;
 }
 
 .vimtag_service_address {
@@ -3206,17 +3021,11 @@ input[type="number"] {
 }
 
 .attachmen_set_list {
-	width: 100%;
-	float: left;
-	margin-top: 20px;
-	border-bottom: 1px solid #00a6ba;
+	border-bottom: 1px solid $projectColor;
 }
 
 .option_scene_list {
-	width: 520px;
-	padding: 20px 0;
-	float: left;
-	border-bottom: 1px solid #00a6ba;
+	border-bottom: 1px solid $projectColor;
 }
 
 .scene_list_motion {
@@ -3260,12 +3069,7 @@ input[type="number"] {
 }
 
 #option_scene_list_add {
-	width: 520px;
-	padding: 20px 0;
-	float: left;
-	/* border-top: 1px solid #00a6ba; */
-	border-bottom: 1px solid #00a6ba;
-	display: none;
+	border-bottom: 1px solid $projectColor;
 }
 
 .scene_list_add {
@@ -3280,12 +3084,7 @@ input[type="number"] {
 }
 
 .list_info {
-	float: right;
-	height: 50px;
-	line-height: 50px;
-	color: #00a6ba;
-	font-size: 16px;
-	cursor: pointer;
+	color: $projectColor;
 }
 
 // .list_info input {
@@ -3375,17 +3174,8 @@ div.ibutton-label-on span {
 }
 
 #attachmen_btn_submit {
-	background: #2988cc;
-	float: right;
-	color: #fff;
-	border: 1px solid #00a6ba;
-	border-radius: 5px;
-	width: 120px;
-	height: 30px;
-	text-align: center;
-	line-height: 30px;
-	margin-left: 30px;
-	cursor: pointer;
+	background-color: $projectColor;
+	border: 1px solid $projectColor;
 }
 
 #device_setting_page {
@@ -3410,19 +3200,7 @@ div.ibutton-label-on span {
 }
 
 .list_right_input {
-	float: right;
-	-moz-border-radius: 2px;
-	-webkit-border-radius: 2px;
-	border-radius: 2px;
-	height: 34px;
-	width: 200px;
-	border: 1px solid #a8abb2;
-	text-align: left;
-	padding-left: 10px;
-	margin-top: 5px;
-	color: #6b7a99;
-	background-color: #FFF;
-	font-size: 14px;
+	color: $projectColor;
 }
 
 .tzSelect {
@@ -3505,11 +3283,7 @@ div.ibutton-label-on {
 }
 
 .options_float_right input {
-	font-size: 15px;
-	/*font-weight: 700;*/
-	/*margin-top:8px;*/
-	height: 34px;
-	color: #6D6D6D;
+	color: $projectColor;
 }
 
 .normal_input_right {
@@ -3591,17 +3365,7 @@ div.ibutton-label-on {
 }
 
 .label_sd {
-	width: 60px;
-	height: 12px;
-	background: #2988cc;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
-	position: relative;
-	float: right;
-	margin-top: 7px;
-	z-index: 1;
-	cursor: pointer;
+	background-color: $projectColor;
 }
 
 .label_img {
@@ -3755,15 +3519,7 @@ div.ibutton-label-on {
 }
 
 #submit_apply {
-	text-align: center;
-	margin: 40px auto 0;
-	width: 120px;
-	height: 30px;
-	border-radius: 4px;
-	background: #2988cc;
-	color: #fff;
-	line-height: 28px;
-	cursor: pointer;
+	background-color: $projectColor;
 }
 
 // .week_list {
@@ -3776,10 +3532,7 @@ div.ibutton-label-on {
 // }
 
 #delete_set_record {
-	/*g 5.7.2*/
-	float: right;
-	color: #2988cc;
-	padding-right: 13px;
+	color: $projectColor;
 }
 
 .set_week {
@@ -3827,16 +3580,12 @@ div.ibutton-label-on {
 }
 
 .start_time_active {
-	color: #2988cc;
+	color: $projectColor;
 }
 
 #time_zone_selevt {
-	color: #6D6D6D;
-	height: 34px;
-	width: 200px;
-	padding-left: 73px;
-	box-sizing: border-box;
-	border-radius: 4px;
+	color: $projectColor;
+    border: 1px solid $projectColor;
 }
 
 .system_class {
@@ -3845,8 +3594,8 @@ div.ibutton-label-on {
 }
 
 #power_fr {
-	width: 200px;
-	height: 34px;
+	color: $projectColor;
+    border: 1px solid $projectColor;
 }
 
 #lighting_page {
@@ -4332,8 +4081,7 @@ div.ibutton-label-on {
 }
 
 #screen_fr {
-	width: 200px;
-	height: 34px;
+	color: $projectColor;
 }
 
 .set_main_page_alarm {
@@ -4373,20 +4121,11 @@ div.ibutton-label-on {
 }
 
 #sd_export_link {
-	font-size: 14px;
-	color: #2988cc;
-	margin-top: 15px;
-	height: 40px;
-	line-height: 40px;
-	cursor: default;
+	color: $projectColor;
 }
 
 #sd_export_link_content {
-	font-size: 14px;
-	color: #2988cc;
-	margin-top: 15px;
-	height: 40px;
-	line-height: 35px;
+	color: $projectColor;
 }
 
 /*后加*/
@@ -4453,14 +4192,7 @@ div.ibutton-label-on {
 // }
 
 #onvif_re_searching {
-// 	width: 685px;
-// 	margin: 0 auto;
-// 	text-align: center;
-// 	font-size: 16px;
 	color: $projectColor;
-// 	margin-top: 30px;
-// 	cursor: default;
-// 	display: none;
 }
 
 .box_onvif_unadd_img_box {
@@ -4497,15 +4229,8 @@ div.ibutton-label-on {
 }
 
 .box_onvif_add_btn {
-	// margin: 24px auto 0;
-	// width: 76px;
-	// height: 32px;
-	// font-size: 16px;
-	// line-height: 32px;
-	// text-align: center;
 	color: $projectColor;
     border: 1px solid $projectColor;
-	// border-radius: 4px;
 }
 
 // #box_per_ipc {
@@ -4698,36 +4423,36 @@ div.ibutton-label-on {
 	color: #646464;
 }
 
-.fd_slider_flag {
-	cursor: pointer;
-	position: absolute;
-	display: block;
-	z-index: 3;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	line-height: 5px;
-	top: 8px;
-	bottom: none;
-	left: 10px;
-	right: 10px;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-}
+// .fd_slider_flag {
+// 	cursor: pointer;
+// 	position: absolute;
+// 	display: block;
+// 	z-index: 3;
+// 	margin: 0;
+// 	padding: 0;
+// 	overflow: hidden;
+// 	line-height: 5px;
+// 	top: 8px;
+// 	bottom: none;
+// 	left: 10px;
+// 	right: 10px;
+// 	border-radius: 3px;
+// 	-moz-border-radius: 3px;
+// }
 
-.no_flag_item {
-	display: block;
-	float: left;
-	background: #c0c0c0;
-	height: 4px;
-}
+// .no_flag_item {
+// 	display: block;
+// 	float: left;
+// 	background: #c0c0c0;
+// 	height: 4px;
+// }
 
-.flag_item {
-	display: block;
-	float: left;
-	background: rgba(255, 0, 0, .5);
-	height: 5px;
-}
+// .flag_item {
+// 	display: block;
+// 	float: left;
+// 	background: rgba(255, 0, 0, .5);
+// 	height: 5px;
+// }
 
 /* 报警/录像新增样式 */
 .set_submit_btn {
@@ -4784,10 +4509,7 @@ div.ibutton-label-on {
 }
 
 .record_sd_calculate {
-	height: 35px;
-	font-size: 14px;
-	line-height: 35px;
-	color: #2988cc;
+	color: $projectColor;
 }
 
 .box_device_nick_span {
@@ -4806,22 +4528,7 @@ div.ibutton-label-on {
 }
 
 #del_dev_button_setup {
-	float: right;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	height: 30px;
-	min-width: 120px;
-	padding: 5px 10px;
-	box-sizing: border-box;
-	margin-right: 100px;
-	border: 0;
-	background-color: #2988cc;
-	margin-top: 20px;
-	margin-left: 20px;
-	cursor: pointer;
-	font-size: 15px;
-	color: #ffffff;
+	background-color: $projectColor;
 }
 // 样式颜色
 #active_dev_li{
@@ -5011,5 +4718,8 @@ div.ibutton-label-on {
 }
 #adjust_reset{
 	background-color: $projectColor;
+}
+input[type=range] {
+	background: -webkit-linear-gradient($projectColor, $projectColor) no-repeat, #c0c0c0;
 }
 // 样式颜色 结束

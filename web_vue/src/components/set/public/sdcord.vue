@@ -217,7 +217,7 @@
     #label_sd {
         width: 60px;
         height: 12px;
-        background: $projectColor;
+        background-color: $projectColor;
         -moz-border-radius: 10px;
         -webkit-border-radius: 10px;
         border-radius: 10px;

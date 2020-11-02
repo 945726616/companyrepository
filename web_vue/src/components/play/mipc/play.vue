@@ -254,8 +254,8 @@
             play_menu_control() { // 播放控制按钮渲染
                 let dom_left = $(".left_button")[0],
                     dom_center = $(".center_button")[0],
-                    dom_right = $(".right_button")[0],
-                    l_cam_conf, outX, left, top, mouseX, i, evt;
+                    dom_right = $(".right_button")[0];
+                    
                 //Get local storage resolution
                 if (sessionStorage.getItem("PlayProfile") == "p0") {
                     if (this.$store.state.jumpPageData.projectName == "vsmahome") {

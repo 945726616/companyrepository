@@ -29,6 +29,7 @@ const jumpPageData = {
     loginStatus: '',// Keeping the login is ipc or user
     percent: 0, // 回放进度条百分比
     playBackObj: null, // 回放页面obj内容
+    playBackSavePercent: 0, // 回放点击进度条时存储百分比
   },
   mutations: {
     SET_PAGE_DOM: (state, pageDom) => {
@@ -111,6 +112,9 @@ const jumpPageData = {
     },
     SET_PLAYBACK_OBJ:(state, playBackObj) => {
       state.playBackObj = playBackObj
+    },
+    SET_PLAYBACK_SAVE_PERCENT: (state, playBackSavePercent) => {
+      state.playBackSavePercent = playBackSavePercent
     }
   },
   actions: {
@@ -145,6 +149,7 @@ const jumpPageData = {
     setLoginStatus: ({ commit }, loginStatus) => commit('SET_LOGIN_STATUS', loginStatus),
     setPercent: ({ commit }, percent) => commit('SET_PERCENT', percent),
     setPlayBackObj: ({ commit }, playBackObj) => commit('SET_PLAYBACK_OBJ', playBackObj),
+    setPlayBackSavePercent: ({ commit }, playBackSavePercent) => commit('SET_PLAYBACK_SAVE_PERCENT', playBackSavePercent),
   }
 }
 
