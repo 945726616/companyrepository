@@ -27,6 +27,8 @@ const jumpPageData = {
     networkEnviron: '', // 代表内部网络访问或外部网络访问直接连接之间的区别非直接连接
     systemStopWait: null, // 系统停止等待
     loginStatus: '',// Keeping the login is ipc or user
+    percent: 0, // 回放进度条百分比
+    playBackObj: null, // 回放页面obj内容
   },
   mutations: {
     SET_PAGE_DOM: (state, pageDom) => {
@@ -103,6 +105,12 @@ const jumpPageData = {
     },
     SET_LOGIN_STATUS: (state, loginStatus) => {
       state.loginStatus = loginStatus
+    },
+    SET_PERCENT: (state, percent) => {
+      state.percent = percent
+    },
+    SET_PLAYBACK_OBJ:(state, playBackObj) => {
+      state.playBackObj = playBackObj
     }
   },
   actions: {
@@ -134,7 +142,9 @@ const jumpPageData = {
     setKbwin: ({ commit }, kbwin) => commit('SET_KBWIN', kbwin),
     setHistoryData: ({ commit }, historyData) => commit('SET_HISTORYDATA', historyData),
     setBoxDeviceData: ({ commit }, boxDeviceData) => commit('SET_BOX_DEVICE_DATA', boxDeviceData),
-    setLoginStatus: ({ commit }, loginStatus) => commit('SET_LOGIN_STATUS', loginStatus)
+    setLoginStatus: ({ commit }, loginStatus) => commit('SET_LOGIN_STATUS', loginStatus),
+    setPercent: ({ commit }, percent) => commit('SET_PERCENT', percent),
+    setPlayBackObj: ({ commit }, playBackObj) => commit('SET_PLAYBACK_OBJ', playBackObj),
   }
 }
 

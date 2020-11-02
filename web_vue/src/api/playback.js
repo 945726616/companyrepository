@@ -2,6 +2,7 @@
 // 已经整合到play.js中
 import axios from '@/axios' // 导入http中创建的axios实例
 import login from './login'
+import play from './play'
 import store from '../store'
 // import md5 from '@/util/mmd5.js'
 // import mcodec from '@/util/mcodec.js'
@@ -12,9 +13,10 @@ const playback = {
   /*
   ** 停止视频播放
   */
-  video_stop (params) {
+  async video_stop (params) {
     let flash_isplay = store.state.jumpPageData.flashIsPlay
     let play_info = store.state.jumpPageData.playInfo
+    console.log(flash_isplay, 'flash_isplay 进入video_stop')
     if (flash_isplay) {
       clearInterval(flash_isplay)
     }
@@ -49,7 +51,7 @@ const playback = {
     let judge_enable_native_plug = true;
     let judge_enable_flash_plug = false;
     let ref_obj = create_play_ipc(data);
-    let playback = data.playback ? 1 : 0;
+    let playbackFlag = data.playback ? 1 : 0;
     let flash_isplay = store.state.jumpPageData.flashIsPlay;
     let l_plug_type;
     if (ref_obj.isDownload) { // 播放弹窗dom
@@ -97,7 +99,7 @@ const playback = {
       sessionStorage.setItem("code_tip", obj.code);
       switch (obj.type) {
         case "missing": {
-          if (!playback) {
+          if (!playbackFlag) {
             if ((navigator.userAgent.toLowerCase().match(/chrome\/[\d.]+/gi) + "").replace(/[^0-9.]/ig, "") > "44") {
               location.href = "https://www.adobe.com/go/getflashplayer";
             }
@@ -122,7 +124,6 @@ const playback = {
           } else {
             if (proto == "auto") proto = "rtdp";
           }
-          // ms.send_msg("playback", { sn: ref_obj.sn, token: ref_obj.token, protocol: proto, ref: obj.ref_obj }, obj.ref_obj, function (msg, ref) { msg.type = "playback"; play_ack(msg, ref); });
           await axios.get('/ccm/ccm_replay', {
             params: {
               sess: {
@@ -239,7 +240,7 @@ const playback = {
                 }
                 // returnItem = l_speed
                 data.func(l_speed)
-              } else if (playback) {
+              } else if (playbackFlag) {
                 let duration2 = sessionStorage.getItem("duration");
                 let kb = json_speed.data.p2ping ? "kB" : "KB";
                 l_speed = json_speed.data.total_bytes > l_Last_speed ? parseInt((json_speed.data.total_bytes - l_Last_speed) / 1000) + kb : l_Last_speed = 0;
@@ -250,7 +251,7 @@ const playback = {
                 l_Last_speed = json_speed.data.total_bytes;
                 l_progress = parseInt((json_speed.data.played_duration / data.videoSize) * 100);
                 sessionStorage.setItem("duration", json_speed.data.played_duration);
-                let record_played_duration = json_speed.data.played_duration - duration2;
+                let record_played_duration = json_speed.data.played_duration // - duration2;
                 // returnItem = [l_speed, l_progress, record_played_duration]
                 console.log('enter_playback_speed')
                 playback_speed(l_speed, l_progress, record_played_duration)
@@ -263,6 +264,7 @@ const playback = {
             }
             console.log(returnItem, 'download_return1')
           }, 1000)
+          store.dispatch('setFlashIsPlay', l_ipc_speed_time)
         } else {
           // 浏览器执行 l_plug_type = flash 由于不显示进度条所以直接传递null值
           returnItem = null
@@ -282,7 +284,7 @@ const playback = {
       console.log('进入flash_play')
       let profile_token_choice = get_profile_token_choice(data.profile_token);
       let urls;
-      if (!playback) {
+      if (!playbackFlag) {
         if (process.env.NODE_ENV === 'production') {
           urls = window.location.protocol + "//" + store.state.jumpPageData.serverDevice + "/ccm/ccm_pic_get.js?hfrom_handle=887330&dsess=1&dsess_nid=" + login.create_nid() + "&dsess_sn=" + data.sn + "&dtoken=" + profile_token_choice.profile_token_choice_value;
         } else {
@@ -307,7 +309,7 @@ const playback = {
       }
     }
     function playback_speed (data, progress, record_played_duration) { // 客户端回放进度条
-      console.log('进入playback_speed')
+      console.log('进入playback_speed playback.js')
       let progress2 = sessionStorage.getItem("aaa")
       sessionStorage.setItem("aaa", progress);
       let bo_type = sessionStorage.getItem('bo_type')
@@ -315,51 +317,65 @@ const playback = {
       let end_time = JSON.parse(sessionStorage.getItem('play_back_endTime'))
       let b_start_time = JSON.parse(sessionStorage.getItem('b_start_time'))
       let first = sessionStorage.getItem('play_first')
-      let percent = sessionStorage.getItem('playBackPercent') // 获取播放百分比
-      console.log(percent, 'playBackPercent')
-      if (bo_type) {
+      let percent = store.state.jumpPageData.percent // 获取播放百分比
+      let playBackTime = end_time - b_start_time // 播放总时间 record_played_duration: 播放的时长
+      console.log(percent, 'playBackPercent', bo_type)
+      if (bo_type && bo_type === 'true') {
         start_time = b_start_time;
-        bo_type = false;
+        bo_type = false
+        sessionStorage.setItem('bo_type', false)
       } else {
-        start_time = start_time + record_played_duration;
+        start_time = b_start_time + record_played_duration;
       }
+      sessionStorage.setItem('play_back_startTime', start_time)
       let play_start_time_stop = new Date(start_time).format("yyyy-MM-dd hh:mm:ss");
-      let play_start_time = new Date(start_time).format("hh:mm:ss");
-      $("#playback_start_time").html(play_start_time);
+      // let play_start_time = new Date(start_time).format("hh:mm:ss");
+      // $("#playback_start_time").html(play_start_time);
       let play_end_time_stop = new Date(end_time).format("yyyy-MM-dd hh:mm:ss");
-      let play_end_time = new Date(end_time).format("hh:mm:ss");
-      console.log(_this.playback)
+      // let play_end_time = new Date(end_time).format("hh:mm:ss");
+      percent = record_played_duration / playBackTime
+      store.dispatch('setPercent', percent) // 计算进度条百分比并赋值
+      console.log(playback, 'playback', percent, playBackTime, record_played_duration)
       if (play_start_time_stop >= play_end_time_stop) {
-        $("#playback_start_time").html(play_end_time)
-        _this.playback.video_stop({
-            dom: $("#playback_screen")
-          }).then(res => {
-            create_preview(res)
+        console.log('进入终止播放函数')
+        store.dispatch('setPercent', 1)
+        playback.video_stop({
+          dom: $("#playback_screen")
+        }).then(res => {
+          // create_preview(res)
+          sessionStorage.setItem("pause_start_time", start_time)
+          let pic_token = store.state.jumpPageData.playBackObj.pic_token.replace("_p3_", "_p0_")
+          play.play_preview_img({
+            dom: $("#playback_screen"),
+            sn: store.state.jumpPageData.selectDeviceIpc,
+            pic_token: pic_token
           })
+        })
         // msdk_ctrl({ type: "play_video_stop", data: { dom: l_dom_playback_screen, func: create_preview } });
       }
-      if (first) {
-        if (publicFunc.mx("#playback_progressbar")) { // 进度条报错(客户端)
-          progress = Number(progress) - Number(progress2) + Number(publicFunc.mx("#playback_progressbar").value);
-        }
-        let play_progress_time_stamp = sessionStorage.getItem("play_progress_time_stamp");
-        let get_drag_duration = sessionStorage.getItem("duration");
-        let drag_start_time = parseInt(play_progress_time_stamp) + parseInt(get_drag_duration);
-        let play_start_time = new Date(drag_start_time).format("hh:mm:ss")
-        let play_start_time_stop = new Date(drag_start_time).format("yyyy-MM-dd hh:mm:ss")
-        $("#playback_start_time").html(play_start_time);
-        let play_end_time = new Date(end_time).format("hh:mm:ss");
-        let play_end_time_stop = new Date(end_time).format("yyyy-MM-dd hh:mm:ss");
-        if (play_start_time_stop >= play_end_time_stop) {
-          $("#playback_start_time").html(play_end_time);
-          _this.playback.video_stop({
-            dom: $("#playback_screen")
-          }).then(res => {
-            create_preview(res)
-          })
-        }
-      }
-      if(!data)data = null
+      console.log(first, 'first playback')
+      // if (first) {
+      //   if (publicFunc.mx("#playback_progressbar")) { // 进度条报错(客户端)
+      //     progress = Number(progress) - Number(progress2) + Number(publicFunc.mx("#playback_progressbar").value);
+      //   }
+      //   let play_progress_time_stamp = sessionStorage.getItem("play_progress_time_stamp");
+      //   let get_drag_duration = sessionStorage.getItem("duration");
+      //   let drag_start_time = parseInt(play_progress_time_stamp) + parseInt(get_drag_duration);
+      //   let play_start_time = new Date(drag_start_time).format("hh:mm:ss")
+      //   let play_start_time_stop = new Date(drag_start_time).format("yyyy-MM-dd hh:mm:ss")
+      //   $("#playback_start_time").html(play_start_time);
+      //   let play_end_time = new Date(end_time).format("hh:mm:ss");
+      //   let play_end_time_stop = new Date(end_time).format("yyyy-MM-dd hh:mm:ss");
+      //   if (play_start_time_stop >= play_end_time_stop) {
+      //     $("#playback_start_time").html(play_end_time);
+      //     playback.video_stop({
+      //       dom: $("#playback_screen")
+      //     }).then(res => {
+      //       create_preview(res)
+      //     })
+      //   }
+      // }
+      if (!data) data = null
       publicFunc.mx("#playback_buffer_ret").innerHTML = data;
       if (publicFunc.mx("#playback_progressbar")) { // 进度条报错(客户端)
         fdSliderController.increment("playback_progressbar", progress - publicFunc.mx("#playback_progressbar").value);

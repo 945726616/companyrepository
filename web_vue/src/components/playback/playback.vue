@@ -104,6 +104,7 @@ export default {
     create_playback_page (obj) {
       let _this = this
       this.createPlaybackObj = obj // 存储调用时的obj内容
+      this.$store.dispatch('setPlayBackObj', this.createPlaybackObj)
       if (obj.data) { // 移动侦测标识数组
         for (let j = 0; j < obj.data.length; j++) {
           this.video_flag_arr.push(obj.data[j].f)
@@ -191,7 +192,8 @@ export default {
     },
     create_preview (data) { // 创建暂停遮罩层
       sessionStorage.setItem("pause_start_time", this.start_time)
-      let pic_token = this.createPlaybackObj.pic_token.replace("_p3_", "_p0_");
+      let pic_token = this.createPlaybackObj.pic_token.replace("_p3_", "_p0_")
+
       this.$api.play.play_preview_img({
         dom: $("#playback_screen"),
         sn: this.$store.state.jumpPageData.selectDeviceIpc,
@@ -199,7 +201,7 @@ export default {
       })
     },
     playback_speed (data, progress, record_played_duration) { // 视频播放速度
-      console.log('enter Play_speed')
+      console.log('enter Play_speed playBack.vue')
       let progress2 = sessionStorage.getItem("aaa")
       sessionStorage.setItem("aaa", progress)
       if (this.bo_type) {
@@ -320,7 +322,7 @@ export default {
       this.is_playing = 1 // 是否播放标识
       console.log(this.percent, 'set_percent')
       sessionStorage.setItem('playBackPercent', this.percent)
-      if (this.first) { // 从开始处进行播放
+      if (!this.first) { // 从开始处进行播放
         sessionStorage.setItem('bo_type', true) // 存储播放状态(playback.js中使用)
         this.bo_type = true
         let bof_start_time = new Date(this.b_start_time).format("hh:mm:ss")
@@ -347,14 +349,15 @@ export default {
           videoSize: this.videoSize,
           token: this.play_back_token,
           playback: 1 // 此处额外添加参数
-        }).then(res => {
-          console.log(res, 'playBack_playSpeed4')
-          if (res && res.length > 2) {
-            this.playback_speed(res[0], res[1], res[2])
-          } else {
-            this.playback_speed(res)
-          }
         })
+        // .then(res => {
+        //   console.log(res, 'playBack_playSpeed4')
+        //   if (res && res.length > 2) {
+        //     this.playback_speed(res[0], res[1], res[2])
+        //   } else {
+        //     this.playback_speed(res)
+        //   }
+        // })
       }
       $("#video_play").attr("class", "video_play_start")
     },
@@ -392,14 +395,15 @@ export default {
             videoSize: this.videoSize,
             token: this.play_back_token,
             playback: 1 // 此处额外添加参数
-          }).then(res => {
-            console.log(res, 'playBack_playSpeed1')
-            if (res && res.length > 2) {
-              this.playback_speed(res[0], res[1], res[2])
-            } else {
-              this.playback_speed(res)
-            }
           })
+          // .then(res => {
+          //   console.log(res, 'playBack_playSpeed1')
+          //   if (res && res.length > 2) {
+          //     this.playback_speed(res[0], res[1], res[2])
+          //   } else {
+          //     this.playback_speed(res)
+          //   }
+          // })
         })
       }
     },
@@ -456,9 +460,11 @@ export default {
         return
       }
       this.percent = percent
+      this.$store.dispatch('setPercent', this.percent) // vuex中存储percent
       // 计算当前播放时间
       let nowTimeStamp = this.b_start_time + (this.videoSize * percent)
       this.start_time_show = new Date(nowTimeStamp).format('hh:mm:ss')
+      console.log(this.start_time_show, '拖动后改变时间')
       // 计算当前播放时间 结束
       this.clickProgress() // 调用点击进度条事件
       // 根据子组件传过来的百分比设置播放进度
@@ -475,6 +481,19 @@ export default {
     //   return returnPercent
     // }
     // 进度条 结束
+  },
+  watch: {
+    '$store.state.jumpPageData.percent'(val) {
+      let percent = val
+      if (percent > 1 || percent < 0) {
+        return
+      }
+      this.percent = percent
+      this.$store.dispatch('setPercent', this.percent) // vuex中存储percent
+      // 计算当前播放时间
+      let nowTimeStamp = this.b_start_time + (this.videoSize * percent)
+      this.start_time_show = new Date(nowTimeStamp).format('hh:mm:ss')
+    }
   },
   async mounted () {
     await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)

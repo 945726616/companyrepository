@@ -77,8 +77,19 @@ export default {
         const barWidth = this.$refs.progressBar.clientWidth - this.btnWidth
         const offsetWidth = barWidth * newPercent
         this._setOffset(offsetWidth) // 设置进度条及按钮偏移
+        // this._triggerPercent() // 通知父组件播放进度变化
       }
-    }
+    },
+    // '$store.state.jumpPageData.percent'(val) {
+    //   if (val > 0) {
+    //     console.log('enter watch vuex', val)
+    //     // 进度条总长度
+    //     const barWidth = this.$refs.progressBar.clientWidth - this.btnWidth
+    //     const offsetWidth = barWidth * val
+    //     this._setOffset(offsetWidth) // 设置进度条及按钮偏移
+    //     this._triggerPercent() // 通知父组件播放进度变化
+    //   }
+    // }
   }
 }
 </script>
