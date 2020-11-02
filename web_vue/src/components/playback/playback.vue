@@ -191,6 +191,7 @@ export default {
       // 添加移动侦测进度条标识 结束
     },
     create_preview (data) { // 创建暂停遮罩层
+      let _this = this
       sessionStorage.setItem("pause_start_time", this.start_time)
       let pic_token = this.createPlaybackObj.pic_token.replace("_p3_", "_p0_")
 
@@ -199,6 +200,13 @@ export default {
         sn: this.$store.state.jumpPageData.selectDeviceIpc,
         pic_token: pic_token
       })
+      this.publicFunc.mx('#playback_screen').innerHTML =
+        "<div id='play_view_box'>"
+        + "<div id='play_pause_pic'></div>"
+        + "</div>"
+      this.publicFunc.mx('#play_view_box').onclick = function () {
+        _this.clickPlayViewBox()
+      }
     },
     playback_speed (data, progress, record_played_duration) { // 视频播放速度
       console.log('enter Play_speed playBack.vue')
@@ -261,9 +269,9 @@ export default {
     },
     // 点击事件
     clickPlay () { // 点击播放（客户端）
-      if (window.fujikam !== "fujikam") { // 客户端播放方法
-        return
-      }
+      // if (window.fujikam !== "fujikam") { // 客户端播放方法
+      //   return
+      // }
       if (this.is_playing) { // 当前播放状态 1 为播放中 0 为未播放
         this.is_playing = 0
         $("#video_play").attr("class", "video_play_stop")
@@ -485,7 +493,7 @@ export default {
     // 进度条 结束
   },
   watch: {
-    '$store.state.jumpPageData.percent'(val) {
+    '$store.state.jumpPageData.percent' (val) {
       let percent = val
       if (percent > 1 || percent < 0) {
         return

@@ -349,6 +349,11 @@ const playback = {
             sn: store.state.jumpPageData.selectDeviceIpc,
             pic_token: pic_token
           })
+          console.log('执行遮罩层')
+          publicFunc.mx('#playback_screen').innerHTML =
+            "<div id='play_view_box'>"
+            + "<div id='play_pause_pic'></div>"
+            + "</div>"
         })
         // msdk_ctrl({ type: "play_video_stop", data: { dom: l_dom_playback_screen, func: create_preview } });
       }
@@ -531,7 +536,7 @@ const playback = {
             // returnItem = l_speed
             download_info(l_speed)
             function download_info (data) {
-              // console.log(data, 'download_info_data')
+              console.log(data, 'download_info_data')
               let data_num = data.substring(0, data.length - 1);
               $("#download_progress").html(data)
               if (data_num == 100) {
@@ -540,7 +545,17 @@ const playback = {
                   dom: $("#playback_screen"),
                   isDownload: 1 // 是否下载中特殊标记
                 }).then(res => {
-                  create_preview(res)
+                  sessionStorage.setItem("pause_start_time", start_time)
+                  let pic_token = store.state.jumpPageData.playBackObj.pic_token.replace("_p3_", "_p0_")
+                  play.play_preview_img({
+                    dom: $("#playback_screen"),
+                    sn: store.state.jumpPageData.selectDeviceIpc,
+                    pic_token: pic_token
+                  })
+                  publicFunc.mx('#playback_screen').innerHTML =
+                    "<div id='play_view_box'>"
+                    + "<div id='play_pause_pic'></div>"
+                    + "</div>"
                 })
                 // msdk_ctrl({ type: "play_download_stop", data: { dom: l_dom_playback_screen, func: create_preview } })
               }

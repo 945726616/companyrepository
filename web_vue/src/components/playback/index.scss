@@ -84,17 +84,14 @@
 #play_menu_left{
 	float:left;
 }
-.video_play_start{
+.video_play_start, .video_play_stop{
 	float:left;
 	width:20px;
 	height:20px;
 	margin-top:12px;
 	margin-left:24px;
 	cursor: pointer;
-	background:url("~@/assets/device/pause.png") no-repeat;
-}
-.video_play_start:hover{
-	background:url("~@/assets/device/choose-pause.png") no-repeat;
+	// background:url(~@/assets/device/pause.png) no-repeat;
 }
 #playback_start_time{
 	color:$projectColor;

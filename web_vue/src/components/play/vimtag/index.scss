@@ -59,16 +59,16 @@
     float: left;
 }
 
-.video_play_stop {
-    float: left;
-    width: 20px;
-    height: 20px;
-    margin-top: 12px;
-    margin-left: 24px;
-    cursor: pointer;
-}
+// .video_play_stop {
+//     float: left;
+//     width: 20px;
+//     height: 20px;
+//     margin-top: 12px;
+//     margin-left: 24px;
+//     cursor: pointer;
+// }
 
-.video_play_start {
+.video_play_start, .video_play_stop {
     float: left;
     width: 20px;
     height: 20px;
