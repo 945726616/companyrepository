@@ -1031,8 +1031,13 @@
                 })
             },
             clickEnterHistory() { // 跳转至历史页面
+              if (this.vimtagPlayObj.box_ipc == 1) { //云盒子设备实时播放时点击回放
+                let jumpData = { parent: $("#dev_main_page"), dev_sn: this.vimtagPlayObj.ipc_sn, back_page: "playpage", box_ipc: this.vimtagPlayObj.box_ipc, ipc_sn: this.vimtagPlayObj.ipc_sn, box_live: 1 };
+                this.$router.push({ name: 'history', params: jumpData })
+              } else {
                 let jumpData = { parent: $("#dev_main_page"), dev_sn: this.$store.state.jumpPageData.selectDeviceIpc, back_page: "playpage" }
                 this.$router.push({ name: 'history', params: jumpData })
+              }
             },
             clickVoice(event) { // 点击声音图标
                 let class_name = event.target.className

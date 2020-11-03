@@ -300,7 +300,7 @@ export default {
       if (this.$route.name == 'history' || this.$route.name == 'set') {
         this.$router.push({ name: 'devlist' })
       } else if (this.$route.name == 'playback') {
-        this.$router.push({name:"history",params:{dev_sn:this.$store.state.jumpPageData.selectDeviceIpc}})
+        this.$router.push({name:"history",params:{dev_sn:this.$router.history.current.params.dev_sn}})
       }
     }
   },
