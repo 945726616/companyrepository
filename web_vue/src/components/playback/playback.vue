@@ -192,7 +192,8 @@ export default {
     },
     create_preview (data) { // 创建暂停遮罩层
       let _this = this
-      sessionStorage.setItem("pause_start_time", this.start_time)
+      let getPauseTime = JSON.parse(sessionStorage.getItem('play_back_startTime'))
+      sessionStorage.setItem("pause_start_time", getPauseTime) // 存储暂停时间
       let pic_token = this.createPlaybackObj.pic_token.replace("_p3_", "_p0_")
 
       this.$api.play.play_preview_img({
@@ -261,18 +262,14 @@ export default {
       this.publicFunc.mx("#playback_buffer_ret").innerHTML = data
       if (this.clientFlag) { // 是否含有进度条
         console.log(progress, this.percent, '进度条')
-        // this.percent = 
       }
-      // if (this.publicFunc.mx("#playback_progress_bar")) { // 进度条相关报错
-      //   fdSliderController.increment("playback_progressbar", progress - this.publicFunc.mx("#playback_progressbar").value)
-      // }
     },
     // 点击事件
     clickPlay () { // 点击播放（客户端）
       // if (window.fujikam !== "fujikam") { // 客户端播放方法
       //   return
       // }
-      if (this.is_playing) { // 当前播放状态 1 为播放中 0 为未播放
+      if (this.is_playing) { // 当前播放状态 1 为播放中 0 为未播放 (切换为暂停)
         this.is_playing = 0
         $("#video_play").attr("class", "video_play_stop")
         this.$api.play.video_stop({
@@ -280,46 +277,39 @@ export default {
         }).then(res => {
           this.create_preview(res)
         })
-      } else {
+      } else { // 当前为暂停状态(切换为播放)
         this.is_playing = 1
-        if (!first) {
+        console.log(JSON.parse(sessionStorage.getItem('pause_start_time')), this.b_start_time, '开始结束时间')
+        if (JSON.parse(sessionStorage.getItem('pause_start_time')) && JSON.parse(sessionStorage.getItem('pause_start_time')) !== this.b_start_time) { // 如果存在暂停时间且时间不等于原始开始时间
+          this.start_time = sessionStorage.getItem('pause_start_time')
+          this.start_time_show = new Date(this.start_time).format("hh:mm:ss")
           sessionStorage.setItem('bo_type', true)
-          this.bo_type = true;
-          $("#playback_start_time").html(start_time)
-          this.$api.playback.play({ // 原playback接口
-            agent: this.createPlaybackObj.agent,
-            dom: $("#playback_screen"),
-            sn: this.$store.state.jumpPageData.selectDeviceIpc,
-            videoSize: this.videoSize,
-            token: this.createPlaybackObj.token,
-            playback: 1 // 此处额外添加参数
-          }).then(res => {
-            console.log(res, 'playBack_playSpeed2')
-            if (res && res.length > 2) {
-              this.playback_speed(res[0], res[1], res[2])
-            } else {
-              this.playback_speed(res)
-            }
-          })
-        } else {
-          console.log('运行至此处')
-          this.$api.playback.play({ // 原playback接口
+          this.bo_type = true
+          this.percent = (this.start_time - this.b_start_time) / (this.end_time - this.b_start_time) // 计算暂停的时间所占的百分比
+          this.$store.dispatch('setPercent', this.percent) // 存储至vuex中
+          let new_token = parseInt(this.createPlaybackObj.data.length * this.percent) // 计算回放token
+          this.play_back_token = this.createPlaybackObj.data[new_token].token // 计算回放token
+          console.log(this.percent, '中断续播')
+          this.$api.playback.play({ // 调用播放接口(从中间暂停点播放)
             agent: this.createPlaybackObj.agent,
             dom: $("#playback_screen"),
             sn: this.$store.state.jumpPageData.selectDeviceIpc,
             videoSize: this.videoSize,
             token: this.play_back_token,
             playback: 1 // 此处额外添加参数
-          }).then(res => {
-            console.log(res, 'playBack_playSpeed3')
-            if (res && res.length > 2) {
-              this.playback_speed(res[0], res[1], res[2])
-            } else {
-              this.playback_speed(res)
-            }
+          })
+        } else {
+          console.log('从头开始')
+          this.$api.playback.play({ // 调用播放接口(从开始播放)
+            agent: this.createPlaybackObj.agent,
+            dom: $("#playback_screen"),
+            sn: this.$store.state.jumpPageData.selectDeviceIpc,
+            videoSize: this.videoSize,
+            token: this.createPlaybackObj.token,
+            playback: 1 // 此处额外添加参数
           })
         }
-        $("#video_play").attr("class", "video_play_start");
+        $("#video_play").attr("class", "video_play_start")
       }
     },
     clickPlayViewBox () { // 点击播放视图
@@ -330,27 +320,18 @@ export default {
       this.is_playing = 1 // 是否播放标识
       console.log(this.percent, 'set_percent')
       sessionStorage.setItem('playBackPercent', this.percent)
-      if (!this.first) { // 从开始处进行播放
-        sessionStorage.setItem('bo_type', true) // 存储播放状态(playback.js中使用)
+      console.log(JSON.parse(sessionStorage.getItem('pause_start_time')), this.b_start_time, '开始结束时间')
+      if (JSON.parse(sessionStorage.getItem('pause_start_time')) && JSON.parse(sessionStorage.getItem('pause_start_time')) !== this.b_start_time) { // 如果存在暂停时间且时间不等于原始开始时间
+        this.start_time = sessionStorage.getItem('pause_start_time')
+        this.start_time_show = new Date(this.start_time).format("hh:mm:ss")
+        sessionStorage.setItem('bo_type', true)
         this.bo_type = true
-        let bof_start_time = new Date(this.b_start_time).format("hh:mm:ss")
-        this.start_time_show = bof_start_time // 赋值回放开始时间
-        console.log('点击图片遮罩从此处进行调用')
-        this.$api.playback.play({ // 原playback接口
-          agent: this.createPlaybackObj.agent,
-          dom: $("#playback_screen"),
-          sn: this.$store.state.jumpPageData.selectDeviceIpc,
-          videoSize: this.videoSize,
-          token: this.createPlaybackObj.token,
-          playback: 1 // 此处额外添加参数
-        })
-        // .then(res => {
-        //   console.log(res, 'playBack_playSpeed5')
-        //   this.playback_speed(res)
-        // })
-      } else { // 非首次播放
-        console.log(this.play_back_token, 'this.play_back_token')
-        this.$api.playback.play({ // 原playback接口
+        this.percent = (this.start_time - this.b_start_time) / (this.end_time - this.b_start_time) // 计算暂停的时间所占的百分比
+        this.$store.dispatch('setPercent', this.percent) // 存储至vuex中
+        let new_token = parseInt(this.createPlaybackObj.data.length * this.percent) // 计算回放token
+        this.play_back_token = this.createPlaybackObj.data[new_token].token // 计算回放token
+        console.log(this.percent, '中断续播')
+        this.$api.playback.play({ // 调用播放接口(从中间暂停点播放)
           agent: this.createPlaybackObj.agent,
           dom: $("#playback_screen"),
           sn: this.$store.state.jumpPageData.selectDeviceIpc,
@@ -358,14 +339,16 @@ export default {
           token: this.play_back_token,
           playback: 1 // 此处额外添加参数
         })
-        // .then(res => {
-        //   console.log(res, 'playBack_playSpeed4')
-        //   if (res && res.length > 2) {
-        //     this.playback_speed(res[0], res[1], res[2])
-        //   } else {
-        //     this.playback_speed(res)
-        //   }
-        // })
+      } else {
+        console.log('从头开始')
+        this.$api.playback.play({ // 调用播放接口(从开始播放)
+          agent: this.createPlaybackObj.agent,
+          dom: $("#playback_screen"),
+          sn: this.$store.state.jumpPageData.selectDeviceIpc,
+          videoSize: this.videoSize,
+          token: this.createPlaybackObj.token,
+          playback: 1 // 此处额外添加参数
+        })
       }
       $("#video_play").attr("class", "video_play_start")
     },
