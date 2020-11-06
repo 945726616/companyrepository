@@ -262,6 +262,7 @@ export default {
           this.set_record_alarm_content = mcs_continuous_recording_hint;
       }
     }
+    console.log(Number(this.ealf) === 0, 'this.ealf === 0', this.ealf)
     if (this.ealf === 0) {
       this.old_process() // 非联动框架执行步骤
     } else {
@@ -928,7 +929,7 @@ export default {
               let temp = item
               for (let i = 0; i < temp.length; i++) {
                 (function (i) {
-                  if (this.change_string_to_four_bit_arr(temp[i])[arr_flag_index] === 1) {
+                  if (_this.change_string_to_four_bit_arr(temp[i])[arr_flag_index] === 1) {
                     temp[i] -= cut_flag
                   }
                 })(i)

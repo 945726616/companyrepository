@@ -108,6 +108,7 @@
             }
         },
         mounted() {
+          this.publicFunc.showBufferPage()
             let _this = this;
             _this.project_flag = _this.$store.state.jumpPageData.projectFlag;
             _this.project_name = _this.$store.state.jumpPageData.projectName;
@@ -239,6 +240,7 @@
                             this.new_ealf = 1
                         }
                         this.$store.dispatch('setDeviceEalf', this.new_ealf)
+                        this.publicFunc.closeBufferPage()
                     }
                 })
                 for (let i = 0; i < this.menu_data.length; i++) {

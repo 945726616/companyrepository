@@ -73,7 +73,7 @@ const play = {
    */
   async video_stop (params) {
     let flash_isplay = store.state.jumpPageData.flashIsPlay
-    // console.log(flash_isplay, 'flash_isplay')
+    console.log(flash_isplay, 'flash_isplay')
     let play_info = store.state.jumpPageData.playInfo
     if (flash_isplay) {
       clearInterval(flash_isplay)
@@ -98,6 +98,10 @@ const play = {
     } else {
       params.dom.html('')
     }
+    publicFunc.mx('#play_screen').innerHTML =
+            "<div id='play_view_box'>"
+            + "<div id='play_pause_pic'></div>"
+            + "</div>"
     return await params.dom
   },
   /*
@@ -184,6 +188,7 @@ const play = {
       sessionStorage.setItem("code_tip", obj.code) // 存储编码提示
       switch (obj.type) { // switch选择存储类型进行判断执行
         case "missing": {
+          console.log(playback, 'switch playback')
           if (!playback) {
             if ((navigator.userAgent.toLowerCase().match(/chrome\/[\d.]+/gi) + "").replace(/[^0-9.]/ig, "") > "44") {
               location.href = "https://www.adobe.com/go/getflashplayer";
@@ -192,6 +197,8 @@ const play = {
             flash_isplay = setInterval(function () {
               flash_play()
             }, 1000);
+            console.log('enter setInterval')
+            store.dispatch('setFlashIsPlay', flash_isplay)
           }
           break;
         }
@@ -387,6 +394,7 @@ const play = {
               }
             }
           }, 1000)
+          store.dispatch('setFlashIsPlay', l_ipc_speed_time)
         } else {
           // 浏览器执行 l_plug_type = flash 由于不显示进度条所以直接传递null值
           returnItem = null

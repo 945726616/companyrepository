@@ -123,7 +123,7 @@ export default {
         box-sizing: border-box;
         width: 10px;
         height: 10px;
-        border: 0.06rem solid #fff;
+        border: 1px solid #fff;
         border-radius: 50%;
         background-color: blue;
         z-index: 11;

@@ -171,7 +171,7 @@
             <div class='device_offline_reason'>{{mcs_device_offline_reson}}</div>
             <div class='device_offline_reason_public'>{{'1、' + mcs_device_offline_first_reson}}</div>
             <div class='device_offline_reason_public'>{{'2、' + mcs_device_offline_check}}
-              <span id='reconfig_wifi' @click="$set(addDeviceModelObj, 'addDeviceBodyFlag', 'chooseDevice'), $set(addDeviceModelObj, 'menuTitle', mcs_choose_device_type)">{{mcs_reconfigure}}</span>
+              <span id='reconfig_wifi' @click="cilckResetDevice">{{mcs_reconfigure}}</span>
             </div>
             <div class='device_offline_reason_public'>{{'3、' + mcs_device_offline_fourth_reson}}</div>
           </div>
@@ -217,6 +217,7 @@ export default {
       input_wifi_password: null, // 设置wifi密码输入
       input_device_nick: null, // 设置设备昵称输入
       connectNetTimeArr: [], // 等待网络链接定时器数组
+      resetDeviceId: null,
       // 多国语言
       mcs_back: mcs_back,
       mcs_cloud_camera: mcs_cloud_camera,
@@ -323,7 +324,7 @@ export default {
       this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device) // 设置填写设备Id页面顶部菜单标题
     },
     inputDeviceIdNext () { // 输入设备Id点击确定事件
-      console.log(this.add_device_input_id, 'input_value')
+      this.add_device_input_id_model = this.add_device_input_id_model.toLowerCase() // 统一为小写设备id进行匹配和对比
       let reg = new RegExp(/1jfie(.){8}$/i) // 正则判断匹配输入的设备号
       let device_existed = 0
       // let add_device_stat 日志用暂时注释
@@ -334,7 +335,7 @@ export default {
         return
       }
       for (let i = 0; i < this.$store.state.jumpPageData.deviceData.length; i++) { // 在vuex中存储的设备列表中对比是否存在该设备
-        if (this.$store.state.jumpPageData.deviceData[i].sn === this.add_device_input_id_model) {
+        if (this.$store.state.jumpPageData.deviceData[i].sn === this.add_device_input_id_model && this.resetDeviceId !== this.add_device_input_id_model) {
           device_existed = 1
         }
       }
@@ -590,6 +591,7 @@ export default {
       this.input_wifi_password = '' // 重置wifi密码输入
       this.input_device_nick = '' // 重置设备昵称输入
       this.add_device_input_id_model = null // 重置组件用输入设备Id变量
+      this.resetDeviceId = null // 重置离线设备重新配置暂存的对比Id
       if (this.connectNetTimeArr) { // 如果存在定时器数组
         for (let item of this.connectNetTimeArr) { // 终止等待网络链接的定时器
           clearInterval(item)
@@ -642,6 +644,11 @@ export default {
     },
     changeInputId () { // 改变输入的设备Id
       this.$emit('add_device_input_id', this.add_device_input_id_model)
+    },
+    cilckResetDevice () { // 点击离线设备的重新配置
+      this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'chooseDevice') // 配置跳转到设备类型选择页面
+      this.$set(this.addDeviceModelObj, 'menuTitle', mcs_choose_device_type) // 配置弹窗标题
+      this.resetDeviceId = this.add_device_input_id_model // 将点击重新配置的设备id存到resetDeviceId中用于Id验证时比对使用
     }
   }
 }

@@ -858,15 +858,25 @@ div.ibutton-label-on {
 	margin-left: 44px;
 }
 .talkback_on_picture {
-	background: url("../assets/device/vimtag_img.png") no-repeat -349px -7px;
+  background: url("../assets/device/vimtag_img.png") no-repeat -349px -7px;
+  width: 61px;
+  height: 58px;
+  float: left;
+	margin-left: 44px;
 }
 .adjust_off_picture {
+  width: 61px;
+	height: 58px;
+	float: left;
+	margin-left: 44px;
 	background: url("../assets/device/vimtag_img.png") no-repeat -5px -6px;
 }
 .adjust_on_picture {
 	background: url("../assets/device/vimtag_img.png") no-repeat -71px -6px;
 	width: 61px;
-	height: 58px;
+  height: 58px;
+  float: left;
+	margin-left: 44px;
 }
 #ptz_control_down{
 	width: 100%;
@@ -877,12 +887,12 @@ div.ibutton-label-on {
 }
 .window_down_key{
 	width: 40px;
-    height: 40px;
-    position: absolute;
-    margin-left: 311px;
-    bottom: 42px;
-    background: url("../assets/device/vimtag_img.png") no-repeat -5px -457px;
-    display: none;
+  height: 40px;
+  position: absolute;
+  margin-left: 311px;
+  bottom: 42px;
+  background: url("../assets/device/vimtag_img.png") no-repeat -5px -457px;
+  display: none;
 }
 #ptz_control_right{
 	width: 15%;
@@ -1333,7 +1343,9 @@ div.ibutton-label-on {
 	font-size:14px;
 	float:left;
 	margin-top:10px;
-	z-index: 100;
+  z-index: 100;
+  left: calc(50% - 125px);
+  background-color: #000;
 }
 #playback_menu_box{
 	height:44px;
@@ -2115,7 +2127,7 @@ input[type=radio]{
 	width:250px;
 	/*height:500px;*/
 	margin:0 auto;
-	padding-top:200px;
+	// padding-top:200px;
 }
 #download_progress{
 	width:100px;

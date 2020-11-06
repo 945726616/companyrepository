@@ -10,16 +10,17 @@
       </div>
       <!-- vimtag专属返回栏 结束 -->
       <div id="playback_view">
-        <div id="playback_buffer_ret"></div>
-        <!-- 回放视频播放 -->
-        <div id="playback_screen">
+        <div id="playback_buffer_ret">
           <!-- 下载弹窗 -->
-          <div id='download_info_box' v-if="downloadBufferFlag">
+          <div id='download_info_box' v-show="downloadBufferFlag">
             <div id='download_progress'></div>
             <div id='download_stop' @click="clickDownloadStop">{{mcs_stop}}</div>
             <div id='download_pause' @click="clickDownloadPause">{{mcs_pause}}</div>
           </div>
           <!-- 下载弹窗结束 -->
+        </div>
+        <!-- 回放视频播放 -->
+        <div id="playback_screen">
           <div id="play_view_box" @click="clickPlayViewBox">
             <div id="play_pause_pic"></div>
           </div>
@@ -93,7 +94,7 @@ export default {
       bo_type: sessionStorage.getItem('bo_type') ? sessionStorage.getItem('bo_type') : false, // 播放类型
       play_back_token: null, // 回放token
       b_start_time: null, // b开始时间
-      clientFlag: window.fujikam === 'fujikam' ? true : false, // window.fujikam === 'fujikam' ? true : false // 客户端判别标识(true: 客户端, false: 网页端)
+      clientFlag: true, // window.fujikam === 'fujikam' ? true : false // 客户端判别标识(true: 客户端, false: 网页端)
       play_progress: null, // 回放进度条参数
       percent: 0,
       downloadBoxFlag: false, // 下载提示框标识
@@ -128,7 +129,7 @@ export default {
       l_dom_playback_screen.style.height = (l_height - l_playback_menu_box_height) + "px" // 播放器高度设置
       l_dom_playback_download_path_box.style.top = l_download_path_box_top + "px" // 下载弹窗高度偏移量设置
       l_dom_playback_download_path_box.style.left = l_download_path_box_left + "px" // 下载弹窗左侧偏移量设置
-      this.publicFunc.mx("#playback_buffer_ret").style.left = (l_dom_playback_screen.offsetLeft + l_dom_playback_screen.offsetWidth - 50) + "px" // 下载进度偏移量设置
+      // this.publicFunc.mx("#playback_buffer_ret").style.left = (l_dom_playback_screen.offsetLeft + l_dom_playback_screen.offsetWidth - 50) + "px" // 下载进度偏移量设置
       // 回放页面相关尺寸设置 结束
       // 获取回放开始时间戳
       this.createPlaybackObj.start_time = parseInt(this.createPlaybackObj.start_time) // 将存储的obj中开始时间
@@ -258,8 +259,8 @@ export default {
       //     })
       //   }
       // }
-      if (!data) data = null
-      this.publicFunc.mx("#playback_buffer_ret").innerHTML = data
+      // if (!data) data = null
+      // this.publicFunc.mx("#playback_buffer_ret").innerHTML = data
       if (this.clientFlag) { // 是否含有进度条
         console.log(progress, this.percent, '进度条')
       }
@@ -406,6 +407,9 @@ export default {
       // 添加下载弹窗内容
       this.publicFunc.mx("#playback_screen").style.background = "#000" // 播放区域黑色背景
       this.downloadBufferFlag = true // 下载进度弹出
+      if (this.publicFunc.mx('#play_view_box')) { // 如果有播放遮罩层也为黑色
+        this.publicFunc.mx('#play_view_box').style.background = '#000'
+      }
       if (this.$store.state.jumpPageData.projectName === "vimtag") {
         this.$api.playback.replay_download({ // 原play_back_download接口
           agent: this.createPlaybackObj.agent,
@@ -438,6 +442,7 @@ export default {
       }
     },
     clickDownloadStop () { // 点击下载终止
+    this.downloadBufferFlag = false
       this.$api.playback.video_stop({
         dom: $("#playback_screen"),
         isDownload: 1 // 是否下载中特殊标记

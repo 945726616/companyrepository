@@ -220,7 +220,7 @@ const playback = {
         if (l_ipc_speed_time) {
           clearInterval(l_ipc_speed_time);
         }
-        if (l_plug_type === "flash") { // 该判断条件中需要添加!此为客户端逻辑(去掉!用于在浏览器中测试使用)
+        if (l_plug_type !== "flash") { // 该判断条件中需要添加!此为客户端逻辑(去掉!用于在浏览器中测试使用)
           l_ipc_speed_time = setInterval(function () {
             let string_speed = obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "query", "{}");
             // console.log(string_speed, 'download_string_speed', obj, 'download_obj')
@@ -379,11 +379,11 @@ const playback = {
       //     })
       //   }
       // }
-      if (!data) data = null
-      publicFunc.mx("#playback_buffer_ret").innerHTML = data;
-      if (publicFunc.mx("#playback_progressbar")) { // 进度条报错(客户端)
-        fdSliderController.increment("playback_progressbar", progress - publicFunc.mx("#playback_progressbar").value);
-      }
+      // if (!data) data = null
+      // publicFunc.mx("#playback_buffer_ret").innerHTML = data;
+      // if (publicFunc.mx("#playback_progressbar")) { // 进度条报错(客户端)
+      //   fdSliderController.increment("playback_progressbar", progress - publicFunc.mx("#playback_progressbar").value);
+      // }
     }
     // return returnItem
   },

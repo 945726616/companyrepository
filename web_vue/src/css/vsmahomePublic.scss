@@ -466,18 +466,11 @@ $projectColor: #2988cc !global;
 	color: #fff;
 }
 
-.video_play_start {
-	float: left;
-	width: 18px;
-	height: 20px;
-	margin-top: 10px;
-	margin-left: 24px;
-	cursor: pointer;
-	background: url("../assets/mipc/mipc_new_img.png") no-repeat -473px -3px;
+.video_play_start{
+	background:url("../assets/mipc/mipc_new_img.png") no-repeat -473px -3px;
 }
-
-.video_play_start:hover {
-	background: url("../assets/mipc/mipc_new_img.png") no-repeat -459px -3px;
+.video_play_start:hover{
+	background:url("../assets/mipc/mipc_new_img.png") no-repeat -459px -3px;
 }
 
 .voice_close_open {
@@ -1095,7 +1088,9 @@ input[type="number"] {
 	font-size: 14px;
 	float: left;
 	margin-top: 10px;
-	z-index: 100;
+  z-index: 100;
+  left: calc(50% - 125px);
+  background-color: #000;
 }
 
 #playback_menu_box {
@@ -1194,7 +1189,7 @@ input[type="number"] {
 	width: 250px;
 	/*height:500px;*/
 	margin: 0 auto;
-	padding-top: 200px;
+	// padding-top: 200px;
 }
 
 #download_progress {

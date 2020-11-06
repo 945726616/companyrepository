@@ -52,7 +52,8 @@
 	font-size:14px;
 	float:left;
 	margin-top:10px;
-	z-index: 100;
+  z-index: 100;
+  top: 40%;
 }
 #playback_screen{
 	position: relative;
@@ -140,7 +141,6 @@
 	background: #fff;
 	border-radius: 5px;
   position: absolute;
-  display: none;
 }
 #playback_download_path_main{
 	text-align: center;

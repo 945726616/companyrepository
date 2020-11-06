@@ -136,7 +136,7 @@
         <!-- 截图弹窗 结束 -->
     </div>
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
     @import './index.scss';
 </style>
 <script>
@@ -227,7 +227,7 @@
             },
             get_definition() { // 获取窗口大小并绘制播放内容
                 this.playScreenHeight = { height: ((document.body.clientWidth - document.getElementById('dev_main_left').offsetWidth - 60) * 0.563) + 'px' }
-                this.get_definition
+                // this.get_definition
                 this.$api.set.dev_info({ //ms.send_msg("dev_info_get"
                     sn: this.$store.state.jumpPageData.selectDeviceIpc
                 }).then(res => {
@@ -255,7 +255,6 @@
                 let dom_left = $(".left_button")[0],
                     dom_center = $(".center_button")[0],
                     dom_right = $(".right_button")[0];
-                    
                 //Get local storage resolution
                 if (sessionStorage.getItem("PlayProfile") == "p0") {
                     if (this.$store.state.jumpPageData.projectName == "vsmahome") {
