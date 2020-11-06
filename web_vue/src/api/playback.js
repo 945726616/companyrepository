@@ -552,10 +552,11 @@ const playback = {
                     sn: store.state.jumpPageData.selectDeviceIpc,
                     pic_token: pic_token
                   })
-                  publicFunc.mx('#playback_screen').innerHTML =
-                    "<div id='play_view_box'>"
-                    + "<div id='play_pause_pic'></div>"
-                    + "</div>"
+                  console.log('下载')
+                  // publicFunc.mx('#playback_screen').innerHTML =
+                  //   "<div id='play_view_box'>"
+                  //   + "<div id='play_pause_pic'></div>"
+                  //   + "</div>"
                 })
                 // msdk_ctrl({ type: "play_download_stop", data: { dom: l_dom_playback_screen, func: create_preview } })
               }
@@ -609,7 +610,7 @@ const playback = {
   /*
   ** 暂停下载
   */
-  pause_ipc () {
+  async pause_ipc () {
     let play_info = store.state.jumpPageData.playInfo
     if (play_info.inner_window_info.mme) {
       play_info.inner_window_info.mme.ctrl(play_info.inner_window_info.video_chls, "pause", "")
@@ -619,7 +620,7 @@ const playback = {
   /*
   ** 继续下载
   */
-  play_download_continue () {
+  async play_download_continue () {
     let play_info = store.state.jumpPageData.playInfo
     play_info.inner_window_info.mme.ctrl(play_info.inner_window_info.video_chls, "play", "");
     play_info.inner_window_info.playback_state = "play";

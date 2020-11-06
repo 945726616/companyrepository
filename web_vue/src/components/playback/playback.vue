@@ -15,7 +15,7 @@
           <div id='download_info_box' v-show="downloadBufferFlag">
             <div id='download_progress'></div>
             <div id='download_stop' @click="clickDownloadStop">{{mcs_stop}}</div>
-            <div id='download_pause' @click="clickDownloadPause">{{mcs_pause}}</div>
+            <div id='download_pause' @click="clickDownloadPause">{{downloadShowWorld}}</div>
           </div>
           <!-- 下载弹窗结束 -->
         </div>
@@ -81,6 +81,7 @@ export default {
       mcs_ok: mcs_ok,
       mcs_stop: mcs_stop,
       mcs_pause: mcs_pause,
+      mcs_continue: mcs_continue,
       // 多国语言 结束
       createPlaybackObj: null, // 页面使用的obj
       video_flag_arr: [], // 移动侦测标记集合
@@ -94,11 +95,12 @@ export default {
       bo_type: sessionStorage.getItem('bo_type') ? sessionStorage.getItem('bo_type') : false, // 播放类型
       play_back_token: null, // 回放token
       b_start_time: null, // b开始时间
-      clientFlag: true, // window.fujikam === 'fujikam' ? true : false // 客户端判别标识(true: 客户端, false: 网页端)
+      clientFlag: window.fujikam === 'fujikam' ? true : false, // window.fujikam === 'fujikam' ? true : false // 客户端判别标识(true: 客户端, false: 网页端)
       play_progress: null, // 回放进度条参数
       percent: 0,
       downloadBoxFlag: false, // 下载提示框标识
       downloadBufferFlag: false, // 下载进度弹窗标识
+      downloadShowWorld: null, // 下载中暂停/开始按钮文字
     }
   },
   methods: {
@@ -169,17 +171,21 @@ export default {
       // 添加移动侦测进度条标识
       function create_flag_item (msg) {
         for (let i = 0; i < msg.length; i++) {
-          if (msg[i] !== "0") {
-            let process_flag = document.createElement("span");
-            process_flag.setAttribute("class", "flag_item");
-            process_flag.style.width = (1 / msg.length * 100 + "%");
-            process_flag_dom.appendChild(process_flag);
+          console.log(msg[i], 'create_flag_item msg[i]')
+          if (msg[i] !== 0) {
+            console.log('enter true')
+            let process_flag_true = document.createElement("span");
+            process_flag_true.setAttribute("class", "flag_item");
+            process_flag_true.style.width = (1 / msg.length * 100 + "%");
+            process_flag_dom.appendChild(process_flag_true);
           } else {
-            let process_flag = document.createElement("span");
-            process_flag.setAttribute("class", "no_flag_item");
-            process_flag.style.width = (1 / msg.length * 100 + "%");
-            process_flag_dom.appendChild(process_flag);
+            console.log('enter false')
+            let process_flag_false = document.createElement("span");
+            process_flag_false.setAttribute("class", "no_flag_item");
+            process_flag_false.style.width = (1 / msg.length * 100 + "%");
+            process_flag_dom.appendChild(process_flag_false);
           }
+          console.log(process_flag_dom, 'process_flag_dom')
         }
       }
       let process_flag_dom = document.createElement("span")
@@ -229,7 +235,7 @@ export default {
       if (play_start_time_stop >= play_end_time_stop) {
         // $("#playback_start_time").html(play_end_time)
         this.start_time_show = this.end_time_show
-        this.$api.play.video_stop({
+        this.$api.playback.video_stop({
           dom: $("#playback_screen")
         }).then(res => {
           this.create_preview(res)
@@ -273,7 +279,7 @@ export default {
       if (this.is_playing) { // 当前播放状态 1 为播放中 0 为未播放 (切换为暂停)
         this.is_playing = 0
         $("#video_play").attr("class", "video_play_stop")
-        this.$api.play.video_stop({
+        this.$api.playback.video_stop({
           dom: $("#playback_screen")
         }).then(res => {
           this.create_preview(res)
@@ -379,7 +385,7 @@ export default {
       // $("#playback_start_time").html(play_progress_time)
       // moveProgressBar
       if (this.is_playing) {
-        this.$api.play.video_stop({
+        this.$api.playback.video_stop({
           dom: $("#playback_screen")
         }).then(() => { // 原函数中是存在返回值调用至函数的情况
           this.$api.playback.play({ // 原playback接口
@@ -402,6 +408,7 @@ export default {
       }
     },
     clickDownloadSubmit () { // 点击下载弹窗中确定事件
+      this.downloadShowWorld = this.mcs_pause // 赋值暂停
       let download_path = this.publicFunc.mx("#playback_download_path_input").value //下载路径
       this.downloadBoxFlag = false
       // 添加下载弹窗内容
@@ -435,10 +442,14 @@ export default {
       }
     },
     clickDownloadPause () { // 点击下载暂停
-      if (this.publicFunc.mx("#download_pause").innerHTML === mcs_pause) {
-        this.$api.playback.pause_ipc().then($("#download_pause").html(mcs_continue))
+      if (this.downloadShowWorld === this.mcs_pause) {
+        this.$api.playback.pause_ipc().then(() => {
+          this.downloadShowWorld = this.mcs_continue
+        })
       } else {
-        this.$api.playback.play_download_continue().then($("#download_pause").html(mcs_pause))
+        this.$api.playback.play_download_continue().then(() => {
+          this.downloadShowWorld = this.mcs_pause
+        })
       }
     },
     clickDownloadStop () { // 点击下载终止

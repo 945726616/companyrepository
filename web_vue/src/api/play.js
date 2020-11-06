@@ -98,6 +98,7 @@ const play = {
     } else {
       params.dom.html('')
     }
+    console.log('下载')
     publicFunc.mx('#play_screen').innerHTML =
             "<div id='play_view_box'>"
             + "<div id='play_pause_pic'></div>"
