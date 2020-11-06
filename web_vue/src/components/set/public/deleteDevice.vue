@@ -22,7 +22,10 @@
                         }).then(res => {
                             this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
                             if (res.type === "success") {
-                                window.location.reload()
+                                setTimeout(()=>{
+                                    this.$router.push({name:'devlist'})
+                                    window.location.reload()
+                                },1000)
                             }
                         })
                     }

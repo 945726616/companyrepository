@@ -137,6 +137,7 @@ export default {
           // this.deviceArr.push(msg[i])
         }
       }
+      this.deviceArr = [] // 重新set设备数组前先清空数组内容
       for (let setIndex = 0; setIndex < listArr.length; setIndex++) {
         this.$set(this.deviceArr, setIndex, listArr[setIndex])
       }

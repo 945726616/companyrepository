@@ -175,6 +175,7 @@ export default {
         _this.history_initial_data = res;
       })
     }
+    _this.history_initial_data.back_page = _this.history_info.back_page;
     _this.choose_start_time = _this.history_initial_data.start_time;
     _this.choose_end_time = _this.history_initial_data.end_time;
     _this.$store.dispatch('setHistoryData', _this.history_initial_data)

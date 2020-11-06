@@ -154,6 +154,7 @@
         },
         watch: {
             flag(val) {
+                console.log('enter set watch flag', val)
                 switch (val) {
                     case 1:
                         this.menu_data = [
@@ -222,6 +223,7 @@
                         break;
                 }
                 this.$api.set.dev_info({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
+                  console.log('get dev_info', res)
                     if (res && res.result === "") {
                         for (let i = 0; i < this.menu_data.length; i++) {
                             if (this.menu_data[i].type === 'osd' && res.fisheye == 1) { //鱼眼设备隐藏osd
@@ -240,8 +242,8 @@
                             this.new_ealf = 1
                         }
                         this.$store.dispatch('setDeviceEalf', this.new_ealf)
-                        this.publicFunc.closeBufferPage()
                     }
+                    this.publicFunc.closeBufferPage()
                 })
                 for (let i = 0; i < this.menu_data.length; i++) {
                     this.menu_data[i].imgSrc = require("@/assets/device/set_" + this.menu_data[i].type + ".png")
@@ -274,5 +276,4 @@
     @import '../../css/jquery.ibutton.scss';
     @import '../../css/jquery.tzSelect.scss';
     @import './index.scss';
-    
 </style>
