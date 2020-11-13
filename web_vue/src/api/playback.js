@@ -226,6 +226,7 @@ const playback = {
             // console.log(string_speed, 'download_string_speed', obj, 'download_obj')
             if (string_speed.length >= 150) {
               let json_speed = eval("(" + string_speed + ")");
+              console.log(json_speed, 'json_speed') // json_speed是视频播放的相关参数 可以根据该参数进行视频内容和进度条的对齐
               if (data.isDownload) {
                 if (json_speed.data.played_duration / data.videoSize > 1) {
                   json_speed.data.played_duration = data.videoSize;

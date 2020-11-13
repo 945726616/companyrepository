@@ -4,7 +4,7 @@ const jumpPageData = {
     pageDom: '',
     pageObj: {},
     projectName: sessionStorage.getItem('projectName') ? sessionStorage.getItem('projectName') : getProjectName(), // 项目名称获取,考虑后续优化获取方法,并删除相关修改项
-    localModel: window.location.protocol === "file:" ? 1 : 0,
+    localModel: 0,
     loginWaitFlag: 0,
     experienceFlag: 0, // 是否为体验状态
     downloadManualUrl: '', // vsmahome用户手册下载域名

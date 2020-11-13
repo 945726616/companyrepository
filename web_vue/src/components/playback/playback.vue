@@ -294,6 +294,7 @@ export default {
           this.bo_type = true
           this.percent = (this.start_time - this.b_start_time) / (this.end_time - this.b_start_time) // 计算暂停的时间所占的百分比
           this.$store.dispatch('setPercent', this.percent) // 存储至vuex中
+          this.$store.dispatch('setPlayBackSavePercent', this.percent) // 中断续播存储至vuex中
           let new_token = parseInt(this.createPlaybackObj.data.length * this.percent) // 计算回放token
           this.play_back_token = this.createPlaybackObj.data[new_token].token // 计算回放token
           console.log(this.percent, '中断续播')
@@ -335,6 +336,7 @@ export default {
         this.bo_type = true
         this.percent = (this.start_time - this.b_start_time) / (this.end_time - this.b_start_time) // 计算暂停的时间所占的百分比
         this.$store.dispatch('setPercent', this.percent) // 存储至vuex中
+        this.$store.dispatch('setPlayBackSavePercent', this.percent) // 中断续播存储至vuex中
         let new_token = parseInt(this.createPlaybackObj.data.length * this.percent) // 计算回放token
         this.play_back_token = this.createPlaybackObj.data[new_token].token // 计算回放token
         console.log(this.percent, '中断续播')

@@ -163,10 +163,13 @@ const publicFunc = {
       child["setAttribute"]("class", child_class);
     }
     if (child_parent) {
-      if (insert_mode) child_parent[insert_mode.type](child, insert_mode.node ? insert_mode.node : null);
-      else child_parent.appendChild(child);
+      if (insert_mode) {
+        child_parent[insert_mode.type](child, insert_mode.node ? insert_mode.node : null)
+      } else {
+        child_parent.appendChild(child)
+      }
     }
-    return child;
+    return child
   },
   trigger_click (el) {
     if (el.click) el.click();
