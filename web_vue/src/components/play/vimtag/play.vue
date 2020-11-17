@@ -866,16 +866,16 @@
                 l_dom_turn_down.className = "down_key";
                 l_dom_turn_left.className = "left_key";
                 l_dom_turn_right.className = "right_key";
-                if (window.fujikam == "fujikam") {
-                    l_dom_play_view_control.style.width = "946px";
-                    l_dom_play_view_control.style.height = "586px";
-                    l_dom_turn_up.className = "window_up_key";
-                    l_dom_turn_down.className = "window_down_key";
-                    l_dom_turn_left.className = "window_left_key";
-                    l_dom_turn_right.className = "window_right_key";
-                    l_dom_control_menu.style.left = "239px";
-                    l_dom_control_menu.style.top = "393px";
-                }
+                // if (window.fujikam == "fujikam") {
+                //     l_dom_play_view_control.style.width = "946px";
+                //     l_dom_play_view_control.style.height = "586px";
+                //     l_dom_turn_up.className = "window_up_key";
+                //     // l_dom_turn_down.className = "window_down_key";
+                //     // l_dom_turn_left.className = "window_left_key";
+                //     // l_dom_turn_right.className = "window_right_key";
+                //     l_dom_control_menu.style.left = "239px";
+                //     l_dom_control_menu.style.top = "393px";
+                // }
                 let dom_left = $(".left_button")[0],
                     dom_center = $(".center_button")[0],
                     dom_right = $(".right_button")[0],
