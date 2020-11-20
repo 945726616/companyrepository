@@ -538,8 +538,7 @@ export default {
                             if (!version) {
                               _this.$store.dispatch('setAutoPlayFlag', 0)
                             } else {
-                              _this.$store.dispatch('setAutoPlayFlag', 1);
-                              let auto_play = localStorage.getItem('auto_play')
+                              let auto_play = Number(localStorage.getItem('auto_play'))
                               if (auto_play !== 0) {
                                 _this.$store.dispatch('setAutoPlayFlag', 1)
                               } else {
