@@ -427,6 +427,7 @@
             // 播放回调 播放速度
             play_speed(data) {
                 let l_dom_play_view = this.publicFunc.mx("#play_view")
+                let l_dom_play_view_control = this.publicFunc.mx("#play_view_control");
                 this.publicFunc.mx("#play_buffer_ret").innerHTML = data;
                 window.onresize = function() {
                     l_dom_play_view_control.style.left = l_dom_play_view.offsetLeft + "px";

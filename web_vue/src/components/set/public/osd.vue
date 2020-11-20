@@ -82,7 +82,6 @@
             }
         },
         mounted() {
-            let _this = this;
             this.l_dom_select_date = this.publicFunc.mx("#select_date");
             this.l_dom_select_hour = this.publicFunc.mx("#select_hour");
             this.l_dom_checkbox_display_name = this.publicFunc.mx("#checkbox_display_name");

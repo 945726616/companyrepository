@@ -519,21 +519,6 @@
     input[type=range] {
         width: 500px;
         height: 1px;
-        background: -webkit-linear-gradient($projectColor, $projectColor) no-repeat, #c0c0c0;
-        -webkit-appearance: none;
-    }
-
-    input[type=range]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        /*清除系统默认样式*/
-        background: none;
-        border-radius: 10px;
-        -webkit-border-radius: 10px;
-        -moz-border-radius: 10px;
-        background: rgb(255, 255, 255);
-        height: 15px;
-        width: 15px;
-        border: 1px solid rgb(204, 204, 204);
     }
 
     #attachmen_del_box {
@@ -546,7 +531,6 @@
         left: 40%;
         border-radius: 5px;
         color: #646464;
-        // display: none;
     }
 
     #attachmen_del_box_text {

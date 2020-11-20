@@ -118,7 +118,7 @@
         },
         async mounted() {
             await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
-            
+
             this.project_flag_name = this.$store.state.jumpPageData.projectFlag ? "mipc" : "vimtag";
             this.boxlist_params = this.$route.params;
             this.project_name = this.$store.state.jumpPageData.projectName;
@@ -352,21 +352,20 @@
                             }
                         }
                     }
-                    // console.log(data.ipcs, "私有设备列表") // 得到的data.ipcs已经是去除过onvif设备的数组了
-
-                    if (data.ipcs && data.ipcs.length > 0) {
-                        for (let i = 0; i < data.ipcs.length; i++) {
-                            _this.private_ipc_data.push(data.ipcs[i]);
-                        }
-                    }
-                    _this.publicFunc.closeBufferPage()
-                    _this.$nextTick(function() {
-                        _this.$api.boxlist.boxlist_img_get({ addr: _this.boxlist_params.addr, agent: data.agent, sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: data.ipcs, dom: $(".box_camera_sign_picture"), resolution: "p3" })
-                        if (_this.project_flag_name === 'vimtag') { // vimtag项目动态自适应   给box_device_list_img 加margin
-                            $(".box_device_list_img").css({ "margin-right": _this.margin_width / 2, "margin-left": _this.margin_width / 2 });
-                        }
-                    })
                 }
+                // console.log(data.ipcs, "私有设备列表") // 得到的data.ipcs已经是去除过onvif设备的数组了
+                if (data.ipcs && data.ipcs.length > 0) {
+                    for (let i = 0; i < data.ipcs.length; i++) {
+                        _this.private_ipc_data.push(data.ipcs[i]);
+                    }
+                }
+                _this.publicFunc.closeBufferPage()
+                _this.$nextTick(function() {
+                    _this.$api.boxlist.boxlist_img_get({ addr: _this.boxlist_params.addr, agent: data.agent, sn: _this.$store.state.jumpPageData.selectDeviceIpc, ipc: data.ipcs, dom: $(".box_camera_sign_picture"), resolution: "p3" })
+                    if (_this.project_flag_name === 'vimtag') { // vimtag项目动态自适应   给box_device_list_img 加margin
+                        $(".box_device_list_img").css({ "margin-right": _this.margin_width / 2, "margin-left": _this.margin_width / 2 });
+                    }
+                })
             }
         },
         components: {

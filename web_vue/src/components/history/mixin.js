@@ -47,7 +47,7 @@ export const historyMixin = {
                 }
             })
         },
-        filter_snapshot_btn(e) { //点击格式-快照
+        filter_snapshot_btn() { //点击格式-快照
             this.filter_type.format_options = 1;
             this.iscid = 0;
             this.publicFunc.showBufferPage()
@@ -65,7 +65,7 @@ export const historyMixin = {
                 this.create_history_list(res)
             })
         },
-        filter_video_btn(e) { //点击格式-录像
+        filter_video_btn() { //点击格式-录像
             this.filter_type.format_options = 2;
             this.iscid = 0;
             this.publicFunc.showBufferPage()
@@ -83,7 +83,7 @@ export const historyMixin = {
                 this.create_history_list(res)
             })
         },
-        filter_video_snapshot_btn(e) { //点击格式-全选
+        filter_video_snapshot_btn() { //点击格式-全选
             this.filter_type.format_options = 0;
             this.iscid = 0;
             this.publicFunc.showBufferPage()
@@ -101,7 +101,7 @@ export const historyMixin = {
                 this.create_history_list(res)
             })
         },
-        filter_event_btn(e) { //点击类别-事件
+        filter_event_btn() { //点击类别-事件
             this.filter_type.category = 1;
             this.publicFunc.showBufferPage()
             this.$api.history.history_list_get({ // 调用获取历史记录列表
@@ -118,7 +118,7 @@ export const historyMixin = {
                 this.create_history_list(res)
             })
         },
-        filter_all_event_btn(e) { //点击类别-全选
+        filter_all_event_btn() { //点击类别-全选
             this.filter_type.category = 0;
             this.publicFunc.showBufferPage()
             this.$api.history.history_list_get({ // 调用获取历史记录列表
@@ -135,7 +135,7 @@ export const historyMixin = {
                 this.create_history_list(res)
             })
         },
-        time_length_1h_btn(e) { //点击时长-一小时
+        time_length_1h_btn() { //点击时长-一小时
             this.filter_type.time_length = "1h";
             this.iscid = 0;
             this.publicFunc.showBufferPage()
@@ -153,7 +153,7 @@ export const historyMixin = {
                 this.create_history_list(res)
             })
         },
-        time_length_30min_btn(e) { //点击时长-半小时
+        time_length_30min_btn() { //点击时长-半小时
             this.filter_type.time_length = "30min";
             this.iscid = 0;
             this.publicFunc.showBufferPage()
@@ -171,7 +171,7 @@ export const historyMixin = {
                 this.create_history_list(res)
             })
         },
-        time_length_5min_btn(e) { //点击时长-五分钟
+        time_length_5min_btn() { //点击时长-五分钟
             this.filter_type.time_length = "5min";
             this.iscid = 0;
             this.publicFunc.showBufferPage()
