@@ -82,6 +82,7 @@
         </div>
         <!-- 使用添加设备弹窗组件 -->
         <device-model :addDeviceModel='addDeviceModel' :addDeviceModelObj='addDeviceModelObj' @closeModel='closeModel' :onvif_box_search_ack='onvif_box_search_ack'></device-model>
+        <div id='mask' v-if='addDeviceModel'></div>
     </div>
 </template>
 
@@ -113,7 +114,6 @@
                 addDeviceModel: false, // 添加设备弹窗控制标识
                 addDeviceModelObj: {}, // 添加设备弹窗展示数组
                 l_get_onvif_flag: false, //用于判断onvif_list_get函数最后回调至get_onvif_list/get_onvif_unadd
-
             }
         },
         async mounted() {

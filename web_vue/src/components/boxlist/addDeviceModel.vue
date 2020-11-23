@@ -1,5 +1,5 @@
 <template>
-    <div id='add_device_model' v-if='addDeviceModel'>
+    <div id='add_device_box' v-if='addDeviceModel'>
         <div id='add_onvif_devices_box'>
             <div id='add_devices_box_menu'>
                 <div id='add_onvif_devices_box_back' v-if='addDeviceModelObj.addDeviceBodyFlag == "addDetailedDevicePage"' @click='$set(addDeviceModelObj, "addDeviceBodyFlag", "searchDevicePage")'> {{mcs_back}} </div>
@@ -226,24 +226,26 @@
                                 this.add_device_sign = true;
                             }, 10000)
                         }
-                        let add_onvif_devices_box_height = document.getElementById("add_onvif_devices_box").offsetHeight;
-                        let height_onvif;
-                        if (window.fujikam == "fujikam") {
-                            let vimtag_device_list_box_height = document.getElementById("vimtag_device_list_box").offsetHeight;
-                            if (vimtag_device_list_box_height < add_onvif_devices_box_height) {
-                                height_onvif = add_onvif_devices_box_height + 500;
+                        this.$nextTick(() => {
+                            let add_onvif_devices_box_height = document.getElementById("add_onvif_devices_box").offsetHeight;
+                            let height_onvif;
+                            if (window.fujikam == "fujikam") {
+                                let vimtag_device_list_box_height = document.getElementById("vimtag_device_list_box").offsetHeight;
+                                if (vimtag_device_list_box_height < add_onvif_devices_box_height) {
+                                    height_onvif = add_onvif_devices_box_height + 500;
+                                } else {
+                                    height_onvif = vimtag_device_list_box_height + 500;
+                                }
+                                $("#add_device_box").css('height', height_onvif);
                             } else {
-                                height_onvif = vimtag_device_list_box_height + 500;
+                                if (document.body.scrollHeight < add_onvif_devices_box_height) {
+                                    height_onvif = add_onvif_devices_box_height + 100;
+                                } else {
+                                    height_onvif = document.body.scrollHeight + 100;
+                                }
+                                $("#add_device_box").css('height', height_onvif);
                             }
-                            $("#add_device_page").css('height', height_onvif);
-                        } else {
-                            if (document.body.scrollHeight < add_onvif_devices_box_height) {
-                                height_onvif = add_onvif_devices_box_height + 100;
-                            } else {
-                                height_onvif = document.body.scrollHeight + 100;
-                            }
-                            $("#add_device_page").css('height', height_onvif);
-                        }
+                        })
                     })
                 }, 2000)
             },
@@ -291,6 +293,13 @@
 </script>
 <style lang='scss' scoped>
     @import "../../css/public.scss";
+
+    #add_device_box {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        z-index: 1099;
+    }
 
     #add_onvif_devices_box {
         width: 840px;

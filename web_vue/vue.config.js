@@ -4,10 +4,10 @@ const FileManagerPlugin = require('filemanager-webpack-plugin')
 // const cssvariables = require("postcss-css-variables")
 
 // 版本管理
-let date = new Date()
-let month = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1)
-let day = date.getDate() > 9 ? date.getDate() : '0' + date.getDate()
-const time = String(date.getFullYear()) + String(month) + String(day) //版本号后拼接的日期参数
+// let date = new Date()
+// let month = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1)
+// let day = date.getDate() > 9 ? date.getDate() : '0' + date.getDate()
+// const time = String(date.getFullYear()) + String(month) + String(day) //版本号后拼接的日期参数
 
 const argv = JSON.parse(process.env.npm_config_argv)
 const config = {}
@@ -45,7 +45,7 @@ module.exports = {
     }
   },
   publicPath: process.env.NODE_ENV === 'production' ? "./" : "/" + process.env.VUE_APP_PROJECT_NAME + "/", // 设置本地服务域名后缀
-  outputDir: './dist/http_' + process.env.VUE_APP_VERSION + time, // 项目打包输出路径
+  outputDir: './dist/http_' + process.env.VUE_APP_VERSION, //  + time项目打包输出路径
   productionSourceMap: false,
   css: {
     extract: false,
@@ -69,11 +69,11 @@ module.exports = {
               './packageZip'
             ],
             copy: [{
-              source: './dist/http_' + process.env.VUE_APP_VERSION + time,
-              destination: './packageZip/http_' + process.env.VUE_APP_VERSION + time
+              source: './dist/http_' + process.env.VUE_APP_VERSION,
+              destination: './packageZip/http_' + process.env.VUE_APP_VERSION
             }],
             archive: [
-              { source: './packageZip', destination: './dist/http_' + process.env.VUE_APP_VERSION + time + '.zip' },
+              { source: './packageZip', destination: './dist/http_' + process.env.VUE_APP_VERSION + '.zip' },
             ],
             delete: [
               './packageZip'
