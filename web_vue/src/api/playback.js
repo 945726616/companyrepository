@@ -227,6 +227,7 @@ const playback = {
             if (string_speed.length >= 150) {
               let json_speed = eval("(" + string_speed + ")");
               console.log(json_speed, 'json_speed') // json_speed是视频播放的相关参数 可以根据该参数进行视频内容和进度条的对齐
+              console.log(data, playbackFlag, 'data_playbackFlag')
               if (data.isDownload) {
                 if (json_speed.data.played_duration / data.videoSize > 1) {
                   json_speed.data.played_duration = data.videoSize;
@@ -250,20 +251,22 @@ const playback = {
                   sessionStorage.setItem("duration_tip", duration_tip)
                 }
                 l_Last_speed = json_speed.data.total_bytes;
-                l_progress = parseInt((json_speed.data.played_duration / data.videoSize) * 100);
+                l_progress = json_speed.data.played_duration / data.videoSize
+                //store.dispatch('setPercent', l_progress) // 赋值播放进度百分比
+                console.log(l_progress, '播放百分比进度')
                 sessionStorage.setItem("duration", json_speed.data.played_duration);
                 let record_played_duration = json_speed.data.played_duration // - duration2;
                 // returnItem = [l_speed, l_progress, record_played_duration]
                 console.log('enter_playback_speed')
                 playback_speed(l_speed, l_progress, record_played_duration)
               } else {
+                console.log('enter this else')
                 let kb = json_speed.data.p2ping ? "kB" : "KB";
                 l_speed = json_speed.data.total_bytes > l_Last_speed ? parseInt((json_speed.data.total_bytes - l_Last_speed) / 1000) + kb : l_Last_speed = 0;
                 l_Last_speed = json_speed.data.total_bytes;
-                returnItem = l_speed
+                // returnItem = l_speed
               }
             }
-            console.log(returnItem, 'download_return1')
           }, 1000)
           store.dispatch('setFlashIsPlay', l_ipc_speed_time)
         } else {

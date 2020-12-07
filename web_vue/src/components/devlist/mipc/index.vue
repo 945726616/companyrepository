@@ -90,9 +90,9 @@ export default {
   methods: {
     mipcDevlist (obj) {
       this.imgRefresh = obj.refresh // 拿到图片刷新标识
-      if (window.fujikam) { // 客户端判断
-        // check_app_version()
-      }
+      // if (window.fujikam) { // 客户端判断
+      //   // check_app_version()
+      // }
       this.publicFunc.mx("#dev_main_right").style.width = document.body.clientWidth - this.publicFunc.mx("#dev_main_left").offsetWidth - 60 + "px"
       this.publicFunc.mx("#dev_main_left").style.height = (document.documentElement.clientHeight - 54) + "px"
       this.publicFunc.mx("#dev_list").style.height = (this.publicFunc.mx("#dev_main_left").offsetHeight - 43) + "px"

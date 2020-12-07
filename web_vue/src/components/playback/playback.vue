@@ -95,7 +95,7 @@ export default {
       bo_type: sessionStorage.getItem('bo_type') ? sessionStorage.getItem('bo_type') : false, // 播放类型
       play_back_token: null, // 回放token
       b_start_time: null, // b开始时间
-      clientFlag: window.fujikam === 'fujikam' ? true : false, // window.fujikam === 'fujikam' ? true : false // 客户端判别标识(true: 客户端, false: 网页端)
+      clientFlag: window.fujikam === 'fujikam' ? true : false, // 客户端判别标识(true: 客户端, false: 网页端)
       play_progress: null, // 回放进度条参数
       percent: 0,
       downloadBoxFlag: false, // 下载提示框标识
@@ -105,7 +105,6 @@ export default {
   },
   methods: {
     create_playback_page (obj) {
-      let _this = this
       this.createPlaybackObj = obj // 存储调用时的obj内容
       this.$store.dispatch('setPlayBackObj', this.createPlaybackObj)
       if (obj.data) { // 移动侦测标识数组
@@ -150,8 +149,9 @@ export default {
       // 时间相关赋值结束
       this.play_menu_control({ parent: l_dom_playback_menu_box }) // 调用播放器控制菜单渲染
       this.create_preview({ parent: $("#playback_screen") }) // 创建暂停遮罩层渲染
-      window.onresize = function () { // 更改页面大小时重新设置相应高度
-        _this.create_playback_page(obj)
+      window.onresize = () => { // 更改页面大小时重新设置相应高度
+        console.log('enter onresize')
+        this.create_playback_page(obj)
       }
     },
     play_menu_control (data) { // 播放控制菜单
@@ -288,8 +288,9 @@ export default {
         this.is_playing = 1
         console.log(JSON.parse(sessionStorage.getItem('pause_start_time')), this.b_start_time, '开始结束时间')
         if (JSON.parse(sessionStorage.getItem('pause_start_time')) && JSON.parse(sessionStorage.getItem('pause_start_time')) !== this.b_start_time) { // 如果存在暂停时间且时间不等于原始开始时间
-          this.start_time = sessionStorage.getItem('pause_start_time')
+          this.start_time = Number(sessionStorage.getItem('pause_start_time'))
           this.start_time_show = new Date(this.start_time).format("hh:mm:ss")
+          console.log(this.start_time_show, '展示的开始时间')
           sessionStorage.setItem('bo_type', true)
           this.bo_type = true
           this.percent = (this.start_time - this.b_start_time) / (this.end_time - this.b_start_time) // 计算暂停的时间所占的百分比
@@ -330,7 +331,7 @@ export default {
       sessionStorage.setItem('playBackPercent', this.percent)
       console.log(JSON.parse(sessionStorage.getItem('pause_start_time')), this.b_start_time, '开始结束时间')
       if (JSON.parse(sessionStorage.getItem('pause_start_time')) && JSON.parse(sessionStorage.getItem('pause_start_time')) !== this.b_start_time) { // 如果存在暂停时间且时间不等于原始开始时间
-        this.start_time = sessionStorage.getItem('pause_start_time')
+        this.start_time = Number(sessionStorage.getItem('pause_start_time'))
         this.start_time_show = new Date(this.start_time).format("hh:mm:ss")
         sessionStorage.setItem('bo_type', true)
         this.bo_type = true
