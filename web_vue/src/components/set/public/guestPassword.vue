@@ -61,7 +61,7 @@
                             return;
                         }
                     }
-                    this.$api.set.admin_password_set({
+                    this.$api.set.guest_password_set({
                         sn: this.$store.state.jumpPageData.selectDeviceIpc,
                         old_pass: this.admin_pwd_value,
                         new_pass: this.guest_pwd_value

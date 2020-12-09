@@ -240,7 +240,7 @@
     right:0;*/
     margin-top:10px;
     margin-right:10px;
-    display: none;
+    // display: none;
     background-image: url(~@/assets/device/device_delete.png);
     background-repeat: no-repeat;
     &:hover{
@@ -250,7 +250,7 @@
   }
   .device_list_sort_box{
     float:right;
-    display: none;
+    // display: none;
     .device_list_sort_num{
       width:20px;
     }

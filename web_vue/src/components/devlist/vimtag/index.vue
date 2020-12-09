@@ -29,12 +29,13 @@
           <div id='online_btn_select_offline'>{{mcs_offline_status}}</div><!-- 离线 -->
         </div>
       </div>
-      <div id='device_list_edit' v-if="!$store.state.jumpPageData.experienceFlag && !$store.state.jumpPageData.localFlag" class='device_list_menu' @click="editClick">{{mcs_edit}}</div><!-- 编辑 -->
+      <div id='device_list_edit' v-if="!$store.state.jumpPageData.experienceFlag && !$store.state.jumpPageData.localFlag" class='device_list_menu' @click="click_edit_flag = !click_edit_flag">{{mcs_edit}}</div><!-- 编辑 -->
       <div id='device_add_btn' v-if="!$store.state.jumpPageData.experienceFlag && !$store.state.jumpPageData.localFlag" class='device_list_menu' @mouseenter="addHoverflag = true" @mouseleave="addHoverflag = false" @click="addDevClick">
         {{mcs_add_device}}
         <!-- 添加设备 -->
         <div id='device_add_btn_down' v-show="addHoverflag">{{mcs_click_add_equipment}}</div><!-- 点击添加设备(hover提示框) -->
       </div>
+      <div id="split_screen" @click="jumpToSplitScreen">Split Screen</div><!-- 分屏轮播 -->
     </div>
     <!-- 顶部设备列表菜单栏 结束 -->
     <!-- 设备列表展示部分 -->
@@ -57,8 +58,8 @@
               <div class='camera_sign_video'></div>
             </div>
             <div class='device_nick'>
-              <div class='device_list_del_ico' @click="delDevice(IPCCamera)"></div>
-              <div class='device_list_sort_box'>
+              <div class='device_list_del_ico' v-show="click_edit_flag" @click="delDevice(IPCCamera)"></div>
+              <div class='device_list_sort_box' v-show="$store.state.user.supportTreeFlag && click_edit_flag">
                 <input class='device_list_sort_num' :value='IPCCamera.sort || ""'>
                 <div class='device_list_sort_btn'>{{mcs_edit}}</div>
               </div>
@@ -83,8 +84,8 @@
               <div class='camera_sign_video'></div>
             </div>
             <div class='device_nick'>
-              <div class='device_list_del_ico' @click="delDevice(BoxItem)"></div>
-              <div class='device_list_sort_box'>
+              <div class='device_list_del_ico' v-show="click_edit_flag" @click="delDevice(BoxItem)"></div>
+              <div class='device_list_sort_box' v-show="$store.state.user.supportTreeFlag && click_edit_flag">
                 <input class='device_list_sort_num' :value='BoxItem.sort || ""'>
                 <div class='device_list_sort_btn'>{{mcs_edit}}</div>
               </div>
@@ -240,7 +241,8 @@ export default {
       tmpData: [],
       search_sort: [],
       search_tree: [],
-      device_offline_sign:false //判断点击关闭弹窗时当前设备是否离线
+      device_offline_sign: false, //判断点击关闭弹窗时当前设备是否离线
+      click_edit_flag: false, // 是否点击编辑标识
     }
   },
   methods: {
@@ -604,12 +606,12 @@ export default {
         clearInterval(stop_scroll)
         this.device_event(0, num)
       }, asnyc_time)
-      window.onscroll = () => {
+      window.onscroll = () => { // 滚动懒加载
         if (stop_scroll) {
           clearInterval(stop_scroll)
         }
         if (document.getElementById("vimtag_device_list_box")) {
-          let scrollTop = document.documentElement.scrollTop
+          let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset // 兼容监听scrolltop
           if (this.$store.state.user.autoPlayFlag) {
             stop_scroll = setInterval(() => {
               clearInterval(stop_scroll)
@@ -848,19 +850,8 @@ export default {
       this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'chooseDevice') // 展示产品选择页面
       this.$set(this.addDeviceModelObj, 'menuTitle', mcs_choose_device_type) // 设置产品选择页面顶部菜单标题
     },
-    editClick () { // 点击菜单编辑按钮
-      if ($(".device_list_del_ico").css("display") === "none") {
-        $(".device_list_del_ico").show();
-      } else {
-        $(".device_list_del_ico").hide();
-      }
-      if (this.$store.state.user.supportTreeFlag) {
-        if ($(".device_list_sort_box").css("display") === "none") {
-          $(".device_list_sort_box").show();
-        } else {
-          $(".device_list_sort_box").hide();
-        }
-      }
+    jumpToSplitScreen () { // 点击跳转至分屏轮播页面
+      this.$router.push({ name: 'splitScreen'})
     },
     // 点击事件处理函数结束
     add_device_connect_power_event () {
@@ -1141,64 +1132,6 @@ export default {
         srcdiv.innerHTML = divdom.innerHTML;
         divdom.innerHTML = ev.dataTransfer.getData("text/html");
       }
-    },
-    // 检测客户端版本
-    check_app_version () {
-      let _this = this
-      let version_type = "";
-      let app_version = window.appVersion ? window.appVersion : "";
-      if (navigator.userAgent.indexOf("Intel Mac") > -1) {
-        version_type = "mac_" + _this.$store.state.jumpPageData.projectName;
-      } else if (navigator.userAgent.indexOf("Windows") > -1) {
-        version_type = "windows_" + _this.$store.state.jumpPageData.projectName;
-      }
-      if (!$("#version_updata_tips_page").length > 0) {
-        $("body").append(
-          "<div id='version_updata_tips_page'>"
-          + "<div id='version_updata_tips_box'>"
-          + "<div id='version_updata_tips_content'>" + mcs_start_upgrade + "</div>"
-          + "<a target='_top' href='http://" + host_oems + "/about/index.htm'><div id='version_updata_tips_ok'>" + mcs_ok + "</div></a>"
-          + "<div id='version_updata_tips_cancel'>" + mcs_cancel + "</div>"
-          + "</div>"
-          + "</div>")
-      }
-      $("#version_updata_tips_cancel").click(function () {
-        $("#version_updata_tips_page").hide()
-      })
-      _this.$api.login.get_version({ // 发送请求对比客户端版本是否为最新版
-        srv: window.location.host,
-        ver_type: version_type,
-        ver_from: "v3.9.1.1607051739",
-        lang: _this.$store.state.user.userLanguage
-      }).then(res => {
-        let msg = res.data
-        if (msg && msg.result == "") {
-          _this.$store.dispatch('setDownloadManualUrl', '')
-          let app_ver = app_version.split(".");
-          let new_ver = msg.info.ver_to.split(".");
-          if (window.location.protocol === "https:") { // 赋值下载地址
-            msg.info.link_url = msg.info.link_url.replace("http://209.133.212.170:2080", "https://us10.vimtag.com:2446");
-            msg.info.link_url = msg.info.link_url.replace("http://61.147.109.92:7080", "https://js.vimtag.com:7446");
-          }
-          _this.$store.dispatch('setDownloadManualUrl', msg.info.link_url)
-          // 这部分判断需要优化一下
-          if (app_ver[0] < new_ver[0]) {
-            $("#version_updata_tips_page").show();
-          } else if (app_ver[0] == new_ver[0]) {
-            if (app_ver[1] < new_ver[1]) {
-              $("#version_updata_tips_page").show();
-            } else if (app_ver[1] == new_ver[1]) {
-              if (app_ver[2] < new_ver[2]) {
-                $("#version_updata_tips_page").show();
-              } else if (app_ver[2] == new_ver[2]) {
-                if (app_ver[3] < new_ver[3]) {
-                  $("#version_updata_tips_page").show();
-                }
-              }
-            }
-          }
-        }
-      })
     }
   },
   async mounted () {
