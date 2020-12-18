@@ -61,7 +61,7 @@
               <div class='device_list_del_ico' v-show="click_edit_flag" @click="delDevice(IPCCamera)"></div>
               <div class='device_list_sort_box' v-show="$store.state.user.supportTreeFlag && click_edit_flag">
                 <input class='device_list_sort_num' :value='IPCCamera.sort || ""'>
-                <div class='device_list_sort_btn'>{{mcs_edit}}</div>
+                <div class='device_list_sort_btn' @click="setDeviceNickName(IPCCamera)">{{mcs_edit}}</div>
               </div>
               <span>{{IPCCamera.nick}}</span>
             </div>
@@ -87,7 +87,7 @@
               <div class='device_list_del_ico' v-show="click_edit_flag" @click="delDevice(BoxItem)"></div>
               <div class='device_list_sort_box' v-show="$store.state.user.supportTreeFlag && click_edit_flag">
                 <input class='device_list_sort_num' :value='BoxItem.sort || ""'>
-                <div class='device_list_sort_btn'>{{mcs_edit}}</div>
+                <div class='device_list_sort_btn' @click="setDeviceNickName(BoxItem)">{{mcs_edit}}</div>
               </div>
               <span v-html="(BoxItem.nick.length < 14) ? BoxItem.nick : (BoxItem.nick.substr(0, 14) + '...')"></span>
             </div>
@@ -852,6 +852,13 @@ export default {
     },
     jumpToSplitScreen () { // 点击跳转至分屏轮播页面
       this.$router.push({ name: 'splitScreen'})
+    },
+    setDeviceNickName (item) { // 树状分类结构特有的编辑设备昵称功能
+      this.addDeviceModel = true // 展示添加设备弹窗
+      this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'setTreeDeviceNick')
+      this.$set(this.addDeviceModelObj, 'menuTitle', mcs_nick_modify)
+      this.$set(this.addDeviceModelObj, 'treeDeviceId', item.sn)
+      this.$set(this.addDeviceModelObj, 'treeDeviceNick', item.nick)
     },
     // 点击事件处理函数结束
     add_device_connect_power_event () {

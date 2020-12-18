@@ -23,10 +23,7 @@
                     <nickname v-if="right_show_sign.nickname"></nickname>
                     <admin-password v-if="right_show_sign.admin_password"></admin-password>
                     <guest-password v-if="right_show_sign.guest_password"></guest-password>
-                    <network v-if="right_show_sign.network"></network>
                     <osd v-if="right_show_sign.osd"></osd>
-                    <sdcord v-if="right_show_sign.sdcord" :info='info_data'></sdcord>
-                    <storage-device v-if="right_show_sign.storage_device"></storage-device>
                     <record v-if="right_show_sign.record"></record>
                     <accessory v-if="right_show_sign.accessory"></accessory>
                     <alarm v-if="right_show_sign.alarm_device_tips"></alarm> <!-- 报警插件 -->
@@ -37,6 +34,9 @@
                     <lighting v-if="right_show_sign.lighting"></lighting>
                     <delete-device v-if="right_show_sign.delete_device"></delete-device>
                 </keep-alive>
+                <network v-if="right_show_sign.network"></network>
+                <sdcord v-if="right_show_sign.sdcord" :info='info_data'></sdcord>
+                <storage-device v-if="right_show_sign.storage_device"></storage-device>
             </div>
         </div>
     </div>
@@ -108,7 +108,7 @@
             }
         },
         mounted() {
-          this.publicFunc.showBufferPage()
+            this.publicFunc.showBufferPage()
             let _this = this;
             _this.project_flag = _this.$store.state.jumpPageData.projectFlag;
             _this.project_name = _this.$store.state.jumpPageData.projectName;
@@ -223,7 +223,6 @@
                         break;
                 }
                 this.$api.set.dev_info({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
-                  console.log('get dev_info', res)
                     if (res && res.result === "") {
                         for (let i = 0; i < this.menu_data.length; i++) {
                             if (this.menu_data[i].type === 'osd' && res.fisheye == 1) { //鱼眼设备隐藏osd

@@ -79,6 +79,16 @@ const history = {
         dev_sn: ref.dev_sn,
         search_type: ref.search_type
       }); //解密成一个个seg 
+      if(videosegs.length == 0){
+        return returnItem = {
+          video: [],
+          time: [],
+          date_infos_time: ref.date_infos_time,
+          dev_sn: ref.dev_sn,
+          start_time: ref.start_time,
+          end_time: ref.end_time
+        }
+      }
       let videoData = history.draw_data_rect({
         videosegs: videosegs,
         time_length: ref.time_length,
@@ -137,7 +147,6 @@ const history = {
       let video_segment_start_time = parseInt((l_segs[i].stm), 16);
       let video_segment_end_time = parseInt((l_segs[i].etm), 16);
       if (obj.search_type == 0) { //如果按照时间检索在筛选视频
-        //    // console.log('进来了')
         // if(video_segment_start_time < obj.base_start_time) continue;//解决显示其他天日期视频问题
         if (video_segment_start_time < obj.base_start_time || video_segment_end_time > obj.base_end_time) continue; //解决显示其他天日期视频问题
       }

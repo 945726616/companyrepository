@@ -41,12 +41,6 @@
                         </div>
                     </div>
                 </div>
-                <div id='box_per_ipc_container' style="flex-direction: column" v-else>
-                    <div id='empty_div_img'></div>
-                    <div class='empty_div_txt'> {{mcs_your_device_list_empty}} </div>
-                    <div id='empty_search_btn' @click='empty_search_btn'> {{mcs_search_device}} </div>
-                </div>
-
             </div>
             <!--开放接口 -->
             <div id='box_onvif_ipc_box'>
@@ -77,7 +71,11 @@
                         </div>
                     </div>
                 </div>
-
+            </div>
+            <div id='box_per_ipc_container' style="flex-direction: column" v-if='private_ipc_data.length == 0 && onvif_ipc_data1.length == 0 && onvif_ipc_data2.length == 0'>
+                <div id='empty_div_img'></div>
+                <div class='empty_div_txt'> {{mcs_your_device_list_empty}} </div>
+                <div id='empty_search_btn' @click='empty_search_btn'> {{mcs_search_device}} </div>
             </div>
         </div>
         <!-- 使用添加设备弹窗组件 -->

@@ -221,7 +221,6 @@
   height: 34px;
   color: #000000;
   font-size: 14px;
-  z-index: 2;
   background: #ffffff;
   line-height: 34px;
   bottom: 0;
@@ -233,6 +232,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
   .device_list_del_ico{
+    z-index: 2; // 提升层级防止层级过低点击无效
     width:16px;
     height:16px;
     float:right; 
@@ -249,6 +249,7 @@
     }
   }
   .device_list_sort_box{
+    z-index: 2; // 提升层级防止层级过低点击无效
     float:right;
     // display: none;
     .device_list_sort_num{
@@ -587,6 +588,27 @@
           background-repeat: no-repeat;
         }
       }
+      #set_tree_device_nick{ // 树状列表修改昵称(vimtag特有)
+        .set_device_edit_name_tips{
+          width:400px;
+          margin:0 auto;
+          text-align: center;
+          font-size: 16px;
+          margin-bottom: 20px;
+          color:#333;
+          &:first-child {
+            margin-top: 150px;
+          }
+        }
+        .add_device_input_name_box_ico{
+          width:14px;
+          height:16px;
+          float: left;
+          margin: 10px;
+          background-image: url(~@/assets/device/nickname.png);
+          background-repeat: no-repeat;
+        }
+      }
       #set_device_zone{ // 设置设备时区
         #add_device_set_zone_box{
           width:240px;
@@ -690,7 +712,7 @@
         margin-left: 159px;
         letter-spacing: 1px;
       }
-      #add_device_success_ico{
+      #vimtag_add_device_success_ico{
         width:44px;
         height:44px;
         margin:0 auto;

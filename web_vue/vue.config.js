@@ -101,10 +101,18 @@ module.exports = {
     // )
   },
   chainWebpack: config => { // 解决webpack无法打包.ico文件
-    config.module
+    config.module // 解决webpack无法打包.ico文件
       .rule('image')
       .test(/\.ico$/)
       .use('url-loader')
       .loader('url-loader')
+    config.module // 解决webpack无法打包.swf文件
+      .rule('swf')
+      .test(/\.swf$/)
+      .use('url-loader')
+      .loader('url-loader')
+      .options({
+        limit: 10000
+      })
   }
 }

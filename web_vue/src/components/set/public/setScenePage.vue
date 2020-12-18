@@ -518,7 +518,7 @@
 
     input[type=range] {
         width: 500px;
-        height: 1px;
+        height: 2px;
     }
 
     #attachmen_del_box {

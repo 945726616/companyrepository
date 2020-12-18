@@ -13,7 +13,7 @@ const playback = () => import(/* webpackChunkName: "group-Vimtag" */'@/component
 const history = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/history/vimtag/history')
 const set = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/set/set')
 const boxlist = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/boxlist/boxlist')
-const splitScreen = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/splitScreen')
+const splitScreen = () => import(/* webpackChunkName: "group-Vimtag" */'@/components/playPlugin') // playPlugin
 
 const vimtagRouter = new Router({
   routes: [

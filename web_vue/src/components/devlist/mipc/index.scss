@@ -587,13 +587,22 @@
         width:80%;
         margin: 0 auto;
       }
-      #add_device_success_ico{
+      #mipcm_add_device_success_ico,#vsmahome_add_device_success_ico{
         width:44px;
         height:44px;
         margin:0 auto;
         margin-top:50px;
         margin-bottom: 14px;
-        background-image: url(~@/assets/device/success2.png);
+        background-image: url(~@/assets/mipc/mipcm_success2.png);
+        background-repeat: no-repeat;
+      }
+      #ebitcam_add_device_success_ico{
+        width:44px;
+        height:44px;
+        margin:0 auto;
+        margin-top:50px;
+        margin-bottom: 14px;
+        background-image: url(~@/assets/ebitcam/ebit_success2.png);
         background-repeat: no-repeat;
       }
       .add_device_input_pass_box_ico{
@@ -650,7 +659,6 @@
         border:1px solid #999;
         border-top:none;
         border-radius: 0 0 5px 5px;
-        display: none;
       }
       #add_device_set_wifi_list_box::-webkit-scrollbar{
         width:5px;

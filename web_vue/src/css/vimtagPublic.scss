@@ -1451,7 +1451,7 @@ div.ibutton-label-on {
 	right:0;*/
 	margin-top:10px;
 	margin-right:10px;
-	display: none;
+	// display: none;
 	background: url(../assets/device/device_delete.png) no-repeat;
 }
 .device_list_del_ico:hover{
@@ -1800,7 +1800,6 @@ div.ibutton-label-on {
     border:1px solid #999;
     border-top:none;
     border-radius: 0 0 5px 5px;
-    display: none;
 }
 #add_device_set_wifi_list_box::-webkit-scrollbar{
     width:5px;

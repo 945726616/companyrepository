@@ -376,12 +376,33 @@
             },
             create_scene_result_page(obj) {
                 this.scene_list_add_page = "create_secne"
+                let project_name = this.$store.state.jumpPageData.projectName;
                 if (obj.result) {
-                    this.content_img = "background:url(" + require("@/assets/device/success.png") + ") no-repeat;";
+                    switch (project_name){
+                        case "vimtag":
+                            this.content_img = "background:url(" + require("@/assets/device/success.png") + ") no-repeat;";
+                            break;
+                        case "ebitcam":
+                            this.content_img = "background:url(" + require("@/assets/ebitcam/ebit_success.png") + ") no-repeat;";
+                            break;
+                        default:
+                            this.content_img = "background:url(" + require("@/assets/mipc/mipc_success.png") + ") no-repeat;";
+                            break;
+                    }
                     this.content_text = mcs_add_successfully;
                     this.content_btn = mcs_ok;
                 } else {
-                    this.content_img = "background:url(" + require("@/assets/device/fail.png") + ") no-repeat;"
+                    switch (project_name){
+                        case "vimtag":
+                            this.content_img = "background:url(" + require("@/assets/device/fail.png") + ") no-repeat;"
+                            break;
+                        case "ebitcam":
+                            this.content_img = "background:url(" + require("@/assets/ebitcam/ebit_fail.png") + ") no-repeat;";
+                            break;
+                        default:
+                            this.content_img = "background:url(" + require("@/assets/mipc/mipc_fail.png") + ") no-repeat;";
+                            break;
+                    }
                     this.content_text = mcs_add_failed;
                     this.content_btn = mcs_action_retry;
                 }

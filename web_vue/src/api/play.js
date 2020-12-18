@@ -1374,6 +1374,24 @@ const play = {
     }
     return returnItem
   },
+  // vue-video-player
+  async getPlayUrl (data) {
+    return await axios.get('/ccm/ccm_play', {
+      params: {
+        sess: {
+          nid: login.create_nid(),
+          sn: data.sn
+        },
+        setup: {
+          stream: "RTP_Unicast",
+          trans: {
+            proto: 'http' //'rtmp'
+          }
+        },
+        token: data.profile_token
+      }
+    })
+  }
 }
 
 export default play

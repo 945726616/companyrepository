@@ -194,9 +194,8 @@
 
     input[type=range] {
         width: 200px;
-        height: 1px;
+        height: 2px;
     }
-
 
     #power_fr {
         width: 200px;

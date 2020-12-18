@@ -86,7 +86,7 @@
         <!-- 修改密码 -->
         <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'editDevicePassword'" id="edit_device_password">
           <div id='add_device_success'>
-            <div id='add_device_success_ico'></div>
+            <div :id='project_name+"_add_device_success_ico"'></div>
             <div id='add_device_success_txt'>{{mcs_device_id + ":" + add_device_input_id_model.toUpperCase() + " " + mcs_add_successfully + "!"}}</div>
           </div>
           <div id='add_device_edit_pass_tips'>{{mcs_device_password_too_simple}}</div> <!-- 密码8到32位 -->
@@ -104,7 +104,7 @@
         <!-- 设置wifi -->
         <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'setDeviceWifi'" id="set_device_wifi">
           <div id='add_device_success'>
-            <div id='add_device_success_ico'></div>
+            <div :id='project_name+"_add_device_success_ico"'></div>
             <div id='add_device_success_txt'>{{mcs_device_id + ":" + add_device_input_id_model.toUpperCase() + " " + mcs_add_successfully + "!"}}</div>
           </div>
           <div id='add_device_edit_pass_tips'>{{mcs_prompt_config_wifi}}</div>
@@ -177,6 +177,17 @@
           </div>
         </div>
         <!-- 离线设备帮助 结束 -->
+        <!-- 树状结构设置设备昵称 -->
+        <div v-if="addDeviceModelObj.addDeviceBodyFlag === 'setTreeDeviceNick'" id="set_tree_device_nick">
+          <div class='set_device_edit_name_tips'>{{mcs_device_id + ":" + addDeviceModelObj.treeDeviceId}}</div>
+          <div class='set_device_edit_name_tips'>{{mcs_nickname + ":" + addDeviceModelObj.treeDeviceNick}}</div>
+          <div class='add_device_input_id_box'>
+            <div class='add_device_input_name_box_ico'></div>
+            <input id='add_device_nick' class='add_device_input_id_box_input' type='text' v-model="input_device_nick" :placeholder='mcs_input_nick'>
+          </div>
+          <div id='add_device_submit' @click="setTreeDeviceNickName(addDeviceModelObj.treeDeviceId)">{{mcs_ok}}</div>
+        </div>
+        <!-- 设置设备昵称 结束 -->
       </div>
       <!-- 弹窗内部内容 结束 -->
     </div>
@@ -218,6 +229,7 @@ export default {
       input_device_nick: null, // 设置设备昵称输入
       connectNetTimeArr: [], // 等待网络链接定时器数组
       resetDeviceId: null,
+      project_name: this.$store.state.jumpPageData.projectName, //项目名
       // 多国语言
       mcs_back: mcs_back,
       mcs_cloud_camera: mcs_cloud_camera,
@@ -256,7 +268,8 @@ export default {
       mcs_reconfigure: mcs_reconfigure,
       mcs_device_offline_fourth_reson: mcs_device_offline_fourth_reson,
       mcs_search_help: mcs_search_help,
-      mcs_device_offline: mcs_device_offline
+      mcs_device_offline: mcs_device_offline,
+      mcs_nickname: mcs_nickname
     }
   },
   methods: {
@@ -540,8 +553,12 @@ export default {
           sn: this.add_device_input_id_model,
           nick: nick
         }).then(res => {
-          this.skipToZone() // 跳转至时区设置页面
-          // add_device_set_zone(res)
+          if (res.result === '') {
+            this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 })
+            this.skipToZone() // 跳转至时区设置页面
+          } else {
+            this.publicFunc.msg_tips({ msg: res.result, type: "error", timeout: 3000 })
+          }
         })
       }
     },
@@ -649,6 +666,19 @@ export default {
       this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'chooseDevice') // 配置跳转到设备类型选择页面
       this.$set(this.addDeviceModelObj, 'menuTitle', mcs_choose_device_type) // 配置弹窗标题
       this.resetDeviceId = this.add_device_input_id_model // 将点击重新配置的设备id存到resetDeviceId中用于Id验证时比对使用
+    },
+    setTreeDeviceNickName (deviceId) { // 树状结构修改昵称
+      this.$api.devlist.nick_set({ // 设置设备昵称
+        sn: deviceId,
+        nick: this.input_device_nick
+      }).then(res => {
+        if (res.result === '') {
+          this.publicFunc.msg_tips({ msg: mcs_set_successfully, type: "success", timeout: 3000 })
+          this.closeModel() // 关闭弹窗
+        } else {
+          this.publicFunc.msg_tips({ msg: res.result, type: "error", timeout: 3000 })
+        }
+      })
     }
   }
 }
