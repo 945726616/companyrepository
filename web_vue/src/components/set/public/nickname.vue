@@ -41,7 +41,7 @@
                     if (this.nickname.search(reg) > -1) {
                         this.publicFunc.msg_tips({ msg: mrs_enter_contain_illegal_characters, type: 'error', timeout: 3000 });
                     } else {
-                        this.$api.set.nickname_set({ sn: this.$store.state.jumpPageData.selectDeviceIpc, val: this.nickname }).then(res => {
+                        this.$api.set.nickname_set({ sn: this.$store.state.jumpPageData.selectDeviceIpc, name: this.nickname }).then(res => {
                             this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
                         })
                     }
