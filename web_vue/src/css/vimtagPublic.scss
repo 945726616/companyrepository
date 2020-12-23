@@ -1019,7 +1019,7 @@ div.ibutton-label-on {
 	font-size: 15px;
 	/*margin-left:13px; g 5.5*/ 
 	position:absolute;
-	z-index: 100000;
+	// // z-index: 100000;
 }
 #back:hover{
 	color:$projectColor;
@@ -1028,22 +1028,6 @@ div.ibutton-label-on {
   background-image: url(~@/assets/device/choose-back.png);
   background-position: 0 22px;
   background-repeat: no-repeat;
-}
-#new_back{
-	cursor: pointer;
-	float:left;
-	line-height: 58px;
-	font-size: 15px;
-	position:absolute;
-	z-index: 100000;
-}
-#new_back:hover{
-	color:$projectColor;
-}
-#new_back:hover #main_title_box_return_img{
-  background-image: url(~@/assets/device/choose-back.png);
-  background-repeat: no-repeat;
-  background-position: 0 22px;
 }
 #snapshot_preview_close {
   background-image: url(~@/assets/device/vimtag_img.png);

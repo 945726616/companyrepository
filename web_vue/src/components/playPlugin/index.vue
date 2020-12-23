@@ -1,7 +1,16 @@
 <template>
   <div>
-    <div data-vjs-player>
-      <video ref="videoNode" class="video-js vjs-default-skin vjs-big-play-centered">抱歉，您的浏览器不支持</video>
+    <div id="player1">
+      <video ref="videoNode1" id="testId" class="video-js vjs-default-skin vjs-big-play-centered">抱歉，您的浏览器不支持</video>
+    </div>
+    <div id="player2">
+      <video ref="videoNode2" class="video-js vjs-default-skin vjs-big-play-centered">抱歉，您的浏览器不支持</video>
+    </div>
+    <div id="player3">
+      <video ref="videoNode3" class="video-js vjs-default-skin vjs-big-play-centered">抱歉，您的浏览器不支持</video>
+    </div>
+    <div id="player4">
+      <video ref="videoNode4" class="video-js vjs-default-skin vjs-big-play-centered">抱歉，您的浏览器不支持</video>
     </div>
   </div>
 </template>
@@ -53,14 +62,42 @@ export default {
           //type: 'rtmp/flv',
         }
       ]
-    };
-    this.player = videojs(
-      this.$refs.videoNode,
-      options,
-      function onPlayerReady () {
-        videojs.log(`Your player is ready!`);
-      }
-    );
+    }
+    let playerTest
+    playerTest= videojs('testId')
+    console.log(this.player,'player')
+    console.log(playerTest, 'playerTest')
+    console.log(videojs.getPlayer, 'this.player')
+    // console.log(this.$refs.videoNode1, 'this.$refs.videoNode1')
+    // videojs.options = options
+    // this.player = videojs(
+    //   this.$refs.videoNode4,
+    //   options,
+    //   function onPlayerReady () {
+    //     videojs.log(`Your player is ready!`);
+    //   }
+    // )
+    // this.player = videojs(
+    //   this.$refs.videoNode1,
+    //   options,
+    //   function onPlayerReady () {
+    //     videojs.log(`Your player is ready!`);
+    //   }
+    // )
+    // this.player = videojs(
+    //   this.$refs.videoNode2,
+    //   options,
+    //   function onPlayerReady () {
+    //     videojs.log(`Your player is ready!`);
+    //   }
+    // )
+    // this.player = videojs(
+    //   this.$refs.videoNode3,
+    //   options,
+    //   function onPlayerReady () {
+    //     videojs.log(`Your player is ready!`);
+    //   }
+    // )
     // videojs.addLanguage("zh-CN", videozhCN);
   },
   beforeDestroy () {

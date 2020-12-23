@@ -151,7 +151,7 @@ export default {
           break;
       }
     },
-    checkIp (data) { //检查ip地址是否规范  
+    checkIp (data) { //检查ip地址是否规范
       let exp = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
       let reg = this.ip_val.match(exp);
       if (reg == null) {
@@ -207,13 +207,16 @@ export default {
           box_sn: this.$store.state.jumpPageData.selectDeviceIpc
         }).then(res => {
           //获取未添加的设备 渲染页面
+          console.log(res.list, 'res.list')
           if (res.list) {
             for (let i = 0; i < res.list.length; i++) {
               if (res.list[i].conted == 0) {
                 this.searching_sign = false;
                 this.add_device_sign = false;
                 this.unadd_device_list.push(res.list[i])
-              } else if (!res.list[i].conted == 0) { // 如果有列表但没有可添加设备
+              }
+            //    else if (!res.list[i].conted == 0) { // 如果有列表但没有可添加设备
+            if(this.unadd_device_list.length == 0){
                 setTimeout(() => {
                   this.searching_sign = false;
                   this.add_device_sign = true;

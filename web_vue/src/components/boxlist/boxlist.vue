@@ -145,7 +145,7 @@
                 _this.publicFunc.delete_tips({
                     content: mrs_delete_association_and_video,
                     func: function() {
-                        _this.$api.history.onvif_box_add_ipc(conf).then(res => { // ccm_box_set_ipc_req
+                        _this.$api.boxlist.onvif_box_add_ipc(conf).then(res => { // ccm_box_set_ipc_req
                             if (res.result == '') { //如果删除关联成功 //ccm_box_set
                                 _this.$api.history.history_delete({ // 调用历史删除接口
                                     box_sn: _this.$store.state.jumpPageData.selectDeviceIpc,
