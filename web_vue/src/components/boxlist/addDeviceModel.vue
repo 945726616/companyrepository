@@ -207,7 +207,6 @@ export default {
           box_sn: this.$store.state.jumpPageData.selectDeviceIpc
         }).then(res => {
           //获取未添加的设备 渲染页面
-          console.log(res.list, 'res.list')
           if (res.list) {
             for (let i = 0; i < res.list.length; i++) {
               if (res.list[i].conted == 0) {

@@ -803,7 +803,7 @@
                 }
                 now_ifs = net_info[l_dom_select_nic.selectedIndex];
                 if (obj.type == mcs_ethernet) {
-                    if ($("#nic_switch_checkbox").checked) {
+                    if (_this.publicFunc.mx("#nic_switch_checkbox").checked) {
                         if (_this.l_nic_enabled_status_flag) {
                             now_net_info["ifs"] = { token: now_ifs.token, enabled: 1 };
                             //Automatically obtain ip
@@ -840,7 +840,7 @@
                             now_net_info["ifs"] = { token: now_ifs.token, enabled: 0 };
                     }
                 } else if (obj.type == mcs_wifi) {
-                    if ($("#nic_switch_checkbox").checked) {
+                    if (_this.publicFunc.mx("#nic_switch_checkbox").checked) {
                         if (_this.l_nic_enabled_status_flag) {
                             now_net_info["ifs"] = { token: now_ifs.token, enabled: 1 };
                             //if(_this.publicFunc.mx("#nic_mode_switch_checkbox").checked)             //client

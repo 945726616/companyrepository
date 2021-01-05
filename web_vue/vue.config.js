@@ -66,11 +66,11 @@ module.exports = {
         new FileManagerPlugin({ // 打包文件处理插件 用于构造合适的压缩包路径以及删除多余的打包内容 打包时需要传递--appVersion=xxx参数
           onEnd: {
             mkdir: [
-              './packageZip/website'
+              './packageZip'
             ],
             copy: [{
               source: './dist/http_' + process.env.VUE_APP_VERSION,
-              destination: './packageZip/website/pkg-website-' + process.env.VUE_APP_VERSION
+              destination: './packageZip/http_' + process.env.VUE_APP_VERSION
             }],
             archive: [
               { source: './packageZip', destination: './dist/http_' + process.env.VUE_APP_VERSION + '.zip' },
@@ -79,6 +79,21 @@ module.exports = {
               './packageZip'
             ]
           }
+          // onEnd: {
+          //   mkdir: [
+          //     './packageZip/website'
+          //   ],
+          //   copy: [{
+          //     source: './dist/http_' + process.env.VUE_APP_VERSION,
+          //     destination: './packageZip/website/pkg-website-' + process.env.VUE_APP_VERSION
+          //   }],
+          //   archive: [
+          //     { source: './packageZip', destination: './dist/http_' + process.env.VUE_APP_VERSION + '.zip' },
+          //   ],
+          //   delete: [
+          //     './packageZip'
+          //   ]
+          // }
         })
       )
     }
