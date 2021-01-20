@@ -17,23 +17,19 @@
         </div>
         <div class='list_right_item'>
             <span class='attribute_key_text'> {{mcs_equipment_flip}} </span>
-            <div id='checkbox_ipc_turnover_div' class='options_float_right'><input id='checkbox_ipc_turnover' type='checkbox' /></div>
+            <switch-button v-model='equipment_flip_sign' @data_updata_event='equipment_flip_updata'></switch-button>
         </div>
         <div id='power_fr_div'>
             <!-- 电源频率 -->
             <div class='options_float_left'> {{mcs_power_frequency}} </div>
-            <div class='options_float_right select_block'><select id='power_fr' v-model='power' @change="power_change">
-                    <option>50hz</option>
-                    <option>60hz</option>
-                </select>
+            <div class='options_float_right select_block'>
+                <dropdown-menu :menuData="power_array" :showData='power' @data_updata_event='power_updata'></dropdown-menu>
             </div>
         </div>
         <div id='screen_fr_div' v-if="screen_fr_sign">
             <div class='options_float_left'> {{mcs_screen_size}} </div>
-            <div class='options_float_right select_block'><select id='screen_fr' v-model='screen' @change='screen_change'>
-                    <option>4:3</option>
-                    <option>16:9</option>
-                </select>
+            <div class='options_float_right select_block'>
+                <dropdown-menu :menuData="screen_array" :showData='screen' @data_updata_event='screen_updata'></dropdown-menu>
             </div>
         </div>
         <div class='options_float_right' style='clear:both'><button id='button_setup' class='list_right_button' @click='button_setup_btn'> {{mcs_apply}} </button>
@@ -42,6 +38,8 @@
 </template>
 
 <script>
+    import DropdownMenu from '@/module/dropdownMenu'
+    import SwitchButton from '@/module/switchButton'
     export default {
         data() {
             return {
@@ -59,30 +57,20 @@
                 input_microphone: 0, //麦克风
                 cam_info: '', //其他信息
                 ratio: 0,
+                power_array: ['50hz', '60hz'], //频率数组
                 power: '', //频率
-                screen: '', //
-                screen_fr_sign: false, //是否显示画面设置
+                screen_array: ['4:3', '16:9'], //屏幕比数组
+                screen: '', //屏幕比
+                screen_fr_sign: '', //控制是否显示画面设置
+                equipment_flip_sign: false, //控制是否画面翻转
             }
         },
         mounted() {
-            $("#checkbox_ipc_turnover").iButton({
-                labelOn: "On",
-                labelOff: "Off",
-                change: () => {
-                    if (this.ipc_turnover_true) {
-                        this.ipc_turnover_true = 0;
-                    } else {
-                        this.cam_set();
-                    }
-                }
-            });
-
             this.$api.set.audio_get({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
                 this.input_speaker = res.speaker_level;
                 this.input_microphone = res.mic_level;
             })
             this.$api.play.adjust_get({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
-                this.ipc_turnover_true = 1;
                 this.cam_info = res;
                 this.cam_info.sn = this.$store.state.jumpPageData.selectDeviceIpc;
                 res.flicker_freq ? this.power = '60hz' : this.power = '50hz';
@@ -97,11 +85,11 @@
                         break;
                     }
                 }
-
                 if (res.flip) {
-                    $("#checkbox_ipc_turnover").iButton("toggle", true);
+                    this.ipc_turnover_true = 1;
+                    this.equipment_flip_sign = true;
                 } else {
-                    $("#checkbox_ipc_turnover").iButton("toggle", false);
+                    this.equipment_flip_sign = false;
                 }
             })
         },
@@ -109,8 +97,8 @@
             cam_set() {
                 this.$api.set.cam_set({
                     sn: this.$store.state.jumpPageData.selectDeviceIpc,
-                    flip: Number(document.getElementById("checkbox_ipc_turnover").checked),
-                    flicker_freq: document.getElementById("power_fr").selectedIndex
+                    flip: Number(this.equipment_flip_sign),
+                    flicker_freq: this.power === '60hz' ? 1 : 0
                 }).then(res => {
                     if (res.result !== "") {
                         if (res.result === "permission.denied") {
@@ -132,17 +120,15 @@
                     this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
                 })
             },
-            power_change() {
-                this.cam_set()
-            },
             screen_change() {
-                this.cam_info.flip = Number(document.getElementById("checkbox_ipc_turnover").checked);
-                this.cam_info.flicker_freq = document.getElementById("power_fr").selectedIndex;
+                this.cam_info.flip = Number(this.equipment_flip_sign);
+                this.cam_info.flicker_freq = this.power === '60hz' ? 1 : 0;
                 this.cam_info.resolute = this.screen;
                 this.$api.play.adjust_set({
                     sn: this.$store.state.jumpPageData.selectDeviceIpc,
                     flip: this.cam_info.flip,
-                    flicker_freq: this.cam_info.flicker_freq
+                    flicker_freq: this.cam_info.flicker_freq,
+                    resolute: this.cam_info.resolute
                 }).then(res => {
                     if (res.result === "permission.denied") {
                         this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
@@ -161,6 +147,17 @@
                         });
                     }
                 })
+            },
+            power_updata(data) { //更新频率
+                this.power = data;
+                this.cam_set();
+            },
+            screen_updata(data) { //更新屏幕比
+                this.screen = data;
+                this.screen_change();
+            },
+            equipment_flip_updata(data) { //更新是否画面翻转
+                this.equipment_flip_sign = data;
             }
         },
         watch: {
@@ -173,7 +170,18 @@
                 if (val) {
                     this.$refs.microphone.style.backgroundSize = val + '%';
                 }
+            },
+            equipment_flip_sign(val) {
+                if (this.ipc_turnover_true) {
+                    this.ipc_turnover_true = 0;
+                } else {
+                    this.cam_set();
+                }
             }
+        },
+        components: {
+            DropdownMenu,
+            SwitchButton
         }
     }
 </script>
@@ -197,14 +205,6 @@
         height: 2px;
     }
 
-    #power_fr {
-        width: 200px;
-        height: 34px;
-        color: $projectColor;
-        border: 1px solid $projectColor;
-        border-radius: 4px;
-    }
-
     #power_fr_div {
         width: 100%;
         height: 50px;
@@ -217,12 +217,8 @@
     #screen_fr_div {
         height: 50px;
         border-bottom: 1px solid #ccc;
-    }
-
-    #screen_fr {
-        width: 200px;
-        height: 34px;
-        color: $projectColor;
-        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 </style>

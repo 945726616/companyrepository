@@ -12,10 +12,10 @@
                         <div id='attachmen_info_sn'>ID: {{deviceID}} </div>
                     </div>
                     <div class='attachmen_set_list'>
-                        <div class='menu_switch' id='mobile_tracking_switch_box' style='height: 4.4rem; width: 100%;background-color: #fff;margin-top: 30px'>
-                            <div class='list_name' id='menu_name_switch' style='color:#333;float: left;height: 4.4rem;line-height: 4.4rem;'> {{mcs_mobile_tracking}} </div>
+                        <div class='menu_switch' id='mobile_tracking_switch_box'>
+                            <div id='menu_name_switch'> {{mcs_mobile_tracking}} </div>
                             <!-- 智能追踪 -->
-                            <div class='list_info'><input id='mobile_tracking_switch' type='checkbox'></div>
+                            <switch-button v-model='mobile_tracking_sign' @data_updata_event='mobile_tracking_updata'></switch-button>
                         </div>
 
                         <div class='attachmen_set_list_title'> {{mcs_motion_detection_sensitivity}} </div>
@@ -82,7 +82,7 @@
                     <div class='attachmen_set_list'>
                         <div class='menu_switch' id='face_detection_switch_box' style='height: 4.4rem; width: 100%;background-color: #fff;margin-top: 30px'>
                             <div class='list_name' id='menu_face_switch' style='float: left;height: 4.4rem;line-height: 4.4rem;'> {{mcs_face_detection_frame}} </div>
-                            <div class='list_info'><input id='face_detection_switch' type='checkbox'></div>
+                            <switch-button v-model='face_detection_sign' @data_updata_event='face_detection_updata'></switch-button>
                         </div>
                     </div>
                 </div>
@@ -121,6 +121,7 @@
 </template>
 
 <script>
+    import SwitchButton from '@/module/switchButton'
     export default {
         props: {
             setScenePageObj: { // 添加设备弹窗展示对象
@@ -161,7 +162,8 @@
                 input_sound_threshold: 0, //声音灵敏度
                 video_time_input: '',
                 del_sign: false, //是否显示删除
-
+                mobile_tracking_sign: '', //控制是否移动追踪
+                face_detection_sign: '', //控制是否人脸检测画框
             }
         },
         methods: {
@@ -234,22 +236,18 @@
                         this.scene_page_close()
                     }
                 })
+            },
+            mobile_tracking_updata(data) { //更新是否移动追踪
+                this.mobile_tracking_sign = data;
+            },
+            face_detection_updata(data) { //更新是否人脸检测画框
+                this.face_detection_sign = data;
             }
         },
         mounted() {
             this.deviceID = this.$store.state.jumpPageData.selectDeviceIpc;
             this.dev_type = this.setScenePageObj.devType;
-            $("#mobile_tracking_switch").iButton({
-                labelOn: "On",
-                labelOff: "Off",
-                change: () => {
-                    if (document.getElementById("mobile_tracking_switch").checked) {
-                        this.motion_track_switch = 1;
-                    } else {
-                        this.motion_track_switch = 0;
-                    }
-                }
-            });
+
             if (this.$store.state.set.motionTrack != 1) {
                 if (document.getElementById("mobile_tracking_switch_box")) {
                     document.getElementById("mobile_tracking_switch_box").style.display = 'none'
@@ -263,14 +261,14 @@
                         this.input_threshold = res.sensitivity;
                         this.input_sound_threshold = res.audio_level;
                         if (res.motion_track_switch == 1) {
-                            $("#mobile_tracking_switch").iButton("toggle", true);
+                            this.mobile_tracking_sign = true;
                         } else {
-                            $("#mobile_tracking_switch").iButton("toggle", false);
+                            this.mobile_tracking_sign = false;
                         }
                         if (res.face_detect_switch == 1) {
-                            $("#face_detection_switch").iButton("toggle", true);
+                            this.face_detection_sign = true;
                         } else {
-                            $("#face_detection_switch").iButton("toggle", false);
+                            this.face_detection_sign = false;
                         }
                     }
                 })
@@ -291,18 +289,6 @@
                     }
                 })
             }
-
-            $("#face_detection_switch").iButton({
-                labelOn: "On",
-                labelOff: "Off",
-                change: function() {
-                    if (document.getElementById('face_detection_switch').checked) {
-                        this.face_detect_switch = 1;
-                    } else {
-                        this.face_detect_switch = 0;
-                    }
-                }
-            })
         },
         watch: {
             input_threshold(val) {
@@ -319,7 +305,24 @@
                 if (val && this.$refs.sound_threshold) {
                     this.$refs.sound_threshold.style.backgroundSize = val + '%';
                 }
-            }
+            },
+            mobile_tracking_sign(val) {
+                if (val) {
+                    this.motion_track_switch = 1;
+                } else {
+                    this.motion_track_switch = 0;
+                }
+            },
+            face_detection_sign(val) {
+                if (val) {
+                    this.face_detect_switch = 1;
+                } else {
+                    this.face_detect_switch = 0;
+                }
+            },
+        },
+        components: {
+            SwitchButton
         }
     }
 </script>
@@ -567,5 +570,17 @@
         height: 45px;
         line-height: 45px;
         cursor: pointer;
+    }
+
+    .menu_switch {
+        color: rgb(51, 51, 51);
+        height: 4.4rem;
+        line-height: 4.4rem;
+        height: 4.4rem;
+        width: 100%;
+        background-color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 </style>

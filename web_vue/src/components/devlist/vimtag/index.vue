@@ -497,7 +497,7 @@ export default {
       if (this.$store.state.pcOfflineFlag === 1) { // 离线模式
         this.$store.dispatch('setLocalModel', 1)
       }
-      console.log(this.$store.state.jumpPageData.localModel, 'this.$store.state.jumpPageData.localModel')
+      // console.log(this.$store.state.jumpPageData.localModel, 'this.$store.state.jumpPageData.localModel')
       if (this.$store.state.jumpPageData.localModel) {
         // console.log('本地模式res进入')
         this.$api.devlist.local_devlist_get().then(res => {

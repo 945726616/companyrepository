@@ -3,7 +3,7 @@
         <div class="list_right_item">
             <div class="options_float_left">{{ mcs_enabled }}</div>
             <div class="options_float_right" style="margin-top: 0px">
-                <input id="storage_device_switch_checkbox" type="checkbox" checked />
+                <switch-button v-model='storage_device_sign' @data_updata_event='storage_device_updata'></switch-button>
             </div>
         </div>
         <div id="storage_device_content">
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+    import SwitchButton from '@/module/switchButton'
     export default {
         data() {
             return {
@@ -48,21 +49,10 @@
                 input_device_id: '', //设备ID
                 input_password: '', //密码
                 input_status: mcs_not_connected, //连接状态
+                storage_device_sign: '', //控制是否启用存储设备
             };
         },
         mounted() {
-            $("#storage_device_switch_checkbox").iButton({
-                labelOn: "On",
-                labelOff: "Off",
-                change: () => {
-                    if (document.getElementById("storage_device_switch_checkbox").checked) {
-                        document.getElementById("storage_device_content").style.display = "inline";
-                    } else {
-                        $("#storage_device_content").fadeOut();
-                    }
-                }
-            });
-
             this.$api.set.storage_device_get({ box_sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
                 this.input_device_id = res.conf.conf[0].username; //show the BOX ID
                 this.input_password = res.conf.conf[0].password; //show the BOX  password
@@ -70,7 +60,7 @@
                     this.input_status = mcs_connnected;
                 }
                 if (res.conf.conf[0].enable == 0) {
-                    $("#storage_device_switch_checkbox").iButton("toggle", false);
+                    this.storage_device_sign = false;
                 }
             })
         },
@@ -79,7 +69,7 @@
                 if (this.$store.state.user.guest) {
                     this.publicFunc.msg_tips({ msg: mcs_permission_denied, type: "error", timeout: 3000 });
                 } else {
-                    let flag = document.getElementById("storage_device_switch_checkbox").checked ? 1 : 0;
+                    let flag = Number(this.storage_device_sign);
                     if (flag) {
                         if (this.input_device_id == '') {
                             this.publicFunc.msg_tips({ msg: mcs_blank_device_id, type: "warning", timeout: 3000 })
@@ -105,9 +95,23 @@
                         this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
                     })
                 }
+            },
+            storage_device_updata(data) { //更新存储设备按钮
+                this.storage_device_sign = data;
             }
         },
-
+        watch: {
+            storage_device_sign(val) {
+                if (val) {
+                    document.getElementById("storage_device_content").style.display = "inline";
+                } else {
+                    $("#storage_device_content").fadeOut();
+                }
+            }
+        },
+        components: {
+            SwitchButton
+        }
     };
 </script>
 

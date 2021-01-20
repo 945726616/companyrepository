@@ -19,24 +19,24 @@
             </div>
             <div id='create_setting_page_right' :style='project_flag?"margin-top:40px":""'>
                 <keep-alive>
-                    <about-info v-if="right_show_sign.about" @system_new_event='system_new_sign_event'></about-info>
-                    <nickname v-if="right_show_sign.nickname"></nickname>
-                    <admin-password v-if="right_show_sign.admin_password"></admin-password>
-                    <guest-password v-if="right_show_sign.guest_password"></guest-password>
-                    <osd v-if="right_show_sign.osd"></osd>
-                    <record v-if="right_show_sign.record"></record>
-                    <accessory v-if="right_show_sign.accessory"></accessory>
-                    <alarm v-if="right_show_sign.alarm_device_tips"></alarm> <!-- 报警插件 -->
-                    <date-time v-if="right_show_sign.date_time"></date-time>
-                    <system v-if="right_show_sign.system"></system>
-                    <others v-if="right_show_sign.others"></others>
-                    <motion-detect v-if="right_show_sign.motion_detect"></motion-detect>
-                    <lighting v-if="right_show_sign.lighting"></lighting>
-                    <delete-device v-if="right_show_sign.delete_device"></delete-device>
+                    <about-info v-if="right_show_sign.about" @system_new_event='system_new_sign_event'></about-info>   <!-- 关于 -->
+                    <nickname v-if="right_show_sign.nickname"></nickname>  <!-- 设备昵称 -->
+                    <admin-password v-if="right_show_sign.admin_password"></admin-password>  <!-- 管理密码 -->
+                    <guest-password v-if="right_show_sign.guest_password"></guest-password>  <!-- 访客密码 -->
+                    <osd v-if="right_show_sign.osd"></osd>  <!-- OSD -->
+                    <record v-if="right_show_sign.record"></record>  <!-- 录像 -->
+                    <accessory v-if="right_show_sign.accessory"></accessory>  <!-- 外设 -->
+                    <alarm v-if="right_show_sign.alarm_device_tips"></alarm>  <!-- 报警 -->
+                    <date-time v-if="right_show_sign.date_time"></date-time>  <!-- 日期时间 -->
+                    <system v-if="right_show_sign.system"></system>  <!-- 系统 -->
+                    <others v-if="right_show_sign.others"></others>  <!-- 其他 -->
+                    <motion-detect v-if="right_show_sign.motion_detect"></motion-detect> <!-- 移动侦测 -->
+                    <lighting v-if="right_show_sign.lighting"></lighting>  <!-- 灯光模式 -->
+                    <delete-device v-if="right_show_sign.delete_device"></delete-device>  <!-- 删除设备 -->
                 </keep-alive>
-                <network v-if="right_show_sign.network"></network>
-                <sdcord v-if="right_show_sign.sdcord" :info='info_data'></sdcord>
-                <storage-device v-if="right_show_sign.storage_device"></storage-device>
+                <network v-if="right_show_sign.network"></network>  <!-- 网络 -->
+                <sdcord v-if="right_show_sign.sdcord" :info='info_data'></sdcord>  <!-- SD卡 -->
+                <storage-device v-if="right_show_sign.storage_device"></storage-device>  <!-- 存储设备 -->
             </div>
         </div>
     </div>
@@ -154,7 +154,6 @@
         },
         watch: {
             flag(val) {
-                console.log('enter set watch flag', val)
                 switch (val) {
                     case 1:
                         this.menu_data = [
@@ -272,7 +271,5 @@
 </script>
 
 <style lang='scss'>
-    @import '../../css/jquery.ibutton.scss';
-    @import '../../css/jquery.tzSelect.scss';
     @import './index.scss';
 </style>

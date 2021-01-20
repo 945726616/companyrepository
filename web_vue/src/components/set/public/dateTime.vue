@@ -21,29 +21,29 @@
                 <input id='input_time_second' class='vimtag_date' type='text' style='width:53px' :disabled='auto_sync_sign' v-model="time_second" />
             </div>
         </div>
-        <div id='time_zone_selevt_content'>
+        <div id='time_zone_selevt_content' class='list_right_item_ex'>
             <div class='options_float_left'> {{mcs_time_zone}} </div>
             <div class='options_float_right select_block'>
-                <select id='time_zone_selevt' class='set_timezone_select' v-model="time_zone">
-                    <option v-for='item in time_zone_list' :key='item.city' :zone='item.utc' :value='item.city' :city='item.file'>{{item.name}}</option>
-                </select>
+                <dropdown-menu :menuData="time_zone_array" :showData='time_zone' @data_updata_event='time_zone_updata'></dropdown-menu>
             </div>
         </div>
-        <div class='list_right_item_ex'>
-            <div id='auto_date_box' style='display:none'>
-                <div class='options_float_left'> {{mcs_auto_sync_date_time}} </div>
-                <div id='checkbox_auto_sync_div' class='options_float_right'><input id='checkbox_auto_sync' type='checkbox' /></div>
-            </div>
-            <div id='ntp' class='clear' style='display:none'>
+        <div class='list_right_item_ex' id='auto_date_box' style="display:none;">
+            <div class='options_float_left'> {{mcs_auto_sync_date_time}} </div>
+            <switch-button v-model='auto_sync_sign' @data_updata_event='auto_sync_updata'></switch-button>
+        </div>
+        <div class='list_right_item' style='display:none'>
+            <div id='ntp' class='clear'>
                 <div class='options_float_left'> {{mcs_ntp}} </div>
                 <div class='options_float_right'><input id='input_ntp' class='vimtag_service_address' type='text' style='width:145px' v-model="input_ntp" /></div>
             </div>
-            <div class='options_float_right' style='clear:both'><button id='button_setup' class='list_right_button' @click='button_setup_btn'> {{mcs_apply}} </button></div>
         </div>
+        <div class='options_float_right' style='clear:both'><button id='button_setup' class='list_right_button' @click='button_setup_btn'> {{mcs_apply}} </button></div>
     </div>
 </template>
 
 <script>
+    import DropdownMenu from '@/module/dropdownMenu'
+    import SwitchButton from '@/module/switchButton'
     export default {
         data() {
             return {
@@ -58,8 +58,9 @@
                 mcs_ntp: mcs_ntp,
                 mcs_apply: mcs_apply,
 
-                auto_sync_sign: true, //是否自动设置时间
-                time_zone_list: [], //时区列表
+                auto_sync_sign: '', //是否自动设置时间
+                time_zone_list: [], //获取的时区列表
+                time_zone_array: [], //时区数组
                 time_zone: '', //时区
                 time_hour: '', //时
                 time_minute: '', //分
@@ -74,17 +75,6 @@
         mounted() {
             let _this = this;
             let l_refresh_time_id = '';
-            $("#checkbox_auto_sync").iButton({
-                labelOn: "On",
-                labelOff: "Off",
-                change: () => {
-                    if (document.getElementById("checkbox_auto_sync").checked) {
-                        _this.auto_sync_sign = true;
-                    } else {
-                        _this.auto_sync_sign = false;
-                    }
-                }
-            });
 
             _this.$api.devlist.time_zone_get({ sn: _this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
                 if (res) {
@@ -97,6 +87,7 @@
                             file: res[i].file,
                             name: zone_name
                         })
+                        _this.time_zone_array.push(zone_name)
                     }
                 }
             })
@@ -108,14 +99,15 @@
                 _this.time_minute = res.min;
                 _this.time_second = res.sec;
                 if (res.auto_sync)
-                    $("#checkbox_auto_sync").iButton("toggle", true);
+                    this.auto_sync_sign = true;
                 else
-                    $("#checkbox_auto_sync").iButton("toggle", false);
+                    this.auto_sync_sign = false
                 if (res.ntp_addr) {
                     _this.input_ntp = res.ntp_addr;
                 }
                 if (res.timezone) {
-                    _this.time_zone = res.timezone;
+                    let zone_name_tmp = res.timezone.replace(/\(|&|\)|_/g, "")
+                    _this.time_zone = eval("mcs_timezone_" + zone_name_tmp)
                 }
                 refresh_time_func({
                     year: _this.date_year,
@@ -207,22 +199,33 @@
         },
         methods: {
             button_setup_btn() { //应用
+                let time_zone_index = this.time_zone_list.findIndex(obj => obj.name == this.time_zone)
                 this.$api.set.time_set({
                     sn: this.$store.state.jumpPageData.selectDeviceIpc,
-                    type: document.getElementById("checkbox_auto_sync").checked ? "NTP" : "manually",
-                    timezone: this.time_zone,
+                    type: this.auto_sync_sign ? "NTP" : "manually",
+                    timezone: this.time_zone_list[time_zone_index].city,
                     hour: this.time_hour,
                     min: this.time_minute,
                     sec: this.time_second,
                     year: this.date_year,
                     mon: this.date_month,
                     day: this.date_day,
-                    auto_sync: Number(document.getElementById("checkbox_auto_sync").checked),
+                    auto_sync: Number(this.auto_sync_sign),
                     ntp_addr: this.input_ntp
                 }).then(res => {
                     this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
                 })
+            },
+            time_zone_updata(data) { //更新时区
+                this.time_zone = data;
+            },
+            auto_sync_updata(data) { //更新自动设置时间日期
+                this.auto_sync_sign = data;
             }
+        },
+        components: {
+            DropdownMenu,
+            SwitchButton
         }
     }
 </script>
@@ -244,24 +247,5 @@
         border-radius: 4px;
         border: 1px solid $projectColor;
         text-align: center;
-    }
-
-    #time_zone_selevt {
-        color: $projectColor;
-        border: 1px solid $projectColor;
-        height: 34px;
-        width: 200px;
-        padding-left: 73px;
-        box-sizing: border-box;
-        border-radius: 4px;
-        margin-top: 6px;
-    }
-
-    .options_float_right {
-        margin-top: 5px;
-    }
-
-    .options_float_left {
-        margin-top: 13px;
     }
 </style>

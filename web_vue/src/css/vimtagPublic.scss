@@ -493,11 +493,6 @@ input, button, select, textarea {
 	margin:0 auto;
     border-bottom: 1px solid rgb(204, 204, 204);
 }
-.attribute_key_text{
-	float: left;
-	font-size: 14px;
-	margin-top: 13px;
-}
 .attribute_value_text{
 	color: $projectColor;
 }
@@ -727,11 +722,6 @@ div.ibutton-label-on {
 	position: absolute;
 	color: transparent;
 }*/
-.options_float_left {
-	clear: both;
-	float: left;
-	margin-top: 13px;
-}
 .fd-slider-bar {
 	background-image: none;
 	cursor: pointer;
@@ -5134,9 +5124,9 @@ line-height: 30px;
 	height:30px;
 	line-height:30px;
 }
-.options_float_right_button{
-	margin-top:10px;
-}
+// .options_float_right_button{
+// 	margin-top:10px;
+// }
 // #set_feedback_page{
 // 	padding:0 40px;
 // 	box-sizing: border-box;

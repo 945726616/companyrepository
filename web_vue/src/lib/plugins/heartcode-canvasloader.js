@@ -640,3 +640,4 @@
 	};
 	window.CanvasLoader = CanvasLoader;
 }(window));
+export default CanvasLoader;

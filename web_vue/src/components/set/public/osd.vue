@@ -2,9 +2,7 @@
     <div id='osd_info' class='list_right_box'>
         <div class='list_right_item_ex'>
             <div class='attribute_key_text'> {{mcs_display_text}} </div>
-            <div id='checkbox_display_name_div' class='options_float_right' style='margin-top:0px;'>
-                <input type='checkbox' id='checkbox_display_name' value='display_name' />
-            </div>
+            <switch-button v-model='display_name_sign' @data_updata_event='display_name_updata'></switch-button>
         </div>
         <div id='input_display_name_content' class='list_right_item'>
             <div class='attribute_key_text'> {{mcs_name}} </div>
@@ -15,40 +13,27 @@
         </div>
         <div class='list_right_item_ex'>
             <div class='attribute_key_text'> {{mcs_display_date}} </div>
-            <div id='checkbox_display_date_div' class='options_float_right' style='margin-top:0px;'>
-                <input type='checkbox' id='checkbox_display_date' value='display_date' />
-            </div>
+            <switch-button v-model='display_date_sign' @data_updata_event='display_date_updata'></switch-button>
         </div>
         <div id='display_date_content' class='list_right_item'>
             <div class='attribute_key_text'> {{mcs_date_format}} </div>
             <div class='options_float_right' style='margin-top:0px;'>
-                <select id='select_date' style='margin-top:0px;'>
-                    <option>MM-DD-YYYY</option>
-                    <option>YYYY-MM-DD</option>
-                    <option>DD-MM-YYYY</option>
-                </select>
+                <dropdown-menu :menuData="date_format_array" :showData='date_format' @data_updata_event='data_format_updata'></dropdown-menu>
             </div>
         </div>
         <div class='list_right_item_ex'>
             <div class='attribute_key_text'> {{mcs_display_time}} </div>
-            <div id='checkbox_display_time_div' class='options_float_right' style='margin-top:0px;'>
-                <input type='checkbox' id='checkbox_display_time' value='display_time' />
-            </div>
+            <switch-button v-model='display_time_sign' @data_updata_event='display_time_updata'></switch-button>
         </div>
         <div id='time_format_content' class='list_right_item'>
             <div class='attribute_key_text'> {{mcs_time_format}} </div>
             <div class='options_float_right' style='margin-top:0px;'>
-                <select id='select_hour' style='width:300px;'>
-                    <option value='12h'> {{mcs_12_hour}} </option>
-                    <option value='24h'> {{mcs_24_hour}} </option>
-                </select>
+                <dropdown-menu :menuData="time_format_array" :showData='time_format' @data_updata_event='time_format_updata'></dropdown-menu>
             </div>
         </div>
         <div class='list_right_item_ex'>
             <div class='attribute_key_text'> {{mcs_display_weeks}} </div>
-            <div id='checkbox_display_weeks_div' class='options_float_right' style='margin-top:0px;'>
-                <input type='checkbox' id='checkbox_display_weeks' value='display_weeks' />
-            </div>
+            <switch-button v-model='display_week_sign' @data_updata_event='display_week_updata'></switch-button>
         </div>
         <div class='options_float_right' style='clear:both'>
             <button id='button_setup' class='list_right_button' @click='setup_btn'> {{mcs_apply}} </button>
@@ -57,6 +42,8 @@
 </template>
 
 <script>
+    import DropdownMenu from '@/module/dropdownMenu'
+    import SwitchButton from '@/module/switchButton'
     export default {
         data() {
             return {
@@ -73,93 +60,41 @@
                 mcs_apply: mcs_apply,
 
                 input_display_name: '', //名称
-                l_dom_select_date: '',
-                l_dom_select_hour: '',
-                l_dom_checkbox_display_name: '',
-                l_dom_checkbox_display_date: '',
-                l_dom_checkbox_display_time: '',
-                l_dom_checkbox_display_weeks: '',
+                date_format_array: ['MM-DD-YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY'], //日期格式数组
+                date_format: '', //日期格式
+                time_format_array: [mcs_12_hour, mcs_24_hour], //时间格式数组
+                time_format: '', //时间格式
+                display_name_sign: '', //控制是否显示名称
+                display_date_sign: '', //控制是否显示日期
+                display_time_sign: '', //控制是否显示时间
+                display_week_sign: '', //控制是否显示星期
             }
         },
         mounted() {
-            this.l_dom_select_date = this.publicFunc.mx("#select_date");
-            this.l_dom_select_hour = this.publicFunc.mx("#select_hour");
-            this.l_dom_checkbox_display_name = this.publicFunc.mx("#checkbox_display_name");
-            this.l_dom_checkbox_display_date = this.publicFunc.mx("#checkbox_display_date");
-            this.l_dom_checkbox_display_time = this.publicFunc.mx("#checkbox_display_time");
-            this.l_dom_checkbox_display_weeks = this.publicFunc.mx("#checkbox_display_weeks");
-
-            $(this.l_dom_checkbox_display_name).iButton({
-                labelOn: "On",
-                labelOff: "Off",
-                change: () => {
-                    if (this.l_dom_checkbox_display_name.checked) {
-                        $("#input_display_name_content").fadeIn();
-                    } else {
-                        $("#input_display_name_content").fadeOut();
-                    }
-                }
-            });
-            $(this.l_dom_checkbox_display_date).iButton({
-                labelOn: "On",
-                labelOff: "Off",
-                change: () => {
-                    if (this.l_dom_checkbox_display_date.checked) {
-                        $("#display_date_content").fadeIn();
-                    } else {
-                        $("#display_date_content").fadeOut();
-                    }
-                }
-            });
-            $(this.l_dom_checkbox_display_time).iButton({
-                labelOn: "On",
-                labelOff: "Off",
-                change: () => {
-                    if (this.l_dom_checkbox_display_time.checked) {
-                        $("#time_format_content").fadeIn();
-                    } else {
-                        $("#time_format_content").fadeOut();
-                    }
-                }
-            });
-            $("#checkbox_display_weeks").iButton({
-                labelOn: "On",
-                labelOff: "Off"
-            });
-
             this.$api.set.osd_get({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => {
+                this.date_format = res.date_format;
+                this.time_format = res.time_12h ? mcs_12_hour : mcs_24_hour
                 if (res.text_enable) {
-                    $("#checkbox_display_name").iButton("toggle", true);
+                    this.display_name_sign = true;
                 } else {
-                    $("#checkbox_display_name").iButton("toggle", false);
+                    this.display_name_sign = false;
                 }
                 this.input_display_name = res.text;
                 if (res.date_enable) {
-                    $("#checkbox_display_date").iButton("toggle", true);
-                    for (let i = 0; i < this.l_dom_select_date.length; ++i) {
-                        if (this.l_dom_select_date[i].text == res.date_format) {
-                            this.l_dom_select_date[i].selected = true;
-                        }
-                    }
+                    this.display_date_sign = true;
                 } else {
-                    $("#checkbox_display_date").iButton("toggle", false);
+                    this.display_date_sign = false;
                 }
                 if (res.time_enable) {
-                    $("#checkbox_display_time").iButton("toggle", true);
-                    if (res.time_12h)
-                        this.l_dom_select_hour[0].selected = true;
-                    else
-                        this.l_dom_select_hour[1].selected = true;
+                    this.display_time_sign = true;
                 } else {
-                    $("#checkbox_display_time").iButton("toggle", false);
+                    this.display_time_sign = false;
                 }
                 if (res.week_enable) {
-                    $("#checkbox_display_weeks").iButton("toggle", true);
+                    this.display_week_sign = true;
                 } else {
-                    $("#checkbox_display_weeks").iButton("toggle", false);
+                    this.display_week_sign = false;
                 }
-                $(this.l_dom_select_date).tzSelect();
-                $(this.l_dom_select_hour).tzSelect();
             })
         },
         methods: {
@@ -167,16 +102,61 @@
                 this.$api.set.osd_set({
                     sn: this.$store.state.jumpPageData.selectDeviceIpc,
                     text: this.input_display_name,
-                    text_enable: Number(this.l_dom_checkbox_display_name.checked),
-                    week_enable: Number(this.l_dom_checkbox_display_weeks.checked),
-                    date_format: this.l_dom_select_date[this.l_dom_select_date.selectedIndex].text,
-                    date_enable: Number(this.l_dom_checkbox_display_date.checked),
-                    time_12h: Number(!this.l_dom_select_hour.selectedIndex),
-                    time_enable: Number(this.l_dom_checkbox_display_time.checked)
+                    text_enable: Number(this.display_name_sign),
+                    week_enable: Number(this.display_week_sign),
+                    date_format: this.date_format,
+                    date_enable: Number(this.display_date_sign),
+                    time_12h: this.time_format === mcs_12_hour ? 1 : 0,
+                    time_enable: Number(this.display_time_sign)
                 }).then(res => {
                     this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
                 })
+            },
+            data_format_updata(data) { //更新日期格式
+                this.date_format = data;
+            },
+            time_format_updata(data) { //更新时间格式
+                this.time_format = data;
+            },
+            display_name_updata(data) { //更新是否显示名称
+                this.display_name_sign = data;
+            },
+            display_date_updata(data) { //更新是否显示日期
+                this.display_date_sign = data;
+            },
+            display_time_updata(data) { //更新是否显示时间
+                this.display_time_sign = data;
+            },
+            display_week_updata(data) { //更新是否显示星期
+                this.display_week_sign = data;
             }
+        },
+        watch: {
+            display_name_sign(val) {
+                if (val) {
+                    $("#input_display_name_content").fadeIn();
+                } else {
+                    $("#input_display_name_content").fadeOut();
+                }
+            },
+            display_date_sign(val) {
+                if (val) {
+                    $("#display_date_content").fadeIn();
+                } else {
+                    $("#display_date_content").fadeOut();
+                }
+            },
+            display_time_sign(val) {
+                if (val) {
+                    $("#time_format_content").fadeIn();
+                } else {
+                    $("#time_format_content").fadeOut();
+                }
+            },
+        },
+        components: {
+            DropdownMenu,
+            SwitchButton
         }
     }
 </script>

@@ -44,6 +44,7 @@
 </template>
 
 <script>
+    import CanvasLoader from '@/lib/plugins/heartcode-canvasloader.js'
     export default {
         data() {
             return {
@@ -69,7 +70,7 @@
                 system_upgrade_div: '', //系统升级文本
                 system_upgrade_left: '', //系统升级左侧文本
                 system_upgrade_sign: false, //是否可以升级
-                ver_valid: '', //
+                ver_valid: '', //版本号
             }
         },
         mounted() {
@@ -153,10 +154,10 @@
                             // wait_display_div = document.createElement("div")
                             // wait_display_div.setAttribute("id", "system_wait_display_div");
                             // l_page.parentNode.appendChild(wait_display_div);
-                            wait_div[s_style][s_cssText] = "float:right;background-color:#fff;" +
+                            wait_div.style.cssText = "float:right;background-color:#fff;" +
                                 "filter:alpha(opacity=10);z-index:100";
                             // wait_display_div[s_style][s_cssText] = "top:" + (l_client_h / 3) + "px;left:" + (l_client_w / 2) + "px";
-                            wait_div["innerHTML"] =
+                            wait_div.innerHTML =
                                 "<div id='cl_wait_div' style='text-align:center'></div>"
                             // +"<div id='cl_str_div' style='padding-left:10px;padding-top:10px;font-weight:900;font-size:18px;color:#EEE'>" + str + "</div>";
 
@@ -177,13 +178,13 @@
 
                         document.documentElement.onkeydown = null;
                         if (wait_div) {
-                            wait_div["innerHTML"] = "";
-                            wait_div.parentNode[s_removeChild](wait_div);
+                            wait_div.innerHTML = "";
+                            wait_div.parentNode.removeChild(wait_div);
                             wait_div = null;
                         }
                         if (wait_display_div) {
-                            wait_display_div["innerHTML"] = "";
-                            wait_display_div.parentNode[s_removeChild](wait_display_div);
+                            wait_display_div.innerHTML = "";
+                            wait_display_div.parentNode.removeChild(wait_display_div);
                             wait_display_div = null;
                         }
                     }
@@ -214,12 +215,14 @@
                             extra += "."
                         }
                         this.extra_timer = ++this.extra_timer > 3 ? 1 : this.extra_timer;
-                        if (msg_status == "download") {
-                            str_div["innerHTML"] = mcs_downloading + extra;
-                        } else if (msg_status == "erase") {
-                            str_div["innerHTML"] = mcs_erasing + extra;
-                        } else if (msg_status == "write") {
-                            str_div["innerHTML"] = mcs_writing + " " + msg.progress + "%"; //Download shows the percentage
+                        if (str_div) {
+                            if (msg_status == "download") {
+                                str_div.innerHTML = mcs_downloading + extra;
+                            } else if (msg_status == "erase") {
+                                str_div.innerHTML = mcs_erasing + extra;
+                            } else if (msg_status == "write") {
+                                str_div.innerHTML = mcs_writing + " " + msg.progress + "%"; //Download shows the percentage
+                            }
                         }
                     }
                 } else if (msg.check_ver && msg_status == "finish") { //发现降级升级时 没有download 直接返回finish
@@ -287,6 +290,7 @@
                             this.publicFunc.delete_tips({
                                 content: (ver_update_warn ? ver_update_warn : (mcs_upgrade_to_the_latest_version + valid_ver)),
                                 func: () => {
+                                    this.system_upgrade_sign = false;
                                     this.$api.set.upgrade_set({
                                         sn: this.$store.state.jumpPageData.selectDeviceIpc,
                                         check: 1

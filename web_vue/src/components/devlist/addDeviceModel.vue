@@ -109,11 +109,13 @@
           </div>
           <div id='add_device_edit_pass_tips'>{{mcs_prompt_config_wifi}}</div>
           <div id='add_device_set_wifi_refresh' @click="getDropdownDom"></div>
-          <div id='add_device_set_wifi_box'>
-            <div class='add_device_set_wifi_box_ico'></div>
-            <div id='add_device_set_wifi_btn' :class="[addDeviceModelObj.wifiListFlag ? 'add_device_set_wifi_down' :'add_device_set_wifi_up']"></div>
-            <div id='add_device_set_wifi_input' @click="$set(addDeviceModelObj, 'wifiListFlag', true)" class='add_device_set_wifi_input' v-text="addDeviceModelObj.wifiName ? addDeviceModelObj.wifiName : (mcs_select_wifi_wizard.length < 14) ? mcs_select_wifi_wizard : (mcs_select_wifi_wizard.substr(0, 14) + '...' )"></div>
-            <div id='add_device_set_wifi_list_box' v-if="addDeviceModelObj.wifiListFlag">
+          <div id='add_device_set_wifi_box' style='user-select:none;'>
+            <div @click="wifiListFlag = !wifiListFlag">
+              <div class='add_device_set_wifi_box_ico'></div>
+              <div id='add_device_set_wifi_btn' :class="[wifiListFlag ? 'add_device_set_wifi_down' :'add_device_set_wifi_up']"></div>
+              <div id='add_device_set_wifi_input' class='add_device_set_wifi_input' v-text="addDeviceModelObj.wifiName ? addDeviceModelObj.wifiName : (mcs_select_wifi_wizard.length < 14) ? mcs_select_wifi_wizard : (mcs_select_wifi_wizard.substr(0, 14) + '...' )"></div>
+            </div>
+            <div id='add_device_set_wifi_list_box' v-if="wifiListFlag">
               <div class='add_device_set_wifi_list' v-for="wifiNameItem in addDeviceModelObj.wifiListArr" :key="wifiNameItem.ssid" @click="chooseWifi(wifiNameItem.ssid)">{{wifiNameItem.ssid}}</div> <!-- 循环渲染wifi设备列表 -->
             </div>
           </div>
@@ -230,6 +232,7 @@ export default {
       connectNetTimeArr: [], // 等待网络链接定时器数组
       resetDeviceId: null,
       project_name: this.$store.state.jumpPageData.projectName, //项目名
+      wifiListFlag: false, // 控制打开关闭下拉列表弹窗
       // 多国语言
       mcs_back: mcs_back,
       mcs_cloud_camera: mcs_cloud_camera,
@@ -511,7 +514,7 @@ export default {
       }
     },
     chooseWifi (wifiId) { // 选择wifi下拉框点击事件
-      this.$set(this.addDeviceModelObj, 'wifiListFlag', false) // 关闭下拉列表弹窗
+      this.wifiListFlag = false; // 关闭下拉列表弹窗
       let select_wifi = wifiId.length < 20 ? wifiId : (wifiId.substr(0, 20) + "...")
       this.$set(this.addDeviceModelObj, 'wifiName', select_wifi) // 关闭下拉列表弹窗
     },

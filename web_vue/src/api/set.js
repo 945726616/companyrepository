@@ -737,7 +737,7 @@ const set = {
         text = msg.text;
         text_enable = msg.text_enable;
         week_enable = msg.week;
-        date_format = msg.date.date_format;
+        date_format = msg.date.format;
         date_enable = msg.date.date_enable;
         time_12h = msg.date.enable_12h;
         time_enable = msg.date.time_enable;
@@ -747,7 +747,8 @@ const set = {
         text: text,
         text_enable: text_enable,
         week_enable: week_enable,
-        date_format: date_format, date_enable: date_enable,
+        date_format: date_format, 
+        date_enable: date_enable,
         time_12h: time_12h,
         time_enable: time_enable
       }

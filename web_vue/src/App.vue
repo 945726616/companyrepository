@@ -33,7 +33,6 @@ export default {
     }
   },
   async mounted () {
-    import(`@/lib/plugins/jquery.ibutton.js`)
     import(`@/lib/plugins/jquery.mousewheel.min.js`)
     let userLanguage = localStorage.getItem('language_choice_info') ? localStorage.getItem('language_choice_info') : this.$store.state.user.userLanguage
     await this.$chooseLanguage.lang(userLanguage)
