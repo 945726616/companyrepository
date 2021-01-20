@@ -180,6 +180,15 @@ const publicFunc = {
         el.dispatchEvent(evt);
       } catch (e) { system_pop_confirm_box({ alert: true, str: e }) }
     }
+  },
+  hasUsableFlash () { // 判断浏览器是否开启flash插件
+    let flashObj
+    if (typeof window.ActiveXObject !== "undefined") {
+      flashObj = new ActiveXObject("ShockwaveFlash.ShockwaveFlash")
+    } else {
+      flashObj = navigator.plugins['Shockwave Flash']
+    }
+    return flashObj ? true : false
   }
 }
 

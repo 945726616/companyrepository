@@ -30,6 +30,7 @@ const jumpPageData = {
     percent: 0, // 回放进度条百分比
     playBackObj: null, // 回放页面obj内容
     playBackSavePercent: 0, // 回放点击进度条时存储百分比
+    clientP2Ping: 0, // 客户端播放时展示的KB数值
   },
   mutations: {
     SET_PAGE_DOM: (state, pageDom) => {
@@ -115,6 +116,9 @@ const jumpPageData = {
     },
     SET_PLAYBACK_SAVE_PERCENT: (state, playBackSavePercent) => {
       state.playBackSavePercent = playBackSavePercent
+    },
+    SET_CLIENT_P2PING: (state, clientP2Ping) => {
+      state.clientP2Ping = clientP2Ping
     }
   },
   actions: {
@@ -150,6 +154,7 @@ const jumpPageData = {
     setPercent: ({ commit }, percent) => commit('SET_PERCENT', percent),
     setPlayBackObj: ({ commit }, playBackObj) => commit('SET_PLAYBACK_OBJ', playBackObj),
     setPlayBackSavePercent: ({ commit }, playBackSavePercent) => commit('SET_PLAYBACK_SAVE_PERCENT', playBackSavePercent),
+    setClientP2Ping: ({ commit }, clientP2Ping) => commit('SET_CLIENT_P2PING', clientP2Ping),
   }
 }
 

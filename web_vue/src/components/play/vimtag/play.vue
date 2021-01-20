@@ -13,6 +13,7 @@
         <div id='play_view' class='noselect' :style="playViewStyle">
           <div id='play_buffer_ret'></div>
           <div id='play_screen' class='noselect' :style="{height: (playViewHeight - 44) + 'px'}">
+            <div id='topClientP2Ping' v-show="clientFlag">{{clientP2PingValue}}</div>
             <!-- 暂停播放遮罩层 -->
             <div id='play_view_box'>
               <div id='play_pause_pic'></div>
@@ -23,9 +24,9 @@
           <div id='play_menu_box'>
             <div id='play_menu_left'>
               <div id='video_play' class='video_play_stop' @click="clickPlay($event)"></div>
-              <div id='voice_close' class='voice_close_close' v-show="voiceFlag" @click="clickVoice($event)"></div>
+              <div id='voice_close' class='voice_close_close' v-show="clientFlag" @click="clickVoice($event)"></div>
             </div>
-            <div id='full_screen' v-show="fullScreenFlag" @click="clickFullScreen"></div><!-- 全屏播放 -->
+            <div id='full_screen' v-show="clientFlag" @click="clickFullScreen"></div><!-- 全屏播放 -->
             <div class='enter_nav'></div>
             <div id='play_menu_right'>
               <!-- 清晰度选择弹出菜单 -->
@@ -66,7 +67,7 @@
                   <div id='control_menu'>
                     <div id='video_off_pic' class='video_off_picture' v-show="recordFlag" @click="clickRecordVideo($event)"></div>
                     <div id='camera_off_pic' class='camera_off_picture' @click="clickScreenShot"></div>
-                    <div id='talkback_off_pic' class='talkback_off_picture' v-show="talkbackFlag" @click="clickTalkback($event)"></div>
+                    <div id='talkback_off_pic' class='talkback_off_picture' v-show="clientFlag" @click="clickTalkback($event)"></div>
                     <div id='adjust_off_pic' :class='adjustSettingFlag?"adjust_on_picture":"adjust_off_picture"' @click="clickAdjust($event)"></div>
                   </div>
                   <!-- 弹出控制选项按钮 结束-->
@@ -207,13 +208,16 @@ export default {
       definitionListFlag: false, // 清晰度选择列表展示标识
       definitionSelect: null, // 最终选择的清晰度
       support_1080p: '', // 1080p分辨率内容展示
-      voiceFlag: window.fujikam ? true : false, // 声音控制图标标识(在客户端中展示,浏览器端隐藏)
-      fullScreenFlag: window.fujikam ? true : false, // 全屏控制图标标识(在客户端中展示,浏览器端隐藏)
+      clientP2PingValue: '0kB', // 客户端视频播放流数据值显示
+      clientFlag: window.fujikam ? true : false, // 客户端标识控制以下功能的显隐: 声音控制图标标识(在客户端中展示,浏览器端隐藏)、全屏控制图标标识(在客户端中展示,浏览器端隐藏)、客户端视频播放展示KB值。对讲控制图标标识(在客户端中展示,浏览器端隐藏)
+      // voiceFlag: window.fujikam ? true : false, // 声音控制图标标识(在客户端中展示,浏览器端隐藏)
+      // fullScreenFlag: window.fujikam ? true : false, // 全屏控制图标标识(在客户端中展示,浏览器端隐藏)
+      // clientP2PingFlag: window.fujikam ? true : false, // 客户端视频播放展示KB值
+      // talkbackFlag: window.fujikam ? true : false, // 对讲控制图标标识(在客户端中展示,浏览器端隐藏)
       recordFlag: false, // 隐藏控制菜单中录像按钮
       snapshotFlag: false, // 截图弹窗展示标识
       snapshotUrl: null, // 截图图片url
       snapshotDownloadName: null, // 截图图片下载的文件名
-      talkbackFlag: window.fujikam ? true : false, // 对讲控制图标标识(在客户端中展示,浏览器端隐藏)
       adjustSettingFlag: false, // 设置弹出框标识
       definitionTop: '', // 清晰度选择弹窗top属性
       cameraControlDivFlag: false, // 摄像头转向控制区域展示标识
@@ -427,6 +431,7 @@ export default {
     },
     // 播放回调 播放速度
     play_speed (data) {
+      console.log(data, 'play_speed')
       let l_dom_play_view = this.publicFunc.mx("#play_view")
       let l_dom_play_view_control = this.publicFunc.mx("#play_view_control");
       this.publicFunc.mx("#play_buffer_ret").innerHTML = data;
@@ -1296,6 +1301,12 @@ export default {
         }
       },
       deep: true
+    },
+    "$store.state.jumpPageData.clientP2Ping" (val) {
+      if (val) {
+        this.clientP2PingValue = val
+        console.log(val, 'p2pingvalue')
+      }
     }
   }
 }

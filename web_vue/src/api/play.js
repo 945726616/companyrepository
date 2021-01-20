@@ -357,7 +357,7 @@ const play = {
             let string_speed = obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "query", "{}");
             if (string_speed.length >= 150) {
               let json_speed = eval("(" + string_speed + ")");
-              if (obj.isDownload) {
+              if (obj.isDownload) { // 下载调用
                 if (json_speed.data.played_duration / data.videoSize > 1) {
                   json_speed.data.played_duration = data.videoSize;
                   l_speed = "100%";
@@ -374,7 +374,7 @@ const play = {
                   l_speed = parseInt((json_speed.data.played_duration / data.videoSize) * 100) + "%";
                 }
                 returnItem = l_speed
-              } else if (playback) {
+              } else if (playback) { // 回放调用
                 let duration2 = sessionStorage.getItem("duration");
                 let kb = json_speed.data.p2ping ? "kB" : "KB";
                 l_speed = json_speed.data.total_bytes > l_Last_speed ? parseInt((json_speed.data.total_bytes - l_Last_speed) / 1000) + kb : l_Last_speed = 0;
@@ -387,12 +387,14 @@ const play = {
                 sessionStorage.setItem("duration", json_speed.data.played_duration);
                 let record_played_duration = json_speed.data.played_duration - duration2;
                 returnItem = [l_speed, l_progress, record_played_duration]
-              } else {
+              } else { // 直播调用
                 let kb = json_speed.data.p2ping ? "kB" : "KB";
                 l_speed = json_speed.data.total_bytes > l_Last_speed ? parseInt((json_speed.data.total_bytes - l_Last_speed) / 1000) + kb : l_Last_speed = 0;
                 l_Last_speed = json_speed.data.total_bytes;
-                returnItem = l_speed
+                console.log(l_speed, 'l_speed')
+                // console.log(json_speed, 'json_speed')
               }
+              store.dispatch('setClientP2Ping', l_speed)
             }
           }, 1000)
           store.dispatch('setFlashIsPlay', l_ipc_speed_time)
