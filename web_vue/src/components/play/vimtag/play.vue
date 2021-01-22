@@ -13,7 +13,6 @@
         <div id='play_view' class='noselect' :style="playViewStyle">
           <div id='play_buffer_ret'></div>
           <div id='play_screen' class='noselect' :style="{height: (playViewHeight - 44) + 'px'}">
-            <div id='topClientP2Ping' v-show="clientFlag">{{clientP2PingValue}}</div>
             <!-- 暂停播放遮罩层 -->
             <div id='play_view_box'>
               <div id='play_pause_pic'></div>
@@ -31,7 +30,7 @@
             <div id='play_menu_right'>
               <!-- 清晰度选择弹出菜单 -->
               <div id='choice_play_definition' v-show="definitionListFlag" :style="{top: definitionTop}">
-                <div id='high_definition' class='definition_cha' @click="clickVideoDefinition"></div>
+                <div id='high_definition' class='definition_cha' @click="clickVideoDefinition">{{highDefinitionClear}}</div>
                 <div class='definition_nav'></div>
                 <div id='standard_definition' class='definition_cha' @click="clickStandard">{{mcs_standard_clear}}</div>
                 <div class='definition_nav'></div>
@@ -51,6 +50,8 @@
           </div>
           <!-- 播放底部菜单栏 结束 -->
           <div id='play_view_control' class='noselect' v-show="cameraControlDivFlag">
+            <!-- 顶部数据传输kb值暂时条(放在这里与控制菜单置于同一层避免影响播放界面效果) -->
+            <div id='topClientP2Ping' v-show="clientFlag">{{clientP2PingValue}}</div>
             <div id='vimtag_ptz_control'>
               <div id='ptz_control_left' @mouseover="leftControl = true" @mouseout="leftControl = false">
                 <div id='turn_left' class='left_key' v-show="leftControl" @mousedown="turnCamera('move', 'left')" @mouseup="turnCamera('stop', 'left')"></div>
@@ -209,7 +210,7 @@ export default {
       definitionSelect: null, // 最终选择的清晰度
       support_1080p: '', // 1080p分辨率内容展示
       clientP2PingValue: '0kB', // 客户端视频播放流数据值显示
-      clientFlag: window.fujikam ? true : false, // 客户端标识控制以下功能的显隐: 声音控制图标标识(在客户端中展示,浏览器端隐藏)、全屏控制图标标识(在客户端中展示,浏览器端隐藏)、客户端视频播放展示KB值。对讲控制图标标识(在客户端中展示,浏览器端隐藏)
+      clientFlag: window.fujikam === 'fujikam' ? true : false, // 客户端标识控制以下功能的显隐: 声音控制图标标识(在客户端中展示,浏览器端隐藏)、全屏控制图标标识(在客户端中展示,浏览器端隐藏)、客户端视频播放展示KB值。对讲控制图标标识(在客户端中展示,浏览器端隐藏)
       // voiceFlag: window.fujikam ? true : false, // 声音控制图标标识(在客户端中展示,浏览器端隐藏)
       // fullScreenFlag: window.fujikam ? true : false, // 全屏控制图标标识(在客户端中展示,浏览器端隐藏)
       // clientP2PingFlag: window.fujikam ? true : false, // 客户端视频播放展示KB值
@@ -239,6 +240,7 @@ export default {
       color_saturation_value: '', //饱和度
       brightness_value: '', //亮度
       cam_conf: '', //保存设备模式亮度等数据
+      highDefinitionClear: '', // 接口获取的该设备可播放的最高清晰度
     }
   },
   methods: {
@@ -451,17 +453,17 @@ export default {
           if (msg && msg.white_light)
             _this.whiteLight = msg.white_light;
           _this.play_view_control({ parent: _this.publicFunc.mx("#play_view_control") })
-          if (obj.box_ipc == 1) { //如果云盒子实时播放页面
-            $("#resolute_choice").text(mcs_new_hd); //云盒子实时播放不能切换分辩率，显示高清
+          if (obj.box_ipc === 1) { //如果云盒子实时播放页面
+            _this.definitionSelect = mcs_new_hd //云盒子实时播放不能切换分辩率，显示高清
           } else {
-            if (msg.s_sensor == 'ok') {
-              _this.publicFunc.mx("#high_definition").innerHTML = msg.def;
-              _this.publicFunc.mx("#resolute_choice").innerHTML = msg.def;
-              _this.support_1080p = msg.def;
+            if (msg.s_sensor === 'ok') {
+              _this.highDefinitionClear = msg.def
+              _this.definitionSelect = msg.def
+              _this.support_1080p = msg.def
             } else {
-              _this.publicFunc.mx("#high_definition").innerHTML = 'NULL';
-              _this.publicFunc.mx("#resolute_choice").innerHTML = 'NULL';
-              _this.support_1080p = 'NULL';
+              _this.highDefinitionClear = 'NULL'
+              _this.definitionSelect = 'NULL'
+              _this.support_1080p = 'NULL'
             }
           }
           // 迁移接口请求顺序将播放接口放入设备信息请求接口后
@@ -937,7 +939,6 @@ export default {
           } else {
             this.$api.play.play_preview_img({ dom: $("#play_screen"), sn: this.$store.state.jumpPageData.selectDeviceIpc, pic_token: "p1_xxxxxxxxxx" })
           }
-          this.get_definition()
         })
         event.target.className = "video_play_stop" // 更改播放按钮的className
         this.cameraControlDivFlag = false // 摄像头方向控制按钮展示
