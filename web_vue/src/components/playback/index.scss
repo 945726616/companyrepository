@@ -44,7 +44,15 @@
 }
 #playback_view{
 	width:80%;
-	margin:0 auto;
+  margin:0 auto;
+  position: relative;
+}
+#topClientP2Ping {
+  text-align: right;
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  color: white;
 }
 #playback_buffer_ret{
 	position: absolute; 

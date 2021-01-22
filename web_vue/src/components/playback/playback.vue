@@ -19,8 +19,11 @@
           </div>
           <!-- 下载弹窗结束 -->
         </div>
+        <!-- 顶部数据传输kb值暂时条 -->
+        <div id='topClientP2Ping' v-show="clientFlag">{{clientP2PingValue}}</div>
         <!-- 回放视频播放 -->
         <div id="playback_screen">
+          <!-- 暂停播放遮罩层 -->
           <div id="play_view_box" @click="clickPlayViewBox">
             <div id="play_pause_pic"></div>
           </div>
@@ -101,6 +104,7 @@ export default {
       downloadBoxFlag: false, // 下载提示框标识
       downloadBufferFlag: false, // 下载进度弹窗标识
       downloadShowWorld: null, // 下载中暂停/开始按钮文字
+      clientP2PingValue: '0kB', // 客户端视频播放流数据值显示
     }
   },
   methods: {
@@ -505,6 +509,12 @@ export default {
       // 计算当前播放时间
       let nowTimeStamp = this.b_start_time + (this.videoSize * percent)
       this.start_time_show = new Date(nowTimeStamp).format('hh:mm:ss')
+    },
+    "$store.state.jumpPageData.clientP2Ping" (val) {
+      if (val) {
+        this.clientP2PingValue = val
+        console.log(val, 'p2pingvalue')
+      }
     }
   },
   async mounted () {

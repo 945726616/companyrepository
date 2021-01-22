@@ -266,6 +266,7 @@ const playback = {
                 l_Last_speed = json_speed.data.total_bytes;
                 // returnItem = l_speed
               }
+              store.dispatch('setClientP2Ping', l_speed)
             }
           }, 1000)
           store.dispatch('setFlashIsPlay', l_ipc_speed_time)

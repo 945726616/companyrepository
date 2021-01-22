@@ -66,11 +66,8 @@
 	width:100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  #active_dev_li{
-    width: 0;
-    height: 150px;
-    border: 2px solid $projectColor;
-    position: relative;
+  .active_dev_li{
+    border-color: $projectColor;
   }
 }
 #dev_list_box{
@@ -79,8 +76,16 @@
 .dev_list{
   width:208px;
   margin-top:10px;
-  margin-left:10px;
+  margin-left:2px;
   float:left;
+  padding-left: 5px;
+  border-left: 4px solid transparent;
+  .active_point {
+    background-color: $projectColor !important;
+  }
+  .active_title{
+    color: $projectColor !important;
+  }
   .device_sidebar_nick{
     float:left;
     margin-bottom: 6px;

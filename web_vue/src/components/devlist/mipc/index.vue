@@ -26,10 +26,10 @@
           <div id='dev_list_box'>
             <!-- 设备循环渲染单元 -->
             <!-- {{deviceArr}} -->
-            <div class='dev_list' v-for="(deviceItem, index) in deviceArr" @click.stop="chooseDeviceItem(deviceItem, index)" :key="index" :state='deviceItem.stat' :dtype='deviceItem.type' :sn='deviceItem.sn'>
+            <div v-for="(deviceItem, index) in deviceArr" :class="['dev_list', {active_dev_li: index === clickItemIndex}]" @click.stop="chooseDeviceItem(deviceItem, index)" :key="index" :state='deviceItem.stat' :dtype='deviceItem.type' :sn='deviceItem.sn'>
               <div class='device_sidebar_nick'>
-                <div class='device_sidebar_point'></div>
-                <div class='device_list_nick'>{{deviceItem.nick}}</div>
+                <div :class="['device_sidebar_point', {active_point: index === clickItemIndex}]"></div>
+                <div :class="['device_list_nick', {active_title: index === clickItemIndex}]">{{deviceItem.nick}}</div>
                 <div class='device_list_del_ico' v-show="deviceDelIconFlag" @click.stop="clickItemDel(deviceItem, $event)"></div> <!-- 点击设备的删除图标 -->
               </div>
               <div :class="['device_list_img', deviceItem.imgClass]">
@@ -37,8 +37,6 @@
               </div>
             </div>
             <!-- 设备循环渲染单元 结束 -->
-            <!-- 选中框样式 -->
-            <div id='active_dev_li'></div>
           </div>
           <!-- 设备列表渲染内容 结束 -->
         </div>
@@ -84,7 +82,8 @@ export default {
         { type: 'fisheye', url: require('@/assets/mipc/fisheye_off.png'), name: mrs_fisheye },
       ],
       add_device_input_id: null, // 添加设备输入框输入的id
-      imgRefresh: null // 传递过来的图片是否刷新标识
+      imgRefresh: null, // 传递过来的图片是否刷新标识
+      clickItemIndex: 0, // 点击添加选中样式index值
     }
   },
   methods: {
@@ -176,32 +175,15 @@ export default {
     },
     // 点击事件
     chooseDeviceItem (item, index) { // 点击设备 (未认证的设备弹窗内容未更改完成)
-      console.log('device被点击', item, index)
+      // console.log('device被点击', item, index)
       this.$nextTick(function () { // 使用this.$nextTick进行更新解决dom未加载完成时导致的报错
         let sn = item.sn
         let type = item.type
         let state = item.stat
-        console.log('执行', state, type, this.$store.state.jumpPageData.selectDeviceIpc, sn)
-        if (sn === this.$store.state.jumpPageData.selectDeviceIpc) {
-          this.publicFunc.mx("#active_dev_li").style.top = (154 * index) + "px" // 154为固定的active高度
-          this.publicFunc.mx(".dev_list")[index].className = "dev_list dev_list_active"
-          if (type === 'IPC') {
-            this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" }, query:{t: Date.now()} })
-          } else if (type === "BOX") {
-            this.$router.push({ name: 'boxlist', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" }, query:{t: Date.now()} })
-          }
-        }
+        // console.log('执行', state, type, this.$store.state.jumpPageData.selectDeviceIpc, sn)
+        this.clickItemIndex = index // 赋值选中的index值, 用于添加选中样式
+        this.$store.dispatch('setSelectDeviceIpc', sn) // 存储选中的设备id至vuex
         if (state === "Online") {
-          $(".img_class").eq(index).show()
-        } else {
-          $(".img_class").eq(index).hide()
-        }
-        this.$store.dispatch('setSelectDeviceIpc', sn)
-        if (state === "Online") {
-          let active_top = 154 * index
-          $("#active_dev_li").animate({ "top": active_top + "px" })
-          this.publicFunc.mx(".dev_list")[index].className = "dev_list"
-          this.publicFunc.mx(".dev_list")[index].className = "dev_list dev_list_active"
           if (type === 'IPC') {
             this.$router.push({ name: 'play', params: { parent: $("#dev_main_right"), parentId: "dev_main_right" }, query:{t: Date.now()} })
           } else if (type === "BOX") {
@@ -213,8 +195,6 @@ export default {
           this.$set(this.addDeviceModelObj, 'addDeviceBodyFlag', 'inputDevicePassword') // 切换至输入设备密码页面
           this.$set(this.addDeviceModelObj, 'menuTitle', mcs_action_add_device) // 设置输入设备密码页面顶部菜单标题
           this.$set(this.addDeviceModelObj, 'deviceType', type) // 设置设备类型
-          // $("#add_device_page").show()
-          // create_add_devices_box({ parent: this.publicFunc.mx("#add_device_page"), sn: this.$store.state.jumpPageData.selectDeviceIpc })
         } else if (state === "Offline") {
           this.$router.push({ name: 'set', params: { parent: $("#dev_main_page"), back_page: "device", type: 4 } })
         }
