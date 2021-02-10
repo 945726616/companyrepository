@@ -35,7 +35,7 @@
         <!-- 添加设备 -->
         <div id='device_add_btn_down' v-show="addHoverflag">{{mcs_click_add_equipment}}</div><!-- 点击添加设备(hover提示框) -->
       </div>
-      <!-- <div id="split_screen" @click="jumpToSplitScreen">Split Screen</div>分屏轮播 -->
+      <div id="split_screen" @click="jumpToSplitScreen">Split Screen</div><!-- 分屏轮播 -->
     </div>
     <!-- 顶部设备列表菜单栏 结束 -->
     <!-- 设备列表展示部分 -->

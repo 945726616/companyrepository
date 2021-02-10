@@ -608,6 +608,7 @@ mme.prototype =
     return "\ncam.index=" + cam_index + "\nmic.index=" + mic_index;
   },
   chl_create: function (obj/*{type:"publish"|"play", url:"xxx", params:"", refer:xxx}*/) {
+    console.log('enter mme chl_create', obj)
     if (!this.is_ready("chl_create")) {
       return null;
     }
@@ -621,6 +622,7 @@ mme.prototype =
     }
   },
   ctrl: function (chl, method, params) {
+    console.log('enter mme ctrl', chl, method, params)
     try {
       return this.is_ready("ctrl") ? this.plug_obj.ctrl(chl ? chl.id : 0, method, params) : "{type:\"error\",status:-1}";
     } catch (e) {
