@@ -83,6 +83,7 @@ export default {
     }
   },
   async mounted () {
+    this.project_sign = window.location.href.indexOf('vimtag') > -1;
     this.$nextTick(async () => {
       // 强制重新引入多国语言 main.js中的引用无法确保在调用top时能够全局使用
       await this.$chooseLanguage.lang(this.$store.state.user.userLanguage)
@@ -91,7 +92,6 @@ export default {
       this.mcs_more_options = mcs_more_options;
       this.mcs_download = mcs_download;
       this.mcs_back = mcs_back;
-      this.project_sign = window.location.href.indexOf('vimtag') > -1;
       this.project_name = this.$store.state.jumpPageData.projectName;
       if (!this.project_sign) {
         if (window.fujikam === 'fujikam') {

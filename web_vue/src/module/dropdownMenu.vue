@@ -94,7 +94,7 @@
             min-width: 100%;
             max-height: 230px;
             max-width: 200px;
-            border: 1px solid #22aaaa;
+            border: 1px solid var(--projectBackgroundColor);
             background-image: none;
             background-color: #ffffff;
             background-size: 100% 100%;
