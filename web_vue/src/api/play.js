@@ -355,8 +355,10 @@ const play = {
         if (l_plug_type !== "flash") { // 该判断条件中需要添加!此为客户端逻辑(去掉!用于在浏览器中测试使用)
           l_ipc_speed_time = setInterval(function () {
             let string_speed = obj.inner_window_info.mme.ctrl(obj.inner_window_info.video_chls, "query", "{}");
+            // console.log(string_speed, 'play.js chl_video_create', obj.inner_window_info.video_chls)
             if (string_speed.length >= 150) {
               let json_speed = eval("(" + string_speed + ")");
+              console.log(json_speed, 'json_speed')
               if (obj.isDownload) { // 下载调用
                 if (json_speed.data.played_duration / data.videoSize > 1) {
                   json_speed.data.played_duration = data.videoSize;

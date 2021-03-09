@@ -172,7 +172,7 @@
     }
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
     .feedback_input {
         overflow: hidden;
         margin-bottom: 20px;

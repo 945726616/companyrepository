@@ -131,20 +131,20 @@
         data() {
             return {
                 //多国语言
-                mcs_apply: mcs_apply,
-                mcs_back: mcs_back,
-                mcs_edit_time: mcs_edit_time,
-                mcs_delete: mcs_delete,
-                mcs_begin_time: mcs_begin_time,
-                mcs_end_time: mcs_end_time,
-                mcs_repeat: mcs_repeat,
-                mcs_Sunday_and: mcs_Sunday_and,
-                mcs_Monday_and: mcs_Monday_and,
-                mcs_Tuesday_and: mcs_Tuesday_and,
-                mcs_Wednesday_and: mcs_Wednesday_and,
-                mcs_Thursday_and: mcs_Thursday_and,
-                mcs_Friday_and: mcs_Friday_and,
-                mcs_Saturday_and: mcs_Saturday_and,
+                mcs_apply: mcs_apply, //应用
+                mcs_back: mcs_back, //返回
+                mcs_edit_time: mcs_edit_time, //编辑时段
+                mcs_delete: mcs_delete, //删除
+                mcs_begin_time: mcs_begin_time, //开始时间
+                mcs_end_time: mcs_end_time, //结束时间
+                mcs_repeat: mcs_repeat, //重复
+                mcs_Sunday_and: mcs_Sunday_and, //周日
+                mcs_Monday_and: mcs_Monday_and, //周一
+                mcs_Tuesday_and: mcs_Tuesday_and, //周二
+                mcs_Wednesday_and: mcs_Wednesday_and, //周三
+                mcs_Thursday_and: mcs_Thursday_and, //周四
+                mcs_Friday_and: mcs_Friday_and, //周五
+                mcs_Saturday_and: mcs_Saturday_and, //周六
 
                 project_name: '', //项目名
                 allow_record_sign: '', //控制是否允许录像/报警
@@ -630,13 +630,13 @@
                     this.set_time_func("submit")
                     if (this.back_sign) {
                         this.$set(this.setTimePageObj, "show_page", 'time_page')
-                    }
-                    if (this.add_time_sign && this.ealf === 0) {
-                        this.time_format.push({
-                            start_time: this.start_time,
-                            end_time: this.end_time,
-                            week: this.repeat_week
-                        })
+                        if (this.add_time_sign && this.ealf === 0) {
+                            this.time_format.push({
+                                start_time: this.start_time,
+                                end_time: this.end_time,
+                                week: this.repeat_week
+                            })
+                        }
                     }
                 }
             },
@@ -649,12 +649,14 @@
                 let new_week_select = [0, 0, 0, 0, 0, 0, 0]
                 this.start_time = parseInt(this.publicFunc.mx("#start_time").innerHTML);
                 this.end_time = parseInt(this.publicFunc.mx("#end_time").innerHTML);
-                if (this.start_time >= this.end_time) {
+                if (this.start_time >= this.end_time) { //报错：开始时间大于结束时间
                     this.publicFunc.msg_tips({ msg: mcs_start_time_is_greater, type: "error", timeout: 3000 })
-                    this.back_sign = false
+                    this.back_sign = false;
                     return;
+                } else {
+                    this.back_sign = true;
                 }
-                for (let i = 0; i < new_week_select.length; i++) {
+                for (let i = 0; i < new_week_select.length; i++) { //选择重复星期
                     if (this.repeat_week.indexOf(i.toString()) > -1) {
                         new_week_select[i] = 1
                     }
@@ -793,7 +795,7 @@
                         this.total_data = l_data_64
                     }
                 }
-
+                
                 // 联动框架
                 if (this.ealf === 1) {
                     let start_time = parseInt(this.publicFunc.mx("#start_time").innerHTML.split(":")[0])
@@ -1264,8 +1266,8 @@
                         })
                         console.log(_this.week_num, 'week_num_arr')
                     }
-				}
-				
+                }
+
                 if (this.g_js_param.set_plan.sd_flag && this.g_js_param.set_plan.sd_flag === 'none') {
                     this.publicFunc.msg_tips({ msg: mcs_no_sd_hint, type: "error", timeout: 3000, web_tips: 1 })
                     this.allow_record_sign = false;
@@ -1673,7 +1675,7 @@
     }
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
     @import '../../../css/public.scss';
 
     #time_page {

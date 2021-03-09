@@ -253,6 +253,6 @@
     }
 </script>
 
-<style src="./index.scss" lang='scss' scoped>
+<style src="./index.scss" lang='scss'>
 
 </style>                                                    

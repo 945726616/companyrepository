@@ -3,7 +3,7 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 // @import url(./index.scss); (暂时注释后续分离样式后放开)
 #login {
   height: calc(100% - 62px);

@@ -115,7 +115,7 @@
     };
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
     .list_right_box {
         width: 520px;
         margin: 0 auto;

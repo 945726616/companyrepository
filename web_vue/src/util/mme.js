@@ -18,6 +18,7 @@ var mme = function (obj/*
    enable_native_plug:true[default]|false,
    enable_flash_plug:true[default]|false
    */) {
+     console.log('enter this mme create', obj)
   this.create(obj)
 }
 mme.prototype =
@@ -107,7 +108,10 @@ mme.prototype =
       else if ((null != navigator.mimeTypes)
         && (0 < navigator.mimeTypes.length)
         && (null != navigator.mimeTypes[this.types.xpcom.mime])
-        && navigator.mimeTypes[this.types.xpcom.mime].enabledPlugin) { type = this.types.xpcom; }
+        && navigator.mimeTypes[this.types.xpcom.mime].enabledPlugin) {
+          type = this.types.xpcom;
+          console.log(type, 'create_plug type')
+      }
     }
     if (!type && enable_flash_plug) {/* check flash */
       if (ie) { try { test = new ActiveXObject(this.types.flash.xname); type = this.types.flash; } catch (e) { } } // IE浏览器检测flash插件功能
@@ -169,7 +173,6 @@ mme.prototype =
   },
   /* plug_valid: */
   check_plug_install: function (ref, on_check_ack/* function(ref, version) */) {
-    
     var plug, info, timer, timer_counts = 20, cont = document.createElement("div"), ret = false;
     cont.style.cssText = "position:absolute;width:1px;height:1px;left:-1px;top:-1px;";
     cont.setAttribute('id','check_plug')
@@ -283,7 +286,6 @@ mme.prototype =
     if (!document.getElementById('check_install_test_div')) {
       document.body.appendChild(this.install_test_panel);
     }
-    
 
     window.onresize = function () {
       description_div = document.getElementById("install_description_div");
@@ -335,7 +337,7 @@ mme.prototype =
           if (me.on_event) { me.on_event({ type: "missing" }); }
         }
         else {
-          if (me.on_event) { me.on_event({ type: "create" }); }
+          if (me.on_event) { console.log('to create 1'); me.on_event({ type: "create" }); }
         }
         return false;
       });
@@ -358,10 +360,12 @@ mme.prototype =
   },
   on_plug_event: function (json) {
     var e = meval(json);
+    console.log('on_plug_event_json', json)
+    console.log('on_plug_event_e', e)
     if (null == e) {/* xxxxxx error. what append. */
       return 0;
     }
-
+    console.log('on_plug_event_e_target', e.target)
     if (e.target && e.target.type && e.target.url) {
       e.chl = this.chl_get(e.target.type, e.target.url)
     }
@@ -377,11 +381,13 @@ mme.prototype =
       case "active": { break; }
     }
     if (this.is_created && this.on_event) {
+      console.log('enter is_created', this.on_event())
       this.on_event(e);
     }
     return 0;
   },
   create: async function (obj) {
+    console.log('enter mme_create', obj)
     var parent = obj.parent, me = this
     /* init parent and skin */
     this.skin = this.get_default_skin();
@@ -412,7 +418,11 @@ mme.prototype =
 
     /* do create */
     this.id = (++this.id_allocer.value);
-    window["plug_" + this.id + "_on_event"] = function (s) { return me.on_plug_event(s); };
+    window["plug_" + this.id + "_on_event"] = function (s) {
+      console.log('window_func_s_2', s)
+      return me.on_plug_event(s);
+    };
+    // console.log('show window', window, 'plug_2_on_event', plug_2_on_event)
     this.status = this.plug_status.initting;
 
     /* try create native plugin */
@@ -434,7 +444,7 @@ mme.prototype =
           }
           else {
             // console.log('enter this create')
-            if (me.on_event) { me.on_event({ type: "create" }); }
+            if (me.on_event) { console.log('to create 2'); me.on_event({ type: "create" }); }
           }
         }
         else {
@@ -446,7 +456,7 @@ mme.prototype =
               if (me.on_event) { me.on_event({ type: "missing" }); }
             }
             else {
-              if (me.on_event) { me.on_event({ type: "create" }); }
+              if (me.on_event) { console.log('to create 3'); me.on_event({ type: "create" }); }
             }
           });
         }
@@ -470,7 +480,7 @@ mme.prototype =
     this.clear_install();
     window["plug_" + this.id + "_on_event"] = null;
     for (var chl, i = this.chls.length - 1; 0 <= i; --i) {
-      if (chl = this.chls[i]) { this.chl_destroy(chl); }
+      if (chl = this.chls[i]) { this.chl_destroy(chl); } // chl_destroy方法用于控制视频销毁
     }
 
     if (this.dev_form) {
@@ -614,15 +624,20 @@ mme.prototype =
     }
     else {
       var me = this, ret, chl = { params: (obj.params || "") };
-      if (0 >= (chl.id = me.plug_obj.chl_create(chl.params))) {
+      console.log('me', me)
+      console.log('me.plug_obj', me.plug_obj.chl_create())
+      console.log('chl.params', chl.params)
+      chl.id = me.plug_obj.chl_create(chl.params) // 该语句创建视频播放通道
+      if (0 >= chl.id) {
         return null;
       }
       this.chls[this.chls.length] = chl;
+      console.log('out chl_create chl value', chl)
       return chl;
     }
   },
   ctrl: function (chl, method, params) {
-    console.log('enter mme ctrl', chl, method, params)
+    console.log('enter mme ctrl', 'chl', chl, 'method', method, 'params', params)
     try {
       return this.is_ready("ctrl") ? this.plug_obj.ctrl(chl ? chl.id : 0, method, params) : "{type:\"error\",status:-1}";
     } catch (e) {

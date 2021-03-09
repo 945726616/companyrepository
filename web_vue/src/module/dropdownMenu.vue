@@ -61,7 +61,9 @@
     }
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
+    @import "../css/public.scss";
+
     .dropdownMenu {
         position: relative;
 
@@ -76,7 +78,7 @@
             background-image: none;
             background-repeat: no-repeat;
             background-position: 98% 40%;
-            border: 1px solid var(--projectBackgroundColor);
+            border: 1px solid $projectColor;
             cursor: pointer;
             border-radius: 4px;
             z-index: 20;
@@ -94,7 +96,7 @@
             min-width: 100%;
             max-height: 230px;
             max-width: 200px;
-            border: 1px solid var(--projectBackgroundColor);
+            border: 1px solid $projectColor;
             background-image: none;
             background-color: #ffffff;
             background-size: 100% 100%;

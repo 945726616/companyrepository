@@ -484,7 +484,7 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 @import '../../../css/public.scss';
 
 .list_right_box {

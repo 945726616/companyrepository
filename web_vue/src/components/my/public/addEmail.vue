@@ -102,7 +102,7 @@
     }
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
     @import "../../../css/public.scss";
 
     #ae_lable {
@@ -110,7 +110,7 @@
         flex-flow: column nowrap;
         justify-content: space-around;
         align-items: center;
-        width:80%;
+        // width:80%;
     }
 
     .ae_tips {
@@ -155,7 +155,7 @@
     }
 
     #ae_btn {
-        float: right;
+        // float: right;
         width: 120px;
         height: 30px;
         border-radius: 4px;
@@ -165,12 +165,14 @@
         line-height: 30px;
         margin-top: 60px;
         cursor: pointer;
-        align-self: flex-end;
+        align-self: center;
     }
 
     #send_msg {
         color: #00A7BA;
         float: left;
+        width: 100%;
+        text-align: center;
     }
 
     #email_invalid {

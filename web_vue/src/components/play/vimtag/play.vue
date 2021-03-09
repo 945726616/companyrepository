@@ -171,7 +171,7 @@
     </div>
   </div>
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
 @import './index.scss';
 </style>
 <script>
@@ -1074,6 +1074,7 @@ export default {
     clickScreenShot () { // 点击隐藏菜单中的截图按钮
       if (this.$store.state.jumpPageData.selectDeviceIpc) {
         this.$api.play.play_snapshot({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => { // 调用截图接口
+          // this.publicFunc.log_upload('take_picture'); //记录日志：拍照
           this.snapshotFlag = true
           this.snapshotUrl = res
           this.snapshotDownloadName = new Date().getTime() + ".jpg"
@@ -1267,22 +1268,22 @@ export default {
   watch: {
     sharpness_value (val) {
       if (val) {
-        this.$refs.sharpness.style.backgroundSize = val + '%';
+        this.$refs.sharpness.style.backgroundSize = val + '% 100%';
       }
     },
     contrast_value (val) {
       if (val) {
-        this.$refs.contrast.style.backgroundSize = val + '%';
+        this.$refs.contrast.style.backgroundSize = val + '% 100%';
       }
     },
     color_saturation_value (val) {
       if (val) {
-        this.$refs.color_saturation.style.backgroundSize = val + '%';
+        this.$refs.color_saturation.style.backgroundSize = val + '% 100%';
       }
     },
     brightness_value (val) {
       if (val) {
-        this.$refs.brightness.style.backgroundSize = val + '%';
+        this.$refs.brightness.style.backgroundSize = val + '% 100%';
       }
     },
     mode (val) {

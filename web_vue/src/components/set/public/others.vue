@@ -44,13 +44,13 @@
         data() {
             return {
                 //多国语言
-                mcs_audio: mcs_audio,
-                mcs_speaker: mcs_speaker,
-                mcs_mic: mcs_mic,
-                mcs_equipment_flip: mcs_equipment_flip,
-                mcs_power_frequency: mcs_power_frequency,
-                mcs_screen_size: mcs_screen_size,
-                mcs_apply: mcs_apply,
+                mcs_audio: mcs_audio, //音频
+                mcs_speaker: mcs_speaker, //扬声器
+                mcs_mic: mcs_mic, //麦克风
+                mcs_equipment_flip: mcs_equipment_flip, //画面翻转
+                mcs_power_frequency: mcs_power_frequency, //电源频率
+                mcs_screen_size: mcs_screen_size, //画面设置
+                mcs_apply: mcs_apply, //应用
 
                 ipc_turnover_true: 0,
                 input_speaker: 0, //扬声器
@@ -163,12 +163,12 @@
         watch: {
             input_speaker(val) {
                 if (val) {
-                    this.$refs.speaker.style.backgroundSize = val + '%';
+                    this.$refs.speaker.style.backgroundSize = val + '% 100%';
                 }
             },
             input_microphone(val) {
                 if (val) {
-                    this.$refs.microphone.style.backgroundSize = val + '%';
+                    this.$refs.microphone.style.backgroundSize = val + '% 100%';
                 }
             },
             equipment_flip_sign(val) {
@@ -186,7 +186,7 @@
     }
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
     @import "../../../css/public.scss";
 
     .list_right_box {

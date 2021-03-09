@@ -205,18 +205,6 @@ export default {
         // this.play_menu_control() // 播放控制按钮渲染
         this.get_definition() // 获取窗口大小并绘制播放内容
       })
-      // 视频播放控制区域设置
-      this.$nextTick(function () {
-        let l_dom_play_view_width = this.$refs.play_view.offsetWidth
-        let l_dom_play_view_height = this.$refs.play_view.offsetHeight
-        let l_dom_play_view_top = this.$refs.play_view.offsetTop
-        let l_dom_play_view_left = this.$refs.play_view.offsetLeft
-        this.$refs.ptz_control.style.width = l_dom_play_view_width + "px"
-        this.$refs.ptz_control.style.height = l_dom_play_view_height - 80 + "px"
-        this.$refs.ptz_control.style.top = l_dom_play_view_top + "px"
-        this.$refs.ptz_control.style.left = l_dom_play_view_left + "px"
-      })
-      // 视频播放控制区域设置 结束
       // 创建暂停画面以及暂停图标
       if (this.$store.state.jumpPageData.localFlag) {
         this.$api.play.play_preview_img({ addr: obj.addr, dom: $("#play_screen"), sn: this.$store.state.jumpPageData.selectDeviceIpc, pic_token: "p1_xxxxxxxxxx" })
@@ -247,6 +235,18 @@ export default {
           this.support_1080p = 'NULL'
         }
       }
+      // 视频播放控制区域设置
+      this.$nextTick(function () {
+        let l_dom_play_view_width = this.$refs.play_view.offsetWidth
+        let l_dom_play_view_height = this.$refs.play_view.offsetHeight
+        let l_dom_play_view_top = this.$refs.play_view.offsetTop
+        let l_dom_play_view_left = this.$refs.play_view.offsetLeft
+        this.$refs.ptz_control.style.width = l_dom_play_view_width + "px"
+        this.$refs.ptz_control.style.height = l_dom_play_view_height - 80 + "px"
+        this.$refs.ptz_control.style.top = l_dom_play_view_top + "px"
+        this.$refs.ptz_control.style.left = l_dom_play_view_left + "px"
+      })
+      // 视频播放控制区域设置 结束
     },
     play_speed (data) { // 播放速度回调
       this.publicFunc.mx("#play_buffer_ret").innerHTML = data;
@@ -418,6 +418,7 @@ export default {
     clickScreenShot () { // 点击隐藏菜单中的截图按钮
       if (this.$store.state.jumpPageData.selectDeviceIpc) {
         this.$api.play.play_snapshot({ sn: this.$store.state.jumpPageData.selectDeviceIpc }).then(res => { // 调用截图接口
+          // this.publicFunc.log_upload('take_picture'); //记录日志：拍照
           this.snapshotFlag = true
           this.snapshotUrl = res
           this.snapshotDownloadName = new Date().getTime() + ".jpg"
@@ -604,22 +605,22 @@ export default {
     },
     sharpness_value (val) {
       if (val) {
-        this.$refs.sharpness.style.backgroundSize = val + '%';
+        this.$refs.sharpness.style.backgroundSize = val + '% 100%';
       }
     },
     contrast_value (val) {
       if (val) {
-        this.$refs.contrast.style.backgroundSize = val + '%';
+        this.$refs.contrast.style.backgroundSize = val + '% 100%';
       }
     },
     color_saturation_value (val) {
       if (val) {
-        this.$refs.color_saturation.style.backgroundSize = val + '%';
+        this.$refs.color_saturation.style.backgroundSize = val + '% 100%';
       }
     },
     brightness_value (val) {
       if (val) {
-        this.$refs.brightness.style.backgroundSize = val + '%';
+        this.$refs.brightness.style.backgroundSize = val + '% 100%';
       }
     },
     mode (val) {

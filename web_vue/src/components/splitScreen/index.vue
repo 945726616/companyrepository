@@ -14,8 +14,8 @@
       </div>
        <!-- @click="clickPlayScreen(2)" -->
       <div class="playScreen">
-        <playerPlugin :playerObj='playerObj2'></playerPlugin>
-        <!-- <div id="screen_2" class="centerAddIco">+</div> -->
+        <!-- <playerPlugin :playerObj='playerObj2'></playerPlugin> -->
+        <div id="screen_2" class="centerAddIco">+</div>
       </div>
       <div class="playScreen" @click="clickPlayScreen(3)">
         <div id="screen_3" class="centerAddIco">+</div>
@@ -55,7 +55,8 @@ export default {
       playerObj1: {
         playRef: 'video1',
         playSrc: 'http://iqiyi.cdn9-okzy.com/20200916/15483_11c434b2/index.m3u8',
-        playWidth: '100%'
+        playWidth: '100%',
+        playTest: "{src:[{url:'rtdp://45.113.201.3:6030/live/1jfiegbqfoe5q_p0_IETOLXMTBMZX'}],trans:[{flow_ctrl:'jitter',thread:'istream'}],thread:'istream', jitter:{max:3000}}"
       },
       playerObj2: {
         playRef: 'video2',

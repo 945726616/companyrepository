@@ -35,7 +35,7 @@
     }
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
     @import "../../../css/public.scss";
 
     #del_dev_button_setup {

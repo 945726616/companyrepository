@@ -132,25 +132,25 @@
         data() {
             return {
                 //多国语言
-                mcs_motion_detection: mcs_motion_detection,
-                mcs_apply: mcs_apply,
-                mcs_motion_detection_sensitivity: mcs_motion_detection_sensitivity,
-                mcs_daytime: mcs_daytime,
-                mcs_night: mcs_night,
-                mcs_mobile_tracking: mcs_mobile_tracking,
-                mcs_sos: mcs_sos,
-                mcs_magnetic: mcs_magnetic,
-                mcs_face_detection: mcs_face_detection,
-                mcs_sound_detection: mcs_sound_detection,
-                mcs_record: mcs_record,
-                mcs_record_time: mcs_record_time,
-                mcs_face_detection_frame: mcs_face_detection_frame,
-                mcs_sound_sensitivity: mcs_sound_sensitivity,
-                mcs_sound: mcs_sound,
-                mcs_delete: mcs_delete,
-                mcs_are_you_sure_delete: mcs_are_you_sure_delete,
-                mcs_ok: mcs_ok,
-                mcs_cancel: mcs_cancel,
+                mcs_motion_detection: mcs_motion_detection, //移动侦测
+                mcs_apply: mcs_apply, //应用
+                mcs_motion_detection_sensitivity: mcs_motion_detection_sensitivity, //移动侦测灵敏度
+                mcs_daytime: mcs_daytime, //白天
+                mcs_night: mcs_night, //夜间
+                mcs_mobile_tracking: mcs_mobile_tracking, //移动追踪
+                mcs_sos: mcs_sos, //紧急按钮
+                mcs_magnetic: mcs_magnetic, //门磁
+                mcs_face_detection: mcs_face_detection, //人脸检测
+                mcs_sound_detection: mcs_sound_detection, //声音侦测
+                mcs_record: mcs_record, //录像
+                mcs_record_time: mcs_record_time, //录像时长(秒)
+                mcs_face_detection_frame: mcs_face_detection_frame, //人脸检测画框
+                mcs_sound_sensitivity: mcs_sound_sensitivity, //声音灵敏度
+                mcs_sound: mcs_sound, //声音
+                mcs_delete: mcs_delete, //删除
+                mcs_are_you_sure_delete: mcs_are_you_sure_delete, //是否删除
+                mcs_ok: mcs_ok, //确定
+                mcs_cancel: mcs_cancel, //取消
 
                 deviceID: '', //设备号
                 input_threshold: 0, //移动侦测白天灵敏度
@@ -293,17 +293,17 @@
         watch: {
             input_threshold(val) {
                 if (val && this.$refs.threshold) {
-                    this.$refs.threshold.style.backgroundSize = val + '%';
+                    this.$refs.threshold.style.backgroundSize = val + '% 100%';
                 }
             },
             input_thresholdLevelNight(val) {
                 if (val && this.$refs.thresholdLevelNight) {
-                    this.$refs.thresholdLevelNight.style.backgroundSize = val + '%';
+                    this.$refs.thresholdLevelNight.style.backgroundSize = val + '% 100%';
                 }
             },
             input_sound_threshold(val) {
                 if (val && this.$refs.sound_threshold) {
-                    this.$refs.sound_threshold.style.backgroundSize = val + '%';
+                    this.$refs.sound_threshold.style.backgroundSize = val + '% 100%';
                 }
             },
             mobile_tracking_sign(val) {
@@ -327,7 +327,7 @@
     }
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
     @import "../../../css/public.scss";
 
     #scene_page {
@@ -342,15 +342,21 @@
     }
 
     #scene_page_box {
-        width: 660px;
-        min-height: 500px;
-        background: #fff;
-        padding-bottom: 10px;
-        border-radius: 5px;
-        position: absolute;
-        left: 50%;
-        top: 6%;
-        margin-left: -330px;
+      width: 660px;
+      min-height: 500px;
+      background: #fff;
+      padding-bottom: 10px;
+      border-radius: 5px;
+      position: absolute;
+      left: 50%;
+      top: 6%;
+      margin-left: -330px;
+      .options_float_right input {
+        font-size: 15px;
+        color: $projectColor;
+        height: 2px;
+        margin: 12px 0;
+      }
     }
 
     #attachmen_box_close {

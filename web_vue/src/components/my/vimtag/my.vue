@@ -527,7 +527,7 @@
     }
 </script>
 
-<style src="./index.scss" lang='scss' scoped>
+<style src="./index.scss" lang='scss'>
     #set_auto_play_box {
         display: flex;
         justify-content: space-between;

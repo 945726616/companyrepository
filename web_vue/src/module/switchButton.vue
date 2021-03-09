@@ -39,7 +39,7 @@
     }
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
     @import "../css/public.scss";
 
     .weui-switch {

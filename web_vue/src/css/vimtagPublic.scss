@@ -5794,4 +5794,11 @@ input[type=radio]:checked:before {
 input[type=range] {
 	background: -webkit-linear-gradient($projectColor, $projectColor) no-repeat, #c0c0c0;
 }
+.dropdownMenu .clickMenu, .dropdownMenu .selectBox{
+	border: 1px solid $projectColor;
+}
+.weui-switch-on {
+	border-color: $projectColor;
+	background-color: $projectColor !important;
+}
 // 样式颜色 结束

@@ -1264,6 +1264,7 @@ input[type="number"] {
 	min-width: 234px;
 	float: left;
 	background: #e6e9f0;
+  margin-left: 8px;
 }
 
 .list_idle_div {
@@ -1376,9 +1377,9 @@ input[type="number"] {
 }
 
 .options_float_left {
-	clear: both;
-	float: left;
-	margin-top: 13px;
+	// clear: both;
+	// float: left;
+	// margin-top: 13px;
 	color: #6b7a99;
 }
 
@@ -4713,7 +4714,22 @@ div.ibutton-label-on {
 #adjust_reset{
 	background-color: $projectColor;
 }
+.mode_cha {
+	color: $projectColor;
+	border: 1px solid $projectColor;
+}
+.mode_cha_active{
+	background-color: $projectColor;
+	border: 1px solid $projectColor;
+}
 input[type=range] {
 	background: -webkit-linear-gradient($projectColor, $projectColor) no-repeat, #c0c0c0;
+}
+.dropdownMenu .clickMenu, .dropdownMenu .selectBox{
+	border: 1px solid $projectColor;
+}
+.weui-switch-on {
+	border-color: $projectColor;
+	background-color: $projectColor !important;
 }
 // 样式颜色 结束
