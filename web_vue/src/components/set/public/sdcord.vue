@@ -77,18 +77,18 @@
         data() {
             return {
                 //多国语言
-                mcs_enabled: mcs_enabled,
-                mcs_status: mcs_status,
-                mcs_capacity: mcs_capacity,
-                mcs_valid: mcs_valid,
-                mcs_sd_first: mcs_sd_first,
-                mcs_sd_nospace: mcs_sd_nospace,
-                mcs_how_to_export_sd: mcs_how_to_export_sd,
-                mrs_login_please: mrs_login_please,
-                mcs_hard_disk_title_1: mcs_hard_disk_title_1,
-                mrs_sd_export_tips: mrs_sd_export_tips,
-                mcs_format: mcs_format,
-                mcs_action_apply: mcs_action_apply,
+                mcs_enabled: mcs_enabled, //启用状态
+                mcs_status: mcs_status, //状态
+                mcs_capacity: mcs_capacity, //容量
+                mcs_valid: mcs_valid, //启用
+                mcs_sd_first: mcs_sd_first, //1.当SD卡第一次插入摄像机使用时，摄像机会对SD卡自动格式化
+                mcs_sd_nospace: mcs_sd_nospace, //当SD卡没有可使用空间时，会对最早空间进行覆盖
+                mcs_how_to_export_sd: mcs_how_to_export_sd, //如何导出SD卡数据
+                mrs_login_please: mrs_login_please, //请登录
+                mcs_hard_disk_title_1: mcs_hard_disk_title_1, //当硬盘没有可使用空间时，会对最早空间进行覆盖
+                mrs_sd_export_tips: mrs_sd_export_tips, //在【下载】页面中下载sdtool电脑客户端,导出SD卡数据
+                mcs_format: mcs_format, //格式化
+                mcs_action_apply: mcs_action_apply, //应用
 
                 project_name: '', //项目名
                 switch_flag: true, //启动状态

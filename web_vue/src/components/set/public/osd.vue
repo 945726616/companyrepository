@@ -48,16 +48,14 @@
         data() {
             return {
                 //多国语言
-                mcs_display_text: mcs_display_text,
-                mcs_name: mcs_name,
-                mcs_display_date: mcs_display_date,
-                mcs_date_format: mcs_date_format,
-                mcs_display_time: mcs_display_time,
-                mcs_time_format: mcs_time_format,
-                mcs_12_hour: mcs_12_hour,
-                mcs_24_hour: mcs_24_hour,
-                mcs_display_weeks: mcs_display_weeks,
-                mcs_apply: mcs_apply,
+                mcs_display_text: mcs_display_text, //显示名称
+                mcs_name: mcs_name, //名称
+                mcs_display_date: mcs_display_date, //显示日期
+                mcs_date_format: mcs_date_format, //日期格式
+                mcs_display_time: mcs_display_time, //显示时间
+                mcs_time_format: mcs_time_format, //时间格式
+                mcs_display_weeks: mcs_display_weeks, //显示星期
+                mcs_apply: mcs_apply, //应用
 
                 input_display_name: '', //名称
                 date_format_array: ['MM-DD-YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY'], //日期格式数组

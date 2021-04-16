@@ -19,7 +19,7 @@
         data() {
             return {
                 //多国语言
-                mcs_motion_detection: mcs_motion_detection,
+                mcs_motion_detection: mcs_motion_detection, //移动侦测
 
                 setScenePage: false, //控制弹窗是否显示
                 setScenePageObj: {}, //控制弹窗展示对象

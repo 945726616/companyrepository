@@ -749,11 +749,11 @@ $projectColor: #2988cc !global;
 	margin-top: 30px;
 }
 
-#boxlist_menu_box {
-	width: 100%;
-	height: 30px;
-	margin-top: 10px;
-}
+// #boxlist_menu_box {
+// 	width: 100%;
+// 	height: 30px;
+// 	margin-top: 10px;
+// }
 
 /*#boxlist_set_btn{
 	float:left;
@@ -2898,6 +2898,15 @@ input[type="number"] {
 	color: #fff;
 }
 
+#plugin_install_box{ 
+	/*居中显示*/
+    height: 142px;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    margin-top: -71px;
+}
+
 #plugin_install_tips {
 	text-align: center;
 	font-size: 16px;
@@ -2915,6 +2924,7 @@ input[type="number"] {
 	border-radius: 5px;
 	margin-top: 20px;
 	margin-bottom: 28px;
+	cursor: pointer;
 }
 
 #plugin_install_download_name {
@@ -4722,7 +4732,7 @@ div.ibutton-label-on {
 	background-color: $projectColor;
 	border: 1px solid $projectColor;
 }
-input[type=range] {
+input[type='range'] {
 	background: -webkit-linear-gradient($projectColor, $projectColor) no-repeat, #c0c0c0;
 }
 .dropdownMenu .clickMenu, .dropdownMenu .selectBox{

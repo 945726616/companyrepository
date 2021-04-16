@@ -32,13 +32,13 @@
         data() {
             return {
                 //多国语言
-                mcs_model: mcs_model,
-                mcs_manufacturer: mcs_manufacturer,
-                mcs_firmware_version: mcs_firmware_version,
-                mcs_plugin_version: mcs_plugin_version,
-                mcs_device_id: mcs_device_id,
-                mcs_sensor_status: mcs_sensor_status,
-                mcs_fault: mcs_fault,
+                mcs_model: mcs_model, //型号
+                mcs_manufacturer: mcs_manufacturer, //厂商
+                mcs_firmware_version: mcs_firmware_version, //固件版本
+                mcs_plugin_version: mcs_plugin_version, //插件版本
+                mcs_device_id: mcs_device_id, //设备ID
+                mcs_sensor_status: mcs_sensor_status, //Sensor状态
+                mcs_fault: mcs_fault, //故障
 
                 about_info: { //关于信息
                     model: '',
@@ -73,7 +73,6 @@
     .attribute_value_text {
         float: right;
         font-size: 14px;
-        margin-top: 13px;
         margin-right: 10px;
         color: $projectColor;
     }

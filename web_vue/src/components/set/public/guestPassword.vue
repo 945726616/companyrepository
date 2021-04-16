@@ -21,10 +21,10 @@
         data() {
             return {
                 //多国语言
-                mcs_admin_password: mcs_admin_password,
-                mcs_guest_password: mcs_guest_password,
-                mcs_confirm_new_password: mcs_confirm_new_password,
-                mcs_action_apply: mcs_action_apply,
+                mcs_admin_password: mcs_admin_password, //管理密码
+                mcs_guest_password: mcs_guest_password, //访客密码
+                mcs_confirm_new_password: mcs_confirm_new_password, //新密码确认
+                mcs_action_apply: mcs_action_apply, //应用
 
                 admin_pwd_value: '@M!N*T', //管理密码
                 guest_pwd_value: '@M!N*T', //访客密码

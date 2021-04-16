@@ -27,7 +27,8 @@ export default {
   data () {
     return {
       //多国语言
-      mcs_allow_type: mcs_allow_type,
+      mcs_allow_type: mcs_allow_type, //报警类型
+      
       face_detect: '',
       sound_detect: '',
       human_detect: '',

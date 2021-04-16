@@ -13,8 +13,8 @@
         data() {
             return {
                 //多国语言
-                mcs_nickname: mcs_nickname,
-                mcs_action_apply: mcs_action_apply,
+                mcs_nickname: mcs_nickname, //设备昵称
+                mcs_action_apply: mcs_action_apply, //应用
 
                 nickname: '', //设备昵称
             }

@@ -183,7 +183,7 @@
     left: 8px;
 }
 
-input[type=radio]:checked:before {
+input[type='radio']:checked:before {
     content: "\2714";
     color: #fff;
     background-color: $projectColor;
@@ -198,7 +198,7 @@ input[type=radio]:checked:before {
     text-align: center;
 }
 
-input[type=radio] {
+input[type='radio'] {
     margin-right: 6px;
 }
 
@@ -333,13 +333,15 @@ input[type=radio] {
     bottom: 17px;
     right: 11px;
 }
-#calendar_input{
-	/*float:right;
+
+#calendar_input {
+    /*float:right;
 	margin-top:30px; 6.1.2*/
-	top: 50px;
-	right:220px;
+    top: 50px;
+    right: 220px;
     position: absolute;
 }
+
 #history_list_bottom {
     width: 100%;
     height: 60px;
@@ -363,9 +365,9 @@ input[type=radio] {
     /*margin: 0 10px 0 10px;*/
     cursor: pointer;
     /*border:1px solid $projectColor;*/
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    /*border-radius: 2px;*/
+    // -moz-border-radius: 2px;
+    // -webkit-border-radius: 2px;
+    border-radius: 2px;
     text-align: center;
     line-height: 30px;
     /*float:left;*/

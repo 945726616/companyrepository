@@ -120,7 +120,7 @@
                     let username_value = JSON.parse(localStorage.getItem("remember_msg_info")).user;
                     let img = document.getElementById("pre_img");
                     let img_src = '';
-                    if(img.getAttribute('src')){
+                    if (img.getAttribute('src')) {
                         img_src = img.getAttribute("src");
                     }
                     // var params = {

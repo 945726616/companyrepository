@@ -652,11 +652,11 @@ $projectColor: #ff781f !global;
 	float:right;
 	margin-top:30px;
 }
-#boxlist_menu_box{
-	width:100%;
-	height:30px;
-	margin-top:10px;
-}
+// #boxlist_menu_box{
+// 	width:100%;
+// 	height:30px;
+// 	margin-top:10px;
+// }
 /*#boxlist_set_btn{
 	float:left;
 	cursor: pointer;
@@ -2434,6 +2434,16 @@ input[type="number"]{
     display: none;
     color: #fff;
 }
+
+#plugin_install_box{ 
+	/*居中显示*/
+    height: 142px;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    margin-top: -71px;
+}
+
 #plugin_install_tips{
 	text-align: center;
 	font-size: 16px;
@@ -2450,6 +2460,7 @@ input[type="number"]{
 	border-radius: 5px;
 	margin-top:20px;
 	margin-bottom: 28px;
+	cursor: pointer;
 }
 #plugin_install_download_name{
 	padding:0 10px;
@@ -4020,7 +4031,7 @@ line-height: 30px;
 #adjust_reset{
 	background-color: $projectColor;
 }
-input[type=range] {
+input[type='range'] {
 	background: -webkit-linear-gradient($projectColor, $projectColor) no-repeat, #c0c0c0;
 }
 .dropdownMenu .clickMenu, .dropdownMenu .selectBox{

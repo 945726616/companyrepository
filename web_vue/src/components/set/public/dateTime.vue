@@ -48,15 +48,15 @@
         data() {
             return {
                 //多国语言
-                mcs_date: mcs_date,
-                mcs_year: mcs_year,
-                mcs_month: mcs_month,
-                mcs_day: mcs_day,
-                mcs_time: mcs_time,
-                mcs_time_zone: mcs_time_zone,
-                mcs_auto_sync_date_time: mcs_auto_sync_date_time,
-                mcs_ntp: mcs_ntp,
-                mcs_apply: mcs_apply,
+                mcs_date: mcs_date, //日期
+                mcs_year: mcs_year, //年
+                mcs_month: mcs_month, //月
+                mcs_day: mcs_day, //日
+                mcs_time: mcs_time, //时间
+                mcs_time_zone: mcs_time_zone, //时区
+                mcs_auto_sync_date_time: mcs_auto_sync_date_time, //自动设置日期和时间
+                mcs_ntp: mcs_ntp, //时间服务器地址
+                mcs_apply: mcs_apply, //应用
 
                 auto_sync_sign: '', //是否自动设置时间
                 time_zone_list: [], //获取的时区列表
@@ -247,5 +247,10 @@
         border-radius: 4px;
         border: 1px solid $projectColor;
         text-align: center;
+    }
+
+    #date_info .options_float_right {
+        display: flex;
+        align-items: center;
     }
 </style>

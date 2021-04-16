@@ -9,7 +9,7 @@
         data() {
             return {
                 //多国语言
-                mcs_delete_device: mcs_delete_device,
+                mcs_delete_device: mcs_delete_device, //删除设备
             }
         },
         methods: {
@@ -22,10 +22,10 @@
                         }).then(res => {
                             this.publicFunc.msg_tips({ msg: res.msg, type: res.type, timeout: 3000 })
                             if (res.type === "success") {
-                                setTimeout(()=>{
-                                    this.$router.push({name:'devlist'})
+                                setTimeout(() => {
+                                    this.$router.push({ name: 'devlist' })
                                     window.location.reload()
-                                },1000)
+                                }, 1000)
                             }
                         })
                     }

@@ -100,14 +100,14 @@
         data() {
             return {
                 // 多国语言
-                mcs_select: mcs_select,
-                mcs_accessory_type: mcs_accessory_type,
-                mcs_magnetic: mcs_magnetic,
-                mcs_sos: mcs_sos,
-                mcs_add_accessory: mcs_add_accessory,
-                mcs_search: mcs_search,
-                mcs_ok: mcs_ok,
-                mcs_device_id: mcs_device_id,
+                mcs_select: mcs_select, //请选择
+                mcs_accessory_type: mcs_accessory_type, //附件类型
+                mcs_magnetic: mcs_magnetic, //门磁
+                mcs_sos: mcs_sos, //紧急按钮
+                mcs_add_accessory: mcs_add_accessory, //添加附件
+                mcs_search: mcs_search, //搜索
+                mcs_ok: mcs_ok, //确定
+                mcs_device_id: mcs_device_id, //设备ID
 
                 sence_data: '',
                 accessory_data: [],
@@ -378,7 +378,7 @@
                 this.scene_list_add_page = "create_secne"
                 let project_name = this.$store.state.jumpPageData.projectName;
                 if (obj.result) {
-                    switch (project_name){
+                    switch (project_name) {
                         case "vimtag":
                             this.content_img = "background:url(" + require("@/assets/device/success.png") + ") no-repeat;";
                             break;
@@ -392,7 +392,7 @@
                     this.content_text = mcs_add_successfully;
                     this.content_btn = mcs_ok;
                 } else {
-                    switch (project_name){
+                    switch (project_name) {
                         case "vimtag":
                             this.content_img = "background:url(" + require("@/assets/device/fail.png") + ") no-repeat;"
                             break;

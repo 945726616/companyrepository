@@ -5,13 +5,13 @@
             <div class='attribute_key_text'> {{mcs_network_interface}} </div>
             <div class='options_float_right select_block' style='margin-top:0px;'>
                 <dropdown-menu :menuData="network_card_array" :showData='network_card' @data_updata_event='network_card_updata'></dropdown-menu>
-        </div>
+            </div>
         </div>
         <div class='list_right_item_ex'>
             <!-- 启动 -->
             <div class='attribute_key_text'> {{mcs_enabled}} </div>
             <switch-button v-model='nic_enabled_sign' @data_updata_event='nic_enabled_updata'></switch-button>
-            </div>
+        </div>
         <div id='nic_enabled_content'>
             <div id='mac_address' class='list_right_item'>
                 <div class='attribute_key_text'> {{mcs_mac_address}} </div>
@@ -165,31 +165,28 @@
         data() {
             return {
                 //多国语言
-                mcs_network_interface: mcs_network_interface,
-                mcs_enabled: mcs_enabled,
-                mcs_mac_address: mcs_mac_address,
-                mcs_wifi_mode: mcs_wifi_mode,
-                mcs_client: mcs_client,
-                mcs_ap: mcs_ap,
-                mcs_network_status: mcs_network_status,
-                mcs_not_connected: mcs_not_connected,
-                mcs_dhcp: mcs_dhcp,
-                mcs_start_address: mcs_start_address,
-                mcs_end_address: mcs_end_address,
-                mcs_gateway: mcs_gateway,
-                mcs_select_network: mcs_select_network,
-                mcs_wifi_list: mcs_wifi_list,
-                mcs_refresh: mcs_refresh,
-                mcs_input_wifi_name: mcs_input_wifi_name,
-                mcs_password: mcs_password,
-                mcs_connect: mcs_connect,
-                mcs_auto_obtain: mcs_auto_obtain,
-                mcs_ip_address: mcs_ip_address,
-                mcs_network_mask: mcs_network_mask,
-                mcs_manually_set: mcs_manually_set,
-                mcs_dns: mcs_dns,
-                mcs_secondary_dns: mcs_secondary_dns,
-                mcs_apply: mcs_apply,
+                mcs_network_interface: mcs_network_interface, //网卡
+                mcs_enabled: mcs_enabled, //启用状态
+                mcs_mac_address: mcs_mac_address, //MAC地址
+                mcs_wifi_mode: mcs_wifi_mode, //Wi-Fi模式
+                mcs_network_status: mcs_network_status, //连接状态
+                mcs_dhcp: mcs_dhcp, //DHCP
+                mcs_start_address: mcs_start_address, //开始地址
+                mcs_end_address: mcs_end_address, //结束地址
+                mcs_gateway: mcs_gateway, //网关
+                mcs_select_network: mcs_select_network, //选择网络
+                mcs_wifi_list: mcs_wifi_list, //Wi-Fi列表
+                mcs_refresh: mcs_refresh, //刷新
+                mcs_input_wifi_name: mcs_input_wifi_name, //请输入Wi-Fi名称
+                mcs_password: mcs_password, //密码
+                mcs_connect: mcs_connect, //连接
+                mcs_auto_obtain: mcs_auto_obtain, //自动获取
+                mcs_ip_address: mcs_ip_address, //IP地址
+                mcs_network_mask: mcs_network_mask, //子网掩码
+                mcs_manually_set: mcs_manually_set, //手动设置
+                mcs_dns: mcs_dns, //DNS
+                mcs_secondary_dns: mcs_secondary_dns, //备用DNS
+                mcs_apply: mcs_apply, //应用
 
                 l_dom_button_setup: '',
                 l_dom_radio_auto_obtain_dns: '',
@@ -316,9 +313,9 @@
                                 this.client_wifi = msg_wifi_list[0].ssid;
                             } else {
                                 this.client_wifi = this.client_wifi_array[0];
-                    }
+                            }
 
-                })
+                        })
                     }
                 })
             },
@@ -615,7 +612,7 @@
                                         this.client_wifi = wifi_list[0].ssid; //切换到wifi模式自动获取已连接的wifi名
                                     } else {
                                         this.client_wifi = this.client_wifi_array[0];
-                            }
+                                    }
                                 })
                             }
                         } else if (now_ifs.phy.info.stat == "err") {
@@ -689,7 +686,7 @@
                             return;
                         } else {
                             now_net_info["ifs"] = { token: now_ifs.token, enabled: 0 };
-                    }
+                        }
                     }
                 } else if (obj.type == mcs_wifi) {
                     if (_this.nic_enabled_sign) {
@@ -804,9 +801,9 @@
                                             this.network_card_array.push(mcs_wifi);
                                             if (res[1] && res[1].select == mcs_wifi)
                                                 this.network_card = mcs_wifi;
-                                    }
                                         }
-                                            } else {
+                                    }
+                                } else {
                                     return -1;
                                 }
                             })
@@ -907,13 +904,13 @@
                     this.wifi_mode = '';
                     $(this.l_dom_button_setup).unbind();
                     this.generate_eth_setup_ex(this.network_info[0].networks[selectedIndex]);
-        }
+                }
                 //Select a wireless network
                 else if (val == mcs_wifi) {
                     this.wifi_mode = mcs_client;
                     $(this.l_dom_button_setup).unbind();
                     this.generate_wireless_setup_ex(this.network_info[0].networks[selectedIndex]);
-    }
+                }
                 if (this.network_info[0].dns) {
                     if (this.network_info[0].dns.info.stat == "ok" && !this.$store.state.jumpPageData.projectFlag) { // vimtag特有内容添加
                         if (this.publicFunc.mx("#dns_status")) {

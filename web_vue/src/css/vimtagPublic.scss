@@ -1889,7 +1889,7 @@ div.ibutton-label-on {
     top: 1px;
     left: 8px;
 }
-// input[type=radio]:checked:before{
+// input[type='radio']:checked:before{
 //      content: "\2714";
 //      color:#fff;
 //      background-color: $projectColor;
@@ -1903,7 +1903,7 @@ div.ibutton-label-on {
 //     line-height: 13px;
 //     text-align: center;
 // }
-input[type=radio]{
+input[type='radio']{
     margin-right: 6px;
 }
 
@@ -2363,6 +2363,7 @@ input[type=radio]{
 	border-radius: 5px;
 	margin-top:20px;
 	margin-bottom: 28px;
+	cursor: pointer;
 }
 #plugin_install_download_name{
 	/*width:110px;*/
@@ -5692,7 +5693,7 @@ line-height: 30px;
 .filter_btn{
   border-color: $projectColor;
 }
-input[type=radio]:checked:before {
+input[type='radio']:checked:before {
   background-color: $projectColor;
 }
 .page_num_btn_no {
@@ -5761,9 +5762,6 @@ input[type=radio]:checked:before {
 .options_float_right {
   color: $projectColor;
 }
-.options_float_right input {
-  color: $projectColor;
-}
 .normal_input_right {
   color: $projectColor;
 }
@@ -5791,7 +5789,7 @@ input[type=radio]:checked:before {
 #bottom_select_lang:hover {
   color: $projectColor;
 }
-input[type=range] {
+input[type='range'] {
 	background: -webkit-linear-gradient($projectColor, $projectColor) no-repeat, #c0c0c0;
 }
 .dropdownMenu .clickMenu, .dropdownMenu .selectBox{

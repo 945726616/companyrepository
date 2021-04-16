@@ -36,13 +36,13 @@
         data() {
             return {
                 //多国语言
-                mcs_IR_mode: mcs_IR_mode,
-                mcs_IR_mode_detail: mcs_IR_mode_detail,
-                mcs_white_light_mode: mcs_white_light_mode,
-                mcs_white_light_mode_detail: mcs_white_light_mode_detail,
-                mcs_smart_mode: mcs_smart_mode,
-                mcs_smart_mode_detail: mcs_smart_mode_detail,
-                mcs_action_apply: mcs_action_apply,
+                mcs_IR_mode: mcs_IR_mode, //红外模式
+                mcs_IR_mode_detail: mcs_IR_mode_detail, //选择红外模式后，在夜间光线不足时，红外线开启
+                mcs_white_light_mode: mcs_white_light_mode, //白光模式
+                mcs_white_light_mode_detail: mcs_white_light_mode_detail, //选择白光模式后，在夜间光线不足时，白光灯开启
+                mcs_smart_mode: mcs_smart_mode, //智能模式
+                mcs_smart_mode_detail: mcs_smart_mode_detail, //选择智能模式后，在夜间光线不足时，默认为红外灯，如有物体移动时，切换为白光灯，白光灯时间持续一分钟
+                mcs_action_apply: mcs_action_apply, //应用
 
                 light_mode: '', //灯光模式
                 project_name: '', //项目名
@@ -95,13 +95,14 @@
         width: 520px;
         margin: 0 auto;
     }
-
-    input[type='radio'] {
+    #lighting_page {
+      input[type='radio'] {
         appearance: none;
         -webkit-appearance: none;
         outline: none;
         margin: 0;
         vertical-align: text-bottom;
         margin-right: 0.1rem;
+      }
     }
 </style>

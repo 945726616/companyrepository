@@ -195,6 +195,7 @@ const play = {
               location.href = "https://www.adobe.com/go/getflashplayer";
             }
             if (flash_isplay) clearInterval(flash_isplay);
+            // publicFunc.log_upload('play', 'success') //记录日志：实时播放成功(无flash)
             flash_isplay = setInterval(function () {
               flash_play()
             }, 1000);
@@ -278,11 +279,31 @@ const play = {
             play_oem = "VSMAHOME";
           }
           // if(store.state.jumpPageData.projectName=="vimtag"){
+
+          // obj.panel.innerHTML = "<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>" +
+          //   "<div id='plugin_install_tips'>" + mcs_download_client + "</div>" +
+          //   "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.playDownloadUrl + "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>" +
+          //   "<div style='margin-top: 85px;'><a name='flash' href='javascript:;'><div id='use_ordinary_video'>" + mcs_temporarily_installed_use_ordinary_video + "</div></a></div>" +
+          //   "</div>" //旧版download,暂时无用(若由https访问进来时，下载页访问不了)
+
           obj.panel.innerHTML = "<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>" +
             "<div id='plugin_install_tips'>" + mcs_download_client + "</div>" +
-            "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.playDownloadUrl + "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>" +
+            "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><div id='plugin_install_download_btn'></div></div>" +
             "<div style='margin-top: 85px;'><a name='flash' href='javascript:;'><div id='use_ordinary_video'>" + mcs_temporarily_installed_use_ordinary_video + "</div></a></div>" +
             "</div>"
+          
+          $("#plugin_install_download").on('click',()=>{
+            if(store.state.jumpPageData.projectName === 'ebitcam'){
+              window.open("http://www.ebitcam.com/download")
+            }else if(store.state.jumpPageData.projectName === 'mipcm'){
+              window.open("http://www.mipcm.com/download")
+            }else if(store.state.jumpPageData.projectName === 'vsmahome'){
+              window.open("http://www.vsmahome.com/download")
+            }else{
+              window.open("http://www.vimtag.com/download")
+            }
+          })
+          
           let plugin_install_page_width = $("#plugin_install_page").outerWidth() / 2;
           let plugin_install_download_width = $("#plugin_install_download").outerWidth() / 2;
           // jQuery("#use_ordinary_video").css({"margin-left":(plugin_install_page_width-use_ordinary_video_width)+"px"});
@@ -296,6 +317,7 @@ const play = {
 
     async function play_ack (msg, ref) {
       if (msg.result == "") {
+        // publicFunc.log_upload('play', 'success') //记录日志：实时播放成功(mme,flash)
         return await chl_video_create({
           type: msg.type,
           uri: msg.url,
@@ -304,6 +326,7 @@ const play = {
           isDownload: ref.isDownload
         });
       } else {
+        // publicFunc.log_upload('play', 'fail', msg.result) //记录日志：实时播放失败，失败原因
         if (msg.result == "accounts.user.offline") { //6.1.1
           publicFunc.msg_tips({
             msg: mcs_video_play_offline,

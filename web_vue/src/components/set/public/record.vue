@@ -67,14 +67,14 @@
         data() {
             return {
                 //多国语言
-                mcs_continuous_recording: mcs_continuous_recording,
-                mcs_Event_record: mcs_Event_record,
-                mcs_mode: mcs_mode,
-                mcs_normal_mode: mcs_normal_mode,
-                mcs_long_video_mode: mcs_long_video_mode,
-                mcs_super_long_video_mode: mcs_super_long_video_mode,
-                mcs_apply: mcs_apply,
-                mcs_turn_off: mcs_turn_off,
+                mcs_continuous_recording: mcs_continuous_recording, //持续录像
+                mcs_Event_record: mcs_Event_record, //事件录像
+                mcs_mode: mcs_mode, //模式
+                mcs_normal_mode: mcs_normal_mode, //普通模式
+                mcs_long_video_mode: mcs_long_video_mode, //长录像模式
+                mcs_super_long_video_mode: mcs_super_long_video_mode, //超长录像模式
+                mcs_apply: mcs_apply, //应用
+                mcs_turn_off: mcs_turn_off, //关
 
                 face_detect: '',
                 sound_detect: '',
@@ -809,14 +809,15 @@
         color: #000;
         margin-top: 20px;
     }
-
-    input[type='radio'] {
+    #record {
+      input[type='radio'] {
         appearance: none;
         -webkit-appearance: none;
         outline: none;
         margin: 0;
         vertical-align: text-bottom;
         margin-right: 0.1rem;
+      }
     }
 
     .record_sd_calculate {

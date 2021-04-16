@@ -19,24 +19,24 @@
             </div>
             <div id='create_setting_page_right' :style='project_flag?"margin-top:40px":""'>
                 <keep-alive>
-                    <about-info v-if="right_show_sign.about" @system_new_event='system_new_sign_event'></about-info>   <!-- 关于 -->
-                    <nickname v-if="right_show_sign.nickname"></nickname>  <!-- 设备昵称 -->
-                    <admin-password v-if="right_show_sign.admin_password"></admin-password>  <!-- 管理密码 -->
-                    <guest-password v-if="right_show_sign.guest_password"></guest-password>  <!-- 访客密码 -->
-                    <osd v-if="right_show_sign.osd"></osd>  <!-- OSD -->
-                    <record v-if="right_show_sign.record"></record>  <!-- 录像 -->
-                    <accessory v-if="right_show_sign.accessory"></accessory>  <!-- 外设 -->
-                    <alarm v-if="right_show_sign.alarm_device_tips"></alarm>  <!-- 报警 -->
-                    <date-time v-if="right_show_sign.date_time"></date-time>  <!-- 日期时间 -->
-                    <system v-if="right_show_sign.system"></system>  <!-- 系统 -->
-                    <others v-if="right_show_sign.others"></others>  <!-- 其他 -->
+                    <about-info v-if="right_show_sign.about" @system_new_event='system_new_sign_event'></about-info> <!-- 关于 -->
+                    <nickname v-if="right_show_sign.nickname"></nickname> <!-- 设备昵称 -->
+                    <admin-password v-if="right_show_sign.admin_password"></admin-password> <!-- 管理密码 -->
+                    <guest-password v-if="right_show_sign.guest_password"></guest-password> <!-- 访客密码 -->
+                    <osd v-if="right_show_sign.osd"></osd> <!-- OSD -->
+                    <record v-if="right_show_sign.record"></record> <!-- 录像 -->
+                    <accessory v-if="right_show_sign.accessory"></accessory> <!-- 外设 -->
+                    <alarm v-if="right_show_sign.alarm_device_tips"></alarm> <!-- 报警 -->
+                    <date-time v-if="right_show_sign.date_time"></date-time> <!-- 日期时间 -->
+                    <system v-if="right_show_sign.system"></system> <!-- 系统 -->
+                    <others v-if="right_show_sign.others"></others> <!-- 其他 -->
                     <motion-detect v-if="right_show_sign.motion_detect"></motion-detect> <!-- 移动侦测 -->
-                    <lighting v-if="right_show_sign.lighting"></lighting>  <!-- 灯光模式 -->
-                    <delete-device v-if="right_show_sign.delete_device"></delete-device>  <!-- 删除设备 -->
+                    <lighting v-if="right_show_sign.lighting"></lighting> <!-- 灯光模式 -->
+                    <delete-device v-if="right_show_sign.delete_device"></delete-device> <!-- 删除设备 -->
                 </keep-alive>
-                <network v-if="right_show_sign.network"></network>  <!-- 网络 -->
-                <sdcord v-if="right_show_sign.sdcord" :info='info_data'></sdcord>  <!-- SD卡 -->
-                <storage-device v-if="right_show_sign.storage_device"></storage-device>  <!-- 存储设备 -->
+                <network v-if="right_show_sign.network"></network> <!-- 网络 -->
+                <sdcord v-if="right_show_sign.sdcord" :info='info_data'></sdcord> <!-- SD卡 -->
+                <storage-device v-if="right_show_sign.storage_device"></storage-device> <!-- 存储设备 -->
             </div>
         </div>
     </div>
@@ -68,8 +68,8 @@
         data() {
             return {
                 //多国语言
-                mcs_back: mcs_back,
-                mcs_delete_device: mcs_delete_device,
+                mcs_back: mcs_back, //返回
+                mcs_delete_device: mcs_delete_device, //删除设备
 
                 project_flag: 0, //判断是否为vimtag
                 project_name: '', //项目名

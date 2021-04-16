@@ -40,11 +40,11 @@
         data() {
             return {
                 //多国语言
-                mcs_enabled: mcs_enabled,
-                mcs_device_id: mcs_device_id,
-                mcs_password: mcs_password,
-                mcs_network_status: mcs_network_status,
-                mcs_apply: mcs_apply,
+                mcs_enabled: mcs_enabled, //启用状态
+                mcs_device_id: mcs_device_id, //设备ID
+                mcs_password: mcs_password, //密码
+                mcs_network_status: mcs_network_status, //连接状态
+                mcs_apply: mcs_apply, //应用
 
                 input_device_id: '', //设备ID
                 input_password: '', //密码

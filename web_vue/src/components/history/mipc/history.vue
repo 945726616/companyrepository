@@ -206,7 +206,7 @@
                         let l_dom_video_list_picture = _this.publicFunc.mx(".video_list_picture"); // nodeList 需要转换成普通数组之后才能显示正常的数组内容不会多出多余杂项
                         for (let i in l_dom_video_list_picture) {
                             if (l_dom_video_list_picture[i].parentNode) {
-                                l_dom_video_list_picture[i].setAttribute('src',' ')
+                                l_dom_video_list_picture[i].setAttribute('src', ' ')
                             }
                         }
                         _this.$api.history.history_img_get({
@@ -255,4 +255,4 @@
 
 <style src="./index.scss" lang='scss'>
 
-</style>                                                    
+</style>

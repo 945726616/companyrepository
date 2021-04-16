@@ -16,11 +16,11 @@
         </div>
         <div :class='project_flag?"system_class list_right_item":"list_right_item"' v-if='networkEnviron === "private"'>
             <!-- ？上传升级 -->
-            <div class=' options_float_left'> {{mcs_upload_upgrade}} </div>
+            <div class='options_float_left'> {{mcs_upload_upgrade}} </div>
             <div id='file_upload_div' class='options_float_right' style='position:relative;right:40px;top:10px;cursor:pointer;'></div>
         </div>
         <div id='activation_div' :class='project_flag?"system_class list_right_item":"list_right_item"' v-if='activation_div_sign'>
-            <div class=' options_float_left'> {{mcs_activation}} </div>
+            <div class='options_float_left'> {{mcs_activation}} </div>
             <div class='options_float_right'>
                 <input type='text' id='input_activation' class='vimtag_service_address' v-model='input_activation' />
                 <button id='button_activation' class='list_right_button_ex' @click='activation_btn'> {{mcs_activate}} </button>
@@ -28,14 +28,14 @@
         </div>
         <div :class='project_flag?"system_class list_right_item":"list_right_item"'>
             <!-- 恢复出厂设置 -->
-            <div class=' options_float_left'> {{mcs_restore_the_factory_settings}} </div>
+            <div class='options_float_left'> {{mcs_restore_the_factory_settings}} </div>
             <div class='options_float_right options_float_right_button'>
                 <button id='button_restore_default_settings' class='list_right_button_ex' @click='restore_btn'> {{mcs_restore}} </button>
             </div>
         </div>
         <div :class='project_flag?"system_class list_right_item":"list_right_item"'>
             <!-- 重启 -->
-            <div class=' options_float_left'> {{mcs_restore_camera}} </div>
+            <div class='options_float_left'> {{mcs_restore_camera}} </div>
             <div class='options_float_right options_float_right_button'>
                 <button id='button_restart_device' class='list_right_button_ex' @click="restart_btn"> {{mcs_reboot}} </button>
             </div>
@@ -49,16 +49,16 @@
         data() {
             return {
                 //多国语言
-                mcs_upload_upgrade: mcs_upload_upgrade,
-                mcs_activation: mcs_activation,
-                mcs_activate: mcs_activate,
-                mcs_restore_the_factory_settings: mcs_restore_the_factory_settings,
-                mcs_restore_camera: mcs_restore_camera,
-                mcs_restore: mcs_restore,
-                mcs_reboot: mcs_reboot,
-                mcs_new_version: mcs_new_version,
-                mcs_valid: mcs_valid,
-                mcs_upgrade: mcs_upgrade,
+                mcs_upload_upgrade: mcs_upload_upgrade, //上传升级
+                mcs_activation: mcs_activation, //激活码
+                mcs_activate: mcs_activate, //激活
+                mcs_restore_the_factory_settings: mcs_restore_the_factory_settings, //恢复出厂设置
+                mcs_restore_camera: mcs_restore_camera, //设备重启
+                mcs_restore: mcs_restore, //恢复
+                mcs_reboot: mcs_reboot, //重启
+                mcs_new_version: mcs_new_version, //有新版本
+                mcs_valid: mcs_valid, //启用
+                mcs_upgrade: mcs_upgrade, //升级
 
                 networkEnviron: '',
                 project_flag: 0, //是否为vimtag

@@ -165,11 +165,31 @@ const playback = {
             play_oem = "VSMAHOME";
           }
           // if(store.state.jumpPageData.projectName=="vimtag"){
+
+          // obj.panel.innerHTML = "<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>"
+          //   + "<div id='plugin_install_tips'>" + mcs_download_client + "</div>"
+          //   + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.playDownloadUrl + "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>"
+          //   + "<div style='margin-top: 85px;'><a name='flash' href='javascript:;'><div id='use_ordinary_video'>" + mcs_temporarily_installed_use_ordinary_video + "</div></a></div>"
+          //   + "</div>"//旧版download,暂时无用(若由https访问进来时，下载页访问不了)
+
           obj.panel.innerHTML = "<div id='plugin_install_box' style='" + (data.ipc_stat === 0 ? 'display:none' : '') + "'>"
             + "<div id='plugin_install_tips'>" + mcs_download_client + "</div>"
-            + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><a href='" + store.state.jumpPageData.playDownloadUrl + "' target='_blank'><div id='plugin_install_download_btn'></div></a></div>"
+            + "<div id='plugin_install_download'><div id='plugin_install_download_name'>" + play_oem + " " + mcs_client_new + "</div><div id='plugin_install_download_btn'></div></div>"
             + "<div style='margin-top: 85px;'><a name='flash' href='javascript:;'><div id='use_ordinary_video'>" + mcs_temporarily_installed_use_ordinary_video + "</div></a></div>"
             + "</div>"
+
+          $("#plugin_install_download").on('click',()=>{
+            if(store.state.jumpPageData.projectName === 'ebitcam'){
+              window.open("http://www.ebitcam.com/download")
+            }else if(store.state.jumpPageData.projectName === 'mipcm'){
+              window.open("http://www.mipcm.com/download")
+            }else if(store.state.jumpPageData.projectName === 'vsmahome'){
+              window.open("http://www.vsmahome.com/download")
+            }else{
+              window.open("http://www.vimtag.com/download")
+            }
+          })
+
           let plugin_install_page_width = $("#plugin_install_page").outerWidth() / 2;
           let plugin_install_download_width = $("#plugin_install_download").outerWidth() / 2;
           // jQuery("#use_ordinary_video").css({"margin-left":(plugin_install_page_width-use_ordinary_video_width)+"px"});
@@ -182,8 +202,20 @@ const playback = {
       console.log('进入play_ack')
       // console.log(msg, ref, 'play_ack_ref_msg')
       if (msg.result == "") {
+        // if(data.box_ipc) { //云盒子
+        //   publicFunc.log_upload('playback_box', 'success')  //记录日志：云盒子录像播放成功
+        // }else{ //sd卡
+        //   publicFunc.log_upload('playback_sd', 'success') //记录日志：sd卡录像播放成功
+        // }
+        
         await chl_video_create({ type: msg.type, uri: msg.url, inner_window_info: ref.inner_window_info, localPath: ref.localPath, isDownload: ref.isDownload });
       } else {
+        // if(data.box_ipc) { //云盒子
+        //   publicFunc.log_upload('playback_box', 'fail', msg.result) //记录日志：云盒子录像播放失败，失败原因
+        // }else{ //sd卡
+        //   publicFunc.log_upload('playback_sd', 'fail', msg.result) //记录日志：sd卡录像播放失败，失败原因
+        // }
+        
         if (msg.result == "accounts.user.offline") { //6.1.1
           publicFunc.msg_tips({ msg: mcs_video_play_offline, type: "error", timeout: 3000 })
         } else if (msg.result == "ccm.system.err") { //临时解决一下
