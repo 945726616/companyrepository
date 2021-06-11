@@ -1,0 +1,158 @@
+
+*{
+	margin: 0;
+	padding:0;
+}
+a{
+	text-decoration: none;
+}
+a:hover{
+	background-color:#03cced;	
+}
+#top{
+	 margin: 40px;
+	 width:90%;
+	 float:left;
+ }
+#top_left{
+	float: left;
+	width:50%;
+}
+#logo{
+	width:90px;
+	float:left;
+	margin-right:15px;
+}
+#logo img{
+	width:100%;
+}
+#top_info{
+	float:left;
+}
+#name{
+	font-size: 18px;
+}
+#size,#version{
+	color:#555;
+}
+#size{
+	line-height: 50px;
+}
+#download{
+	width:224px;
+	float:right;
+}
+#normal_download{
+	color:#000;
+	width:200px;
+	border:1px solid #fff;
+	background: #fff;
+	/*border-top-right-radius:5px;
+	border-top-left-radius:5px;*/
+	text-align: center;
+	line-height: 30px;
+/*	position: absolute;*/
+}
+.down_span{
+	margin-right: 40px;
+
+}
+
+#down_arrow{
+	margin-top: 18px;
+	float: right;
+	margin-right: 40px;
+}
+.img_span{
+	float: left;;
+	margin-left: 40px;
+}
+
+#choose_download{
+	display: none;
+	position: absolute;
+	top:102px;
+	z-index: 1003;
+}
+
+#app_download{
+	margin-top:20px;
+	width:70px;
+	height: 40px;
+	border:1px solid #45A7B0;
+	background: #45A7B0;
+	border-radius:0px 5px 5px 0px;
+	text-align: center;
+	line-height: 40px;
+	color:#fff;
+	float:left;
+}
+
+#PC_download, #Android_download, #iPhone_download,#Mac_download,#SD_download{
+	color:#fff;
+	width:222px;
+	border:1px solid #555;
+	background: #fff;
+	text-align: right;
+	line-height: 36px;
+	height: 36px;
+  display: none;
+	/* display: inline-block; */
+/*	position:absolute;*/
+/*	z-index: 1002;*/
+}
+
+#Mac_download{
+	border-radius: 0px 0px 5px 5px;
+}
+
+
+#fast_download{
+	margin-top:20px;
+	width:200px;
+	border:1px solid #45A7B0;
+	background: #45A7B0;
+	border-radius: 5px;
+	text-align: center;
+	line-height: 30px;
+	color:#fff;
+}
+
+#content{
+	float:left;
+	clear: both;
+	width:100%;
+	border-top:1px solid #555;
+}
+#content_img{
+	margin: 20px auto;
+	width:550px;
+}
+#content_img img{
+	width:100%;
+}
+#introduction{
+	float:left;
+	clear: both;
+	margin: 20px;
+}
+#introduction_content{
+	margin-top:10px;
+	color:#555;
+	font-size: 14px;
+}
+#download_url{
+	margin-top:20px;
+	width:150px;
+	height: 40px;
+	border:1px solid #45A7B0;
+	background: #45A7B0;
+	border-radius:5px 0px 0px 5px;
+	text-align: center;
+	line-height: 40px;
+	color:#fff;
+	float:left;
+}
+/* #download_box{
+	float:right;
+} */

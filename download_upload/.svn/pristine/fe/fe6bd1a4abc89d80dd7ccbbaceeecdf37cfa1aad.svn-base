@@ -1,0 +1,110 @@
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html" charset="utf-8">
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=2.0' />
+  <script type="text/javascript">
+    function start() {
+      s = document.createElement("script");
+      s.setAttribute("type", "text/javascript");
+      s.setAttribute("src", "/cmipcgw/cmipcgw_get_req.js");
+      document.getElementsByTagName('head').item(0).appendChild(s);
+    }
+
+    function GetUrlParms() {
+      var args, query, pairs;
+      args = new Object();
+      query = location.search.substring(1);
+      pairs = query.split("&");
+      for (var i = 0; i < pairs.length; i++) {
+        var pos = pairs[i].indexOf('=');
+        if (pos == -1) continue;
+        var argname = pairs[i].substring(0, pos);
+        var value = pairs[i].substring(pos + 1);
+        args[argname] = unescape(value);
+      }
+      return args;
+    }
+    function message(obj) {
+      console.log(obj)
+      if (obj && obj.type == "cmipcgw_get_ack") {
+        if (obj && obj.data && obj.data.result == "" && obj.data.server.signal && obj.data.server.signal[0]) {
+          var urlparm = GetUrlParms(), proto = ("https:" == window.location.protocol) ? "https://" : "http://",
+            server_ip = obj.data.server.signal[0].substring(obj.data.server.signal[0].indexOf("//") + 2, obj.data.server.signal[0].lastIndexOf(":")),
+            signal_inland_server_ip = new Array("218.14.146.199", "61.147.109.92", "222.186.3.5"), signal_inland_server_ip_ok = 0;
+          var web_url = window.location.href;
+          var oem_domain = web_url.substring(web_url.indexOf("=") + 1);
+          host_ip = obj.data.server.signal[0].substring(obj.data.server.signal[0].indexOf("//") + 2, obj.data.server.signal[0].lastIndexOf("/"));
+          signal_server_ip = host_ip.substring(0, host_ip.lastIndexOf(":"));
+
+          if (!Array.prototype.indexOf) {
+            Array.prototype.indexOf = function (signal_server_ip) {
+              var len = this.length >>> 0;
+              var from = Number(arguments[1]) || 0;
+              from = (from < 0) ? Math.ceil(from) : Math.floor(from);
+              if (from < 0)
+                from += len;
+              for (; from < len; from++) {
+                if (from in this && this[from] === signal_server_ip)
+                  return from;
+              }
+              return -1;
+            };
+          }
+          if (signal_inland_server_ip.indexOf(signal_server_ip) >= 0) {
+            signal_inland_server_ip_ok = 1;
+          }
+          if (location.href.indexOf("ebitcam.com") > -1) {
+            document.title = "Ebit";
+            var host = location.host;
+            var sur = GetUrlParms.hl ? "&hl=" + GetUrlParms.hl : "";
+            var download_version = "v6.1.1.1901181636";
+            document.body.innerHTML = "<iframe src='" + (("https:" == window.location.protocol) ? https_host : "http://" + host_ip) + "/dcm/static/download/download/download.htm?m=" + host + sur + "&" + download_version + "'></iframe>";
+
+          } else if (location.href.indexOf("vimtag.com") > -1) {
+            var host = location.host;
+            document.title = "vimtag"
+            var sur = GetUrlParms.hl ? "&hl=" + GetUrlParms.hl : "";
+            var download_version = "v6.1.1.1901181636";
+            document.body.innerHTML = "<iframe src='" + (("https:" == window.location.protocol) ? https_host : "http://" + host_ip) + "/dcm/static/download/download/download.htm?m=" + host + sur + "&" + download_version + "'></iframe>";
+          } else if (location.href.indexOf("vsmahome.com") > -1) {
+            var host = location.host;
+            document.title = "vsmahome.com"
+            var sur = GetUrlParms.hl ? "&hl=" + GetUrlParms.hl : "";
+            var download_version = "v6.1.1.1901181636";
+            document.body.innerHTML = "<iframe src='" + (("https:" == window.location.protocol) ? https_host : "http://" + host_ip) + "/dcm/static/download/download/download.htm?m=" + host + sur + "&" + download_version + "'></iframe>";
+          }
+          else {
+            var host = location.host;
+            document.title = "MIPC"
+            var sur = GetUrlParms.hl ? "&hl=" + GetUrlParms.hl : "";
+            var download_version = "v6.1.1.1901181636";
+            document.body.innerHTML = "<iframe src='" + (("https:" == window.location.protocol) ? https_host : "http://" + host_ip) + "/dcm/static/download/download/download.htm?m=" + host + sur + "&" + download_version + "'></iframe>";
+          }
+        }
+      }
+    }
+
+  </script>
+
+  <style type="text/css">
+    html,
+    body,
+    #iframe_div,
+    iframe {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+      border: 0;
+    }
+  </style>
+  <title></title>
+</head>
+
+<body onload="start()">
+</body>
+
+</html>

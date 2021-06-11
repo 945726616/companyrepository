@@ -1,0 +1,1 @@
+function crc32(f,e){var b,c,a,d=crc32.prototype.tbl||(crc32.prototype.tbl=[]);if(0==d.length)for(b=0;256>b;b++){a=b;for(c=0;8>c;c++)a=a>>1&2147483647^(a&1?3988292384:0);d[b]=a}a=f^4294967295;for(b=0;b<e.length;++b)a=d[(a^e.charCodeAt(b))&255]^a>>8&16777215;return(a^4294967295)>>>0};

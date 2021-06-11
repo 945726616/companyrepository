@@ -1,0 +1,11 @@
+java -jar /Volumes/Data/project/src/platforms/win32-x86/bin/compiler.jar --js mlib.core.base.js --js_output_file mlib.core.base.min.js
+java -jar /Volumes/Data/project/src/platforms/win32-x86/bin/compiler.jar --js mlib.core.json.js --js_output_file mlib.core.json.min.js
+java -jar /Volumes/Data/project/src/platforms/win32-x86/bin/compiler.jar --js mlib.core.codec.js --js_output_file mlib.core.codec.min.js
+java -jar /Volumes/Data/project/src/platforms/win32-x86/bin/compiler.jar --js mlib.core.cookie.js --js_output_file mlib.core.cookie.min.js
+java -jar /Volumes/Data/project/src/platforms/win32-x86/bin/compiler.jar --js mlib.core.drag.js --js_output_file mlib.core.drag.min.js
+java -jar /Volumes/Data/project/src/platforms/win32-x86/bin/compiler.jar --js mlib.core.evt.js --js_output_file mlib.core.evt.min.js
+java -jar /Volumes/Data/project/src/platforms/win32-x86/bin/compiler.jar --js mlib.core.hack.js --js_output_file mlib.core.hack.min.js
+java -jar /Volumes/Data/project/src/platforms/win32-x86/bin/compiler.jar --js mlib.core.localstorage.js --js_output_file mlib.core.localstorage.min.js
+java -jar /Volumes/Data/project/src/platforms/win32-x86/bin/compiler.jar --js mlib.core.mme.js --js_output_file mlib.core.mme.min.js
+java -jar /Volumes/Data/project/src/platforms/win32-x86/bin/compiler.jar --js mlib.core.rpc.js --js_output_file mlib.core.rpc.min.js
+java -jar /Volumes/Data/project/src/platforms/win32-x86/bin/compiler.jar --js mlib.core.tips.js --js_output_file mlib.core.tips.min.js

@@ -1,0 +1,131 @@
+*{
+	margin: 0;
+	padding:0;
+}
+#top{
+	width:90%;
+	margin: 1em auto;
+}
+#top_left{
+	width:100%;
+	float:left;
+}
+#logo{
+	width:20%;
+	float:left;
+	margin-right:1em;
+}
+#logo img{
+	width:100%;
+}
+#top_info{
+	float:left;
+}
+#name{
+	font-size: 1em;
+}
+#size,#version{
+	color:#999;
+	font-size: 0.85em;
+}
+#size{
+	line-height: 1.8em;
+}
+#download{
+	margin-top:2em;
+	/*padding-bottom: 1em;*/
+	margin-bottom:1em;
+	width:100%;
+	float: left;
+	/*border-bottom: 1px solid #999;*/
+}
+#normal_download{
+	color:#000;
+	float:left;
+	width:24%;
+	border:1px solid #999;
+	background: #fff;
+	line-height: 2.3em;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 0.9em;
+}
+#fast_download{
+	float:right;
+	width:70%;
+	background: #45A7B0;
+	border:1px solid #45A7B0;
+	line-height: 2.3em;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 0.9em;
+	color:#fff;
+}
+#app_download{
+	float:left;
+	width:100%;
+	background: #45A7B0;
+	border:1px solid #45A7B0;
+	line-height: 2.3em;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 0.9em;
+	color:#fff;
+}
+#content{
+	width:100%;
+	border-top:1px solid #999;
+	float:left;
+}
+#content_img{
+	width:45%;
+	margin: 1em auto;
+}
+#content_img img{
+	width:100%;
+}
+#introduction{
+	float:left;
+	padding:0 1em 1em 1em;
+}
+#introduction_title{
+	font-size: 1em;
+}
+#introduction_content{
+	margin-top:0.5em;
+	font-size: 0.9em;
+	color:#555;
+}
+
+
+#weixin_body{
+	width: 100%;
+}
+
+#weixin_top{
+	/*height: 230px;*/
+	text-align: right;
+}
+
+#weixin_word{
+	font-size: 1em;
+	color: #FFF;
+	text-align: center;
+	width:70%;
+	margin:0 auto;
+}
+
+#weixin_right, #weixin_context{
+	color:#00a6ba;
+}
+
+
+#arrow_img{
+	padding-right: 1em;
+	width:30%;
+}
+
+#choose_download{
+
+	
+}

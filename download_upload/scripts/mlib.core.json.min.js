@@ -1,0 +1,1 @@
+function meval(a){try{return eval("("+a+")")}catch(f){return null}}function mmerge(a,f){var e,b,c,d;if(!f)return a;for(d in f)if(void 0!=(b=f[d])&&null!=b)if(b.constructor===Array){a[d]=c=[];e=0;for(len=b.length;e<len;e++)c[e]=b[e]}else if("object"!=typeof b)a[d]=b;else{if(void 0==(c=a[d])||null==c)a[d]=c={};mmerge(c,b)}return a};
