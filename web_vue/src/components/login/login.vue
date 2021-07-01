@@ -66,9 +66,9 @@
               </div>
               <!--  第一步：请输入有效用户名 -->
               <div style='margin-bottom:20px;'>
-                <input class='standard_inputs_normal' id='binding_account_name' type='text' :style="remember_data_sign?'display:none; width:230px; float:none;':'width:230px; float:none;'" :value='mcs_please_input_username'>
+                <input class='standard_inputs_normal' id='binding_account_name' type='text' style="width:230px; float:none;" v-model="binding_account_val">
                 <!-- 请输入用户名 -->
-                <input class='standard_inputs_normal' id='binding_account' type='text' :style='remember_data_sign?"display:inline":""' v-model="binding_account_val">
+                <!-- <input class='standard_inputs_normal' id='binding_account' type='text' :style='remember_data_sign?"display:inline":""' v-model="binding_account_val"> -->
               </div>
               <div style='width:235px; margin:auto;'>
                 <!-- 下一步按钮 -->
@@ -175,8 +175,8 @@ export default {
       mcs_username_already_exists: mcs_username_already_exists, //用户名已存在
       mcs_sign_up_failed: mcs_sign_up_failed, //注册失败
 
-      appid: 'vimtag.com', // location.origin.split('www.')[1] // 获取项目地址vimtag.com/mipcm.com
-      name: 'vimtag', // appid.split('.')[0] // 获取项目名 vimtag/mipcm
+      appid: '', // location.origin.split('www.')[1] // 获取项目地址vimtag.com/mipcm.com
+      name: '', // appid.split('.')[0] // 获取项目名 vimtag/mipcm
       l_remember_data_obj: {}, //用户信息
       keep_pw: false, //是否记住密码
       forget_pw_sign: false, //是否点击忘记密码
@@ -186,7 +186,7 @@ export default {
       password_val: '', //密码
       l_pwd_val: '', // 函数内接口使用的密码值
       l_password_value: '', // 暂定义局部记住密码时获取到的存储的密码
-      binding_account_val: '', //忘记密码用户名
+      binding_account_val: mcs_please_input_username, //忘记密码用户名
       email_sign: false, //忘记密码用户名是否绑定邮箱
       email_val: '', //后台返回绑定邮箱
       pass_email_val: '', //用户绑定邮箱
@@ -207,12 +207,16 @@ export default {
   async mounted () {
     if (window.location.href.indexOf('vimtag') > -1) {
       this.name = 'vimtag';
+      this.appid = 'vimtag.com'
     } else if (window.location.href.indexOf('ebitcam') > -1) {
       this.name = 'ebit';
+      this.appid = 'ebitcam.com'
     } else if (window.location.href.indexOf('mipcm') > -1) {
       this.name = 'mipc';
+      this.appid = 'mipcm.com'
     } else {
       this.name = 'vsmahome';
+      this.appid = 'vsmahome.com'
     }
 
     let remember_msg_info
@@ -276,7 +280,7 @@ export default {
   methods: {
     binding_account_next_btn () { // 点击下一步按钮
       let _this = this;
-      if (!_this.binding_account_val) { // 未输入任何值弹出报错信息
+      if (_this.binding_account_val.length === 0 || _this.binding_account_val === mcs_please_input_username) { // 未输入任何值弹出报错信息
         _this.publicFunc.msg_tips({
           msg: mcs_the_user_name_is_empty,
           type: 'error',

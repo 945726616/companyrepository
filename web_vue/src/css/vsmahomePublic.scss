@@ -4124,7 +4124,9 @@ div.ibutton-label-on {
 	height: 35px;
 	line-height: 35px;
 }
-
+#label_sd {
+	background-color: $projectColor;
+}
 #sd_export_link {
 	color: $projectColor;
 }

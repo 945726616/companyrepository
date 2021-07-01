@@ -28,7 +28,8 @@ const history = {
         search_type: params.search_type,
         cid: cid,
         sid: sid,
-        direction: direction
+        direction: direction,
+        max_counts: 10000
       }
     }).then(res => {
       let result = login.get_ret(res)
@@ -602,7 +603,8 @@ const history = {
         search_type: params.search_type,
         cid: cid,
         sid: sid,
-        direction: direction
+        direction: direction,
+        max_counts: 10000
       }
     }).then(res => {
       let result = login.get_ret(res)
